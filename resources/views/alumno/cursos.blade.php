@@ -36,7 +36,7 @@
                                 <div class="row">
                                     <div class="col-md-6"><h4> ${{ $curso->precio_en_moneda}} MxN</h4></div>
                                     <div class="col-md-6">
-                                        <a href="javascript:void(0)" class="btn btn-block btn-dark rounded-10 btn-detalle" id="{{ route('inscripcion.form',['curso_programado_id'=>$curso->id]) }}">Comprar</a>
+                                        <a href="javascript:void(0)" class="btn btn-block btn-dark rounded-10 btn-detalle" id="{{ route('inscripcion.form',$curso->id) }}">Comprar</a>
                                     </div>
                                 </div>
                             </div>

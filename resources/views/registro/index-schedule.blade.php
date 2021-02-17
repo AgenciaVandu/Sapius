@@ -83,7 +83,7 @@
     <script>
         $(document).ready( function () {
             var activo = true;
-            var endpoint = '{{ URL::route("schedule.getall",["curso_id" => $curso->id,"activo" => "enable"]) }}';
+            var endpoint = '{{ URL::route("schedule.getall",[$curso->id,"enable"]) }}';
 
             $( "#btnActivo" ).click(function() {
                 if(activo){

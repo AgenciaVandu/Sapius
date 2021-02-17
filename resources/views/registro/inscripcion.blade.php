@@ -31,13 +31,13 @@
                         <div class="form-group">
                             <label for="nombretarjetahabiente">Nombre del tarjetahabiente</label>
                             <input type="text" class="form-control" id="nombretarjetahabiente"
-                                    
+
                                     placeholder="Ej. Oscar Robles Torres" size="20" data-conekta="card[name]" />
                         </div>
                         <div class="form-group">
                             <label for="tarjeta">Número de la tarjeta de crédito</label>
                             <input type="text" class="form-control" id="tarjeta"
-                                    
+
                                     placeholder="Ej. 87129873" size="20" data-conekta="card[number]" />
                         </div>
                         <div class="form-row">
@@ -76,7 +76,7 @@
                     <!---<input type="hidden" id="authName" name="authName" value="{{ auth()->user()->nombre.''.auth()->user()->apellido }}">
                     <input type="hidden" id="authEmail" name="authEmail" value="{{ auth()->user()->email }}">
                     <input type="hidden" id="authPhone" name="authPhone" value="{{ auth()->user()->telefono }}">-->
-                    
+
                 </div>
                 <div class="form-group">
                     <input type="text" id="clave" class="form-control" name="clave" placeholder="Código de descuento">

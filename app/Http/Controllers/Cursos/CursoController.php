@@ -23,7 +23,8 @@ class CursoController extends Controller
      */
     public function index()
     {
-        return (Auth::user()->rol[0]->slug =='admin') ? view('cursos.index') : view('instructor.cursos-index');
+        $cursos = Curso::where('activo', 'si')->get();
+        return (Auth::user()->rol[0]->slug =='admin') ? view('cursos.index',compact('cursos')) : view('instructor.cursos-index');
     }
 
     public function getAll($active)

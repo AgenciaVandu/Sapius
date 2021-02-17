@@ -4,7 +4,7 @@
     'name' => 'Sapius',
     'env' => 'local',
     'debug' => true,
-    'url' => 'https://sapius.test',
+    'url' => 'https://127.0.0.1',
     'asset_url' => NULL,
     'timezone' => 'America/Mexico_City',
     'locale' => 'es',
@@ -327,7 +327,7 @@
       array (
         'driver' => 'local',
         'root' => 'C:\\laragon\\www\\Sapius\\storage\\app/public',
-        'url' => 'https://sapius.test/storage',
+        'url' => 'https://127.0.0.1/storage',
         'visibility' => 'public',
       ),
       's3' => 
@@ -435,16 +435,16 @@
   'mail' => 
   array (
     'driver' => 'smtp',
-    'host' => 'mail.sapius.com.mx',
-    'port' => '587',
+    'host' => 'smtp.mailtrap.io',
+    'port' => '2525',
     'from' => 
     array (
       'address' => 'atencion@sapius.com.mx',
       'name' => 'SAPIUS',
     ),
-    'encryption' => '',
-    'username' => 'atencion@sapius.com.mx',
-    'password' => 'SAPIUS2020!*',
+    'encryption' => 'tls',
+    'username' => 'e2da5e808c6c2d',
+    'password' => '1fadd2950c403b',
     'sendmail' => '/usr/sbin/sendmail -bs',
     'markdown' => 
     array (

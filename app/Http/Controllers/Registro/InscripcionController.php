@@ -107,7 +107,7 @@ class InscripcionController extends Controller
         try {
           if($request->tipo_cobro == "tarjeta"){
               $order = $this->payment($request,$curso);
-              $this->correoTarjeta($order);
+              //$this->correoTarjeta($order);
           }else if($request->tipo_cobro == "oxxo"){
               $order = $this->paymentOxxo($request);
               $this->correoOxxo($order);
@@ -115,9 +115,9 @@ class InscripcionController extends Controller
               //tipo_cobro no definido
           }
         } catch (\Throwable $th) {
-          
+
         }
-        
+
         //***********Validar si previamente el alumno fue inscrito*******************
 
         if(is_null ($order->id) == false){
@@ -130,7 +130,7 @@ class InscripcionController extends Controller
           $inscripcion->clave = $request->clave;
 
           $inscripcion->save();
-          
+
         }
         $send = new Curso;
         return $send->cursoDetallado($request);

@@ -113,7 +113,7 @@
     <script>
         $(document).ready( function () {
             var activo = true;
-            var endpoint = '{{ URL::route(Auth::user()->rol[0]->slug.".gle",["curso_id" => $curso->id,"leccion_id" => $leccion_id,"activo" => "enable"]) }}';
+            var endpoint = '{{ URL::route(Auth::user()->rol[0]->slug.".gle",[$curso->id,$leccion_id,"enable"]) }}';
             var show = '<a class="btn btn-primary btn-detalle" href="javascript:void(0)" id="{{ route(Auth::user()->rol[0]->slug.'.lecciones.show',1) }}"><i class="fas fa-eye"></i></a>';
             $( "#btnActivo" ).click(function() {
                 if(activo){
