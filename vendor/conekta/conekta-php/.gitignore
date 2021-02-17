@@ -1,0 +1,13 @@
+# OS
+.DS_Store
+*~
+# Composer
+composer.lock
+/vendor
+
+INSTALL.txt
+LICENSE.txt
+README.txt
+.phpunit.result.cache
+demos/
+extras/documentation
