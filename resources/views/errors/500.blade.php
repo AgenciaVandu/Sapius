@@ -6,7 +6,7 @@
             <div class="col-md-12 text-center padding-2" >
                 <div class="contaner-title-tabs-black">
                 <i class="fas fa-ban"></i>
-                Esta acción no esta permitida en el sistema
+                Esta acción no esta permitida en el sistema (error 500)
                 <i class="fas fa-ban"></i>
                 </div>
                 <p class="p-5">Se ha detectado el uso indebido de la plataforma y violación de las restricciones previstas en el contrato de servicios, de los términos y condiciones. Por ello, no podrá continuar con el examen y se le negará la retroalimentación correspondiente, nos reservamos el derecho de negar el acceso permanente a la plataforma.</p>
