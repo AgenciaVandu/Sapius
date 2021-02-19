@@ -116,7 +116,7 @@
                 header: {
                     left: 'prev,next today',
                     center: 'title',
-                    right: 'month,agendaWeek,agendaDay'
+                    right: 'month,basicWeek,basicDay'
                 },
                 timeZone: 'local',
                 eventRender: function(defaultEvents, $el) {
