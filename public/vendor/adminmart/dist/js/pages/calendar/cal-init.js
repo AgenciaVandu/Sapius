@@ -130,7 +130,7 @@
                 },
                 events: defaultEvents,
                 editable: false,
-                droppable: false, // this allows things to be dropped onto the calendar !!!
+                droppable: true, // this allows things to be dropped onto the calendar !!!
                 eventLimit: true, // allow "more" link when too many events
                 selectable: true,
                 locale: 'es',
