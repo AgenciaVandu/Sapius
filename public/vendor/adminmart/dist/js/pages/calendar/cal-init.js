@@ -105,30 +105,27 @@
 
             var $this = this;
             $this.$calendarObj = $this.$calendar.fullCalendar({
+                initialView: 'timeGridWeek',
                 slotDuration: '01:00:00',
                 slotEventOverlap:false,
-                slotMaxTime: '01:00:00',
-                /* If we want to split day time each 15minutes */
-                minTime: '00:00:00',
-                maxTime: '23:59:59',
-                defaultView: 'month',
                 handleWindowResize: true,
-
                 header: {
                     left: 'prev,next today',
                     center: 'title',
                     right: 'month,agendaWeek,agendaDay'
                 },
                 timeZone: 'local',
+                eventRender: function(defaultEvents, $el) {
+                $el.popover({
+                    title: defaultEvents.title,
+                    content: defaultEvents.description,
+                    trigger: 'hover',
+                    placement: 'top',
+                    container: 'body'
+                });
+                },
                 events: defaultEvents,
-                editable: false,
-                droppable: false, // this allows things to be dropped onto the calendar !!!
-                eventLimit: true, // allow "more" link when too many events
-                selectable: true,
                 locale: 'es',
-                //drop: function(date) { $this.onDrop($(this), date); },
-                //select: function(start, end, allDay) { $this.onSelect(start, end, allDay); },
-                //eventClick: function(calEvent, jsEvent, view) { $this.onEventClick(calEvent, jsEvent, view); }
 
             });
 
