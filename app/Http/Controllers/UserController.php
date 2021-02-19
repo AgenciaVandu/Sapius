@@ -223,7 +223,6 @@ class UserController extends Controller
                         'start' => date('D M d Y H:i:s',strtotime(str_replace('/','-',$fecha_inicial.''.$hora_inicial))),
                         'end' =>date('D M d Y H:i:s',strtotime(str_replace('/','-',$fecha_final.''.$hora_final))),
                         'className' => 'bg-purple',
-                        'display' => 'list-item',
                     ];
                 }
             }
