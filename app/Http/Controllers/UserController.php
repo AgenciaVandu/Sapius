@@ -218,7 +218,7 @@ class UserController extends Controller
                     $fecha_final = $contenido['fecha_final'] ? $contenido['fecha_final'] : null;
                     $hora_final = $contenido['hora_final'] ? $contenido['hora_final'] : null;
                     $arr[] =[
-                        'title' => $curso_programado->identificador,
+                        'title' => $curso_programado->curso->titulo,
                         'description' => $leccion->titulo,
                         'start' => date('D M d Y H:i:s',strtotime(str_replace('/','-',$fecha_inicial.''.$hora_inicial))),
                         'end' =>date('D M d Y H:i:s',strtotime(str_replace('/','-',$fecha_final.''.$hora_final))),
