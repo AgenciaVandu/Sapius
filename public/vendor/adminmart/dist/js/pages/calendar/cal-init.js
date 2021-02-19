@@ -131,7 +131,7 @@
                 events: defaultEvents,
                 editable: false,
                 droppable: true, // this allows things to be dropped onto the calendar !!!
-                eventLimit: false, // allow "more" link when too many events
+                eventLimit: true, // allow "more" link when too many events
                 selectable: true,
                 locale: 'es',
 
