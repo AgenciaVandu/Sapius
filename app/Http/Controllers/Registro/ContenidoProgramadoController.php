@@ -61,6 +61,8 @@ class ContenidoProgramadoController extends Controller
                 'id' => $request->{'leccion_id_'.$leccion->id},
                 'fecha_inicial' => $request->{'fecha_inicial_'.$leccion->id},
                 'fecha_final' => $request->{'fecha_final_'.$leccion->id},
+                'hora_inicial' => $request->{'hora_inicial_'.$leccion->id},
+                'hora_final' => $request->{'hora_final_'.$leccion->id},
             ];
         }
         $contenido_programado->contenido = $arr;
@@ -69,7 +71,7 @@ class ContenidoProgramadoController extends Controller
         $curso = CursoProgramado::with(['Curso.Lecciones' => function($q){
             $q->with('Clases')->where('leccion_id',0);
         }])->find($request->curso_programado_id);
-        
+
         $curso_original = Curso::find($curso->curso_id);
         //dd($curso);
         return view('registro.index-contenido')->with('cp',$curso)

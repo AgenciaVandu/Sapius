@@ -3,8 +3,8 @@
 @section('breadcrumb')
     <div class="page-breadcrumb">
         <div class="row">
-            <div class="col-7 align-self-center">
-                <h3 class="page-title text-truncate text-dark font-weight-medium mb-1">Editar Pregunta: {{ $pregunta->pregunta }}</h3>
+            <div class="col-12 align-self-center">
+                <h3 class="page-title text-truncate text-dark font-weight-medium mb-1">Editar Pregunta: @php echo $pregunta->pregunta @endphp</h3>
                 <div class="d-flex align-items-center">
                     @include('genericos.breadcrum',['route' => 'preguntas.edit'])
                 </div>

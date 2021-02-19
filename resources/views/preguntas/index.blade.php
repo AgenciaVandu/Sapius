@@ -108,7 +108,7 @@
     <script>
         $(document).ready( function () {
             var activo = true;
-            var endpoint = '{{ URL::route(Auth::user()->rol[0]->slug.".gpre",["prueba_id" => $prueba->id,"activo" => "enable"]) }}';
+            var endpoint = '{{ URL::route(Auth::user()->rol[0]->slug.".gpre",[$prueba->id,"enable"]) }}';
             var show = '<a class="btn btn-primary btn-detalle" href="javascript:void(0)" id="{{ route(Auth::user()->rol[0]->slug.'.preguntas.show',1) }}"><i class="fas fa-eye"></i></a>';
             $( "#btnActivo" ).click(function() {
                 if(activo){

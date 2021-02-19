@@ -14,7 +14,8 @@
 @section('content')
     <div class="row">
         <div class="col-md-12">
-            <input type="hidden" id="eventos" value="{{ $eventos }}">
+            <input type="text" id="eventos" value="{{ $eventos }}">
+            {{ $eventos }}
             <div id="calendar"></div>
         </div>
     </div>
@@ -29,7 +30,7 @@
     <script src="{{ asset('vendor/adminmart/assets/libs/fullcalendar/dist/fullcalendar.min.js') }}"></script>
     <script src="{{ asset('vendor/adminmart/assets/libs/fullcalendar/dist/locale/es.js') }}"></script>
     <script src="{{ asset('vendor/adminmart/dist/js/pages/calendar/cal-init.js') }}"></script>
-    
+
     <script>
         $(document).ready( function () {
             $('#calendar').fullCalendar("next");

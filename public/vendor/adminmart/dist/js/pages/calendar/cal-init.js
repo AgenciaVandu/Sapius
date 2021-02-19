@@ -105,10 +105,11 @@
 
             var $this = this;
             $this.$calendarObj = $this.$calendar.fullCalendar({
-                slotDuration: '00:15:00',
+                slotDuration: '01:00:00',
+                slotEventOverlap:true,
                 /* If we want to split day time each 15minutes */
-                minTime: '08:00:00',
-                maxTime: '19:00:00',
+                minTime: '00:00:00',
+                maxTime: '23:59:59',
                 defaultView: 'month',
                 handleWindowResize: true,
 
@@ -117,6 +118,7 @@
                     center: 'title',
                     right: 'month,agendaWeek,agendaDay'
                 },
+                timeZone: 'local',
                 events: defaultEvents,
                 editable: false,
                 droppable: false, // this allows things to be dropped onto the calendar !!!

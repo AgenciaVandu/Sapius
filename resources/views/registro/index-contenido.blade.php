@@ -23,62 +23,107 @@
                             <tr>
                                 <th>Módulos - Clases</th>
                                 <th>Fecha inicial</th>
+                                <th>Hora inicial</th>
                                 <th>Fecha Final</th>
+                                <th>Hora Final</th>
                             </tr>
                         </thead>
                         <tbody>
                             <form action="{{ route('contenido.store') }}" method="POST">
                                 @csrf
                                 <input id="curso_id" type="hidden" name="curso_id" value="{{ $cp['curso']->id }}">
-                                <input id="curso_programado_id" type="hidden" name="curso_programado_id" value="{{ $cp->id }}">
+                                <input id="curso_programado_id" type="hidden" name="curso_programado_id"
+                                    value="{{ $cp->id }}">
                                 @foreach ($cp['Curso']['Lecciones'] as $leccion)
-                                @php
-                                //dd($cp['Curso']['Lecciones']);
-                                    $fecha_inicial = $fecha_final = null;
-                                    if($contenido_programado){
-                                        $contenido = collect($contenido_programado->contenido)->where('id',$leccion->id)->first();
-                                        $fecha_inicial = ($contenido['fecha_inicial'])? $contenido['fecha_inicial'] : null;
-                                        $fecha_final = ($contenido['fecha_final'])? $contenido['fecha_final'] :null;
-                                    }
-                                @endphp
-                                <tr style="border-block-start: medium solid blue;">
-                                    <td>
-                                        {{ $leccion->titulo}}
-                                        <input id="leccion_id_{{ $leccion->id }}" type="hidden" name="leccion_id_{{ $leccion->id }}" value="{{ $leccion->id }}">
-                                    </td>
-                                    <td>
-                                        <input id="fecha_inicial_{{ $leccion->id }}" type="text" class="form-control" name="fecha_inicial_{{ $leccion->id }}" required autocomplete="fecha_inicial_{{ $leccion->id }}" autofocus value="@if($fecha_inicial) {{ $fecha_inicial }} @endif">
-                                    </td>
-                                    <td>
-                                        <input id="fecha_final_{{ $leccion->id }}" type="text" class="form-control" name="fecha_final_{{ $leccion->id }}" required autocomplete="fecha_final_{{ $leccion->id }}" autofocus value="@if($fecha_final) {{ $fecha_final }} @endif">
-                                    </td>
-                                </tr>
-                                    @foreach ($leccion['Clases'] as $clase)
                                     @php
-                                    //dd($cp['Curso']['Lecciones']);
+                                        //dd($cp['Curso']['Lecciones']);
                                         $fecha_inicial = $fecha_final = null;
-                                        if($contenido_programado){
-                                            $contenido = collect($contenido_programado->contenido)->where('id',$clase->id)->first();
-                                            $fecha_inicial = ($contenido['fecha_inicial'])? $contenido['fecha_inicial'] : null;
-                                            $fecha_final = ($contenido['fecha_final'])? $contenido['fecha_final'] :null;
+                                        if ($contenido_programado) {
+                                            $contenido = collect($contenido_programado->contenido)
+                                                ->where('id', $leccion->id)
+                                                ->first();
+                                            $fecha_inicial = $contenido['fecha_inicial'] ? $contenido['fecha_inicial'] : null;
+                                            $hora_inicial = $contenido['hora_inicial'] ? $contenido['hora_inicial'] : null;
+                                            $fecha_final = $contenido['fecha_final'] ? $contenido['fecha_final'] : null;
+                                            $hora_final = $contenido['hora_final'] ? $contenido['hora_final'] : null;
                                         }
                                     @endphp
-                                    <tr>
+                                    <tr style="border-block-start: medium solid blue;">
                                         <td>
-                                            {{ $clase->titulo}}
-                                            <input id="leccion_id_{{ $clase->id }}" type="hidden" name="leccion_id_{{ $clase->id }}" value="{{ $clase->id }}">
+                                            {{ $leccion->titulo }}
+                                            <input id="leccion_id_{{ $leccion->id }}" type="hidden"
+                                                name="leccion_id_{{ $leccion->id }}" value="{{ $leccion->id }}">
                                         </td>
                                         <td>
-                                            <input id="fecha_inicial_{{ $clase->id }}" type="text" class="form-control" name="fecha_inicial_{{ $clase->id }}" required autocomplete="fecha_inicial_{{ $clase->id }}" autofocus value="@if($fecha_inicial) {{ $fecha_inicial }} @endif">
+                                            <input id="fecha_inicial_{{ $leccion->id }}" type="text" class="form-control"
+                                                name="fecha_inicial_{{ $leccion->id }}" required
+                                                autocomplete="fecha_inicial_{{ $leccion->id }}" autofocus
+                                                value="@if ($fecha_inicial) {{ $fecha_inicial }} @endif">
                                         </td>
                                         <td>
-                                            <input id="fecha_final_{{ $clase->id }}" type="text" class="form-control" name="fecha_final_{{ $clase->id }}" required autocomplete="fecha_final_{{ $clase->id }}" autofocus value="@if($fecha_final) {{ $fecha_final }} @endif">
+                                            <input id="fecha_final_{{ $leccion->id }}" type="text" class="form-control"
+                                                name="fecha_final_{{ $leccion->id }}" required
+                                                autocomplete="fecha_final_{{ $leccion->id }}" autofocus
+                                                value="@if ($fecha_final) {{ $fecha_final }} @endif">
+                                        </td>
+                                        <td>
+                                            <input type="time" name="hora_inicial_{{ $leccion->id }}" required
+                                            autocomplete="hora_inicial_{{ $leccion->id }}" autofocus
+                                            value="{{ $hora_inicial }}">
+                                        </td>
+                                        <td>
+                                            <input type="time" name="hora_final_{{ $leccion->id }}" required
+                                            autocomplete="hora_final_{{ $leccion->id }}" autofocus
+                                            value="{{ $hora_final }}">
                                         </td>
                                     </tr>
+                                    @foreach ($leccion['Clases'] as $clase)
+                                        @php
+                                            //dd($cp['Curso']['Lecciones']);
+                                            $fecha_inicial = $fecha_final = null;
+                                            if ($contenido_programado) {
+                                                $contenido = collect($contenido_programado->contenido)
+                                                    ->where('id', $clase->id)
+                                                    ->first();
+                                                $fecha_inicial = $contenido['fecha_inicial'] ? $contenido['fecha_inicial'] : null;
+                                                $hora_inicial = $contenido['hora_inicial'] ? $contenido['hora_inicial'] : null;
+                                                $fecha_final = $contenido['fecha_final'] ? $contenido['fecha_final'] : null;
+                                                $hora_final = $contenido['hora_final'] ? $contenido['hora_final'] : null;
+                                            }
+                                        @endphp
+                                        <tr>
+                                            <td>
+                                                {{ $clase->titulo }}
+                                                <input id="leccion_id_{{ $clase->id }}" type="hidden"
+                                                    name="leccion_id_{{ $clase->id }}" value="{{ $clase->id }}">
+                                            </td>
+                                            <td>
+                                                <input id="fecha_inicial_{{ $clase->id }}" type="text"
+                                                    class="form-control" name="fecha_inicial_{{ $clase->id }}" required
+                                                    autocomplete="fecha_inicial_{{ $clase->id }}" autofocus
+                                                    value="@if ($fecha_inicial) {{ $fecha_inicial }} @endif">
+                                            </td>
+                                            <td>
+                                                <input id="fecha_final_{{ $clase->id }}" type="text"
+                                                    class="form-control" name="fecha_final_{{ $clase->id }}" required
+                                                    autocomplete="fecha_final_{{ $clase->id }}" autofocus
+                                                    value="@if ($fecha_final) {{ $fecha_final }} @endif">
+                                            </td>
+                                            <td>
+                                                <input type="time" name="hora_inicial_{{ $clase->id }}" required
+                                                autocomplete="hora_inicial_{{ $clase->id }}" autofocus
+                                                value="{{ $hora_inicial }}">
+                                            </td>
+                                            <td>
+                                                <input type="time" name="hora_final_{{ $clase->id }}" required
+                                                autocomplete="hora_final_{{ $clase->id }}" autofocus
+                                                value="{{ $hora_final }}">
+                                            </td>
+                                        </tr>
                                     @endforeach
                                 @endforeach
                                 <tr>
-                                    <td colspan="3">
+                                    <td colspan="5">
                                         <button type="submit" class="btn btn-primary btn-block">
                                             {{ __('Register') }}
                                         </button>
@@ -103,7 +148,11 @@
     <script src="{{ asset('vendor/DatePicker/js/bootstrap-datepicker.es.min.js') }}"></script>
 
     <script>
+        $('.form-control').datepicker({
+            language: "es",
+            clearBtn: true,
+            todayHighlight: true
+        });
 
-        $('input').datepicker({language: "es",clearBtn: true,todayHighlight: true});
     </script>
 @endsection

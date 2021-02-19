@@ -96,14 +96,14 @@ class ExamenController extends Controller
         $examen = Prueba::withCount(['Examenes' => function($q) use($inscripcion_id){
                         $q->where('inscripcion_id',$inscripcion_id)->where('finalizado','si');
                     }])->find($prueba_id);
-                    
-        
+
+
         $desPrueba = Prueba::find($prueba_id);
-        
+
         $desPrueba = $desPrueba->descripcion;
-        
-        
-                    
+
+
+
         if($examen->oportunidades == $examen->examenes_count){
             $examen = Prueba::with(['Examenes' => function($q) use($inscripcion_id){
                             $q->where('inscripcion_id',$inscripcion_id)->where('finalizado','si');
@@ -113,7 +113,7 @@ class ExamenController extends Controller
 
             return view('evaluacion.resultados')->with('examen',$examen);
         }
-        
+
 
         return view('evaluacion.previo')->with('prueba_id',$prueba_id)->with('inscripcion_id',$inscripcion_id)->with('examen',$examen)->with('desPrueba',$desPrueba);
     }
@@ -122,7 +122,7 @@ class ExamenController extends Controller
     {
         //verificar si hay alguna prueba iniciada
         $examen = Examen::with(['Inscripcion','Prueba'])->where('inscripcion_id',$request->inscripcion_id)->where('prueba_id',$request->prueba_id)->first();
-    
+
         if($request->ajax() && $examen->finalizado == 'si'){
             $fin =  view('evaluacion.finalizar-imprevisto')->with('examen_id',$examen->id)
             ->with('leccion_id',$examen->Prueba->leccion_id)
@@ -130,9 +130,9 @@ class ExamenController extends Controller
             ->with('inscripcion_id',$examen->inscripcion_id);
 
             return response()->json($fin->render());
-            
+
         }
-        
+
 
 
         $prueba = Prueba::withCount(['Preguntas' => function($q){
@@ -157,7 +157,7 @@ class ExamenController extends Controller
         //dd($preguntas);
 
         $respuestas = collect([]);
-    
+
         // si apenas va empezar la prueba, damos de alta el examen
         if($examen == null){
             $examen = new Examen;
@@ -272,9 +272,9 @@ class ExamenController extends Controller
 
         $examen->save();
 
-        $mail = Mail::to(Auth::user()->email);
-        $correo_examen_finalizado = new ExamenFinalizado($examen);
-        $mail->send($correo_examen_finalizado);
+        // $mail = Mail::to(Auth::user()->email);
+        // $correo_examen_finalizado = new ExamenFinalizado($examen);
+        // $mail->send($correo_examen_finalizado);
 
         $send = new Curso;
         return $send->leccionDetallada($request);

@@ -105,7 +105,7 @@
     <script>
         $(document).ready( function () {
             var activo = true;
-            var endpoint = '{{ URL::route(Auth::user()->rol[0]->slug.".gres",["pregunta_id" => $pregunta->id,"activo" => "enable"]) }}';
+            var endpoint = '{{ URL::route(Auth::user()->rol[0]->slug.".gres",[$pregunta->id,"enable"]) }}';
             var show = '<a class="btn btn-primary btn-detalle" href="javascript:void(0)" id="{{ route(Auth::user()->rol[0]->slug.'.respuestas.show',1) }}"><i class="fas fa-eye"></i></a>';
             $( "#btnActivo" ).click(function() {
                 if(activo){

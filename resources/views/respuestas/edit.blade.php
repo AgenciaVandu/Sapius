@@ -4,7 +4,7 @@
     <div class="page-breadcrumb">
         <div class="row">
             <div class="col-7 align-self-center">
-                <h3 class="page-title text-truncate text-dark font-weight-medium mb-1">Editar respuesta de la pregunta {{ $pregunta->pregunta }}</h3>
+                <h3 class="page-title text-truncate text-dark font-weight-medium mb-1">Editar respuesta de la pregunta @php echo $pregunta->pregunta @endphp</h3>
                 <div class="d-flex align-items-center">
                     @include('genericos.breadcrum',['route' => 'respuestas.edit'])
                     {{-- Prueba {{ $prueba->titulo }} de la leccion {{ $leccion->titulo }} del curso {{ $curso->titulo }} --}}

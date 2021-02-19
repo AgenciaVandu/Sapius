@@ -213,17 +213,20 @@ class UserController extends Controller
             if($contenido_programado){
                 foreach($curso_programado['Curso']['Lecciones'] as $leccion){
                     $contenido = collect($contenido_programado->contenido)->where('id',$leccion->id)->first();
-                    $fecha_inicial = ($contenido['fecha_inicial'])? $contenido['fecha_inicial'] : null;
-                    $fecha_final = ($contenido['fecha_final'])? $contenido['fecha_final'] :null;
+                    $fecha_inicial = $contenido['fecha_inicial'] ? $contenido['fecha_inicial'] : null;
+                    $hora_inicial = $contenido['hora_inicial'] ? $contenido['hora_inicial'] : null;
+                    $fecha_final = $contenido['fecha_final'] ? $contenido['fecha_final'] : null;
+                    $hora_final = $contenido['hora_final'] ? $contenido['hora_final'] : null;
                     $arr[] =[
                         'title' => $leccion->titulo,
-                        'start' => date('D M d Y H:i:s O',strtotime(str_replace('/','-',$fecha_inicial.' 00:00:00'))),
-                        'end' =>date('D M d Y H:i:s O',strtotime(str_replace('/','-',$fecha_final.' 23:59:59'))),
-                        'className' => 'bg-purple'
+                        'start' => date('D M d Y H:i:s',strtotime(str_replace('/','-',$fecha_inicial.''.$hora_inicial))),
+                        'end' =>date('D M d Y H:i:s',strtotime(str_replace('/','-',$fecha_final.''.$hora_final))),
+                        'className' => 'bg-info'
                     ];
                 }
             }
         }
+       //    dd($arr);
 
         return view('alumno.calendario')->with('eventos',collect($arr)->toJson());
     }
