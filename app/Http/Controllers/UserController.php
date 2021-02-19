@@ -221,7 +221,7 @@ class UserController extends Controller
                         'title' => $leccion->titulo,
                         'start' => date('D M d Y H:i:s',strtotime(str_replace('/','-',$fecha_inicial.''.$hora_inicial))),
                         'end' =>date('D M d Y H:i:s',strtotime(str_replace('/','-',$fecha_final.''.$hora_final))),
-                        'className' => 'bg-info'
+                        'className' => 'bg-purple'
                     ];
                 }
             }
@@ -246,3 +246,6 @@ class UserController extends Controller
         $mail->send($m);
     }
 }
+
+
+

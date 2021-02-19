@@ -17,15 +17,15 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-body">
+                <div class="card-body ">
                     <table class="table table-striped table-sm" id="dataTable">
                         <thead class="thead-light">
                             <tr>
                                 <th>Módulos - Clases</th>
                                 <th>Fecha inicial</th>
                                 <th>Hora inicial</th>
-                                <th>Fecha Final</th>
-                                <th>Hora Final</th>
+                                <th>Fecha final</th>
+                                <th>Hora final</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -55,13 +55,13 @@
                                                 name="leccion_id_{{ $leccion->id }}" value="{{ $leccion->id }}">
                                         </td>
                                         <td>
-                                            <input id="fecha_inicial_{{ $leccion->id }}" type="text" class="form-control"
+                                            <input id="fecha_inicial_{{ $leccion->id }}" type="text" class="calendar"
                                                 name="fecha_inicial_{{ $leccion->id }}" required
                                                 autocomplete="fecha_inicial_{{ $leccion->id }}" autofocus
                                                 value="@if ($fecha_inicial) {{ $fecha_inicial }} @endif">
                                         </td>
                                         <td>
-                                            <input id="fecha_final_{{ $leccion->id }}" type="text" class="form-control"
+                                            <input id="fecha_final_{{ $leccion->id }}" type="text" class="calendar"
                                                 name="fecha_final_{{ $leccion->id }}" required
                                                 autocomplete="fecha_final_{{ $leccion->id }}" autofocus
                                                 value="@if ($fecha_final) {{ $fecha_final }} @endif">
@@ -92,20 +92,20 @@
                                             }
                                         @endphp
                                         <tr>
-                                            <td>
+                                            <td >
                                                 {{ $clase->titulo }}
                                                 <input id="leccion_id_{{ $clase->id }}" type="hidden"
                                                     name="leccion_id_{{ $clase->id }}" value="{{ $clase->id }}">
                                             </td>
                                             <td>
                                                 <input id="fecha_inicial_{{ $clase->id }}" type="text"
-                                                    class="form-control" name="fecha_inicial_{{ $clase->id }}" required
+                                                    class="calendar" name="fecha_inicial_{{ $clase->id }}" required
                                                     autocomplete="fecha_inicial_{{ $clase->id }}" autofocus
                                                     value="@if ($fecha_inicial) {{ $fecha_inicial }} @endif">
                                             </td>
                                             <td>
                                                 <input id="fecha_final_{{ $clase->id }}" type="text"
-                                                    class="form-control" name="fecha_final_{{ $clase->id }}" required
+                                                    class="calendar" name="fecha_final_{{ $clase->id }}" required
                                                     autocomplete="fecha_final_{{ $clase->id }}" autofocus
                                                     value="@if ($fecha_final) {{ $fecha_final }} @endif">
                                             </td>
@@ -148,7 +148,7 @@
     <script src="{{ asset('vendor/DatePicker/js/bootstrap-datepicker.es.min.js') }}"></script>
 
     <script>
-        $('.form-control').datepicker({
+        $('.calendar').datepicker({
             language: "es",
             clearBtn: true,
             todayHighlight: true

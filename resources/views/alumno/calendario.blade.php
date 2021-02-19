@@ -14,8 +14,7 @@
 @section('content')
     <div class="row">
         <div class="col-md-12">
-            <input type="text" id="eventos" value="{{ $eventos }}">
-            {{ $eventos }}
+            <input type="hidden" id="eventos" value="{{ $eventos }}">
             <div id="calendar"></div>
         </div>
     </div>
