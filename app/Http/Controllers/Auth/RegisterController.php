@@ -80,16 +80,16 @@ class RegisterController extends Controller
         ]);
 
         $user->roles()->attach($roleId);
-        
+
         $datos = [
             'nombre' => $data['nombre'],
             'apellido' => $data['apellido'],
             'email' => $data['email'],
         ];
-        $mail = Mail::to($data['email'])->cc(config('mail.to_support'));
-        //$mail = Mail::to('eduardoica_@hotmail.com');
-        $m = new RegistroEmail($datos);
-        $mail->send($m);
+        // $mail = Mail::to($data['email'])->cc(config('mail.to_support'));
+        // //$mail = Mail::to('eduardoica_@hotmail.com');
+        // $m = new RegistroEmail($datos);
+        // $mail->send($m);
 
         return $user;
     }

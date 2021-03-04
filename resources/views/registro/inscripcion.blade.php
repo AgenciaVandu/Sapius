@@ -1,7 +1,7 @@
 @extends('layouts.adminmart.detalle')
 
 @section('content')
-    <input type="hidden" id="curso" value="{{ $curso->Curso->titulo }}">
+<input type="hidden" id="curso" value="{{ $curso->Curso->titulo }}">
     <div class="card">
         <div class="card-body">
             <h4 class="card-title">Metodos de pago</h4>
@@ -23,7 +23,7 @@
                             <i class="mdi mdi-account-circle d-lg-none d-block mr-1"></i>
                             <span class="d-none d-lg-block">Oxxo</span>
                         </a>
-                    </li> --}}
+                    </li>--}}
                 </ul>
 
                 <div class="tab-content">
@@ -85,14 +85,16 @@
             </form>
         </div>
     </div>
+
+
 @endsection
 
 @section('javascript')
 
     <script>
-        $(document).ready( function () {
+        $(document).ready(function() {
             $(".modal-title").html("Inscripción al curso " + $('#curso').val());
-            $("#pago").click(function(){
+            $("#pago").click(function() {
                 //$("#form-pago").submit();
                 //event.preventDefault();
                 var $form = $('#form-pago');
@@ -105,10 +107,10 @@
                 return false;
             });
             //Codigo para el tipo de transaccion
-            $("#tarjeta").click(function(){
+            $("#tarjeta").click(function() {
                 $("#tipo_cobro").val("tarjeta");
             });
-            $("#oxxo").click(function(){
+            $("#oxxo").click(function() {
                 $("#tipo_cobro").val("oxxo");
             });
             //Codigo para el descuento
@@ -116,28 +118,35 @@
                 var precio = $("#precioh").val();
                 var clave = $("#clave").val();
                 var curso_programado_id = $("#curso_programado_id").val();
-                var token =  "{{ csrf_token() }}";
+                var token = "{{ csrf_token() }}";
                 $.post("{{ route('descuentos.check') }}", {
                     _token: token,
                     clave: clave,
                     curso_programado_id: curso_programado_id
-                },function(){
-                }).done(function(data){
+                }, function() {}).done(function(data) {
                     descuento = JSON.parse(data);
-                    if(descuento.descuento > 0){
+                    if (descuento.descuento > 0) {
                         $("#descuento").hide();
-                    $("#clave").hide();
-                    $("#precio").val('$ ' + (precio - ((descuento.descuento/100) * precio)) + ' MxN');
-                    $("#precioh").val((precio - ((descuento.descuento/100) * precio)));
-                    $("#text_descuento").html(', descuento aplicado <strike>$ '+ precio +' MxN</strike>');
-                    $("#divAlerts").html('<div class="alert alert-success alert-dismissible bg-success text-white border-0 fade show" role="alert"> <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">×</span> </button> <strong>¡Correcto!</strong> Descuento aplicado </div>');
-                    }else{
-                        $("#divAlerts").html('<div class="alert alert-warning alert-dismissible bg-warning text-white border-0 fade show" role="alert"> <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">×</span> </button> <strong>Advertencia !</strong> ' + descuento.mensaje + ' </div>');
+                        $("#clave").hide();
+                        $("#precio").val('$ ' + (precio - ((descuento.descuento / 100) * precio)) +
+                            ' MxN');
+                        $("#precioh").val((precio - ((descuento.descuento / 100) * precio)));
+                        $("#text_descuento").html(', descuento aplicado <strike>$ ' + precio +
+                            ' MxN</strike>');
+                        $("#divAlerts").html(
+                            '<div class="alert alert-success alert-dismissible bg-success text-white border-0 fade show" role="alert"> <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">×</span> </button> <strong>¡Correcto!</strong> Descuento aplicado </div>'
+                        );
+                    } else {
+                        $("#divAlerts").html(
+                            '<div class="alert alert-warning alert-dismissible bg-warning text-white border-0 fade show" role="alert"> <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">×</span> </button> <strong>Advertencia !</strong> ' +
+                            descuento.mensaje + ' </div>');
                     }
-                }).fail(function(){
+                }).fail(function() {
                     $("#rowValidar").show();
                     $("#rowValidarOk").hide();
-                    $("#divAlerts").html('<div class="alert alert-danger alert-dismissible bg-danger text-white border-0 fade show" role="alert"> <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">×</span> </button> <strong>Error !</strong> No se aplicaron los cambios </div>');
+                    $("#divAlerts").html(
+                        '<div class="alert alert-danger alert-dismissible bg-danger text-white border-0 fade show" role="alert"> <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">×</span> </button> <strong>Error !</strong> No se aplicaron los cambios </div>'
+                    );
                 });
             });
             //Codigo para conekta........
@@ -157,5 +166,6 @@
                 console.log(token);
             };
         });
+
     </script>
 @endsection
