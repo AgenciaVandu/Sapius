@@ -97,7 +97,7 @@
                 processing: true,
                 paging: true,
                 ajax: {
-                    url: '{{ URL::route("descuento.getall",["curso_programado_id" => $curso->id]) }}',
+                    url: '{{ URL::route("descuento.getall", $curso->id) }}',
                     dataSrc: ''
                 },
                 columns: [
