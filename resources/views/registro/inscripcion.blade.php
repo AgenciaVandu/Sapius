@@ -1,7 +1,7 @@
 @extends('layouts.adminmart.detalle')
 
 @section('content')
-<input type="hidden" id="curso" value="{{ $curso->Curso->titulo }}">
+    {{-- <input type="hidden" id="curso" value="{{ $curso->Curso->titulo }}">
     <div class="card">
         <div class="card-body">
             <h4 class="card-title">Metodos de pago</h4>
@@ -23,7 +23,7 @@
                             <i class="mdi mdi-account-circle d-lg-none d-block mr-1"></i>
                             <span class="d-none d-lg-block">Oxxo</span>
                         </a>
-                    </li>--}}
+                    </li>
                 </ul>
 
                 <div class="tab-content">
@@ -62,7 +62,7 @@
                     </div>
                     {{-- <div class="tab-pane" id="profile">
                         A continuacion se generara una ficha para pagar a travez de Oxxo pay.
-                    </div> --}}
+                    </div> --
                 </div>
                 <hr>
                 <input type="hidden" id="tipo_cobro" name="tipo_cobro" value="tarjeta">
@@ -84,7 +84,7 @@
                 </div>
             </form>
         </div>
-    </div>
+    </div> --}}
 
 
 @endsection

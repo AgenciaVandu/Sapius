@@ -101,13 +101,13 @@
                                     </td>
                                     <td>
                                         {{-- <a class="btn btn-primary btn-detalle" href="javascript:void(0)" id="{{ route('users.show',$user->id) }}"><i class="fas fa-clipboard-check"></i></a> --}}
-                                        <div class="dropdown">
+                                        <div class="dropleft">
                                             <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                               Acciones
                                             </button>
                                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                                 {{-- @if($user->validado == "no") --}}
-                                                <a class="btn btn-primary btn-detalle" href="javascript:void(0)" id="{{ route('users.verify',$user->id) }}">
+                                                <a class="btn btn-primary btn-detalle ml-2" href="javascript:void(0)" id="{{ route('users.verify',$user->id) }}">
                                                     <i class="fas fa-clipboard-check"></i> Validar datos
                                                 </a>
                                                 {{-- @endif --}}
