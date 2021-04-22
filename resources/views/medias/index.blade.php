@@ -16,7 +16,7 @@
                             Opciones
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <form method="POST" id="create-form"  action="{{ route(Auth::user()->rol[0]->slug.'.medias.create') }}">
+                            <form method="POST" id="create-form" action="{{ route(Auth::user()->rol[0]->slug.'.medias.create') }}">
                                 @csrf
                                 <input name="leccion_id" type="hidden" value="{{ $leccion->id }}">
                                 <a class="dropdown-item" href="{{ route(Auth::user()->rol[0]->slug.'.medias.create') }}"
@@ -85,7 +85,6 @@
                 </button>
               </div>
             <div class="modal-body">
-
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>

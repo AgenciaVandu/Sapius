@@ -3,7 +3,7 @@
 @section('timer')
 
     <div>
-        <h2 class="text-dark mb-1 font-weight-medium" id="timer" style="display:none"></h2>
+        <h2 class="text-dark mb-1 font-weight-medium" id="timer"></h2>
         <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate" style="display:none">Tiempo restante</h6>
         @php
             $str_time = $examen->Prueba->tiempo_vigencia;
@@ -157,7 +157,7 @@ $(document).ready(function () {
     $("body").on("contextmenu",function(e){
         return false;
     });
-    
+
 });
 </script>
 <script type="text/javascript">

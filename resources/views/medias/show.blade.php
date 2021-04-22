@@ -29,7 +29,7 @@
 
 @if($media->tipo == "video")
 <div style="text-align: center">
-    <video id="video" width="600" controls controlsList="nodownload">
+    <video width="100%" src="https://sapius.com.mx/storage/{{ $media->ruta }}" controls controlsList="nodownload">
         {{-- <video id="video" width="600" controls controlsList="nodownload"> --}}
         Your browser does not support the video tag.
     </video>
