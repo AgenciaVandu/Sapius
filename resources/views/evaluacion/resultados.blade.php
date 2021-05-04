@@ -3,7 +3,7 @@
 @section('content')
     <div class="card">
         <div class="card-body">
-            <h4 class="card-title">Lista de resultados de la prueba "{{ $examen->titulo}}"</h4>
+            <h4 class="card-title">Lista de resultados de la prueba "{{ $examen->titulo }}"</h4>
             @php
                 $count = 1;
             @endphp
@@ -41,6 +41,8 @@
                     break;
             }
             @endphp
+
+            {{-- Crear tabla para que aqui vayan los datos --}}
             <div class="text-center p-3">
                 <img src="{{ asset('vendor/adminmart/assets/images/'.$imagenExamen.'') }}" alt="wrapkit">
             </div>
