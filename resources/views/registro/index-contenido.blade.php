@@ -22,10 +22,10 @@
                         <thead class="thead-light">
                             <tr>
                                 <th>Módulos - Clases</th>
-                                <th>Fecha inicial</th>
-                                <th>Hora inicial</th>
-                                <th>Fecha final</th>
-                                <th>Hora final</th>
+                                <th>Fecha Inicial</th>
+                                <th>Fecha Final</th>
+                                <th>Hora Inicial</th>
+                                <th>Hora Final</th>
                             </tr>
                         </thead>
                         <tbody>
