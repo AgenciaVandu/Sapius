@@ -103,7 +103,7 @@
                         <div class="col-md-12">
                             @if ($inscrito == null)
                                 <a href="javascript:void(0)" class="btn btn-block btn-dark btn-detalle"
-                                    id="{{ route('inscripcion.form', ['curso_programado_id' => $curso_programado->id]) }}">Inscribir</a>
+                                    {{-- id="{{ route('inscripcion.form', ['curso_programado_id' => $curso_programado->id]) }}" --}}>Inscribir</a>
                             @elseif($inscrito->aceptado == 'no')
                                 <div class="alert alert-warning bg-warning text-white border-0" role="alert">
                                     Aprobración <strong>Pendiente</strong>

@@ -1,7 +1,7 @@
 @extends('layouts.adminmart.detalle')
 
 @section('content')
-    {{-- <input type="hidden" id="curso" value="{{ $curso->Curso->titulo }}">
+    <input type="hidden" id="curso" value="{{ $curso->Curso->titulo }}">
     <div class="card">
         <div class="card-body">
             <h4 class="card-title">Metodos de pago</h4>
@@ -11,15 +11,14 @@
                 @csrf
                 <ul class="nav nav-tabs mb-3">
                     <li class="nav-item">
-                        <a href="#home" id="tarjeta" data-toggle="tab" aria-expanded="true" class="nav-link active">
+                        <a href="#home" id="tarjeta" data-toggle="tab" aria-expanded="false" class="nav-link">
                             <i class="mdi mdi-home-variant d-lg-none d-block mr-1"></i>
                             <span class="d-none d-lg-block">Tarjeta Credito/Debito</span>
                             <img src="{{ asset('img/logo_conekta_color.svg') }}" class="img-fluid" alt="conekta">
                         </a>
                     </li>
-                    {{-- <li class="nav-item">
-                        <a href="#profile" id="oxxo" data-toggle="tab" aria-expanded="false"
-                            class="nav-link">
+                    <li class="nav-item">
+                        <a href="#oxo" id="oxxo" data-toggle="tab" aria-expanded="false" class="nav-link">
                             <i class="mdi mdi-account-circle d-lg-none d-block mr-1"></i>
                             <span class="d-none d-lg-block">Oxxo</span>
                         </a>
@@ -31,60 +30,59 @@
                         <div class="form-group">
                             <label for="nombretarjetahabiente">Nombre del tarjetahabiente</label>
                             <input type="text" class="form-control" id="nombretarjetahabiente"
-
-                                    placeholder="Ej. Oscar Robles Torres" size="20" data-conekta="card[name]" />
+                                placeholder="Ej. Oscar Robles Torres" size="20" data-conekta="card[name]" />
                         </div>
                         <div class="form-group">
                             <label for="tarjeta">Número de la tarjeta de crédito</label>
-                            <input type="text" class="form-control" id="tarjeta"
-
-                                    placeholder="Ej. 87129873" size="20" data-conekta="card[number]" />
+                            <input type="text" class="form-control" id="tarjeta" placeholder="Ej. 87129873" size="20"
+                                data-conekta="card[number]" />
                         </div>
                         <div class="form-row">
                             <label>
                                 <span>CVC</span>
-                                <input type="text" size="4"
-                                         data-conekta="card[cvc]"/>
+                                <input type="text" size="4" data-conekta="card[cvc]" />
                             </label>
                         </div>
                         <div class="form-row">
                             <label>
                                 <span>Fecha de expiración (MM/AAAA)</span>
-                                <input type="text" size="2"
-                                         data-conekta="card[exp_month]"/>
+                                <input type="text" size="2" data-conekta="card[exp_month]" />
                             </label>
                             <span>/</span>
                             <label>
-                                <input type="text" size="4"
-                                         data-conekta="card[exp_year]"/>
+                                <input type="text" size="4" data-conekta="card[exp_year]" />
                             </label>
                         </div>
                     </div>
-                    {{-- <div class="tab-pane" id="profile">
+                    <div class="tab-pane" id="profile">
                         A continuacion se generara una ficha para pagar a travez de Oxxo pay.
-                    </div> --
-                </div>
-                <hr>
-                <input type="hidden" id="tipo_cobro" name="tipo_cobro" value="tarjeta">
-                <input type="hidden" id="curso_programado_id" name="curso_programado_id" value="{{ $curso->id }}">
-                <div class="form-group">
-                    <div id="divAlerts"></div>
-                    <label for="">Precio</label>
-                    <label id="text_descuento"></label>
-                    <input type="text" class="form-control" id="precio" value="${{ $curso->precio_en_moneda }} MxN" disabled>
-                    <input type="hidden" id="precioh" name="precio" value="{{ str_replace(",","",$curso->precio_en_moneda) }}">
-                    <!---<input type="hidden" id="authName" name="authName" value="{{ auth()->user()->nombre.''.auth()->user()->apellido }}">
-                    <input type="hidden" id="authEmail" name="authEmail" value="{{ auth()->user()->email }}">
-                    <input type="hidden" id="authPhone" name="authPhone" value="{{ auth()->user()->telefono }}">-->
+                    </div>
+                    <hr>
+                    <input type="hidden" id="tipo_cobro" name="tipo_cobro" value="tarjeta">
+                    <input type="hidden" id="curso_programado_id" name="curso_programado_id" value="{{ $curso->id }}">
+                    <div class="form-group">
+                        <div id="divAlerts"></div>
+                        <label for="">Precio</label>
+                        <label id="text_descuento"></label>
+                        <input type="text" class="form-control" id="precio" value="${{ $curso->precio_en_moneda }} MxN"
+                            disabled>
+                        <input type="hidden" id="precioh" name="precio"
+                            value="{{ str_replace(',', '', $curso->precio_en_moneda) }}">
+                        <input type="hidden" id="authName" name="authName"
+                            value="{{ auth()->user()->nombre . '' . auth()->user()->apellido }}">
+                        <input type="hidden" id="authEmail" name="authEmail" value="{{ auth()->user()->email }}">
+                        <input type="hidden" id="authPhone" name="authPhone" value="{{ auth()->user()->telefono }}">
 
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="clave" class="form-control" name="clave" placeholder="Código de descuento">
+                        <button type="button" class="btn btn-primary" id="descuento">Agregar descuento</button>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <input type="text" id="clave" class="form-control" name="clave" placeholder="Código de descuento">
-                    <button type="button" class="btn btn-primary" id="descuento">Agregar descuento</button>
-                </div>
+
             </form>
         </div>
-    </div> --}}
+    </div>
 
 
 @endsection
@@ -166,6 +164,5 @@
                 console.log(token);
             };
         });
-
     </script>
 @endsection
