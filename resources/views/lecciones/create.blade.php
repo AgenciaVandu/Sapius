@@ -4,7 +4,7 @@
     <div class="page-breadcrumb">
         <div class="row">
             <div class="col-7 align-self-center">
-                <h3 class="page-title text-truncate text-dark font-weight-medium mb-1">Agregar @if($leccion_id == 0) Módulos @else Clases @endif</h3>
+                <h3 class="page-title text-truncate text-dark font-weight-medium mb-1">Agregar @if ($leccion_id == 0) Módulos @else Clases @endif</h3>
                 <div class="d-flex align-items-center">
                     @include('genericos.breadcrum',['route' => 'lecciones.create'])
                 </div>
@@ -23,7 +23,8 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-body">
-                    <form method="POST" action="{{ route(Auth::user()->rol[0]->slug.'.lecciones.store') }}" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route(Auth::user()->rol[0]->slug . '.lecciones.store') }}"
+                        enctype="multipart/form-data">
                         @csrf
 
                         <input name="curso_id" type="hidden" value="{{ $curso->id }}">
@@ -32,7 +33,8 @@
                         <div class="form-group row">
                             <div class="col-md-12">
                                 <label for="titulo">Título</label>
-                                <input id="titulo" type="text" class="form-control @error('nombre') is-invalid @enderror" name="titulo" value="" required autocomplete="titulo" autofocus>
+                                <input id="titulo" type="text" class="form-control @error('nombre') is-invalid @enderror"
+                                    name="titulo" value="" required autocomplete="titulo" autofocus>
 
                                 @error('titulo')
                                     <span class="invalid-feedback" role="alert">
@@ -45,7 +47,8 @@
                         <div class="form-group row">
                             <div class="col-md-12">
                                 <label for="slug">Slug</label>
-                                <input id="slug" type="text" class="form-control @error('slug') is-invalid @enderror" name="slug" value="" required autocomplete="slug" autofocus>
+                                <input id="slug" type="text" class="form-control @error('slug') is-invalid @enderror"
+                                    name="slug" value="" required autocomplete="slug" autofocus>
 
                                 @error('slug')
                                     <span class="invalid-feedback" role="alert">
@@ -58,7 +61,9 @@
                         <div class="form-group row">
                             <div class="col-md-12">
                                 <label for="contenido">Contenido</label>
-                                <textarea id="contenido" class="form-control @error('contenido') is-invalid @enderror" name="contenido" required autocomplete="contenido" autofocus>{{ old('contenido') }}</textarea>
+                                <textarea id="contenido" class="form-control @error('contenido') is-invalid @enderror"
+                                    name="contenido" required autocomplete="contenido"
+                                    autofocus>{{ old('contenido') }}</textarea>
 
                                 @error('contenido')
                                     <span class="invalid-feedback" role="alert">
@@ -72,8 +77,10 @@
                             <div class="col-md-12">
                                 <label for="descripcion">Imagen</label>
                                 <div class="custom-file">
-                                    <input type="file" name="image" class="custom-file-input" id="inputGroupFile02" accept="image/*">
-                                    <label class="custom-file-label" for="inputGroupFile02" aria-describedby="inputGroupFileAddon02">Selecciona</label>
+                                    <input type="file" name="image" class="custom-file-input" id="inputGroupFile02"
+                                        accept="image/*">
+                                    <label class="custom-file-label" for="inputGroupFile02"
+                                        aria-describedby="inputGroupFileAddon02">Selecciona</label>
                                 </div>
                             </div>
                         </div>
@@ -89,7 +96,7 @@
             </div>
         </div>
     </div>
-</div>
+    </div>
 @endsection
 
 @section('css')
@@ -100,13 +107,13 @@
     <script src="{{ asset('vendor/summernote/summernote.min.js') }}"></script>
 
     <script>
-        $(document).ready( function () {
+        $(document).ready(function() {
             //cambiar nombre de input importar
             $(".custom-file-input").on("change", function() {
                 var fileName = $(this).val().split("\\").pop();
                 if (fileName) {
                     $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
-                }else{
+                } else {
                     $(this).siblings(".custom-file-label").addClass("selected").html("Selecciona archivo");
                 }
             });

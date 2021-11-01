@@ -170,7 +170,7 @@ Route::group(['middleware' =>['instructor'],'prefix' => 'instructor'], function(
     // Lecciones
     Route::post('/cursos/modulos', 'Cursos\LeccionController@index')->name('instructor.lecciones.index');//{curso_id}
     Route::post('/modulos/create', 'Cursos\LeccionController@create')->name('instructor.lecciones.create');//{curso_id}
-    Route::post('/modulos/store', 'Cursos\LeccionController@store')->name('instructor.lecciones.store');
+    Route::post('/modulos/store', 'Cursos\LeccionController@stoFre')->name('instructor.lecciones.store');
     Route::get('modulos/{id}/view', 'Cursos\LeccionController@show')->name('instructor.lecciones.show');//{id}
     Route::post('/modulos/edit', 'Cursos\LeccionController@edit')->name('instructor.lecciones.edit');//{id}
     Route::post('/modulos/update', 'Cursos\LeccionController@update')->name('instructor.lecciones.update');

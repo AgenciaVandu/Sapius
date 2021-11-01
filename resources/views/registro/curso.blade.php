@@ -61,7 +61,7 @@
                                         $array_fecha_final = explode('/', $fecha_final);
                                         $fecha_final = $contenido['fecha_final'] ? $array_fecha_final[1] . '/' . $array_fecha_final[0] . '/' . $array_fecha_final[2] : null;
                                         $hora_final = $contenido['hora_final'] ? $contenido['hora_final'] : null;
-                                        $date_end = new DateTime ($fecha_final . ' ' . $hora_final);
+                                        $date_end = new DateTime($fecha_final . ' ' . $hora_final);
                                     }
                                     $verifica_fecha = $hoy >= $fecha_inicial && $hoy <= $fecha_final;
                                     $date_diff_start = $date_start->diff(date_create('now'));
@@ -69,8 +69,9 @@
                                 @endphp
                                 {{-- {{ dd($date_diff_start) }} --}}
                                 @if ($date_diff_end->invert == 1 && $date_diff_start->invert == 0)
-                                    <a href="javascript:void(0)" class="list-group-item" onclick="event.preventDefault();
-                                                        document.getElementById('form{{ $item->id }}').submit();">
+                                    <a href="javascript:void(0)" class="list-group-item"
+                                        onclick="event.preventDefault();
+                                                                    document.getElementById('form{{ $item->id }}').submit();">
                                         {{ $item->titulo }}
                                     </a>
                                     <form method="POST" action="{{ route('leccion.detallada') }}"
@@ -103,7 +104,9 @@
                         <div class="col-md-12">
                             @if ($inscrito == null)
                                 <a href="javascript:void(0)" class="btn btn-block btn-dark btn-detalle"
-                                    {{-- id="{{ route('inscripcion.form', ['curso_programado_id' => $curso_programado->id]) }}" --}}>Inscribir</a>
+                                    id="{{ route('inscripcion.form', [$curso_programado->id]) }}">Inscribir</a>
+                                <a href="javascript:void(0)" class="btn btn-block btn-dark rounded-10 btn-detalle"
+                                    id="{{ route('inscripcion.form', [$curso_programado->id]) }}">Comprar</a>
                             @elseif($inscrito->aceptado == 'no')
                                 <div class="alert alert-warning bg-warning text-white border-0" role="alert">
                                     Aprobración <strong>Pendiente</strong>
@@ -151,5 +154,12 @@
 @endsection
 
 @section('javascript')
+
     <script src="{{ asset('js/funciones.js') }}"></script>
+    <script type="text/javascript" src="https://cdn.conekta.io/js/latest/conekta.js"></script>
+    <script type="text/javascript">
+        // Conekta Public Key
+        Conekta.setPublishableKey('key_sqDsFRvLBF3xEPZiYYJjtA');
+        // ...
+    </script>
 @endsection
