@@ -22,10 +22,10 @@
                         <thead class="thead-light">
                             <tr>
                                 <th>Módulos - Clases</th>
-                                <th>Fecha inicial</th>
-                                <th>Hora inicial</th>
-                                <th>Fecha final</th>
-                                <th>Hora final</th>
+                                <th>Fecha Inicial</th>
+                                <th>Fecha Final</th>
+                                <th>Hora Inicial</th>
+                                <th>Hora Final</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -34,10 +34,12 @@
                                 <input id="curso_id" type="hidden" name="curso_id" value="{{ $cp['curso']->id }}">
                                 <input id="curso_programado_id" type="hidden" name="curso_programado_id"
                                     value="{{ $cp->id }}">
+
                                 @foreach ($cp['Curso']['Lecciones'] as $leccion)
                                     @php
-                                        //dd($cp['Curso']['Lecciones']);
+
                                         $fecha_inicial = $fecha_final = null;
+                                        $hora_inicial = $hora_final = null;
                                         if ($contenido_programado) {
                                             $contenido = collect($contenido_programado->contenido)
                                                 ->where('id', $leccion->id)
@@ -63,18 +65,15 @@
                                         <td>
                                             <input id="fecha_final_{{ $leccion->id }}" type="text" class="calendar"
                                                 name="fecha_final_{{ $leccion->id }}" required
-                                                autocomplete="fecha_final_{{ $leccion->id }}" autofocus
-                                                value="@if ($fecha_final) {{ $fecha_final }} @endif">
+                                                autocomplete="fecha_final_{{ $leccion->id }}" value="@if($fecha_final){{ $fecha_final }}@endif">
                                         </td>
                                         <td>
                                             <input type="time" name="hora_inicial_{{ $leccion->id }}" required
-                                            autocomplete="hora_inicial_{{ $leccion->id }}" autofocus
-                                            value="{{ $hora_inicial }}">
+                                                autocomplete="hora_inicial_{{ $leccion->id }}" value="@if ($hora_inicial){{ $hora_inicial }}@endif">
                                         </td>
                                         <td>
                                             <input type="time" name="hora_final_{{ $leccion->id }}" required
-                                            autocomplete="hora_final_{{ $leccion->id }}" autofocus
-                                            value="{{ $hora_final }}">
+                                                autocomplete="hora_final_{{ $leccion->id }}" value="@if ($hora_final){{$hora_final}}@endif">
                                         </td>
                                     </tr>
                                     @foreach ($leccion['Clases'] as $clase)
@@ -92,32 +91,32 @@
                                             }
                                         @endphp
                                         <tr>
-                                            <td >
+                                            <td>
                                                 {{ $clase->titulo }}
                                                 <input id="leccion_id_{{ $clase->id }}" type="hidden"
                                                     name="leccion_id_{{ $clase->id }}" value="{{ $clase->id }}">
                                             </td>
                                             <td>
-                                                <input id="fecha_inicial_{{ $clase->id }}" type="text"
-                                                    class="calendar" name="fecha_inicial_{{ $clase->id }}" required
+                                                <input id="fecha_inicial_{{ $clase->id }}" type="text" class="calendar"
+                                                    name="fecha_inicial_{{ $clase->id }}" required
                                                     autocomplete="fecha_inicial_{{ $clase->id }}" autofocus
                                                     value="@if ($fecha_inicial) {{ $fecha_inicial }} @endif">
                                             </td>
                                             <td>
-                                                <input id="fecha_final_{{ $clase->id }}" type="text"
-                                                    class="calendar" name="fecha_final_{{ $clase->id }}" required
+                                                <input id="fecha_final_{{ $clase->id }}" type="text" class="calendar"
+                                                    name="fecha_final_{{ $clase->id }}" required
                                                     autocomplete="fecha_final_{{ $clase->id }}" autofocus
                                                     value="@if ($fecha_final) {{ $fecha_final }} @endif">
                                             </td>
                                             <td>
                                                 <input type="time" name="hora_inicial_{{ $clase->id }}" required
-                                                autocomplete="hora_inicial_{{ $clase->id }}" autofocus
-                                                value="{{ $hora_inicial }}">
+                                                    autocomplete="hora_inicial_{{ $clase->id }}" autofocus
+                                                    value="@if ($hora_inicial){{ $hora_inicial }}@endif">
                                             </td>
                                             <td>
                                                 <input type="time" name="hora_final_{{ $clase->id }}" required
-                                                autocomplete="hora_final_{{ $clase->id }}" autofocus
-                                                value="{{ $hora_final }}">
+                                                    autocomplete="hora_final_{{ $clase->id }}" autofocus
+                                                    value="@if ($hora_final){{ $hora_final }}@endif">
                                             </td>
                                         </tr>
                                     @endforeach

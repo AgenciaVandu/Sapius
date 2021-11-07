@@ -192,7 +192,7 @@ class CursoProgramadoController extends Controller
                 }])->find($request->curso_programado_id);
 
         $contenido_programado = ContenidoProgramado::where('curso_programado_id',$request->curso_programado_id)->first();
-        
+
         //Verificar si se muestra:
         // 2.- Video de la clase en medias
         // 1.- Imagen de la clase

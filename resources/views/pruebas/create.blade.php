@@ -37,7 +37,6 @@
                                     <option value="EGEL">EGEL</option>
                                     <option value="ENARM">ENARM</option>
                                 </select>
-
                                 @error('tipo')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
