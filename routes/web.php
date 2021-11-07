@@ -13,6 +13,7 @@
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\User;
 
 Route::get('/', function () {
     return view('welcome');
@@ -297,4 +298,9 @@ Route::group(['middleware' =>['alumno'],'prefix' => 'alumno'], function() {
 
     //Descuentos
     Route::post('descuentos/check', 'Registro\DescuentoController@check')->name('descuentos.check');
+});
+
+Route::get('email-registro', function () {
+    $user = User::find(1);
+        return new App\Mail\RegistroEmail($user);
 });

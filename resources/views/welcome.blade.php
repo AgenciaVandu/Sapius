@@ -221,6 +221,7 @@
     </div>
 
     <hr>
+    <div><button id="culo" data-target="#culo" data-toggle="modal" >culo</button></div>
 
     <div class="container-fluid">
         <div class="row">
@@ -338,7 +339,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"></script>
     <script>
         $(document).ready( function(){
-            $('#exampleModal').on('hidden.bs.modal', function (e) {
+            $('#culo').on('hidden.bs.modal', function (e) {
                 $(this)
                 .find("input,textarea,select")
                 .val('')
