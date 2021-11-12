@@ -1,0 +1,270 @@
+
+/* COLORS */
+.color-orange {
+    color: #ED6A5A;
+}
+
+.color-blue {
+    color: #002146;
+}
+
+.color-lowblue{
+    color: #30D6E6;
+}
+
+.color-gray {
+    color: #4C5454;
+}
+
+.nav-link {
+    color: #fff !important;
+}
+
+.nav-link:hover{
+    color: #ED6A5A !important;
+}
+
+/* BACKGROUNDS */
+
+.bg-blue {
+    background-color: #002146;
+}
+
+.bg-light {
+    background-color: transparent !important;
+}
+
+.bg-blue-1 {
+    background-image: url(/img/fondos/fondo-1.svg);
+    background-position: center;
+    background-size: cover;
+    min-height: 600px;
+}
+
+
+.bg-2 {
+    background-image: url(/img/fondos/fondo-2.svg);
+    background-position: center;
+    background-size: cover;
+    min-height: 362px;
+}
+.bg-blue-2 {
+    background-color: #002146;
+    border-radius: 28px;
+}
+
+.bg-blue-3 {
+    background-image: url(/img/fondos/fondo-3.svg);
+    background-position: center;
+    background-size: cover;
+    min-height: 600px;
+}
+
+/*buttons*/
+
+.btn-primary {
+    background-color: #ED6A5A;
+    padding-right: 30px;
+    padding-left: 30px;
+    text-transform: uppercase;
+    border: none;
+    font-weight: 700;
+    border-radius: 10px;
+}
+.btn-primary:hover {
+    background-color: #30D6E6;
+    
+}
+.btn-secondary {
+    background-color: #ED6A5A;
+    padding-right: 20px;
+    padding-left: 20px;
+    text-transform: uppercase;
+    border: none;
+    font-weight: 700;
+    border-radius: 10px;
+} .btn-secondary:hover {
+    background-color: #30D6E6;
+    
+    
+}
+.btn-light {
+    background-color: #30D6E6;
+    border: none;
+    color: #fff;
+    font-weight: 500;
+    border-radius: 8px;
+
+}
+
+/*padding*/
+
+.pad{
+    padding-top: 80px;
+    padding-bottom: 40px;
+}
+.pad-1 {
+    padding-top: 100px;
+}
+.p-link {
+    padding-right: 10px;
+}
+.p-info {
+    padding:58px;
+}
+.exani {
+    padding-top: 110px;
+}
+
+.orgullo-txt-1 {
+    position: relative;
+    top: 75px;
+}
+
+.pad-50 {
+    padding-left: 40px;
+    padding-right: 40px;
+    padding-bottom: 40px;
+}
+/**/
+
+* {
+    font-family: 'Roboto';
+}
+
+.bg-blue p {
+    font-weight: 300;
+}
+
+.bg-naranja {
+    background-image: url(/img/naranja.svg);
+    background-repeat: no-repeat;
+    background-position: right;
+}
+
+.orgullo-sapius {
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
+
+.orgullo-txt {
+    padding-top: 130px;
+}
+.orgullo-txt h1 {
+    font-size: 50px;
+}
+
+.card {
+    position: relative;
+    left: 150px;
+    height: 400px;
+    width: 300px;
+    border-color: transparent;
+    border-radius: 20px;
+    box-shadow: .2px 0 0.8em rgba(128, 128, 128, 0.29);
+}
+
+.cabecera-orgullo {
+    margin-top: 35px;
+}
+
+.maestros p {
+    font-weight: 300;
+    font-size: 16px;
+}
+
+#modalidades h2 {
+    color: #3a3a3a;
+    font-weight: 700;
+}
+
+li {
+    font-weight: 200;
+    line-height: 32px;
+    color: #fff;
+    list-style: none;
+}
+
+a {
+    color: #fff;
+    text-decoration: none;
+}
+a:hover {
+    color: #ED6A5A;
+    text-decoration: none;
+}
+
+.icono {
+    font-size: 25px;
+}
+
+.exani p {
+    text-align: justify;
+}
+
+.titular {
+    text-align: center;
+}
+
+.titular h2 {
+    line-height: 30px;
+}
+
+.titular span {
+    font-weight: 300;
+    font-size: 22px;
+}
+.posicion {
+    position: relative;
+    top: 135px;
+}
+.caracteristicas {
+    font-size: 20px;
+}
+
+hr {
+    position: relative;
+    right: 30px;
+    width: 305px;
+}
+.check {
+    position: relative;
+    left: 140px;
+}
+.check-1 {
+    position: relative;
+    left: 180px;
+}
+.check-2 {
+    position: relative;
+    left: 112px;
+}
+.check-3 {
+    position: relative;
+    left: 165px;
+}
+.check-4 {
+    position: relative;
+    left: 212px;
+}
+.check-5 {
+    position: relative;
+    left: 152px;
+}
+.check-6 {
+    position: relative;
+    top: -20px;
+    left: 142px;
+}
+.check-7 {
+    position: relative;   
+    left: 156px;
+}
+
+.fa-star {
+    color: gold;
+}
+
+.cta-1 {
+    line-height: 30px;
+}

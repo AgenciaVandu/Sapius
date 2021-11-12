@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 use App\User;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('index');
 });
 Route::get('terms/conditions', function () {
     return view('terms');
