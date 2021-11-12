@@ -21,6 +21,21 @@ Route::get('/', function () {
 Route::get('terms/conditions', function () {
     return view('terms');
 });
+Route::get('/exani-1', function () {
+    return view('cursos-front.exani-1');
+});
+Route::get('/exani-2', function () {
+    return view('cursos-front.exani-2');
+});
+Route::get('/exani-3', function () {
+    return view('cursos-front.exani-3');
+});
+Route::get('/egel-plus', function () {
+    return view ('cursos-front.egel-plus');
+});
+Route::get ('/egel-plus-nutricion', function () {
+    return view('cursos-front.nutricion');
+});
 //Socialite
 Route::get('/redirect', 'SocialAuthFacebookController@redirect');
 Route::get('/callback', 'SocialAuthFacebookController@callback');

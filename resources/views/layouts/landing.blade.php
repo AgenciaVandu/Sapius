@@ -45,10 +45,10 @@
           <ul class="navbar-nav ml-auto">
             <li class="nav-item active">
               <li class="nav-item p-link">
-                <a class="nav-link" href="#">Registrarme</a>
+                <a class="nav-link" href="{{ route('register') }}">Registrarme</a>
               </li>
               <form class="form-inline my-2 my-lg-0">
-                <button class="btn btn-primary my-2 my-sm-0" type="submit">Iniciar sesión</button>
+                <a class="btn btn-primary my-2 my-sm-0"  href="{{ route('login') }}">Iniciar sesión</a>
               </form>
             </li>
           </ul>
