@@ -16,7 +16,7 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
         <div class="container">
             <a class="navbar-brand" href="#">
-                <img src="/img/logo-sapius.svg" width="130" alt="">
+                <img src="{{asset('img/v1/logo-sapius.svg')}}" width="130" alt="">
             </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -109,7 +109,9 @@
                     <span class="pr-2"><a href="">Política de cookies</a></span> 
                     <br>
                     <small>
-                    Sapius.®  Todos los derechos reservados &copy;<script>document.write(new Date().getFullYear());</script>
+                    Sapius.®  Todos los derechos reservados &copy;<script>document.write(new Date().getFullYear()); 
+                     </script>. Desarrollado por <a href="https://agenciavandu.com">Agencia Vandu.</a>
+                    
                 </div>
               </div>
               

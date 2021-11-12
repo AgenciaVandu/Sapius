@@ -35,7 +35,7 @@
 }
 
 .bg-blue-1 {
-    background-image: url(/img/fondos/fondo-1.svg);
+    background-image: url(/img/v1/fondos/fondo-1.svg);
     background-position: center;
     background-size: cover;
     min-height: 600px;
@@ -43,7 +43,7 @@
 
 
 .bg-2 {
-    background-image: url(/img/fondos/fondo-2.svg);
+    background-image: url(/img/v1//fondos/fondo-2.svg);
     background-position: center;
     background-size: cover;
     min-height: 362px;
@@ -54,7 +54,7 @@
 }
 
 .bg-blue-3 {
-    background-image: url(/img/fondos/fondo-3.svg);
+    background-image: url(/img/v1/fondos/fondo-3.svg);
     background-position: center;
     background-size: cover;
     min-height: 600px;
@@ -137,7 +137,7 @@
 }
 
 .bg-naranja {
-    background-image: url(/img/naranja.svg);
+    background-image: url(/img/v1/naranja.svg);
     background-repeat: no-repeat;
     background-position: right;
 }
