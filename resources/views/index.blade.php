@@ -257,44 +257,75 @@
     </div>
   </section>
   <section id="maestros">
-    <div class="bg-blue mt-5">
-      <div class="container-fluid"> <!--Slider-->
-        <h2 class="text-center pt-5 pb-4" style="color: #fff;">Conoce a nuestros docentes</h2>
-        <div class="row text-center maestros pb-5">
-          <div class="col-md-3 col-lg-3 col-sm-6">
-            <div class="maestro-img">
-              <img src="{{asset('img/v1/maestros.png')}}" class="img-fluid pb-3" alt="">
-            </div>
-            <h4 style="color: #fff;">Verónica G.</h5>
-            <p class="lead" style="color: #fff;">¿Quieres contactar a <br> algún docente?</p>
-            <a href="" class="btn btn-secondary">Enviar Mensaje</a>
+    <div class="bg-blue pt-5 pb-5">
+      <div class="container"> <!--Slider-->
+        <h2 class="text-center pb-4" style="color: #fff;">Conoce a nuestros docentes</h2>
+        <div class="carousel_1">
+          <!--Carousel 2-->
+          <div class="carousel__contenedor">
+              <!--Carousel contenedor-->
+              <button aria-label="anterior" class="carousel__anterior">
+                  <i class="fas fa-chevron-left"></i>
+              </button>
+              <div class="carousel__lista1 text-center">
+                <div class="carousel__elemento">
+                  <div class="maestro-img">
+                    <img src="{{asset('img/v1/maestros.png')}}" class="img-fluid pb-3" alt="">
+                  </div>
+                    <h4 style="color: #fff;">Verónica G.</h5>
+                    <p class="lead" style="color: #fff;">¿Quieres contactar a <br> algún docente?</p>
+                    <a href="" class="btn btn-secondary">Enviar Mensaje</a>   
+                </div>
+                <div class="carousel__elemento">
+                  <div class="maestro-img">
+                    <img src="{{asset('img/v1/maestros.png')}}" class="img-fluid pb-3" alt="">
+                  </div>
+                    <h4 style="color: #fff;">Verónica G.</h5>
+                    <p class="lead" style="color: #fff;">¿Quieres contactar a <br> algún docente?</p>
+                    <a href="" class="btn btn-secondary">Enviar Mensaje</a>   
+                </div>
+                <div class="carousel__elemento">
+                  <div class="maestro-img">
+                    <img src="{{asset('img/v1/maestros.png')}}" class="img-fluid pb-3" alt="">
+                  </div>
+                    <h4 style="color: #fff;">Verónica G.</h5>
+                    <p class="lead" style="color: #fff;">¿Quieres contactar a <br> algún docente?</p>
+                    <a href="" class="btn btn-secondary">Enviar Mensaje</a>   
+                </div>
+                <div class="carousel__elemento">
+                  <div class="maestro-img">
+                    <img src="{{asset('img/v1/maestros.png')}}" class="img-fluid pb-3" alt="">
+                  </div>
+                    <h4 style="color: #fff;">Verónica G.</h5>
+                    <p class="lead" style="color: #fff;">¿Quieres contactar a <br> algún docente?</p>
+                    <a href="" class="btn btn-secondary">Enviar Mensaje</a>   
+                </div>
+                <div class="carousel__elemento">
+                  <div class="maestro-img">
+                    <img src="{{asset('img/v1/maestros.png')}}" class="img-fluid pb-3" alt="">
+                  </div>
+                    <h4 style="color: #fff;">Verónica G.</h5>
+                    <p class="lead" style="color: #fff;">¿Quieres contactar a <br> algún docente?</p>
+                    <a href="" class="btn btn-secondary">Enviar Mensaje</a>   
+                </div>
+                <div class="carousel__elemento">
+                  <div class="maestro-img">
+                    <img src="{{asset('img/v1/maestros.png')}}" class="img-fluid pb-3" alt="">
+                  </div>
+                    <h4 style="color: #fff;">Verónica G.</h5>
+                    <p class="lead" style="color: #fff;">¿Quieres contactar a <br> algún docente?</p>
+                    <a href="" class="btn btn-secondary">Enviar Mensaje</a>   
+                </div>
+                  
+              </div>
+              <button aria-label="siguiente" class="carousel__siguiente">
+                  <i class="fas fa-chevron-right"></i>
+              </button>
           </div>
-          <div class="col-md-3 col-lg-3 col-sm-6">
-            <div class="maestro-img">
-              <img src="{{asset('img/v1/maestros.png')}}" class="img-fluid pb-3" alt="">
-            </div>
-            <h4 style="color: #fff;">Verónica G.</h5>
-            <p class="lead" style="color: #fff;">¿Quieres contactar a <br> algún docente?</p>
-            <a href="" class="btn btn-secondary">Enviar Mensaje</a>
-          </div>
-          <div class="col-md-3 col-lg-3 col-sm-6">
-            <div class="maestro-img">
-              <img src="{{asset('img/v1/maestros.png')}}" class="img-fluid pb-3" alt="">
-            </div>
-            <h4 style="color: #fff;">Verónica G.</h5>
-            <p class="lead" style="color: #fff;">¿Quieres contactar a <br> algún docente?</p>
-            <a href="" class="btn btn-secondary">Enviar Mensaje</a>
-          </div>
-          <div class="col-md-3 col-lg-3 col-sm-6">
-            <div class="maestro-img">
-              <img src="{{asset('img/v1/maestros.png')}}" class="img-fluid pb-3" alt="">
-            </div>
-            <h4 style="color: #fff;">Verónica G.</h5>
-            <p class="lead" style="color: #fff;">¿Quieres contactar a <br> algún docente?</p>
-            <a href="" class="btn btn-secondary">Enviar Mensaje</a>
-          </div>
-        </div>
-      </div> <!--END Slider-->
+          <div role="tabList" class="carousel__indicadores1"></div>
+      </div> <!-- Fint Carousel 2--> 
+      </div>
+    </div> <!--END Slider-->
       
     </div>
   </section>

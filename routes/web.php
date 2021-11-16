@@ -36,6 +36,16 @@ Route::get('/egel-plus', function () {
 Route::get ('/egel-plus-nutricion', function () {
     return view('cursos-front.nutricion');
 });
+
+Route::get ('/egel-plus-medicina', function () {
+    return view('cursos-front.medicina');
+});
+Route::get ('/cursos-enarm', function(){
+    return view('cursos-front.enarm');
+});
+Route::get ('/cursos-presenciales', function (){
+    return view('cursos-front.presencial');
+});
 //Socialite
 Route::get('/redirect', 'SocialAuthFacebookController@redirect');
 Route::get('/callback', 'SocialAuthFacebookController@callback');

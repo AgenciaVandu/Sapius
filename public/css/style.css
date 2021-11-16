@@ -357,4 +357,27 @@ hr {
     color: #fff;
 }
 
-/*Carusel*/
+.carousel__anterior,
+.carousel__siguiente {
+    display: none;
+}
+
+.texto-carousel-1 {
+    text-align: justify;
+}
+
+
+
+.glider-dot {
+    background: #EE7768;
+    opacity: .2;
+}
+.glider-dot:hover {
+    background: #EE7768;
+    opacity: .5;
+}
+
+.glider-dot.active {
+    background: #EE7768;
+    opacity: 1;
+}

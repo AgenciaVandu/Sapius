@@ -4,7 +4,7 @@
     <div class="container pad text-center">
         <div class="col-12 pad-1">
             <h1 style="color: #fff;">Prepárate con Sapius <br>
-                Acredita el <span class=color-lowblue>EGEL Plus</span> NUTRICIÓN con Sapius. <br> <span>El 99.1% de nuestros estudiantes acreditan</span>
+                Acredita el <span class=color-lowblue>EGEL Plus</span> MEDICINA con Sapius. <br> <span>El 99.1% de nuestros estudiantes acreditan</span>
             </h1>
             <p style="color: #fff;">"Tu formación, es nuestra pasión"</p>
             <a href="" class="btn btn-primary">Comenzar</a>
@@ -14,54 +14,61 @@
 </header>
 <section id="exani">
     <div class="container pt-5">
-        <h2 class="color-gray text-center pt-3">Habilidades que reforzarás en el curso</h2>
+        <h2 class="color-gray text-center pt-3">Habilidades que reforzarás en el curso <br>
+            <span style="font-size: 20px">Sección Disciplinar Específica</span>
+        </h2>
         <div class="row pt-3">
-            <div class="col-md-4 col-lg-4 col-sm-12">
+            <div class="col-md-4 col-lg-3 col-sm-12">
                 <h1 class="color-orange">1</h1>
-                <h4 class="color-gray">Atención clínica <br> 
-                    Nutriológica
-                </h4>
-                <p style="color: gray">1. Evaluación del estado de nutrición <br>
-                    <span>2. Tratamiento nutriológico individualizado </span> <br>
-                    <span>3. Orientación alimentaria individualizada </span> <br>
-                    <span>4. Manejo del servicio de nutrición clínica</span>
+                <h5 class="color-gray">Promoción de la salud y  <br> 
+                    prevención de riesgos
+                </h5>
+                <p style="color: gray">1. Diagnóstico de la comunidad <br>
+                    <span>2. Promoción y prevención clínica</span> <br>
                 </p>
             </div>
-            <div class="col-md-4 col-lg-4 col-sm-12">
+            <div class="col-md-4 col-lg-3 col-sm-12">
                 <h1 class="color-orange">2</h1>
-                <h4 class="color-gray">Atención clínica <br> 
-                    Nutriológica
-                </h4>
-                <p style="color: gray">1. Evaluación de la situación alimentaria y nutricional. <br>
-                    <span>2. Desarrollo de intervenciones nutricionales</span> <br>
-                    <span>3. Investigación.</span> <br>
+                <h5 class="color-gray">Atención médica: <br> 
+                    Diagnóstico médico
+                </h5>
+                <p style="color: gray">1. Diagnóstico clínico<br>
+                    <span>2. Diagnóstico paraclínico</span> <br>
                 </p>
             </div>
-            <div class="col-md-4 col-lg-4 col-sm-12">
+            <div class="col-md-4 col-lg-3 col-sm-12">
                 <h1 class="color-orange">3</h1>
-                <h4 class="color-gray">Atención clínica <br> 
-                    Nutriológica
-                </h4>
-                <p style="color: gray">1. Manejo de servicios de alimentos<br>
-                    <span>2. Normatividad para el control sanitario </span> <br>
-                    <span>3. Diseño de planes alimentarios y menús </span> <br>
-                    <span>4. Orientación alimentaria</span>
+                <h5 class="color-gray">Atención médica: <br> 
+                    Tratamiento y evolución
+                </h5>
+                <p style="color: gray">1. Manejo terapéutico integral<br>
+                    <span>2. Manejo terapéutico de emergencia </span> <br>
+                    <span>3. Evolución y complicaciones</span> <br>
+                </p>
+            </div>
+            <div class="col-md-4 col-lg-3 col-sm-12">
+                <h1 class="color-orange">4</h1>
+                <h5 class="color-gray">Sociomedicina <br> 
+                </h5>
+                <p style="color: gray">1. Acciones médico - legales<br>
+                    <span>2. Vigilancia epidemiológica</span> <br>
+                    <span>3. Sistema Nacional de Salud</span> <br>
+                    <span>4. Educación e investigación en salud</span>
                 </p>
             </div>
         </div>
         <h2 class="color-gray text-center pt-3">Sección Transversal de Lenguaje y Comunicación</h2>
         <div class="row pt-3">
             <div class="col-md-4 col-lg-4 col-sm-12">
-                <h1 class="color-orange">4</h1>
-                <h4 class="color-gray">Comprensión<br>
+                <h1 class="color-orange">5</h1>
+                <h5 class="color-gray">Comprensión
                     lectora 
-                </h4>
+                </h5>
             </div>
             <div class="col-md-4 col-lg-4 col-sm-12">
-                <h1 class="color-orange">5</h1>
-                <h4 class="color-gray">Redacción indirecta<br> 
-                    Nutriológica
-                </h4>
+                <h1 class="color-orange">6</h1>
+                <h5 class="color-gray">Redacción indirecta<br> 
+                </h5>
             </div>
         </div>
     </div>
