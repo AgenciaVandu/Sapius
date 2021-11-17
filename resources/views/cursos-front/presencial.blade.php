@@ -12,6 +12,50 @@
         
     </div>
 </header>
+<section id="incluido" class="bg-naranja-3">
+    <div class="container">
+        <div class="row pt-5 align-items-center">
+            <div class="col-lg-6 col-md-12 col-sm-12 pt-5">
+                <h2>Tasa de aprobados <br> del 99.1%</h2>
+                <p>Contamos con la tasa de aprobados más alta a nivel nacional,<br> con una acreditación del 99.1%, con resultados de excelencia.</p>
+            </div>
+            <div class="col-lg-6 col-md-12 col-sm-12 pt-5">
+                <img src="{{asset('img/v1/estudiantes/1.png')}}" class="img-fluid" alt="">
+            </div>
+            <div class="col-lg-6 col-md-12 col-sm-12 pt-5">
+                <img src="{{asset('img/v1/estudiantes/2.png')}}" class="img-fluid" alt="">
+            </div>
+            <div class="col-lg-6 col-md-12 col-sm-12 pt-5">
+                <h2>Más de 1200 <br>
+                    estudiantes nos avalan</h2>
+                <p>En la modalidad presencial contamos con más de 1200 estudiantes, satisfechos con sus resultados.</p>
+            </div>
+            <div class="col-lg-6 col-md-12 col-sm-12 pt-5">
+                <h2>Profesores expertos en el área
+                    con programas actualizados</h2>
+                <p>Nuestros profesores cuentan con la máxima experiencia en docencia y cuentan con la mayor experiencia y conocimiento de la especialidad.</p>
+            </div>
+            <div class="col-lg-6 col-md-12 col-sm-12 pt-5">
+                <img src="{{asset('img/v1/estudiantes/3.jpg')}}" class="img-fluid" alt="">
+            </div>
+            <div class="col-lg-6 col-md-12 col-sm-12 pt-5">
+                <img src="{{asset('img/v1/estudiantes/4.jpg')}}" class="img-fluid" alt="">
+            </div>
+            <div class="col-lg-6 col-md-12 col-sm-12 pt-5">
+                <h2>Contamos con descuentos por 
+                    grupos y pago anticipado</h2>
+                <p>Programa de descuentos por grupos de estudiantes (Descuento dependiendo el número) y descuento por pago anticipado.</p>
+            </div>
+            <div class="col-lg-6 col-md-12 col-sm-12 align-items-center pt-5">
+                <h2>Cupo limitado</h2>
+                <p>Nuestros programas educativos cuentan con un grupo limitado de estudiantes con la finalidad de brindar atención personalizada a cada estudiante, para la obtención de excelentes resultados.</p>
+            </div>
+            <div class="col-lg-6 col-md-12 col-sm-12 pt-5">
+                <img src="{{asset('img/v1/estudiantes/5.jpg')}}" class="img-fluid" alt="">
+            </div>
+        </div>
+    </div>
+</section>
 <section id="experiencia">
     <div class="bg-2 mt-5">
         <div class="container text-center">
@@ -22,28 +66,26 @@
         </div>
     </div>
 </section>
-<section id="prueba">
-    <div class="container">
+<section id="prueba" >
+    <div class="container justify-content-center">
         <div class="row pt-5">
             <div class="col-md-6 col-lg-6 col-sm-12">
                 <div class="row">
-                    <div class="col-3">
-                        <img src="{{asset ('img//v1/icon/exni/icono-e-1.png')}}" class="img-fluid" alt="">
+                    <div class="col-4" style="text-align: right">
+                        <img src="{{asset ('img/v1/icon/exni/calendario.png')}}" class="img-fluid" alt="">
                     </div>
-                    <div class="col-9">
-                        <h4 class="color-gray">Video Clases con <br> profesores expertos</h2>
-                        <p class="color-gray">Todos nuestros profesores tienen años de experiencia en nuestro método SUMA</p>
+                    <div class="col-8 pt-2">
+                        <h4 class="color-gray">Contamos con diferentes <br> horarios disponibles</h2>
                     </div>
                 </div>
             </div>
             <div class="col-md-6 col-lg-6 col-sm-12">
                 <div class="row">
-                    <div class="col-3">
-                        <img src="{{asset ('img//v1/icon/exni/icono-e-2.png')}}" class="img-fluid" alt="">
+                    <div class="col-4" style="text-align: right">
+                        <img src="{{asset ('img//v1/icon/exni/alumno.png')}}" class="img-fluid" alt="">
                     </div>
-                    <div class="col-9">
-                        <h4 class="color-gray">Guía <br> ENARM</h2>
-                        <p class="color-gray">Actualizamos nuestro contenido cada año con base en la bibliografía del ENARM</p>
+                    <div class="col-8 pt-2">
+                        <h4 class="color-gray">Grupos <br>reducidos</h2>
                     </div>
                 </div>
             </div>

@@ -40,6 +40,11 @@
 
 .bg-light {
     background-color: transparent !important;
+    transition: 0.5s ease;
+}
+
+.bg-light.scrolled {
+        background-color: #002146 !important;
 }
 
 .bg-blue-1 {
@@ -193,6 +198,12 @@
     .bg-naranja {
         background-position: right bottom;
     }
+}
+
+.bg-naranja-3 {
+    background-image: url(/img/v1/naranja.svg);
+    background-repeat: no-repeat;
+    background-position: center right;
 }
 
 .orgullo-sapius {
@@ -366,8 +377,6 @@ hr {
     text-align: justify;
 }
 
-
-
 .glider-dot {
     background: #EE7768;
     opacity: .2;
@@ -380,4 +389,18 @@ hr {
 .glider-dot.active {
     background: #EE7768;
     opacity: 1;
+}
+
+#incluido .row {
+    padding: 40px;
+}
+
+#incluido h2{
+    color: #3a3a3a;
+    font-weight: 600;
+    
+}
+
+.prueba-2 {
+    background: url(/v1/);
 }
