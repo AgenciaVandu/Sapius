@@ -13,12 +13,38 @@
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\User;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('index');
 });
 Route::get('terms/conditions', function () {
     return view('terms');
+});
+Route::get('/exani-1', function () {
+    return view('cursos-front.exani-1');
+});
+Route::get('/exani-2', function () {
+    return view('cursos-front.exani-2');
+});
+Route::get('/exani-3', function () {
+    return view('cursos-front.exani-3');
+});
+Route::get('/egel-plus', function () {
+    return view ('cursos-front.egel-plus');
+});
+Route::get ('/egel-plus-nutricion', function () {
+    return view('cursos-front.nutricion');
+});
+
+Route::get ('/egel-plus-medicina', function () {
+    return view('cursos-front.medicina');
+});
+Route::get ('/cursos-enarm', function(){
+    return view('cursos-front.enarm');
+});
+Route::get ('/cursos-presenciales', function (){
+    return view('cursos-front.presencial');
 });
 //Socialite
 Route::get('/redirect', 'SocialAuthFacebookController@redirect');
@@ -297,4 +323,9 @@ Route::group(['middleware' =>['alumno'],'prefix' => 'alumno'], function() {
 
     //Descuentos
     Route::post('descuentos/check', 'Registro\DescuentoController@check')->name('descuentos.check');
+});
+
+Route::get('email-registro', function () {
+    $user = User::find(1);
+        return new App\Mail\RegistroEmail($user);
 });

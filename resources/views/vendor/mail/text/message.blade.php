@@ -2,13 +2,12 @@
     {{-- Header --}}
     @slot('header')
         @component('mail::header', ['url' => config('app.url')])
-        
-        <img src="{{ asset('vendor/adminmart/assets/images/200x80.png') }}">
+            {{ config('app.name') }}
         @endcomponent
     @endslot
 
     {{-- Body --}}
-    {!! $slot !!}
+    {{ $slot }}
 
     {{-- Subcopy --}}
     @isset($subcopy)
