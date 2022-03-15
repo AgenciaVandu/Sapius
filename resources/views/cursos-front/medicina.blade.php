@@ -6,7 +6,7 @@
             <h1 style="color: #fff;">Prepárate con Sapius <br>
                 Acredita el <span class=color-lowblue>EGEL Plus</span> MEDICINA con Sapius. <br> <span>El 99.1% de nuestros estudiantes acreditan</span>
             </h1>
-            <p style="color: #fff;">"Tu formación, es nuestra pasión"</p>
+            <p style="color: #fff;">"Tu formación, nuestra pasión"</p>
             <a href="" class="btn btn-primary">Comenzar</a>
         </div>
         
@@ -18,59 +18,56 @@
             <span style="font-size: 20px">Sección Disciplinar Específica</span>
         </h2>
         <div class="row pt-3">
-            <div class="col-md-4 col-lg-3 col-sm-12">
+            <div class="col-lg-4 col-md-6 col-lg-3 col-sm-12">
                 <h1 class="color-orange">1</h1>
-                <h5 class="color-gray">Promoción de la salud y  <br> 
-                    prevención de riesgos
+                <h5 class="color-gray">Abordaje clínico <br> 
                 </h5>
-                <p style="color: gray">1. Diagnóstico de la comunidad <br>
-                    <span>2. Promoción y prevención clínica</span> <br>
+                <p style="color: gray">1. Identificación del problema de salud <br>
+                    <span>2. Diagnóstico de la comunidad</span> <br>
+                    <span>3. Terapéutica</span> <br>
                 </p>
             </div>
-            <div class="col-md-4 col-lg-3 col-sm-12">
+            <div class="col-lg-4 col-md-6 col-lg-3 col-sm-12">
                 <h1 class="color-orange">2</h1>
-                <h5 class="color-gray">Atención médica: <br> 
-                    Diagnóstico médico
+                <h5 class="color-gray">Promoción de la salud <br> 
                 </h5>
-                <p style="color: gray">1. Diagnóstico clínico<br>
-                    <span>2. Diagnóstico paraclínico</span> <br>
+                <p style="color: gray">1. Prevención<br>
+                    <span>2. Protección específica</span> <br>
+                    <span>3. Educación para la salud</span> <br>
                 </p>
             </div>
-            <div class="col-md-4 col-lg-3 col-sm-12">
+            <div class="col-lg-4 col-md-6 col-lg-3 col-sm-12">
                 <h1 class="color-orange">3</h1>
-                <h5 class="color-gray">Atención médica: <br> 
-                    Tratamiento y evolución
+                <h5 class="color-gray">Fundamento de las decisiones médicas
                 </h5>
-                <p style="color: gray">1. Manejo terapéutico integral<br>
-                    <span>2. Manejo terapéutico de emergencia </span> <br>
-                    <span>3. Evolución y complicaciones</span> <br>
+                <p style="color: gray">1. Investigación en Ciencias Médicas<br>
+                    <span>2. Medicina basada en evidencias</span> <br>
+                    <span>3. Bioética y marco legal de la medicina</span> <br>
+                    <span>4. Salud pública y global</span> <br>
                 </p>
             </div>
-            <div class="col-md-4 col-lg-3 col-sm-12">
+            <div class="col-12">
+                <h2 class="color-gray text-center pt-3 pb-3">Sección Transversal de Lenguaje y Comunicación</h2>
+            </div>
+            <div class="col-lg-4 col-md-6 col-lg-3 col-sm-12">
                 <h1 class="color-orange">4</h1>
-                <h5 class="color-gray">Sociomedicina <br> 
+                <h5 class="color-gray">Comprensión lectora <br> 
                 </h5>
-                <p style="color: gray">1. Acciones médico - legales<br>
-                    <span>2. Vigilancia epidemiológica</span> <br>
-                    <span>3. Sistema Nacional de Salud</span> <br>
-                    <span>4. Educación e investigación en salud</span>
+                <p style="color: gray">1. Ámbito de estudio<br>
+                    <span>2. Ámbito literario</span> <br>
+                    <span>3. Ámbito de participación social</span> <br>
+                </p>
+            </div>
+            <div class="col-lg-4 col-md-6 col-lg-4 col-sm-12">
+                <h1 class="color-orange">5</h1>
+                <h5 class="color-gray">Redacción indirecta nutriológica
+                </h5>
+                <p style="color: gray">1. Ámbito de estudio<br>
+                    <span>2. Ámbito de participación social</span> <br>
                 </p>
             </div>
         </div>
-        <h2 class="color-gray text-center pt-3">Sección Transversal de Lenguaje y Comunicación</h2>
-        <div class="row pt-3">
-            <div class="col-md-4 col-lg-4 col-sm-12">
-                <h1 class="color-orange">5</h1>
-                <h5 class="color-gray">Comprensión
-                    lectora 
-                </h5>
-            </div>
-            <div class="col-md-4 col-lg-4 col-sm-12">
-                <h1 class="color-orange">6</h1>
-                <h5 class="color-gray">Redacción indirecta<br> 
-                </h5>
-            </div>
-        </div>
+        
     </div>
 </section>
 <section id="prueba">
@@ -99,7 +96,7 @@
                     </div>
                     <div class="col-9">
                         <h4 class="color-gray">Guía <br> EGEL Plus</h2>
-                        <p class="color-gray">Actualizamos nuestro contenido cada año con base en la bibliografía del EGEL Plus</p>
+                        <p class="color-gray">Actualizamos nuestro contenido cada año con base en la bibliografía del EGEL Plus Medicina</p>
                     </div>
                 </div>
             </div>
@@ -169,55 +166,114 @@
                     </div>
                     <div class="row pad-50">
                         <div class="col-12">
-                            <li class="caracteristicas">Examen diagnóstico 
-                                <span class="check">
-                                    <img src="{{asset ('img/v1/icon/check.svg')}}" width="40" alt="">
-                                </span>
+                            <li class="caracteristicas">
+                                <div class="row">
+                                    <div class="col-10">Examen diagnóstico </div>
+                                    <div class="col-2">
+                                        <img src="{{asset ('img/v1/icon/check.svg')}}" width="40" alt="">
+                                        {{-- <span class="check">
+                                            <img src="{{asset ('img/v1/icon/check.svg')}}" width="40" alt="">
+                                        </span> --}}
+                                    </div>
+                                </div>
                             </li>
                             <hr style="border-color: #fff;">
-                            <li class="caracteristicas">Paquete escolar 
-                                <span class="check-1">
-                                    <img src="{{asset ('img/v1/icon/check.svg')}}" width="40" alt="">
+                            <li class="caracteristicas"> 
+                                <div class="row">
+                                    <div class="col-10">Paquete escolar</div>
+                                    <div class="col-2">
+                                        <img src="{{asset ('img/v1/icon/check.svg')}}" width="40" alt="">
+                                        {{-- <span class="check">
+                                            <img src="{{asset ('img/v1/icon/check.svg')}}" width="40" alt="">
+                                        </span> --}}
+                                    </div>
+                                </div>
                                 </span> 
                             </li>
                             <hr style="border-color: #fff;">
-                            <li class="caracteristicas">Guía actualizada Sapius 
-                                <span class="check-2">
-                                    <img src="{{asset ('img/v1/icon/check.svg')}}" width="40" alt="">
-                                </span>  
+                            <li class="caracteristicas"> 
+                                <div class="row">
+                                    <div class="col-10">Guía actualizada Sapius</div>
+                                    <div class="col-2">
+                                        <img src="{{asset ('img/v1/icon/check.svg')}}" width="40" alt="">
+                                        {{-- <span class="check">
+                                            <img src="{{asset ('img/v1/icon/check.svg')}}" width="40" alt="">
+                                        </span> --}}
+                                    </div>
+                                </div>
                             </li>
                             <hr style="border-color: #fff;">
-                            <li class="caracteristicas">Plataforma 24 / 7   
-                                <span class="check-3">
-                                    <img src="{{asset ('img/v1/icon/check.svg')}}" width="40" alt="">
-                                </span>
+                            <li class="caracteristicas">   
+                                <div class="row">
+                                    <div class="col-10">Plataforma 24 / 7</div>
+                                    <div class="col-2">
+                                        <img src="{{asset ('img/v1/icon/check.svg')}}" width="40" alt="">
+                                        {{-- <span class="check">
+                                            <img src="{{asset ('img/v1/icon/check.svg')}}" width="40" alt="">
+                                        </span> --}}
+                                    </div>
+                                </div>
                             </li>
                             <hr style="border-color: #fff;">
-                            <li class="caracteristicas">Portabilidad 
-                                <span class="check-4">
-                                    <img src="{{asset ('img/v1/icon/check.svg')}}" width="40" alt="">
-                                </span>
+                            <li class="caracteristicas">
+                                <div class="row">
+                                    <div class="col-10">Portabilidad</div>
+                                    <div class="col-2">
+                                        <img src="{{asset ('img/v1/icon/check.svg')}}" width="40" alt="">
+                                        {{-- <span class="check">
+                                            <img src="{{asset ('img/v1/icon/check.svg')}}" width="40" alt="">
+                                        </span> --}}
+                                    </div>
+                                </div>
                             </li>
                             <hr style="border-color: #fff;">
-                            <li class="caracteristicas">Asesorías en vivo *   
-                                <span class="check-5">
+                            <li class="caracteristicas"><div class="row">
+                                <div class="col-10">Asesorías en vivo*</div>
+                                <div class="col-2">
                                     <img src="{{asset ('img/v1/icon/check.svg')}}" width="40" alt="">
-                                </span>
+                                    {{-- <span class="check">
+                                        <img src="{{asset ('img/v1/icon/check.svg')}}" width="40" alt="">
+                                    </span> --}}
+                                </div>
+                            </div>
                             </li>
                             <hr style="border-color: #fff;">
-                            <li class="caracteristicas">Simuladores por tema, <br>
-                                módulos y globales.   
-                                <span class="check-6">
-                                    <img src="{{asset ('img/v1/icon/check.svg')}}" width="40" alt="">
-                                </span>
+                            <li class="caracteristicas">
+                                <div class="row">
+                                    <div class="col-10">Simuladores por tema, <br>
+                                        módulos y globales.   </div>
+                                    <div class="col-2 m-auto pr-1">
+                                        <img src="{{asset ('img/v1/icon/check.svg')}}" width="40" alt="">
+                                        {{-- <span class="check">
+                                            <img src="{{asset ('img/v1/icon/check.svg')}}" width="40" alt="">
+                                        </span> --}}
+                                    </div>
+                                </div>
                             </li>
                             <hr style="border-color: #fff;">
-                            <li class="caracteristicas">Feedback en vivo*  
-                                <span class="check-7">
-                                    <img src="{{asset ('img/v1/icon/check.svg')}}" width="40" alt="">
-                                </span>
+                            <li class="caracteristicas">
+                                <div class="row">
+                                    <div class="col-10">Feedback en vivo*</div>
+                                    <div class="col-2 m-auto">
+                                        <img src="{{asset ('img/v1/icon/check.svg')}}" width="40" alt="">
+                                        {{-- <span class="check">
+                                            <img src="{{asset ('img/v1/icon/check.svg')}}" width="40" alt="">
+                                        </span> --}}
+                                    </div>
+                                </div>
                             </li>
                             <hr style="border-color: #fff;">
+                            <li class="caracteristicas"> 
+                                <div class="row">
+                                    <div class="col-10">Garantía*</div>
+                                    <div class="col-2">
+                                        <img src="{{asset ('img/v1/icon/check.svg')}}" width="40" alt="">
+                                        {{-- <span class="check">
+                                            <img src="{{asset ('img/v1/icon/check.svg')}}" width="40" alt="">
+                                        </span> --}}
+                                    </div>
+                                </div>
+                            </li>
                         </div>
                         
                     </div>

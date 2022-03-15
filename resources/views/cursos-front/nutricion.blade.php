@@ -6,7 +6,7 @@
             <h1 style="color: #fff;">Prepárate con Sapius <br>
                 Acredita el <span class=color-lowblue>EGEL Plus</span> NUTRICIÓN con Sapius. <br> <span>El 99.1% de nuestros estudiantes acreditan</span>
             </h1>
-            <p style="color: #fff;">"Tu formación, es nuestra pasión"</p>
+            <p style="color: #fff;">"Tu formación, nuestra pasión"</p>
             <a href="" class="btn btn-primary">Comenzar</a>
         </div>
         
@@ -92,7 +92,7 @@
                     </div>
                     <div class="col-9">
                         <h4 class="color-gray">Guía <br> EGEL Plus</h2>
-                        <p class="color-gray">Actualizamos nuestro contenido cada año con base en la bibliografía del EGEL Plus</p>
+                        <p class="color-gray">Actualizamos nuestro contenido cada año con base en la bibliografía del EGEL Plus Nutrición</p>
                     </div>
                 </div>
             </div>
@@ -162,55 +162,114 @@
                     </div>
                     <div class="row pad-50">
                         <div class="col-12">
-                            <li class="caracteristicas">Examen diagnóstico 
-                                <span class="check">
-                                    <img src="{{asset ('img/v1/icon/check.svg')}}" width="40" alt="">
-                                </span>
+                            <li class="caracteristicas">
+                                <div class="row">
+                                    <div class="col-10">Examen diagnóstico </div>
+                                    <div class="col-2">
+                                        <img src="{{asset ('img/v1/icon/check.svg')}}" width="40" alt="">
+                                        {{-- <span class="check">
+                                            <img src="{{asset ('img/v1/icon/check.svg')}}" width="40" alt="">
+                                        </span> --}}
+                                    </div>
+                                </div>
                             </li>
                             <hr style="border-color: #fff;">
-                            <li class="caracteristicas">Paquete escolar 
-                                <span class="check-1">
-                                    <img src="{{asset ('img/v1/icon/check.svg')}}" width="40" alt="">
+                            <li class="caracteristicas"> 
+                                <div class="row">
+                                    <div class="col-10">Paquete escolar</div>
+                                    <div class="col-2">
+                                        <img src="{{asset ('img/v1/icon/check.svg')}}" width="40" alt="">
+                                        {{-- <span class="check">
+                                            <img src="{{asset ('img/v1/icon/check.svg')}}" width="40" alt="">
+                                        </span> --}}
+                                    </div>
+                                </div>
                                 </span> 
                             </li>
                             <hr style="border-color: #fff;">
-                            <li class="caracteristicas">Guía actualizada Sapius 
-                                <span class="check-2">
-                                    <img src="{{asset ('img/v1/icon/check.svg')}}" width="40" alt="">
-                                </span>  
+                            <li class="caracteristicas"> 
+                                <div class="row">
+                                    <div class="col-10">Guía actualizada Sapius</div>
+                                    <div class="col-2">
+                                        <img src="{{asset ('img/v1/icon/check.svg')}}" width="40" alt="">
+                                        {{-- <span class="check">
+                                            <img src="{{asset ('img/v1/icon/check.svg')}}" width="40" alt="">
+                                        </span> --}}
+                                    </div>
+                                </div>
                             </li>
                             <hr style="border-color: #fff;">
-                            <li class="caracteristicas">Plataforma 24 / 7   
-                                <span class="check-3">
-                                    <img src="{{asset ('img/v1/icon/check.svg')}}" width="40" alt="">
-                                </span>
+                            <li class="caracteristicas">   
+                                <div class="row">
+                                    <div class="col-10">Plataforma 24 / 7</div>
+                                    <div class="col-2">
+                                        <img src="{{asset ('img/v1/icon/check.svg')}}" width="40" alt="">
+                                        {{-- <span class="check">
+                                            <img src="{{asset ('img/v1/icon/check.svg')}}" width="40" alt="">
+                                        </span> --}}
+                                    </div>
+                                </div>
                             </li>
                             <hr style="border-color: #fff;">
-                            <li class="caracteristicas">Portabilidad 
-                                <span class="check-4">
-                                    <img src="{{asset ('img/v1/icon/check.svg')}}" width="40" alt="">
-                                </span>
+                            <li class="caracteristicas">
+                                <div class="row">
+                                    <div class="col-10">Portabilidad</div>
+                                    <div class="col-2">
+                                        <img src="{{asset ('img/v1/icon/check.svg')}}" width="40" alt="">
+                                        {{-- <span class="check">
+                                            <img src="{{asset ('img/v1/icon/check.svg')}}" width="40" alt="">
+                                        </span> --}}
+                                    </div>
+                                </div>
                             </li>
                             <hr style="border-color: #fff;">
-                            <li class="caracteristicas">Asesorías en vivo *   
-                                <span class="check-5">
+                            <li class="caracteristicas"><div class="row">
+                                <div class="col-10">Asesorías en vivo*</div>
+                                <div class="col-2">
                                     <img src="{{asset ('img/v1/icon/check.svg')}}" width="40" alt="">
-                                </span>
+                                    {{-- <span class="check">
+                                        <img src="{{asset ('img/v1/icon/check.svg')}}" width="40" alt="">
+                                    </span> --}}
+                                </div>
+                            </div>
                             </li>
                             <hr style="border-color: #fff;">
-                            <li class="caracteristicas">Simuladores por tema, <br>
-                                módulos y globales.   
-                                <span class="check-6">
-                                    <img src="{{asset ('img/v1/icon/check.svg')}}" width="40" alt="">
-                                </span>
+                            <li class="caracteristicas">
+                                <div class="row">
+                                    <div class="col-10">Simuladores por tema, <br>
+                                        módulos y globales.   </div>
+                                    <div class="col-2 m-auto pr-1">
+                                        <img src="{{asset ('img/v1/icon/check.svg')}}" width="40" alt="">
+                                        {{-- <span class="check">
+                                            <img src="{{asset ('img/v1/icon/check.svg')}}" width="40" alt="">
+                                        </span> --}}
+                                    </div>
+                                </div>
                             </li>
                             <hr style="border-color: #fff;">
-                            <li class="caracteristicas">Feedback en vivo*  
-                                <span class="check-7">
-                                    <img src="{{asset ('img/v1/icon/check.svg')}}" width="40" alt="">
-                                </span>
+                            <li class="caracteristicas">
+                                <div class="row">
+                                    <div class="col-10">Feedback en vivo*</div>
+                                    <div class="col-2 m-auto">
+                                        <img src="{{asset ('img/v1/icon/check.svg')}}" width="40" alt="">
+                                        {{-- <span class="check">
+                                            <img src="{{asset ('img/v1/icon/check.svg')}}" width="40" alt="">
+                                        </span> --}}
+                                    </div>
+                                </div>
                             </li>
                             <hr style="border-color: #fff;">
+                            <li class="caracteristicas"> 
+                                <div class="row">
+                                    <div class="col-10">Garantía*</div>
+                                    <div class="col-2">
+                                        <img src="{{asset ('img/v1/icon/check.svg')}}" width="40" alt="">
+                                        {{-- <span class="check">
+                                            <img src="{{asset ('img/v1/icon/check.svg')}}" width="40" alt="">
+                                        </span> --}}
+                                    </div>
+                                </div>
+                            </li>
                         </div>
                         
                     </div>

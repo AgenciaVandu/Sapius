@@ -6,7 +6,7 @@
             <h1 style="color: #fff;">Forma parte de nuestra comunidad Sapius.<br>
                 Vive la experiencia en modo<span class=color-lowblue> Presencial</span> 
             </h1>
-            <p style="color: #fff;">"Tu formación, es nuestra pasión"</p>
+            <p style="color: #fff;">"Tu formación, nuestra pasión"</p>
             <a href="" class="btn btn-primary">Comenzar</a>
         </div>
         
@@ -33,7 +33,7 @@
             <div class="col-lg-6 col-md-12 col-sm-12 pt-5">
                 <h2>Profesores expertos en el área
                     con programas actualizados</h2>
-                <p>Nuestros profesores cuentan con la máxima experiencia en docencia y cuentan con la mayor experiencia y conocimiento de la especialidad.</p>
+                <p>Nuestros profesores cuentan con la máxima experiencia en docencia, cuentan con un amplio conocimiento teórico – practico de la especialidad.</p>
             </div>
             <div class="col-lg-6 col-md-12 col-sm-12 pt-5">
                 <img src="{{asset('img/v1/estudiantes/3.jpg')}}" class="img-fluid" alt="">
@@ -60,7 +60,7 @@
     <div class="bg-2 mt-5">
         <div class="container text-center">
             <div class="posicion">
-                <h1 style="color: #fff;">10 años de excelencia nos respaldan</h1>
+                <h1 style="color: #fff;">Más de 10 años de excelencia nos respaldan</h1>
                 <a href="" class="btn btn-primary">COMENZAR</a>
             </div>
         </div>

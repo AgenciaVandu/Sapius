@@ -4,11 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Sapius v1</title>
+    <title>Sapius - Formación que te prepara para el futuro</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glider-js@1.7.3/glider.min.css">
     <link rel="stylesheet" href="{{asset('css/style.css')}}">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+    <meta name="author" content="Agenciavandu.com" />
+    <meta name="copyright" content="Sapius.com.mx" />
+    <meta name="robots" content="index,follow"/>
+    <meta http-equiv="expires" content="43200"/>
+    <meta name="keywords" content="Cursos Egel, Cursos Enarm, Cursos Exani I, Cursos Exani II, Cursos Exani III, cursos para aprobar el EGEL, cómo aprobar el Exani"/>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
     </style>
@@ -16,7 +21,7 @@
 <body class="d-none d-sm-none d-md-none d-lg-block">
     <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand" href="/">
                 <img src="{{asset('img/v1/logo-sapius.svg')}}" width="130" alt="">
             </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -25,22 +30,30 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-              <a class="nav-link" href="#">INICIO<span class="sr-only">(current)</span></a>
+              <a class="nav-link" href="/">INICIO<span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">EXANI-I</a>
+              <a class="nav-link" href="/exani-1">EXANI-I</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">EXANI-II</a>
+                <a class="nav-link" href="/exani-2">EXANI-II</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">EXANI-III</a>
+                <a class="nav-link" href="/exani-3">EXANI-III</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">EGEL</a>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-expanded="false">
+                EGEL PLUS
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="/egel-plus-medicina">Medicina</a>
+                <a class="dropdown-item" href="egel-plus-nutricion">Nutrición</a>
+                
+              </div>
             </li>
+           
             <li class="nav-item">
-                <a class="nav-link" href="#">ENARM</a>
+                <a class="nav-link" href="/cursos-enarm">ENARM</a>
             </li>
           </ul>
           <ul class="navbar-nav ml-auto">
@@ -77,14 +90,13 @@
                 <h3 class="lead" style="color: #fff;">Mapa del sitio</h3>
                 <div class="row">
                   <div class="col-6">
-                    <li><a href="#">INICIO</a></li>
-                    <li><a href="#">EXANI-I</a></li>
-                    <li><a href="#">EXANI-II</a></li>
-                    <li><a href="#">EXANI-III</a></li>
+                    <li><a href="/">INICIO</a></li>
+                    <li><a href="/exani-1">EXANI-I</a></li>
+                    <li><a href="/exani-2">EXANI-II</a></li>
+                    <li><a href="/exani-3">EXANI-III</a></li>
                   </div>
                   <div class="col-6">
-                    <li><a href="#">ENARM</a></li>
-                    <li><a href="#">BLOG</a></li>
+                    <li><a href="/cursos-enarm">ENARM</a></li>
                   </div>
                 </div>
               </div>
@@ -95,7 +107,8 @@
                     <a href=""><i class="fab fa-facebook pl-3 pr-3 icono"></i></a>
                     <a href=""><i class="fab fa-instagram pr-3 icono"></i></a>
                     <a href=""><i class="fab fa-twitter pr-3 icono"></i></a>
-                    <a href=""><i class="fab fa-tiktok icono"></i></a>
+                    <a href=""><i class="fab fa-tiktok pr-3 icono"></i></a>
+                    <a href=""><i class="fab fa-youtube icono"></i></a>
                   </div>
                   <a href="" class="btn btn-light mt-2">ENVIANOS UN WHATSAPP</a>
                 </li>
@@ -111,7 +124,7 @@
                     <br>
                     <small>
                     Sapius.®  Todos los derechos reservados &copy;<script>document.write(new Date().getFullYear()); 
-                     </script>. Desarrollado por <a href="https://agenciavandu.com">Agencia Vandu.</a>
+                     </script>. {{-- Desarrollado por <a href="https://agenciavandu.com">Agencia Vandu.</a> --}}
                     
                 </div>
               </div>

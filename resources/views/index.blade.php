@@ -4,10 +4,10 @@
     <div class="container pad">
         <div class="row">
             <div class="col-lg-6 col-md-12 col-sm-12 pad-1 pad-2">
-                <h1 style="color: #fff;">Prepárate con Sapius <br>
-                    Cursos online para el <span class=color-lowblue>EGEL</span> 
-                </h1>
-                <p style="color: #fff;">"Tu formación, es nuestra pasión"</p>
+                <h2 style="color: #fff;">Prepárate con Sapius <br>
+                    Cursos online para el <span class=color-lowblue>EGEL PLUS</span> 
+                </h2>
+                <p style="color: #fff;">"Tu formación, nuestra pasión"</p>
                 <a href="" class="btn btn-primary">Comenzar</a>
             </div>
             <div class="col-lg-6 col-md-12 col-sm-12 d-none d-sm-none d-md-none d-lg-block">
@@ -340,7 +340,7 @@
         <div class="col-lg-6 col-md-12 col-sm-12 p-info">
           <h2>Modalidad Presencial</h5>
           <p class="color-gray">Nuestro cuerpo docente esta disponible para consultas, asesorías, clases, pláticas, conferencias y ponencias.</p>
-          <a href="" class="btn btn-primary">Más información</a>
+          <a href="/cursos-presenciales" class="btn btn-primary">Más información</a>
         </div>
       </div>
     </div>
