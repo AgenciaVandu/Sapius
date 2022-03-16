@@ -272,40 +272,40 @@
                   <div class="maestro-img">
                     <img src="{{asset('img/m-4.png')}}" class="img-fluid pb-3" alt="">
                   </div>
-                    <h4 style="color: #fff;">L.N. Verónica</h5>
-                    <p class="lead" style="color: #fff;">¿Quieres contactar a <br> algún docente?</p>
+                    <h5 style="color: #fff;">L.N. Verónica González <br> <small style="color: #30D6E6; font-size: 12px;">Premio Nacional a la Excelencia EGEL</small></h5>
+                    <p style="color: #fff;">¿Quieres contactar a <br> algún docente?</p>
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sapius-info">Enviar Mensaje</butt>   
                 </div>
                 <div class="carousel__elemento">
                   <div class="maestro-img">
                     <img src="{{asset('img/m-5.png')}}" class="img-fluid pb-3" alt="">
                   </div>
-                    <h4 style="color: #fff;">Dr. Erika</h5>
-                    <p class="lead" style="color: #fff;">¿Quieres contactar a <br> algún docente?</p>
+                    <h5 style="color: #fff;">Dr. Erika González <br> <small style="color: #30D6E6; font-size: 12px;">Residente de Neurología</small></h5>
+                    <p style="color: #fff;">¿Quieres contactar a <br> algún docente?</p>
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sapius-info">Enviar Mensaje</butt>   
                 </div>
                 <div class="carousel__elemento">
                   <div class="maestro-img">
                     <img src="{{asset('img/m-1.png')}}" class="img-fluid pb-3" alt="">
                   </div>
-                    <h4 style="color: #fff;">Dr. Carlos</h5>
-                    <p class="lead" style="color: #fff;">¿Quieres contactar a <br> algún docente?</p>
+                    <h5 style="color: #fff;">Dr. Carlos Blando <br> <small style="color: #30D6E6; font-size: 12px;">Residente de Cardiología</small></h5>
+                    <p style="color: #fff;">¿Quieres contactar a <br> algún docente?</p>
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sapius-info">Enviar Mensaje</butt>   
                 </div>
                 <div class="carousel__elemento">
                   <div class="maestro-img">
                     <img src="{{asset('img/m-2.png')}}" class="img-fluid pb-3" alt="">
                   </div>
-                    <h4 style="color: #fff;">Dr. César</h5>
-                    <p class="lead" style="color: #fff;">¿Quieres contactar a <br> algún docente?</p>
+                    <h5 style="color: #fff;">Dr. César Estrada <br> <small style="color: #30D6E6; font-size: 12px;">Cirujano Plástico Estético</small></h5>
+                    <p style="color: #fff;">¿Quieres contactar a <br> algún docente?</p>
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sapius-info">Enviar Mensaje</butt>   
                 </div>
                 <div class="carousel__elemento">
                   <div class="maestro-img">
                     <img src="{{asset('img/m-3.png')}}" class="img-fluid pb-3" alt="">
                   </div>
-                    <h4 style="color: #fff;">Lic.Trab.Soc Martín</h5>
-                    <p class="lead" style="color: #fff;">¿Quieres contactar a <br> algún docente?</p>
+                    <h5 style="color: #fff;">LTS. Martín González <br> <small style="color: #30D6E6; font-size: 12px;">Docente titular del curso EGEL</small></h5>
+                    <p style="color: #fff;">¿Quieres contactar a <br> algún docente?</p>
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sapius-info">Enviar Mensaje</butt>   
                 </div>    
               </div>
