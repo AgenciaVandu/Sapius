@@ -115,8 +115,8 @@
                         <a href="{{ route('register') }}" class="button-title-tabs btn btn-primary">COMENZAR</a>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <img src="{{ asset('img/v1/3.png') }}" class="img-fluid" alt="Foto 1"/>
+                <div class="col-md-4 pt-3 pb-2">
+                    <img src="{{ asset('img/egel.png') }}" class="img-fluid" alt="Foto 1"/>
                 </div>
             </div>
           </div>
@@ -270,53 +270,44 @@
               <div class="carousel__lista1 text-center">
                 <div class="carousel__elemento">
                   <div class="maestro-img">
-                    <img src="{{asset('img/v1/maestros.png')}}" class="img-fluid pb-3" alt="">
+                    <img src="{{asset('img/m-4.png')}}" class="img-fluid pb-3" alt="">
                   </div>
-                    <h4 style="color: #fff;">Verónica G.</h5>
+                    <h4 style="color: #fff;">L.N. Verónica</h5>
                     <p class="lead" style="color: #fff;">¿Quieres contactar a <br> algún docente?</p>
-                    <a href="" class="btn btn-secondary">Enviar Mensaje</a>   
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sapius-info">Enviar Mensaje</butt>   
                 </div>
                 <div class="carousel__elemento">
                   <div class="maestro-img">
-                    <img src="{{asset('img/v1/maestros.png')}}" class="img-fluid pb-3" alt="">
+                    <img src="{{asset('img/m-5.png')}}" class="img-fluid pb-3" alt="">
                   </div>
-                    <h4 style="color: #fff;">Verónica G.</h5>
+                    <h4 style="color: #fff;">Dr. Erika</h5>
                     <p class="lead" style="color: #fff;">¿Quieres contactar a <br> algún docente?</p>
-                    <a href="" class="btn btn-secondary">Enviar Mensaje</a>   
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sapius-info">Enviar Mensaje</butt>   
                 </div>
                 <div class="carousel__elemento">
                   <div class="maestro-img">
-                    <img src="{{asset('img/v1/maestros.png')}}" class="img-fluid pb-3" alt="">
+                    <img src="{{asset('img/m-1.png')}}" class="img-fluid pb-3" alt="">
                   </div>
-                    <h4 style="color: #fff;">Verónica G.</h5>
+                    <h4 style="color: #fff;">Dr. Carlos</h5>
                     <p class="lead" style="color: #fff;">¿Quieres contactar a <br> algún docente?</p>
-                    <a href="" class="btn btn-secondary">Enviar Mensaje</a>   
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sapius-info">Enviar Mensaje</butt>   
                 </div>
                 <div class="carousel__elemento">
                   <div class="maestro-img">
-                    <img src="{{asset('img/v1/maestros.png')}}" class="img-fluid pb-3" alt="">
+                    <img src="{{asset('img/m-2.png')}}" class="img-fluid pb-3" alt="">
                   </div>
-                    <h4 style="color: #fff;">Verónica G.</h5>
+                    <h4 style="color: #fff;">Dr. César</h5>
                     <p class="lead" style="color: #fff;">¿Quieres contactar a <br> algún docente?</p>
-                    <a href="" class="btn btn-secondary">Enviar Mensaje</a>   
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sapius-info">Enviar Mensaje</butt>   
                 </div>
                 <div class="carousel__elemento">
                   <div class="maestro-img">
-                    <img src="{{asset('img/v1/maestros.png')}}" class="img-fluid pb-3" alt="">
+                    <img src="{{asset('img/m-3.png')}}" class="img-fluid pb-3" alt="">
                   </div>
-                    <h4 style="color: #fff;">Verónica G.</h5>
+                    <h4 style="color: #fff;">Lic.Trab.Soc Martín</h5>
                     <p class="lead" style="color: #fff;">¿Quieres contactar a <br> algún docente?</p>
-                    <a href="" class="btn btn-secondary">Enviar Mensaje</a>   
-                </div>
-                <div class="carousel__elemento">
-                  <div class="maestro-img">
-                    <img src="{{asset('img/v1/maestros.png')}}" class="img-fluid pb-3" alt="">
-                  </div>
-                    <h4 style="color: #fff;">Verónica G.</h5>
-                    <p class="lead" style="color: #fff;">¿Quieres contactar a <br> algún docente?</p>
-                    <a href="" class="btn btn-secondary">Enviar Mensaje</a>   
-                </div>
-                  
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sapius-info">Enviar Mensaje</butt>   
+                </div>    
               </div>
               <button aria-label="siguiente" class="carousel__siguiente">
                   <i class="fas fa-chevron-right"></i>
@@ -335,7 +326,7 @@
         <div class="col-lg-6 col-md-12 col-sm-12 p-info">
           <h2>¿Quieres más información?</h5>
           <p class="color-gray ">Nuestros asesores están felices de ayudarte <br class="d-none d-sm-none d-md-none d-lg-block"><br class="d-none d-sm-none d-md-none d-lg-block"></p>
-          <a href="" class="btn btn-primary">Enviar mensaje</a>
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sapius-info">Enviar mensaje</button>
         </div>
         <div class="col-lg-6 col-md-12 col-sm-12 p-info">
           <h2>Modalidad Presencial</h5>

@@ -336,7 +336,7 @@
                             
                           </div>    
                     
-                    <a href="" class="btn btn-primary">COMENZAR</a>
+                    <a href="" class="btn btn-primary">Más información</a>
                 </div>
             </div>
         </div>

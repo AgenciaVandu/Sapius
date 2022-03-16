@@ -18,6 +18,8 @@
 
 .nav-link {
     color: #fff !important;
+    font-weight: 400;
+    font-size: 15px;
 }
 
 .nav-link:hover{
@@ -28,8 +30,8 @@
     margin-bottom: -5px;
     border: 1px solid transparent !important;
     color: #002146 !important;
-    font-weight: 600;
-    font-size: 24px;
+    font-weight: 700;
+    font-size: 20px;
 }
 
 /* BACKGROUNDS */
@@ -76,7 +78,9 @@
 #pills-tabContent {
     background: #002146 !important;
 }
-
+.btn-outline-secondary {
+    border: none;
+}
 .text-title2.active {
     background: #002146 !important;
     border-radius: 10px 10px 0px 0px !important;

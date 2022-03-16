@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Sapius - Formación que te prepara para el futuro</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glider-js@1.7.3/glider.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
     <link rel="stylesheet" href="{{asset('css/style.css')}}">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
     <meta name="author" content="Agenciavandu.com" />
@@ -42,7 +42,7 @@
                 <a class="nav-link" href="/exani-3">EXANI-III</a>
             </li>
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-expanded="false">
+              <a href="/egel-plus" class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-expanded="false">
                 EGEL PLUS
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -69,6 +69,41 @@
         </div>
         </div>
     </nav>
+
+<!-- Modal -->
+<div class="modal fade" id="sapius-info" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Contacta a un docente</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="name">Nombre</label>
+            <input type="text" class="form-control" id="name">
+          </div>
+          <div class="form-group">
+            <label for="correo">Correo electrónico</label>
+            <input type="email" class="form-control" id="correo" aria-describedby="correo">
+            <small id="correo" class="form-text text-muted">No lo compartiremos con nadie más</small>
+          </div>
+          <div class="form-group">
+            <label for="mensaje">Mensaje</label>
+            <textarea class="form-control" id="mensaje" rows="3"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cerrar</button>
+        <button type="submit" class="btn btn-primary">Enviar</button>
+      </div>
+    </div>
+  </div>
+</div>
 
     @yield('content')
 
@@ -104,13 +139,13 @@
                 <h3 class="lead" style="color: #fff;">Síguenos</h3>
                 <li>
                   <div class="row">
-                    <a href=""><i class="fab fa-facebook pl-3 pr-3 icono"></i></a>
-                    <a href=""><i class="fab fa-instagram pr-3 icono"></i></a>
+                    <a href="https://www.facebook.com/Sapius-latinoam%C3%A9rica-104931991400060"><i class="fab fa-facebook pl-3 pr-3 icono"></i></a>
+                    <a href="https://www.instagram.com/sapius_latinoamerica/"><i class="fab fa-instagram pr-3 icono"></i></a>
                     <a href=""><i class="fab fa-twitter pr-3 icono"></i></a>
-                    <a href=""><i class="fab fa-tiktok pr-3 icono"></i></a>
-                    <a href=""><i class="fab fa-youtube icono"></i></a>
+                    <a href="https://www.tiktok.com/@sapiuslatinoamerica"><i class="fab fa-tiktok pr-3 icono"></i></a>
+                    <a href="https://www.youtube.com/channel/UCDfPMHpBkAC2-SHi8Kxfitw"><i class="fab fa-youtube icono"></i></a>
                   </div>
-                  <a href="" class="btn btn-light mt-2">ENVIANOS UN WHATSAPP</a>
+                  <a href="https://api.whatsapp.com/send?phone=529992988744" class="btn btn-light mt-2">ENVIANOS UN WHATSAPP</a>
                 </li>
               </div>
             </div>
@@ -118,8 +153,8 @@
               <div class="col-md-12">
                 <div class="pt-5" style="color: #fff;">
                   <p class="copyright" style="text-align: center;">
-                    <span class="pr-2"><a href="">Términos y condiciones</a><span class="pl-2">|</span></span> 
-                    <span class="pr-2"><a href="">Política de privacidad</a><span class="pl-2">|</span></span>  <br class="d-block d-sm-block d-md-none d-lg-none">
+                    <span class="pr-2"><a href="{{asset('/tyc.pdf')}}" target="blank_">Términos y condiciones</a><span class="pl-2">|</span></span> 
+                    <span class="pr-2"><a href="{{asset('/politica-sapius.pdf')}}" target="blank_">Política de privacidad</a><span class="pl-2">|</span></span>  <br class="d-block d-sm-block d-md-none d-lg-none">
                     <span class="pr-2"><a href="">Política de cookies</a></span> 
                     <br>
                     <small>
