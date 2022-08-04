@@ -195,6 +195,7 @@
                   </strong>
               </h1>
                 <p class="color-gray">Selecciona el objetivo que quieras conseguir</p>
+                <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#sapius-info">¡Solicita una clase muestra!</button>
             </div>
           </div>
           <div class="col-md-12 col-lg-6 col-sm-12 centro-card text-center">
@@ -219,47 +220,47 @@
 </section>
 <section id="nuestra-plataforma">
     <div class="container pt-5 pb-5">
-      <h2 class="color-gray text-center pt-5 pb-4">La plataforma diferente para ser excelente</h2>
+      <h2 class="color-gray text-center pt-5 pb-5">La plataforma diferente para ser excelente</h2>
       <div class="row">
         <div class="col-md-4 col-lg-4 col-sm-12">
-          <div class="row centro-card">
-            <div class="col-md-12 col-lg-2 col-sm-12">
+          <div class="centro-card text-center">
+            <div class="col-12 pb-3">
               <i class="fas fa-check-circle" style="font-size: 40px; color:#ED6A5A;"></i>
             </div>
-            <div class="col-md-12 col-lg-10 col-sm-12">
-                <h5 class="color-gray">El 99.1% de nuestros estudiantes acreditan</h5>
+            <div class="col-12">
+                <h5 class="color-gray" style="font-weight: 400">El 99.1% de nuestros <br> estudiantes acreditan</h5>
             </div>
           </div>
         </div>
         <div class="col-md-4 col-lg-4 col-sm-12">
-          <div class="row centro-card">
-            <div class="col-md-12 col-lg-2 col-sm-12">
+          <div class="centro-card text-center">
+            <div class="col-12 pb-3">
               <i class="fas fa-user-graduate" style="font-size: 40px; color:#ED6A5A;"></i>
             </div>
-            <div class="col-md-12 col-lg-10 col-sm-12">
-              <h5 class="color-gray">Nuestro método SUMA
+            <div class="col-12">
+              <h5 class="color-gray" style="font-weight: 400">Nuestro método <b>SUMA</b> <br>
                 maximiza tus resultados</h5>
             </div>
           </div>
         </div>
         <div class="col-md-4 col-lg-4 col-sm-12">
-          <div class="row centro-card">
-            <div class="col-md-12 col-lg-2 col-sm-12">
+          <div class="centro-card text-center">
+            <div class="col-12 pb-3">
               <i class="fas fa-book-reader" style="font-size: 40px; color:#ED6A5A;"></i>
             </div>
-            <div class="col-md-12 col-lg-10 col-sm-12">
-              <h5 class="color-gray">El curso más <br class="d-none d-sm-none d-md-block">
+            <div class="col-12">
+              <h5 class="color-gray" style="font-weight: 400;">El curso más <br class="d-none d-sm-none d-md-block">
                 completo del mercado</h5>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </section>
-  <section id="maestros">
-    <div class="bg-blue pt-5 pb-5">
+</section>
+<section class="maestros-section">
+    <div>
       <div class="container"> <!--Slider-->
-        <h2 class="text-center pb-4" style="color: #fff;">Conoce a nuestros docentes</h2>
+        <h2 class="text-center pt-5 pb-4" style="color: #fff;">Conoce a nuestros docentes</h2>
         <div class="carousel_1">
           <!--Carousel 2-->
           <div class="carousel__contenedor">
@@ -274,7 +275,7 @@
                   </div>
                     <h5 style="color: #fff;">L.N. Verónica González <br> <small style="color: #30D6E6; font-size: 12px;">Premio Nacional a la Excelencia EGEL</small></h5>
                     <p style="color: #fff;">¿Quieres contactar a <br> algún docente?</p>
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sapius-info">Enviar Mensaje</butt>   
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sapius-maestros">Enviar Mensaje</butt>   
                 </div>
                 <div class="carousel__elemento">
                   <div class="maestro-img">
@@ -282,7 +283,7 @@
                   </div>
                     <h5 style="color: #fff;">Dr. Erika González <br> <small style="color: #30D6E6; font-size: 12px;">Residente de Neurología</small></h5>
                     <p style="color: #fff;">¿Quieres contactar a <br> algún docente?</p>
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sapius-info">Enviar Mensaje</butt>   
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sapius-maestros">Enviar Mensaje</butt>   
                 </div>
                 <div class="carousel__elemento">
                   <div class="maestro-img">
@@ -290,7 +291,7 @@
                   </div>
                     <h5 style="color: #fff;">Dr. Carlos Blando <br> <small style="color: #30D6E6; font-size: 12px;">Residente de Cardiología</small></h5>
                     <p style="color: #fff;">¿Quieres contactar a <br> algún docente?</p>
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sapius-info">Enviar Mensaje</butt>   
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sapius-maestros">Enviar Mensaje</butt>   
                 </div>
                 <div class="carousel__elemento">
                   <div class="maestro-img">
@@ -298,7 +299,7 @@
                   </div>
                     <h5 style="color: #fff;">Dr. César Estrada <br> <small style="color: #30D6E6; font-size: 12px;">Cirujano Plástico Estético</small></h5>
                     <p style="color: #fff;">¿Quieres contactar a <br> algún docente?</p>
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sapius-info">Enviar Mensaje</butt>   
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sapius-maestros">Enviar Mensaje</butt>   
                 </div>
                 <div class="carousel__elemento">
                   <div class="maestro-img">
@@ -306,8 +307,24 @@
                   </div>
                     <h5 style="color: #fff;">LTS. Martín González <br> <small style="color: #30D6E6; font-size: 12px;">Docente titular del curso EGEL</small></h5>
                     <p style="color: #fff;">¿Quieres contactar a <br> algún docente?</p>
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sapius-info">Enviar Mensaje</butt>   
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sapius-maestros">Enviar Mensaje</butt>   
                 </div>    
+                <div class="carousel__elemento">
+                  <div class="maestro-img">
+                    <img src="{{asset('img/m-6.png')}}" class="img-fluid pb-3" alt="">
+                  </div>
+                    <h5 style="color: #fff;">LN. Fernando Iván Pat <br> <small style="color: #30D6E6; font-size: 12px;">Docente Sapius – Asesorías personalizadas</small></h5>
+                    <p style="color: #fff;">¿Quieres contactar a <br> algún docente?</p>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sapius-info">Enviar Mensaje</butt>   
+                </div>   
+                <div class="carousel__elemento">
+                  <div class="maestro-img">
+                    <img src="{{asset('img/m-7.png')}}" class="img-fluid pb-3" alt="">
+                  </div>
+                    <h5 style="color: #fff;">LN. Alexis Manzanero León <br> <small style="color: #30D6E6; font-size: 12px;">Candidato a Maestro en Ciencias del Deporte</small></h5>
+                    <p style="color: #fff;">¿Quieres contactar a <br> algún docente?</p>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sapius-info">Enviar Mensaje</butt>   
+                </div>   
               </div>
               <button aria-label="siguiente" class="carousel__siguiente">
                   <i class="fas fa-chevron-right"></i>
@@ -335,6 +352,8 @@
         </div>
       </div>
     </div>
-  </section>
+</section>
 
+@endsection
+@section('cta')
 @endsection

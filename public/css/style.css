@@ -168,11 +168,22 @@
 }
 .exani {
     padding-top: 110px;
+} @media (max-width:767px) {
+    .exani {
+        padding-top: 80px;
+        padding-bottom: 30px;
+        text-align: center;
+    }
 }
 
+.plataforma {
+    padding-bottom: 2.3em;
+
+}
+
+
 .orgullo-txt-1 {
-    position: relative;
-    top: 75px;
+    padding-top: 3em;
 }
 
 .pad-50 {
@@ -248,16 +259,23 @@
         left: 0px !important; 
     }
     .centro-card {
-        display: flex;
-        justify-content: center;
-        text-align: center;
+        padding-bottom: 2em;
     }
 }
 
 .cabecera-orgullo {
     margin-top: 35px;
 }
-
+.maestros-section {
+    background-image: url(/img/blue-fondo.svg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    min-height: 500px;
+    /* display: flex;
+    justify-content: center;
+    align-items: center; */
+}
 .maestros p {
     font-weight: 300;
     font-size: 16px;
@@ -290,6 +308,10 @@ a:hover {
 
 .exani p {
     text-align: justify;
+}@media (max-width:767px) {
+    .exani p{
+        text-align: center;
+    }
 }
 
 .titular {

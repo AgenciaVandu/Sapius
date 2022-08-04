@@ -18,7 +18,37 @@
         @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
     </style>
 </head>
-<body class="d-none d-sm-none d-md-none d-lg-block">
+<body >
+        <!-- Messenger Plugin de chat Code -->
+        <div id="fb-root"></div>
+
+      <!-- Your Plugin de chat code -->
+      <div id="fb-customer-chat" class="fb-customerchat">
+      </div>
+
+      <script>
+        var chatbox = document.getElementById('fb-customer-chat');
+        chatbox.setAttribute("page_id", "104931991400060");
+        chatbox.setAttribute("attribution", "biz_inbox");
+      </script>
+
+      <!-- Your SDK code -->
+      <script>
+        window.fbAsyncInit = function() {
+          FB.init({
+            xfbml            : true,
+            version          : 'v14.0'
+          });
+        };
+
+        (function(d, s, id) {
+          var js, fjs = d.getElementsByTagName(s)[0];
+          if (d.getElementById(id)) return;
+          js = d.createElement(s); js.id = id;
+          js.src = 'https://connect.facebook.net/es_LA/sdk/xfbml.customerchat.js';
+          fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+      </script>
     <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
         <div class="container">
             <a class="navbar-brand" href="/">
@@ -104,6 +134,67 @@
     </div>
   </div>
 </div>
+ 
+<!-- Modal - maestros  -->
+<div class="modal fade" id="sapius-maestros" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Contacta a un docente</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="name">Nombre completo</label>
+            <input type="text" class="form-control" id="name">
+          </div>
+          <div class="form-group">
+            <label for="name">Escuela de procedencia</label>
+            <input type="text" class="form-control" id="name">
+          </div>
+          <div class="form-group">
+            <label for="inputState">Estado</label>
+            <select id="inputState" class="form-control">
+              <option selected>Escoge uno</option>
+              <option>...</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="name">Teléfono</label>
+            <input type="tel" class="form-control" id="state">
+          </div>
+          <div class="form-group">
+            <label for="correo">Correo electrónico</label>
+            <input type="email" class="form-control" id="correo" aria-describedby="correo">
+            <small id="correo" class="form-text text-muted">No lo compartiremos con nadie más</small>
+          </div>
+          <div class="form-group">
+            <label for="name">Fecha en que deseas sustentar</label>
+            <input type="date" class="form-control" id="name">
+          </div>
+          <div class="form-group">
+            <label for="name">Examen que deseas presentar</label>
+            <input type="date" class="form-control" id="name">
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+            <label class="form-check-label" for="defaultCheck1">
+              Acepto los <a href="" style="color: gray; "><b>términos y condiciones</b></a>
+            </label>
+        </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cerrar</button>
+        <button type="submit" class="btn btn-primary">Enviar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- end modal -->
 
     @yield('content')
 
@@ -119,7 +210,7 @@
                   <li>Teléfono</li>
                   <li><a href="tel:529992988744">+52 999 298 8744</a></li>
                   <li>Email:</li>
-                  <li><a href="">contacto@sapius.com</a></li>
+                  <li><a href="mailto:contacto@sapius.com">contacto@sapius.com</a></li>
               </div>
               <div class="col-lg-3 col-md-4 col-sm-12 pt-2">
                 <h3 class="lead" style="color: #fff;">Mapa del sitio</h3>
@@ -139,13 +230,13 @@
                 <h3 class="lead" style="color: #fff;">Síguenos</h3>
                 <li>
                   <div class="row">
-                    <a href="https://www.facebook.com/Sapius-latinoam%C3%A9rica-104931991400060"><i class="fab fa-facebook pl-3 pr-3 icono"></i></a>
-                    <a href="https://www.instagram.com/sapius_latinoamerica/"><i class="fab fa-instagram pr-3 icono"></i></a>
-                    <a href=""><i class="fab fa-twitter pr-3 icono"></i></a>
-                    <a href="https://www.tiktok.com/@sapiuslatinoamerica"><i class="fab fa-tiktok pr-3 icono"></i></a>
-                    <a href="https://www.youtube.com/channel/UCDfPMHpBkAC2-SHi8Kxfitw"><i class="fab fa-youtube icono"></i></a>
+                    <a href="https://www.facebook.com/Sapius-latinoam%C3%A9rica-104931991400060" target="blank_"><i class="fab fa-facebook pl-3 pr-3 icono"></i></a>
+                    <a href="https://www.instagram.com/sapius_latinoamerica/" target="blank_"><i class="fab fa-instagram pr-3 icono"></i></a>
+                    <a href="https://twitter.com/_Sapius" target="blank_"><i class="fab fa-twitter pr-3 icono"></i></a>
+                    <a href="https://www.tiktok.com/@sapiuslatinoamerica" target="blank_"><i class="fab fa-tiktok pr-3 icono"></i></a>
+                    <a href="https://www.youtube.com/channel/UCDfPMHpBkAC2-SHi8Kxfitw" target="blank_"><i class="fab fa-youtube icono"></i></a>
                   </div>
-                  <a href="https://api.whatsapp.com/send?phone=529992988744" class="btn btn-light mt-2">ENVIANOS UN WHATSAPP</a>
+                  <a href="https://api.whatsapp.com/send?phone=529992988744" target="blank_" class="btn btn-light mt-2">ENVIANOS UN WHATSAPP</a>
                 </li>
               </div>
             </div>

@@ -102,8 +102,9 @@
                         <img src="{{asset('img/v1/icon/exni/icono-e-3.png')}}" class="img-fluid" alt="">
                     </div>
                     <div class="col-9">
-                        <h4 class="color-gray">Simulador tipo <br>
-                            CENEVAL</h2>
+                        <h4 class="color-gray">Simulador <br>
+                            Especializado
+                        </h4>
                         <p class="color-gray">Mide tu conocimiento con exámenes por tema, módulo y exámenes simuladores globales con retroalimentación completa</p>
                     </div>
                 </div>
@@ -133,26 +134,8 @@
         </div>
     </div>
 </section>
-<section id="orgullos-sapius">
-    <div class="bg-naranja pt-5">
-      <div class="container">
-        <div class="row orgullo-sapius">
-          <div class="col-md-6 col-lg-6 col-sm-12">
-            <div class="orgullo-txt-1">
-                <h2 class="color-gray">Continúa tu preparación <br>
-                    donde quieras</h2>
-                <p class="color-gray">Nuestra plataforma ofrece la posibilidad de reproducir el contenido desde tu computadora/laptop y así continúa tu preparación en todo momento.</p>
-                <a href="" class="btn btn-primary">COMENZAR</a>
-            </div>
-          </div>
-          <div class="col-md-6 col-lg-6 col-sm-12 text-center">
-            <img src="{{asset('img/v1/plataforma.png')}}" class=" img-fluid" alt="">
-          </div>
-        </div>
-      </div>
-    </div>
-</section>
-<section id="cta">
+@include('components.cta')
+<!-- <section id="cta">
     <div class="container">
         <div class="row">
             <div class="col-lg-5 col-sm-12 mb-5">
@@ -341,5 +324,5 @@
             </div>
         </div>
     </div>
-</section>
+</section> -->
 @endsection
