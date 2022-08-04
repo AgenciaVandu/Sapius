@@ -216,9 +216,9 @@
 }
 
 .bg-naranja-3 {
-    background-image: url(/img/v1/naranja.svg);
+    background-image: url(/img/v1/a-left.svg);
     background-repeat: no-repeat;
-    background-position: center right;
+    background-position: top left;
 }
 
 .orgullo-sapius {
@@ -348,6 +348,11 @@ hr {
     position: relative;
     right: 30px;
     width: 305px;
+}
+@media (max-width:991px) {
+    .incluido__info {
+        text-align: center;
+    }
 }
 .check {
     position: relative;
