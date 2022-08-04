@@ -102,6 +102,19 @@
   </div>
 </div>
 <!-- end modal -->
+<!-- Modal -->
+<div class="modal fade" id="plataforma" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+      <img src="{{asset('/img/portabilidad.png')}}" class="img-fluid" alt="">
+      </div>
+      <div class="modal-footer" style="background-color: #002146;">
+      </div>
+    </div>
+  </div>
+</div>
+<!-- end modal -->
 <section class="plataforma">
     <div class="bg-naranja pt-5">
       <div class="container">
@@ -122,7 +135,7 @@
       </div>
     </div>
 </section>
-<section id="cta">
+<section class="cta">
     <div class="container">
         <div class="row">
             <div class="col-lg-5 col-sm-12 mb-5">
@@ -177,7 +190,9 @@
                             <hr style="border-color: #fff;">
                             <li class="caracteristicas">   
                                 <div class="row">
-                                    <div class="col-10">Plataforma 24 / 7</div>
+                                    <div class="col-10">
+                                    <a type="button" data-toggle="modal" data-target="#plataforma">Plataforma 24 / 7</a>    
+                                    </div>
                                     <div class="col-2">
                                         <img src="{{asset ('img/v1/icon/check.svg')}}" width="40" alt="">
                                         {{-- <span class="check">

@@ -12,17 +12,17 @@
         
     </div>
 </header>
-<section id="exani">
+<section class="exani-3">
     <div class="container pt-4">
         <div class="row">
-            <div class="col-md-6 col-lg-6 col-sm-12 exani">
+            <div class="col-md-6 col-lg-6 col-sm-12 m-auto pb-5">
                 <h3 class="color-gray">¿Qué es el EXANI-III?</h3>
                 <p class="color-gray">El Examen Nacional de Ingreso al Posgrado (EXANI-III) es un examen que proporciona información acerca del potencial que los aspirantes tienen para iniciar estudios de tipo superior.</p>
                 <a href="" class="btn btn-primary">COMENZAR</a>
             </div>
             <div class="col-md-6 col-lg-6 col-sm-12 text-center">
                 <div>
-                    <img src="{{asset('img/v1/exani-III.png')}}" class="img-fluid" alt="">
+                    <img src="{{asset('img/guia-egel.png')}}" class="img-fluid" alt="">
                 </div>
             </div>
         </div>

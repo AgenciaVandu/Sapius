@@ -111,10 +111,25 @@
         </button>
       </div>
       <div class="modal-body">
-        <form>
+      <form>
           <div class="form-group">
-            <label for="name">Nombre</label>
+            <label for="name">Nombre completo</label>
             <input type="text" class="form-control" id="name">
+          </div>
+          <div class="form-group">
+            <label for="name">Escuela de procedencia</label>
+            <input type="text" class="form-control" id="name">
+          </div>
+          <div class="form-group">
+            <label for="inputState">Estado</label>
+            <select id="inputState" class="form-control">
+              <option selected>Escoge uno</option>
+              <option>...</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="name">Teléfono</label>
+            <input type="tel" class="form-control" id="state">
           </div>
           <div class="form-group">
             <label for="correo">Correo electrónico</label>
@@ -122,10 +137,21 @@
             <small id="correo" class="form-text text-muted">No lo compartiremos con nadie más</small>
           </div>
           <div class="form-group">
-            <label for="mensaje">Mensaje</label>
-            <textarea class="form-control" id="mensaje" rows="3"></textarea>
+            <label for="name">Fecha en que deseas sustentar</label>
+            <input type="date" class="form-control" id="name">
+          </div>
+          <div class="form-group">
+            <label for="name">Examen que deseas presentar</label>
+            <input type="date" class="form-control" id="name">
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+            <label class="form-check-label" for="defaultCheck1">
+              Acepto los <a href="" style="color: gray; "><b>términos y condiciones</b></a>
+            </label>
           </div>
         </form>
+        <img src="{{asset('/img/clase-muestra.png')}}" class="img-fluid" alt="">
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cerrar</button>
@@ -184,7 +210,7 @@
             <label class="form-check-label" for="defaultCheck1">
               Acepto los <a href="" style="color: gray; "><b>términos y condiciones</b></a>
             </label>
-        </div>
+          </div>
         </form>
       </div>
       <div class="modal-footer">

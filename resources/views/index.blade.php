@@ -76,11 +76,11 @@
                             <p class="text-sub-title1"> En esta curso obtendrás todo lo que necesitas para aprobar el examen.</p>
                         </div>
                         <div class="container-button">
-                            <a href="{{ route('register') }}" class="button-title-tabs btn btn-primary">COMENZAR</a>
+                            <a href="/exani-1" class="button-title-tabs btn btn-primary">COMENZAR</a>
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <img src="{{ asset('img/v1/1.png') }}" class="img-fluid" alt="Foto 1"/>
+                        <img src="{{ asset('img/prepa.png') }}" class="img-fluid" alt="Foto 1"/>
                     </div>
                 </div>
             </div>
@@ -94,11 +94,11 @@
                         <p class="text-sub-title1">En esta curso obtendrás todo lo que necesitas para aprobar el examen.</p>
                     </div>
                     <div class="container-button">
-                        <a href="{{ route('register') }}" class="button-title-tabs btn btn-primary">COMENZAR</a>
+                        <a href="/exani-2" class="button-title-tabs btn btn-primary">COMENZAR</a>
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <img src="{{ asset('img/v1/2.png') }}" class="img-fluid" alt="Foto 1"/>
+                    <img src="{{ asset('img/universidad.png') }}" class="img-fluid" alt="universitario sapius"/>
                 </div>
               </div>
             </div>
@@ -112,11 +112,11 @@
                         <p class="text-sub-title1"> En esta curso obtendrás todo lo que necesitas para aprobar el examen.</p>
                     </div>
                     <div class="container-button">
-                        <a href="{{ route('register') }}" class="button-title-tabs btn btn-primary">COMENZAR</a>
+                        <a href="/exani-3" class="button-title-tabs btn btn-primary">COMENZAR</a>
                     </div>
                 </div>
                 <div class="col-md-4 pt-3 pb-2">
-                    <img src="{{ asset('img/egel.png') }}" class="img-fluid" alt="Foto 1"/>
+                    <img src="{{ asset('img/egel-plus.png') }}" class="img-fluid" alt="Foto 1"/>
                 </div>
             </div>
           </div>
@@ -130,7 +130,7 @@
                         <p class="text-sub-title1"> En esta curso obtendrás todo lo que necesitas para aprobar el examen.</p>
                     </div>
                     <div class="container-button">
-                        <a href="{{ route('register') }}" class="button-title-tabs btn btn-primary">COMENZAR</a>
+                        <a href="/egel-plus" class="button-title-tabs btn btn-primary">COMENZAR</a>
                     </div>
                 </div>
                 <div class="col-md-4">

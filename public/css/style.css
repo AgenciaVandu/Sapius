@@ -313,7 +313,9 @@ a:hover {
         text-align: center;
     }
 }
-
+.cta {
+    padding-bottom: 3em;
+}
 .titular {
     text-align: center;
 }
@@ -325,6 +327,14 @@ a:hover {
 .titular span {
     font-weight: 300;
     font-size: 22px;
+}
+.exani-3 {
+    padding-top: 3em;
+    padding-bottom: 3em;
+} @media (max-width:767px) {
+    .exani-3 {
+        text-align: center;
+    }
 }
 .posicion {
     position: relative;
