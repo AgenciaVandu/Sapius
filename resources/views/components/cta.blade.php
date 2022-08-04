@@ -3,7 +3,8 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-body">
-      <iframe src="https://www.facebook.com/plugins/video.php?height=466&href=https%3A%2F%2Fwww.facebook.com%2F104931991400060%2Fvideos%2F194940275367370%2F&show_text=true&width=560&t=0" width="100%" height="477" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowFullScreen="true"></iframe>
+      <iframe src="https://www.facebook.com/plugins/video.php?height=466&href=https%3A%2F%2Fwww.facebook.com%2F104931991400060%2Fvideos%2F194940275367370%2F&show_text=false&width=560&t=0" width="100%" height="380" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowFullScreen="true"></iframe>
+        <img src="{{asset('img/paquete-escolar.png')}}" class="img-fluid">
       </div>
      
     </div>
@@ -23,7 +24,84 @@
   </div>
 </div>
 <!-- end modal -->
-
+<!-- Modal -->
+<div class="modal fade" id="feedback" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+      <img src="{{asset('/img/feedback.png')}}" class="img-fluid" alt="">
+      </div>
+      <div class="modal-footer" style="background-color: #002146;">
+      </div>
+    </div>
+  </div>
+</div>
+<!-- end modal -->
+<!-- Modal -->
+<div class="modal fade" id="asesorias" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+      <img src="{{asset('/img/asesorias.png')}}" class="img-fluid" alt="">
+      </div>
+      <div class="modal-footer" style="background-color: #002146;">
+      </div>
+    </div>
+  </div>
+</div>
+<!-- end modal -->
+<!-- Modal -->
+<div class="modal fade" id="simuladores" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+      <img src="{{asset('/img/simuladores.png')}}" class="img-fluid" alt="">
+      </div>
+      <div class="modal-footer" style="background-color: #002146;">
+      </div>
+    </div>
+  </div>
+</div>
+<!-- end modal -->
+<!-- Modal -->
+<div class="modal fade" id="guia" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+      <img src="{{asset('/img/guia.png')}}" class="img-fluid" alt="">
+      </div>
+      <div class="modal-footer" style="background-color: #002146;">
+      </div>
+    </div>
+  </div>
+</div>
+<!-- end modal -->
+<!-- Modal -->
+<div class="modal fade" id="examen-diagnostico" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+      <img src="{{asset('/img/diagnostico.png')}}" class="img-fluid" alt="">
+      </div>
+      <div class="modal-footer" style="background-color: #002146;">
+      </div>
+    </div>
+  </div>
+</div>
+<!-- end modal -->
+<!-- Modal -->
+<div class="modal fade" id="portabilidad" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+      <img src="{{asset('/img/portabilidad.png')}}" class="img-fluid" alt="">
+      </div>
+      <div class="modal-footer" style="background-color: #002146;">
+      </div>
+    </div>
+  </div>
+</div>
+<!-- end modal -->
 <section class="plataforma">
     <div class="bg-naranja pt-5">
       <div class="container">
@@ -56,7 +134,9 @@
                         <div class="col-12">
                             <li class="caracteristicas">
                                 <div class="row">
-                                    <div class="col-10">Examen diagnóstico </div>
+                                    <div class="col-10">
+                                    <a type="button" data-toggle="modal" data-target="#examen-diagnostico">Examen diagnóstico </a>    
+                                    </div>
                                     <div class="col-2">
                                         <img src="{{asset ('img/v1/icon/check.svg')}}" width="40" alt="">
                                         {{-- <span class="check">
@@ -83,7 +163,9 @@
                             <hr style="border-color: #fff;">
                             <li class="caracteristicas"> 
                                 <div class="row">
-                                    <div class="col-10">Guía actualizada Sapius</div>
+                                    <div class="col-10">
+                                        <a type="button" data-toggle="modal" data-target="#guia">Guía actualizada Sapius</a>
+                                    </div>
                                     <div class="col-2">
                                         <img src="{{asset ('img/v1/icon/check.svg')}}" width="40" alt="">
                                         {{-- <span class="check">
@@ -107,7 +189,9 @@
                             <hr style="border-color: #fff;">
                             <li class="caracteristicas">
                                 <div class="row">
-                                    <div class="col-10">Portabilidad</div>
+                                    <div class="col-10">
+                                        <a type="button" data-toggle="modal" data-target="#portabilidad">Portabilidad</a>
+                                    </div>
                                     <div class="col-2">
                                         <img src="{{asset ('img/v1/icon/check.svg')}}" width="40" alt="">
                                         {{-- <span class="check">
@@ -118,7 +202,7 @@
                             </li>
                             <hr style="border-color: #fff;">
                             <li class="caracteristicas"><div class="row">
-                                <div class="col-10">Asesorías en vivo*</div>
+                                <div class="col-10"><a type="button" data-toggle="modal" data-target="#asesorias">Asesorías en vivo*</a></div>
                                 <div class="col-2">
                                     <img src="{{asset ('img/v1/icon/check.svg')}}" width="40" alt="">
                                     {{-- <span class="check">
@@ -130,8 +214,9 @@
                             <hr style="border-color: #fff;">
                             <li class="caracteristicas">
                                 <div class="row">
-                                    <div class="col-10">Simuladores por tema, <br>
-                                        módulos y globales.   </div>
+                                    <div class="col-10">
+                                    <a type="button" data-toggle="modal" data-target="#simuladores"> Simuladores por tema, <br>
+                                        módulos y globales.  </a></div>
                                     <div class="col-2 m-auto pr-1">
                                         <img src="{{asset ('img/v1/icon/check.svg')}}" width="40" alt="">
                                         {{-- <span class="check">
@@ -143,7 +228,8 @@
                             <hr style="border-color: #fff;">
                             <li class="caracteristicas">
                                 <div class="row">
-                                    <div class="col-10">Feedback en vivo*</div>
+                                    <div class="col-10">
+                                    <a type="button" data-toggle="modal" data-target="#feedback">Feedback en vivo*</a></div>
                                     <div class="col-2 m-auto">
                                         <img src="{{asset ('img/v1/icon/check.svg')}}" width="40" alt="">
                                         {{-- <span class="check">
