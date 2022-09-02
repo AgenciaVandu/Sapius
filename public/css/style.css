@@ -18,6 +18,8 @@
 
 .nav-link {
     color: #fff !important;
+    font-weight: 400;
+    font-size: 15px;
 }
 
 .nav-link:hover{
@@ -28,8 +30,8 @@
     margin-bottom: -5px;
     border: 1px solid transparent !important;
     color: #002146 !important;
-    font-weight: 600;
-    font-size: 24px;
+    font-weight: 700;
+    font-size: 20px;
 }
 
 /* BACKGROUNDS */
@@ -76,7 +78,9 @@
 #pills-tabContent {
     background: #002146 !important;
 }
-
+.btn-outline-secondary {
+    border: none;
+}
 .text-title2.active {
     background: #002146 !important;
     border-radius: 10px 10px 0px 0px !important;
@@ -164,11 +168,22 @@
 }
 .exani {
     padding-top: 110px;
+} @media (max-width:767px) {
+    .exani {
+        padding-top: 80px;
+        padding-bottom: 30px;
+        text-align: center;
+    }
 }
 
+.plataforma {
+    padding-bottom: 2.3em;
+
+}
+
+
 .orgullo-txt-1 {
-    position: relative;
-    top: 75px;
+    padding-top: 3em;
 }
 
 .pad-50 {
@@ -201,9 +216,9 @@
 }
 
 .bg-naranja-3 {
-    background-image: url(/img/v1/naranja.svg);
+    background-image: url(/img/v1/a-left.svg);
     background-repeat: no-repeat;
-    background-position: center right;
+    background-position: top left;
 }
 
 .orgullo-sapius {
@@ -244,16 +259,23 @@
         left: 0px !important; 
     }
     .centro-card {
-        display: flex;
-        justify-content: center;
-        text-align: center;
+        padding-bottom: 2em;
     }
 }
 
 .cabecera-orgullo {
     margin-top: 35px;
 }
-
+.maestros-section {
+    background-image: url(/img/blue-fondo.svg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    min-height: 500px;
+    /* display: flex;
+    justify-content: center;
+    align-items: center; */
+}
 .maestros p {
     font-weight: 300;
     font-size: 16px;
@@ -286,8 +308,14 @@ a:hover {
 
 .exani p {
     text-align: justify;
+}@media (max-width:767px) {
+    .exani p{
+        text-align: center;
+    }
 }
-
+.cta {
+    padding-bottom: 3em;
+}
 .titular {
     text-align: center;
 }
@@ -299,6 +327,14 @@ a:hover {
 .titular span {
     font-weight: 300;
     font-size: 22px;
+}
+.exani-3 {
+    padding-top: 3em;
+    padding-bottom: 3em;
+} @media (max-width:767px) {
+    .exani-3 {
+        text-align: center;
+    }
 }
 .posicion {
     position: relative;
@@ -312,6 +348,11 @@ hr {
     position: relative;
     right: 30px;
     width: 305px;
+}
+@media (max-width:991px) {
+    .incluido__info {
+        text-align: center;
+    }
 }
 .check {
     position: relative;

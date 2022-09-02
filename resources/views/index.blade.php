@@ -4,10 +4,10 @@
     <div class="container pad">
         <div class="row">
             <div class="col-lg-6 col-md-12 col-sm-12 pad-1 pad-2">
-                <h1 style="color: #fff;">Prepárate con Sapius <br>
-                    Cursos online para el <span class=color-lowblue>EGEL</span> 
-                </h1>
-                <p style="color: #fff;">"Tu formación, es nuestra pasión"</p>
+                <h2 style="color: #fff;">Prepárate con Sapius <br>
+                    Cursos online para el <span class=color-lowblue>EGEL PLUS</span> 
+                </h2>
+                <p style="color: #fff;">"Tu formación, nuestra pasión"</p>
                 <a href="" class="btn btn-primary">Comenzar</a>
             </div>
             <div class="col-lg-6 col-md-12 col-sm-12 d-none d-sm-none d-md-none d-lg-block">
@@ -76,11 +76,11 @@
                             <p class="text-sub-title1"> En esta curso obtendrás todo lo que necesitas para aprobar el examen.</p>
                         </div>
                         <div class="container-button">
-                            <a href="{{ route('register') }}" class="button-title-tabs btn btn-primary">COMENZAR</a>
+                            <a href="/exani-1" class="button-title-tabs btn btn-primary">COMENZAR</a>
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <img src="{{ asset('img/v1/1.png') }}" class="img-fluid" alt="Foto 1"/>
+                        <img src="{{ asset('img/prepa.png') }}" class="img-fluid" alt="Foto 1"/>
                     </div>
                 </div>
             </div>
@@ -94,11 +94,11 @@
                         <p class="text-sub-title1">En esta curso obtendrás todo lo que necesitas para aprobar el examen.</p>
                     </div>
                     <div class="container-button">
-                        <a href="{{ route('register') }}" class="button-title-tabs btn btn-primary">COMENZAR</a>
+                        <a href="/exani-2" class="button-title-tabs btn btn-primary">COMENZAR</a>
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <img src="{{ asset('img/v1/2.png') }}" class="img-fluid" alt="Foto 1"/>
+                    <img src="{{ asset('img/universidad.png') }}" class="img-fluid" alt="universitario sapius"/>
                 </div>
               </div>
             </div>
@@ -112,11 +112,11 @@
                         <p class="text-sub-title1"> En esta curso obtendrás todo lo que necesitas para aprobar el examen.</p>
                     </div>
                     <div class="container-button">
-                        <a href="{{ route('register') }}" class="button-title-tabs btn btn-primary">COMENZAR</a>
+                        <a href="/exani-3" class="button-title-tabs btn btn-primary">COMENZAR</a>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <img src="{{ asset('img/v1/3.png') }}" class="img-fluid" alt="Foto 1"/>
+                <div class="col-md-4 pt-3 pb-2">
+                    <img src="{{ asset('img/egel-plus.png') }}" class="img-fluid" alt="Foto 1"/>
                 </div>
             </div>
           </div>
@@ -130,7 +130,7 @@
                         <p class="text-sub-title1"> En esta curso obtendrás todo lo que necesitas para aprobar el examen.</p>
                     </div>
                     <div class="container-button">
-                        <a href="{{ route('register') }}" class="button-title-tabs btn btn-primary">COMENZAR</a>
+                        <a href="/egel-plus" class="button-title-tabs btn btn-primary">COMENZAR</a>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -195,6 +195,7 @@
                   </strong>
               </h1>
                 <p class="color-gray">Selecciona el objetivo que quieras conseguir</p>
+                <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#sapius-info">¡Solicita una clase muestra!</button>
             </div>
           </div>
           <div class="col-md-12 col-lg-6 col-sm-12 centro-card text-center">
@@ -219,47 +220,47 @@
 </section>
 <section id="nuestra-plataforma">
     <div class="container pt-5 pb-5">
-      <h2 class="color-gray text-center pt-5 pb-4">La plataforma diferente para ser excelente</h2>
+      <h2 class="color-gray text-center pt-5 pb-5">La plataforma diferente para ser excelente</h2>
       <div class="row">
         <div class="col-md-4 col-lg-4 col-sm-12">
-          <div class="row centro-card">
-            <div class="col-md-12 col-lg-2 col-sm-12">
+          <div class="centro-card text-center">
+            <div class="col-12 pb-3">
               <i class="fas fa-check-circle" style="font-size: 40px; color:#ED6A5A;"></i>
             </div>
-            <div class="col-md-12 col-lg-10 col-sm-12">
-                <h5 class="color-gray">El 99.1% de nuestros estudiantes acreditan</h5>
+            <div class="col-12">
+                <h5 class="color-gray" style="font-weight: 400">El 99.1% de nuestros <br> estudiantes acreditan</h5>
             </div>
           </div>
         </div>
         <div class="col-md-4 col-lg-4 col-sm-12">
-          <div class="row centro-card">
-            <div class="col-md-12 col-lg-2 col-sm-12">
+          <div class="centro-card text-center">
+            <div class="col-12 pb-3">
               <i class="fas fa-user-graduate" style="font-size: 40px; color:#ED6A5A;"></i>
             </div>
-            <div class="col-md-12 col-lg-10 col-sm-12">
-              <h5 class="color-gray">Nuestro método SUMA
+            <div class="col-12">
+              <h5 class="color-gray" style="font-weight: 400">Nuestro método <b>SUMA</b> <br>
                 maximiza tus resultados</h5>
             </div>
           </div>
         </div>
         <div class="col-md-4 col-lg-4 col-sm-12">
-          <div class="row centro-card">
-            <div class="col-md-12 col-lg-2 col-sm-12">
+          <div class="centro-card text-center">
+            <div class="col-12 pb-3">
               <i class="fas fa-book-reader" style="font-size: 40px; color:#ED6A5A;"></i>
             </div>
-            <div class="col-md-12 col-lg-10 col-sm-12">
-              <h5 class="color-gray">El curso más <br class="d-none d-sm-none d-md-block">
+            <div class="col-12">
+              <h5 class="color-gray" style="font-weight: 400;">El curso más <br class="d-none d-sm-none d-md-block">
                 completo del mercado</h5>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </section>
-  <section id="maestros">
-    <div class="bg-blue pt-5 pb-5">
+</section>
+<section class="maestros-section">
+    <div>
       <div class="container"> <!--Slider-->
-        <h2 class="text-center pb-4" style="color: #fff;">Conoce a nuestros docentes</h2>
+        <h2 class="text-center pt-5 pb-4" style="color: #fff;">Conoce a nuestros docentes</h2>
         <div class="carousel_1">
           <!--Carousel 2-->
           <div class="carousel__contenedor">
@@ -270,53 +271,60 @@
               <div class="carousel__lista1 text-center">
                 <div class="carousel__elemento">
                   <div class="maestro-img">
-                    <img src="{{asset('img/v1/maestros.png')}}" class="img-fluid pb-3" alt="">
+                    <img src="{{asset('img/m-4.png')}}" class="img-fluid pb-3" alt="">
                   </div>
-                    <h4 style="color: #fff;">Verónica G.</h5>
-                    <p class="lead" style="color: #fff;">¿Quieres contactar a <br> algún docente?</p>
-                    <a href="" class="btn btn-secondary">Enviar Mensaje</a>   
+                    <h5 style="color: #fff;">L.N. Verónica González <br> <small style="color: #30D6E6; font-size: 12px;">Premio Nacional a la Excelencia EGEL</small></h5>
+                    <p style="color: #fff;">¿Quieres contactar a <br> algún docente?</p>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sapius-maestros">Enviar Mensaje</butt>   
                 </div>
                 <div class="carousel__elemento">
                   <div class="maestro-img">
-                    <img src="{{asset('img/v1/maestros.png')}}" class="img-fluid pb-3" alt="">
+                    <img src="{{asset('img/m-5.png')}}" class="img-fluid pb-3" alt="">
                   </div>
-                    <h4 style="color: #fff;">Verónica G.</h5>
-                    <p class="lead" style="color: #fff;">¿Quieres contactar a <br> algún docente?</p>
-                    <a href="" class="btn btn-secondary">Enviar Mensaje</a>   
+                    <h5 style="color: #fff;">Dr. Erika González <br> <small style="color: #30D6E6; font-size: 12px;">Residente de Neurología</small></h5>
+                    <p style="color: #fff;">¿Quieres contactar a <br> algún docente?</p>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sapius-maestros">Enviar Mensaje</butt>   
                 </div>
                 <div class="carousel__elemento">
                   <div class="maestro-img">
-                    <img src="{{asset('img/v1/maestros.png')}}" class="img-fluid pb-3" alt="">
+                    <img src="{{asset('img/m-1.png')}}" class="img-fluid pb-3" alt="">
                   </div>
-                    <h4 style="color: #fff;">Verónica G.</h5>
-                    <p class="lead" style="color: #fff;">¿Quieres contactar a <br> algún docente?</p>
-                    <a href="" class="btn btn-secondary">Enviar Mensaje</a>   
+                    <h5 style="color: #fff;">Dr. Carlos Blando <br> <small style="color: #30D6E6; font-size: 12px;">Residente de Cardiología</small></h5>
+                    <p style="color: #fff;">¿Quieres contactar a <br> algún docente?</p>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sapius-maestros">Enviar Mensaje</butt>   
                 </div>
                 <div class="carousel__elemento">
                   <div class="maestro-img">
-                    <img src="{{asset('img/v1/maestros.png')}}" class="img-fluid pb-3" alt="">
+                    <img src="{{asset('img/m-2.png')}}" class="img-fluid pb-3" alt="">
                   </div>
-                    <h4 style="color: #fff;">Verónica G.</h5>
-                    <p class="lead" style="color: #fff;">¿Quieres contactar a <br> algún docente?</p>
-                    <a href="" class="btn btn-secondary">Enviar Mensaje</a>   
+                    <h5 style="color: #fff;">Dr. César Estrada <br> <small style="color: #30D6E6; font-size: 12px;">Cirujano Plástico Estético</small></h5>
+                    <p style="color: #fff;">¿Quieres contactar a <br> algún docente?</p>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sapius-maestros">Enviar Mensaje</butt>   
                 </div>
                 <div class="carousel__elemento">
                   <div class="maestro-img">
-                    <img src="{{asset('img/v1/maestros.png')}}" class="img-fluid pb-3" alt="">
+                    <img src="{{asset('img/m-3.png')}}" class="img-fluid pb-3" alt="">
                   </div>
-                    <h4 style="color: #fff;">Verónica G.</h5>
-                    <p class="lead" style="color: #fff;">¿Quieres contactar a <br> algún docente?</p>
-                    <a href="" class="btn btn-secondary">Enviar Mensaje</a>   
-                </div>
+                    <h5 style="color: #fff;">LTS. Martín González <br> <small style="color: #30D6E6; font-size: 12px;">Docente titular del curso EGEL</small></h5>
+                    <p style="color: #fff;">¿Quieres contactar a <br> algún docente?</p>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sapius-maestros">Enviar Mensaje</butt>   
+                </div>    
                 <div class="carousel__elemento">
                   <div class="maestro-img">
-                    <img src="{{asset('img/v1/maestros.png')}}" class="img-fluid pb-3" alt="">
+                    <img src="{{asset('img/m-6.png')}}" class="img-fluid pb-3" alt="">
                   </div>
-                    <h4 style="color: #fff;">Verónica G.</h5>
-                    <p class="lead" style="color: #fff;">¿Quieres contactar a <br> algún docente?</p>
-                    <a href="" class="btn btn-secondary">Enviar Mensaje</a>   
-                </div>
-                  
+                    <h5 style="color: #fff;">LN. Fernando Iván Pat <br> <small style="color: #30D6E6; font-size: 12px;">Docente Sapius – Asesorías personalizadas</small></h5>
+                    <p style="color: #fff;">¿Quieres contactar a <br> algún docente?</p>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sapius-info">Enviar Mensaje</butt>   
+                </div>   
+                <div class="carousel__elemento">
+                  <div class="maestro-img">
+                    <img src="{{asset('img/m-7.png')}}" class="img-fluid pb-3" alt="">
+                  </div>
+                    <h5 style="color: #fff;">LN. Alexis Manzanero León <br> <small style="color: #30D6E6; font-size: 12px;">Candidato a Maestro en Ciencias del Deporte</small></h5>
+                    <p style="color: #fff;">¿Quieres contactar a <br> algún docente?</p>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sapius-info">Enviar Mensaje</butt>   
+                </div>   
               </div>
               <button aria-label="siguiente" class="carousel__siguiente">
                   <i class="fas fa-chevron-right"></i>
@@ -335,15 +343,17 @@
         <div class="col-lg-6 col-md-12 col-sm-12 p-info">
           <h2>¿Quieres más información?</h5>
           <p class="color-gray ">Nuestros asesores están felices de ayudarte <br class="d-none d-sm-none d-md-none d-lg-block"><br class="d-none d-sm-none d-md-none d-lg-block"></p>
-          <a href="" class="btn btn-primary">Enviar mensaje</a>
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sapius-info">Enviar mensaje</button>
         </div>
         <div class="col-lg-6 col-md-12 col-sm-12 p-info">
           <h2>Modalidad Presencial</h5>
           <p class="color-gray">Nuestro cuerpo docente esta disponible para consultas, asesorías, clases, pláticas, conferencias y ponencias.</p>
-          <a href="" class="btn btn-primary">Más información</a>
+          <a href="/cursos-presenciales" class="btn btn-primary">Más información</a>
         </div>
       </div>
     </div>
-  </section>
+</section>
 
+@endsection
+@section('cta')
 @endsection
