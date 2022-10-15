@@ -102,36 +102,25 @@ class InscripcionController extends Controller
 
     public function pago(Request $request)
     {
+        return $request;
         //Codigo para crear la referencia de la transaccion ya sea con tarjeta o en oxxo
-        $order = new Order;
         $cursoProgramado = CursoProgramado::with('Curso')->where('id', $request->curso_programado_id)->first();
         $curso = $cursoProgramado->Curso;
-        try {
-            if ($request->tipo_cobro == "tarjeta") {
-                $order = $this->payment($request, $curso);
-                //$this->correoTarjeta($order);
-            } else if ($request->tipo_cobro == "oxxo") {
-                $order = $this->paymentOxxo($request);
-                $this->correoOxxo($order);
-            } else {
-                //tipo_cobro no definido
-            }
-        } catch (\Throwable $th) {
-        }
+
 
         //***********Validar si previamente el alumno fue inscrito*******************
 
-        if (is_null($order->id) == false) {
+
             $inscripcion = new Inscripcion();
 
             $inscripcion->user_id = Auth::user()->id;
             $inscripcion->curso_programado_id = $request->curso_programado_id;
-            $inscripcion->referencia = $order->id;
+            $inscripcion->referencia = $request->id;
             $inscripcion->tipo_pago = $request->tipo_cobro;
             $inscripcion->clave = $request->clave;
 
             $inscripcion->save();
-        }
+
         $send = new Curso;
         return $send->cursoDetallado($request);
     }

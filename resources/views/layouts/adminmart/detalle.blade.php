@@ -22,7 +22,7 @@
 </head>
 
 <body>
-    
+
     @yield('content')
 
     {{-- <script src="{{ asset('vendor/adminmart/assets/libs/jquery/dist/jquery.min.js') }}"></script>
