@@ -32,6 +32,12 @@
                 @if (session('descuento'))
                 <div class="alert alert-success">Descuento aplicado</div>
                 @endif
+                @if (session('error'))
+                <div class="alert alert-danger">No se encontro la clave o ya expiro</div>
+                @endif
+                @if (session('limit'))
+                <div class="alert alert-warning">Descuento agotado</div>
+                @endif
                 <div class="form-group">
                     <input type="text" class="form-control" name="clave"
                         placeholder="Código de descuento">
