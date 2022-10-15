@@ -1,6 +1,16 @@
 @extends('layouts.adminmart.default')
 
 @section('content')
+
+    @php
+        $precio = $curso->precio;
+
+        if (session('descuento')) {
+            $precio = $curso->precio - session('descuento');
+        }
+    @endphp
+
+    {{ session('descuento') }}
     <input type="hidden" id="curso" value="{{ $curso->Curso->titulo }}">
     <div class="card">
         <div class="card-body text-center">
@@ -12,11 +22,23 @@
                 {!! $curso->Curso->descripcion !!}
             </small>
             <h3>
-                ${{ number_format($curso->precio, 2) }}
+                ${{ number_format($precio, 2) }}
             </h3>
             <h4 class="card-title">Metodos de pago</h4>
             <h6 class="card-subtitle">A continuación selecciona tu método de pago e introduce los datos solicitados.
             </h6>
+            <form action="{{ route('descuentos.check') }}" method="POST" class="px-5 py-2">
+                @csrf
+                @if (session('descuento'))
+                <div class="alert alert-success">Descuento aplicado</div>
+                @endif
+                <div class="form-group">
+                    <input type="text" class="form-control" name="clave"
+                        placeholder="Código de descuento">
+                    <input type="hidden" name="curso_programado_id" value="{{ $curso->id }}">
+                    <button type="submit" class="btn btn-primary mt-2">Agregar descuento</button>
+                </div>
+            </form>
             {{-- <form method="POST" action="{{ route('inscripcion.pago') }}" class="mt-4" id="form-pago"> --}}{{--
                 @csrf
                 <ul class="nav nav-tabs mb-3">
@@ -103,7 +125,7 @@
             return actions.order.create({
                 purchase_units: [{
                     amount: {
-                        value: "{{ $curso->precio }}" // Can also reference a variable or function
+                        value: "{{ $precio }}" // Can also reference a variable or function
                     }
                 }]
             });
@@ -116,7 +138,8 @@
                     2));
                 const transaction = orderData.purchase_units[0].payments.captures[0];
                 if (transaction.status == "COMPLETED") {
-                    actions.redirect("{{ route('inscripcion.pago') }}/?curso_programado_id="+"{{ $curso->id }}&order="+transaction.id);
+                    actions.redirect("{{ route('inscripcion.pago') }}/?curso_programado_id=" +
+                        "{{ $curso->id }}&order=" + transaction.id);
                 }
                 alert(
                     `Transaction ${transaction.status}: ${transaction.id}\n\nSee console for all available details`

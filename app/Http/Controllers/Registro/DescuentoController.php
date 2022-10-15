@@ -96,13 +96,16 @@ class DescuentoController extends Controller
         if(isset($descuento) == false){
             $descuento = New Descuento;
             $descuento->mensaje = "No se encontro la clave o ya expiro";
+            return back()->with('descuento', 'error');
         }else if($descuento->limite < 1){
             $descuento = New Descuento;
             $descuento->mensaje = "Descuentos agotados";
+            return back()->with('descuento', 'limit');
         }else{
             $descuento->limite = $descuento->limite - 1;
             $descuento->save();
         }
-        return $descuento->toJson();
+
+        return back()->with('descuento', $descuento->descuento);
     }
 }
