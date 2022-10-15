@@ -102,7 +102,7 @@ class InscripcionController extends Controller
 
     public function pago(Request $request)
     {
-        return $request;
+        return $request->all();
         //Codigo para crear la referencia de la transaccion ya sea con tarjeta o en oxxo
         $cursoProgramado = CursoProgramado::with('Curso')->where('id', $request->curso_programado_id)->first();
         $curso = $cursoProgramado->Curso;

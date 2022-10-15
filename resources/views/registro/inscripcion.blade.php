@@ -116,7 +116,7 @@
                     2));
                 const transaction = orderData.purchase_units[0].payments.captures[0];
                 if (transaction.status == "COMPLETED") {
-                    actions.redirect("{{ route('inscripcion.pago') }}/?curso_programado_id="+"{{ $curso->id }}&order"+transaction.id);
+                    actions.redirect("{{ route('inscripcion.pago') }}/?curso_programado_id="+"{{ $curso->id }}&order="+transaction.id);
                 }
                 alert(
                     `Transaction ${transaction.status}: ${transaction.id}\n\nSee console for all available details`
