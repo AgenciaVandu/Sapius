@@ -26,25 +26,16 @@ class FileStore implements Store
     protected $directory;
 
     /**
-     * Octal representation of the cache file permissions.
-     *
-     * @var int|null
-     */
-    protected $filePermission;
-
-    /**
      * Create a new file cache store instance.
      *
      * @param  \Illuminate\Filesystem\Filesystem  $files
      * @param  string  $directory
-     * @param  int|null  $filePermission
      * @return void
      */
-    public function __construct(Filesystem $files, $directory, $filePermission = null)
+    public function __construct(Filesystem $files, $directory)
     {
         $this->files = $files;
         $this->directory = $directory;
-        $this->filePermission = $filePermission;
     }
 
     /**
@@ -62,7 +53,7 @@ class FileStore implements Store
      * Store an item in the cache for a given number of seconds.
      *
      * @param  string  $key
-     * @param  mixed  $value
+     * @param  mixed   $value
      * @param  int  $seconds
      * @return bool
      */
@@ -74,13 +65,7 @@ class FileStore implements Store
             $path, $this->expiration($seconds).serialize($value), true
         );
 
-        if ($result !== false && $result > 0) {
-            $this->ensureFileHasCorrectPermissions($path);
-
-            return true;
-        }
-
-        return false;
+        return $result !== false && $result > 0;
     }
 
     /**
@@ -97,26 +82,10 @@ class FileStore implements Store
     }
 
     /**
-     * Ensure the cache file has the correct permissions.
-     *
-     * @param  string  $path
-     * @return void
-     */
-    protected function ensureFileHasCorrectPermissions($path)
-    {
-        if (is_null($this->filePermission) ||
-            intval($this->files->chmod($path), 8) == $this->filePermission) {
-            return;
-        }
-
-        $this->files->chmod($path, $this->filePermission);
-    }
-
-    /**
      * Increment the value of an item in the cache.
      *
      * @param  string  $key
-     * @param  mixed  $value
+     * @param  mixed   $value
      * @return int
      */
     public function increment($key, $value = 1)
@@ -132,7 +101,7 @@ class FileStore implements Store
      * Decrement the value of an item in the cache.
      *
      * @param  string  $key
-     * @param  mixed  $value
+     * @param  mixed   $value
      * @return int
      */
     public function decrement($key, $value = 1)
@@ -144,7 +113,7 @@ class FileStore implements Store
      * Store an item in the cache indefinitely.
      *
      * @param  string  $key
-     * @param  mixed  $value
+     * @param  mixed   $value
      * @return bool
      */
     public function forever($key, $value)
@@ -179,9 +148,7 @@ class FileStore implements Store
         }
 
         foreach ($this->files->directories($this->directory) as $directory) {
-            $deleted = $this->files->deleteDirectory($directory);
-
-            if (! $deleted || $this->files->exists($directory)) {
+            if (! $this->files->deleteDirectory($directory)) {
                 return false;
             }
         }

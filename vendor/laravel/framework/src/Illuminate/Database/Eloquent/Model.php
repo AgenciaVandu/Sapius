@@ -2,23 +2,22 @@
 
 namespace Illuminate\Database\Eloquent;
 
-use ArrayAccess;
 use Exception;
-use Illuminate\Contracts\Queue\QueueableCollection;
-use Illuminate\Contracts\Queue\QueueableEntity;
-use Illuminate\Contracts\Routing\UrlRoutable;
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Contracts\Support\Jsonable;
-use Illuminate\Database\ConnectionResolverInterface as Resolver;
-use Illuminate\Database\Eloquent\Relations\Concerns\AsPivot;
-use Illuminate\Database\Eloquent\Relations\Pivot;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection as BaseCollection;
-use Illuminate\Support\Str;
-use Illuminate\Support\Traits\ForwardsCalls;
+use ArrayAccess;
 use JsonSerializable;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
+use Illuminate\Contracts\Support\Jsonable;
+use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Support\Traits\ForwardsCalls;
+use Illuminate\Contracts\Routing\UrlRoutable;
+use Illuminate\Contracts\Queue\QueueableEntity;
+use Illuminate\Database\Eloquent\Relations\Pivot;
+use Illuminate\Contracts\Queue\QueueableCollection;
+use Illuminate\Support\Collection as BaseCollection;
+use Illuminate\Database\ConnectionResolverInterface as Resolver;
 
-abstract class Model implements Arrayable, ArrayAccess, Jsonable, JsonSerializable, QueueableEntity, UrlRoutable
+abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializable, QueueableEntity, UrlRoutable
 {
     use Concerns\HasAttributes,
         Concerns\HasEvents,
@@ -144,14 +143,14 @@ abstract class Model implements Arrayable, ArrayAccess, Jsonable, JsonSerializab
     /**
      * The name of the "created at" column.
      *
-     * @var string|null
+     * @var string
      */
     const CREATED_AT = 'created_at';
 
     /**
      * The name of the "updated at" column.
      *
-     * @var string|null
+     * @var string
      */
     const UPDATED_AT = 'updated_at';
 
@@ -279,7 +278,7 @@ abstract class Model implements Arrayable, ArrayAccess, Jsonable, JsonSerializab
         static::$ignoreOnTouch = array_values(array_merge(static::$ignoreOnTouch, $models));
 
         try {
-            $callback();
+            call_user_func($callback);
         } finally {
             static::$ignoreOnTouch = array_values(array_diff(static::$ignoreOnTouch, $models));
         }
@@ -375,7 +374,7 @@ abstract class Model implements Arrayable, ArrayAccess, Jsonable, JsonSerializab
      */
     protected function removeTableFromKey($key)
     {
-        return $key;
+        return Str::contains($key, '.') ? last(explode('.', $key)) : $key;
     }
 
     /**
@@ -468,7 +467,7 @@ abstract class Model implements Arrayable, ArrayAccess, Jsonable, JsonSerializab
      * Begin querying a model with eager loading.
      *
      * @param  array|string  $relations
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return \Illuminate\Database\Eloquent\Builder|static
      */
     public static function with($relations)
     {
@@ -1151,10 +1150,7 @@ abstract class Model implements Arrayable, ArrayAccess, Jsonable, JsonSerializab
             static::newQueryWithoutScopes()->findOrFail($this->getKey())->attributes
         );
 
-        $this->load(collect($this->relations)->reject(function ($relation) {
-            return $relation instanceof Pivot
-                || (is_object($relation) && in_array(AsPivot::class, class_uses_recursive($relation), true));
-        })->keys()->all());
+        $this->load(collect($this->relations)->except('pivot')->keys()->toArray());
 
         $this->syncOriginal();
 

@@ -2,11 +2,10 @@
 
 namespace Caffeinated\Shinobi\Tactics;
 
-use Illuminate\Support\Arr;
 use Illuminate\Database\Eloquent\Model;
 use Caffeinated\Shinobi\Facades\Shinobi;
 
-class RevokePermissionFrom
+class RevokePermissionsFrom
 {
     /**
      * @var array
@@ -15,12 +14,12 @@ class RevokePermissionFrom
 
     /**
      * Create a new GivePermissionTo instance.
-     *
+     * 
      * @param  array  $permissions
      */
     public function __construct(...$permissions)
     {
-        $this->permissions = Arr::flatten($permissions);
+        $this->permissions = array_flatten($permissions);
     }
 
     public function to($roleOrUser)

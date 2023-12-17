@@ -2,20 +2,27 @@
 
 namespace Illuminate\Database\Eloquent\Relations\Concerns;
 
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Support\Collection as BaseCollection;
 
 trait InteractsWithPivotTable
 {
     /**
+     * The cached copy of the currently attached pivot models.
+     *
+     * @var Collection
+     */
+    private $currentlyAttached;
+
+    /**
      * Toggles a model (or models) from the parent.
      *
      * Each existing model is detached, and non existing ones are attached.
      *
      * @param  mixed  $ids
-     * @param  bool  $touch
+     * @param  bool   $touch
      * @return array
      */
     public function toggle($ids, $touch = true)
@@ -77,7 +84,7 @@ trait InteractsWithPivotTable
      * Sync the intermediate tables with a list of IDs or collection of models.
      *
      * @param  \Illuminate\Support\Collection|\Illuminate\Database\Eloquent\Model|array  $ids
-     * @param  bool  $detaching
+     * @param  bool   $detaching
      * @return array
      */
     public function sync($ids, $detaching = true)
@@ -145,7 +152,7 @@ trait InteractsWithPivotTable
      *
      * @param  array  $records
      * @param  array  $current
-     * @param  bool  $touch
+     * @param  bool   $touch
      * @return array
      */
     protected function attachNew(array $records, array $current, $touch = true)
@@ -179,7 +186,7 @@ trait InteractsWithPivotTable
      *
      * @param  mixed  $id
      * @param  array  $attributes
-     * @param  bool  $touch
+     * @param  bool   $touch
      * @return int
      */
     public function updateExistingPivot($id, array $attributes, $touch = true)
@@ -208,7 +215,7 @@ trait InteractsWithPivotTable
      *
      * @param  mixed  $id
      * @param  array  $attributes
-     * @param  bool  $touch
+     * @param  bool   $touch
      * @return int
      */
     protected function updateExistingPivotUsingCustomClass($id, array $attributes, $touch)
@@ -220,14 +227,10 @@ trait InteractsWithPivotTable
 
         $updated = $pivot ? $pivot->fill($attributes)->isDirty() : false;
 
-        $pivot = $this->newPivot([
+        $this->newPivot([
             $this->foreignPivotKey => $this->parent->{$this->parentKey},
             $this->relatedPivotKey => $this->parseId($id),
-        ], true);
-
-        $pivot->timestamps = $updated && in_array($this->updatedAt(), $this->pivotColumns);
-
-        $pivot->fill($attributes)->save();
+        ], true)->fill($attributes)->save();
 
         if ($touch) {
             $this->touchIfTouching();
@@ -241,7 +244,7 @@ trait InteractsWithPivotTable
      *
      * @param  mixed  $id
      * @param  array  $attributes
-     * @param  bool  $touch
+     * @param  bool   $touch
      * @return void
      */
     public function attach($id, array $attributes = [], $touch = true)
@@ -309,10 +312,10 @@ trait InteractsWithPivotTable
     /**
      * Create a full attachment record payload.
      *
-     * @param  int  $key
+     * @param  int    $key
      * @param  mixed  $value
      * @param  array  $attributes
-     * @param  bool  $hasTimestamps
+     * @param  bool   $hasTimestamps
      * @return array
      */
     protected function formatAttachRecord($key, $value, $attributes, $hasTimestamps)
@@ -342,7 +345,7 @@ trait InteractsWithPivotTable
     /**
      * Create a new pivot attachment record.
      *
-     * @param  int  $id
+     * @param  int   $id
      * @param  bool  $timed
      * @return array
      */
@@ -370,7 +373,7 @@ trait InteractsWithPivotTable
      * Set the creation and update timestamps on an attach record.
      *
      * @param  array  $record
-     * @param  bool  $exists
+     * @param  bool   $exists
      * @return array
      */
     protected function addTimestampsToAttachment(array $record, $exists = false)
@@ -472,7 +475,7 @@ trait InteractsWithPivotTable
      */
     protected function getCurrentlyAttachedPivots()
     {
-        return $this->newPivotQuery()->get()->map(function ($record) {
+        return $this->currentlyAttached ?: $this->newPivotQuery()->get()->map(function ($record) {
             $class = $this->using ? $this->using : Pivot::class;
 
             return (new $class)->setRawAttributes((array) $record, true);
@@ -483,7 +486,7 @@ trait InteractsWithPivotTable
      * Create a new pivot model instance.
      *
      * @param  array  $attributes
-     * @param  bool  $exists
+     * @param  bool   $exists
      * @return \Illuminate\Database\Eloquent\Relations\Pivot
      */
     public function newPivot(array $attributes = [], $exists = false)
@@ -532,16 +535,16 @@ trait InteractsWithPivotTable
      *
      * @return \Illuminate\Database\Query\Builder
      */
-    public function newPivotQuery()
+    protected function newPivotQuery()
     {
         $query = $this->newPivotStatement();
 
         foreach ($this->pivotWheres as $arguments) {
-            $query->where(...$arguments);
+            call_user_func_array([$query, 'where'], $arguments);
         }
 
         foreach ($this->pivotWhereIns as $arguments) {
-            $query->whereIn(...$arguments);
+            call_user_func_array([$query, 'whereIn'], $arguments);
         }
 
         return $query->where($this->foreignPivotKey, $this->parent->{$this->parentKey});
@@ -626,7 +629,7 @@ trait InteractsWithPivotTable
     /**
      * Cast the given pivot attributes.
      *
-     * @param  array  $attributes
+     * @param  array $attributes
      * @return array
      */
     protected function castAttributes($attributes)
@@ -639,7 +642,7 @@ trait InteractsWithPivotTable
     /**
      * Converts a given value to a given type value.
      *
-     * @param  string  $type
+     * @param  string $type
      * @param  mixed  $value
      * @return mixed
      */

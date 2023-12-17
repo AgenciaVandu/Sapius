@@ -76,11 +76,11 @@ abstract class Kernel implements KernelInterface, RebootableInterface, Terminabl
 
     private static $freshCache = [];
 
-    public const VERSION = '4.4.19';
-    public const VERSION_ID = 40419;
+    public const VERSION = '4.4.50';
+    public const VERSION_ID = 40450;
     public const MAJOR_VERSION = 4;
     public const MINOR_VERSION = 4;
-    public const RELEASE_VERSION = 19;
+    public const RELEASE_VERSION = 50;
     public const EXTRA_VERSION = '';
 
     public const END_OF_MAINTENANCE = '11/2022';
@@ -205,7 +205,7 @@ abstract class Kernel implements KernelInterface, RebootableInterface, Terminabl
     }
 
     /**
-     * Gets a HTTP kernel from the container.
+     * Gets an HTTP kernel from the container.
      *
      * @return HttpKernelInterface
      */
@@ -237,7 +237,7 @@ abstract class Kernel implements KernelInterface, RebootableInterface, Terminabl
     /**
      * {@inheritdoc}
      */
-    public function locateResource($name/*, $dir = null, $first = true, $triggerDeprecation = true*/)
+    public function locateResource($name/* , $dir = null, $first = true, $triggerDeprecation = true */)
     {
         if (2 <= \func_num_args()) {
             $dir = func_get_arg(1);
@@ -255,17 +255,17 @@ abstract class Kernel implements KernelInterface, RebootableInterface, Terminabl
             throw new \InvalidArgumentException(sprintf('A resource name must start with @ ("%s" given).', $name));
         }
 
-        if (false !== strpos($name, '..')) {
+        if (str_contains($name, '..')) {
             throw new \RuntimeException(sprintf('File name "%s" contains invalid characters (..).', $name));
         }
 
         $bundleName = substr($name, 1);
         $path = '';
-        if (false !== strpos($bundleName, '/')) {
+        if (str_contains($bundleName, '/')) {
             [$bundleName, $path] = explode('/', $bundleName, 2);
         }
 
-        $isResource = 0 === strpos($path, 'Resources') && null !== $dir;
+        $isResource = str_starts_with($path, 'Resources') && null !== $dir;
         $overridePath = substr($path, 9);
         $bundle = $this->getBundle($bundleName);
         $files = [];
@@ -471,7 +471,7 @@ abstract class Kernel implements KernelInterface, RebootableInterface, Terminabl
     protected function getContainerClass()
     {
         $class = static::class;
-        $class = false !== strpos($class, "@anonymous\0") ? get_parent_class($class).str_replace('.', '_', ContainerBuilder::hash($class)) : $class;
+        $class = str_contains($class, "@anonymous\0") ? get_parent_class($class).str_replace('.', '_', ContainerBuilder::hash($class)) : $class;
         $class = $this->name.str_replace('\\', '_', $class).ucfirst($this->environment).($this->debug ? 'Debug' : '').'Container';
 
         if (!preg_match('/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/', $class)) {
@@ -528,12 +528,10 @@ abstract class Kernel implements KernelInterface, RebootableInterface, Terminabl
             is_dir($cacheDir) ?: mkdir($cacheDir, 0777, true);
 
             if ($lock = fopen($cachePath.'.lock', 'w')) {
-                flock($lock, \LOCK_EX | \LOCK_NB, $wouldBlock);
-
-                if (!flock($lock, $wouldBlock ? \LOCK_SH : \LOCK_EX)) {
+                if (!flock($lock, \LOCK_EX | \LOCK_NB, $wouldBlock) && !flock($lock, $wouldBlock ? \LOCK_SH : \LOCK_EX)) {
                     fclose($lock);
                     $lock = null;
-                } elseif (!\is_object($this->container = include $cachePath)) {
+                } elseif (!is_file($cachePath) || !\is_object($this->container = include $cachePath)) {
                     $this->container = null;
                 } elseif (!$oldContainer || \get_class($this->container) !== $oldContainer->name) {
                     flock($lock, \LOCK_UN);
@@ -598,8 +596,8 @@ abstract class Kernel implements KernelInterface, RebootableInterface, Terminabl
             if ($collectDeprecations) {
                 restore_error_handler();
 
-                file_put_contents($cacheDir.'/'.$class.'Deprecations.log', serialize(array_values($collectedLogs)));
-                file_put_contents($cacheDir.'/'.$class.'Compiler.log', null !== $container ? implode("\n", $container->getCompiler()->getLog()) : '');
+                @file_put_contents($cacheDir.'/'.$class.'Deprecations.log', serialize(array_values($collectedLogs)));
+                @file_put_contents($cacheDir.'/'.$class.'Compiler.log', null !== $container ? implode("\n", $container->getCompiler()->getLog()) : '');
             }
         }
 
