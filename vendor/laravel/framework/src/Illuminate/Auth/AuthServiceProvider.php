@@ -3,12 +3,9 @@
 namespace Illuminate\Auth;
 
 use Illuminate\Auth\Access\Gate;
-use Illuminate\Auth\Middleware\RequirePassword;
+use Illuminate\Support\ServiceProvider;
 use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
-use Illuminate\Contracts\Routing\ResponseFactory;
-use Illuminate\Contracts\Routing\UrlGenerator;
-use Illuminate\Support\ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -22,7 +19,6 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerAuthenticator();
         $this->registerUserResolver();
         $this->registerAccessGate();
-        $this->registerRequirePassword();
         $this->registerRequestRebindHandler();
         $this->registerEventRebindHandler();
     }
@@ -77,24 +73,6 @@ class AuthServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register a resolver for the authenticated user.
-     *
-     * @return void
-     */
-    protected function registerRequirePassword()
-    {
-        $this->app->bind(
-            RequirePassword::class, function ($app) {
-                return new RequirePassword(
-                    $app[ResponseFactory::class],
-                    $app[UrlGenerator::class],
-                    $app['config']->get('auth.password_timeout')
-                );
-            }
-        );
-    }
-
-    /**
      * Handle the re-binding of the request binding.
      *
      * @return void
@@ -117,10 +95,6 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->app->rebinding('events', function ($app, $dispatcher) {
             if (! $app->resolved('auth')) {
-                return;
-            }
-
-            if ($app['auth']->hasResolvedGuards() === false) {
                 return;
             }
 

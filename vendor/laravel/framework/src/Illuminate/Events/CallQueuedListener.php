@@ -4,8 +4,8 @@ namespace Illuminate\Events;
 
 use Illuminate\Container\Container;
 use Illuminate\Contracts\Queue\Job;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
 class CallQueuedListener implements ShouldQueue
 {
@@ -38,13 +38,6 @@ class CallQueuedListener implements ShouldQueue
      * @var int
      */
     public $tries;
-
-    /**
-     * The number of seconds to wait before retrying the job.
-     *
-     * @var int
-     */
-    public $retryAfter;
 
     /**
      * The timestamp indicating when the job should timeout.
@@ -89,15 +82,17 @@ class CallQueuedListener implements ShouldQueue
             $this->job, $container->make($this->class)
         );
 
-        $handler->{$this->method}(...array_values($this->data));
+        call_user_func_array(
+            [$handler, $this->method], $this->data
+        );
     }
 
     /**
      * Set the job instance of the given class if necessary.
      *
      * @param  \Illuminate\Contracts\Queue\Job  $job
-     * @param  object  $instance
-     * @return object
+     * @param  mixed  $instance
+     * @return mixed
      */
     protected function setJobInstanceIfNecessary(Job $job, $instance)
     {
@@ -122,10 +117,10 @@ class CallQueuedListener implements ShouldQueue
 
         $handler = Container::getInstance()->make($this->class);
 
-        $parameters = array_merge(array_values($this->data), [$e]);
+        $parameters = array_merge($this->data, [$e]);
 
         if (method_exists($handler, 'failed')) {
-            $handler->failed(...$parameters);
+            call_user_func_array([$handler, 'failed'], $parameters);
         }
     }
 

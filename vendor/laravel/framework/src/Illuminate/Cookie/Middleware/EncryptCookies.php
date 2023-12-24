@@ -3,12 +3,11 @@
 namespace Illuminate\Cookie\Middleware;
 
 use Closure;
-use Illuminate\Contracts\Encryption\DecryptException;
-use Illuminate\Contracts\Encryption\Encrypter as EncrypterContract;
-use Illuminate\Cookie\CookieValuePrefix;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Contracts\Encryption\DecryptException;
+use Illuminate\Contracts\Encryption\Encrypter as EncrypterContract;
 
 class EncryptCookies
 {
@@ -81,13 +80,7 @@ class EncryptCookies
             }
 
             try {
-                $value = $this->decryptCookie($key, $cookie);
-
-                $hasValidPrefix = strpos($value, CookieValuePrefix::create($key, $this->encrypter->getKey())) === 0;
-
-                $request->cookies->set(
-                    $key, $hasValidPrefix ? CookieValuePrefix::remove($value) : null
-                );
+                $request->cookies->set($key, $this->decryptCookie($key, $cookie));
             } catch (DecryptException $e) {
                 $request->cookies->set($key, null);
             }
@@ -143,11 +136,7 @@ class EncryptCookies
             }
 
             $response->headers->setCookie($this->duplicate(
-                $cookie,
-                $this->encrypter->encrypt(
-                    CookieValuePrefix::create($cookie->getName(), $this->encrypter->getKey()).$cookie->getValue(),
-                    static::serialized($cookie->getName())
-                )
+                $cookie, $this->encrypter->encrypt($cookie->getValue(), static::serialized($cookie->getName()))
             ));
         }
 
@@ -173,7 +162,7 @@ class EncryptCookies
     /**
      * Determine whether encryption has been disabled for the given cookie.
      *
-     * @param  string  $name
+     * @param  string $name
      * @return bool
      */
     public function isDisabled($name)

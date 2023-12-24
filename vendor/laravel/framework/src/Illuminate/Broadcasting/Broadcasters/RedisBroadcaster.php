@@ -2,8 +2,8 @@
 
 namespace Illuminate\Broadcasting\Broadcasters;
 
-use Illuminate\Contracts\Redis\Factory as Redis;
 use Illuminate\Support\Arr;
+use Illuminate\Contracts\Redis\Factory as Redis;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class RedisBroadcaster extends Broadcaster
@@ -25,24 +25,15 @@ class RedisBroadcaster extends Broadcaster
     protected $connection;
 
     /**
-     * The Redis key prefix.
-     *
-     * @var string
-     */
-    protected $prefix;
-
-    /**
      * Create a new broadcaster instance.
      *
      * @param  \Illuminate\Contracts\Redis\Factory  $redis
      * @param  string|null  $connection
-     * @param  string  $prefix
      * @return void
      */
-    public function __construct(Redis $redis, $connection = null, $prefix = '')
+    public function __construct(Redis $redis, $connection = null)
     {
         $this->redis = $redis;
-        $this->prefix = $prefix;
         $this->connection = $connection;
     }
 
@@ -56,9 +47,7 @@ class RedisBroadcaster extends Broadcaster
      */
     public function auth($request)
     {
-        $channelName = $this->normalizeChannelName(
-            str_replace($this->prefix, '', $request->channel_name)
-        );
+        $channelName = $this->normalizeChannelName($request->channel_name);
 
         if ($this->isGuardedChannel($request->channel_name) &&
             ! $this->retrieveUser($request, $channelName)) {
@@ -101,10 +90,6 @@ class RedisBroadcaster extends Broadcaster
      */
     public function broadcast(array $channels, $event, array $payload = [])
     {
-        if (empty($channels)) {
-            return;
-        }
-
         $connection = $this->redis->connection($this->connection);
 
         $payload = json_encode([
@@ -113,39 +98,8 @@ class RedisBroadcaster extends Broadcaster
             'socket' => Arr::pull($payload, 'socket'),
         ]);
 
-        $connection->eval(
-            $this->broadcastMultipleChannelsScript(),
-            0, $payload, ...$this->formatChannels($channels)
-        );
-    }
-
-    /**
-     * Get the Lua script for broadcasting to multiple channels.
-     *
-     * ARGV[1] - The payload
-     * ARGV[2...] - The channels
-     *
-     * @return string
-     */
-    protected function broadcastMultipleChannelsScript()
-    {
-        return <<<'LUA'
-for i = 2, #ARGV do
-  redis.call('publish', ARGV[i], ARGV[1])
-end
-LUA;
-    }
-
-    /**
-     * Format the channel array into an array of strings.
-     *
-     * @param  array  $channels
-     * @return array
-     */
-    protected function formatChannels(array $channels)
-    {
-        return array_map(function ($channel) {
-            return $this->prefix.$channel;
-        }, parent::formatChannels($channels));
+        foreach ($this->formatChannels($channels) as $channel) {
+            $connection->publish($channel, $payload);
+        }
     }
 }

@@ -3,12 +3,12 @@
 namespace Illuminate\Bus;
 
 use Closure;
-use Illuminate\Contracts\Bus\QueueingDispatcher;
-use Illuminate\Contracts\Container\Container;
+use RuntimeException;
+use Illuminate\Pipeline\Pipeline;
 use Illuminate\Contracts\Queue\Queue;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Pipeline\Pipeline;
-use RuntimeException;
+use Illuminate\Contracts\Container\Container;
+use Illuminate\Contracts\Bus\QueueingDispatcher;
 
 class Dispatcher implements QueueingDispatcher
 {
@@ -140,6 +140,8 @@ class Dispatcher implements QueueingDispatcher
      *
      * @param  mixed  $command
      * @return mixed
+     *
+     * @throws \RuntimeException
      */
     public function dispatchToQueue($command)
     {
@@ -180,20 +182,6 @@ class Dispatcher implements QueueingDispatcher
         }
 
         return $queue->push($command);
-    }
-
-    /**
-     * Dispatch a command to its appropriate handler after the current process.
-     *
-     * @param  mixed  $command
-     * @param  mixed  $handler
-     * @return void
-     */
-    public function dispatchAfterResponse($command, $handler = null)
-    {
-        $this->container->terminating(function () use ($command, $handler) {
-            $this->dispatchNow($command, $handler);
-        });
     }
 
     /**

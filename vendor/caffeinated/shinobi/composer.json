@@ -8,8 +8,7 @@
         "email": "shea.lewis89@gmail.com"
     }],
     "require": {
-        "php": "^7.2",
-        "illuminate/support": "^6.0|^7.0"
+        "illuminate/support": "5.7.*|5.8.*"
     },
     "autoload": {
         "psr-4": {

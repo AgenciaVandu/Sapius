@@ -290,9 +290,3 @@ img {
     font-size: 15px;
     text-align: center;
 }
-
-/* Utilities */
-
-.break-all {
-    word-break: break-all;
-}
