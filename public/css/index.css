@@ -1,0 +1,123 @@
+.header__intro {
+    background-color: #002146;
+    min-height: 530px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.bg-naranja{
+    min-height: 530px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+@media (max-width: 1000px) {
+    .orgullo-txt {
+        padding-top: 0px;
+    }
+}
+.orgullo-txt {
+    font-size: 50px;
+} @media (max-width: 430px) {
+    .orgullo-txt h1 {
+        font-size: 35px;
+    }
+}
+
+.card {
+    position: relative;
+    left: 150px;
+    height: 400px;
+    width: 300px;
+    border-color: transparent;
+    border-radius: 20px;
+    box-shadow: .2px 0 0.8em rgba(128, 128, 128, 0.29);
+}  @media (max-width: 1000px) {
+    .card {
+        left: 0px !important; 
+    }
+    .centro-card {
+        display: flex;
+        justify-content: center;
+        text-align: center;
+    }
+}
+
+.cabecera-orgullo {
+    margin-top: 35px;
+}
+
+.bg-naranja {
+    background-image: url(/img/v1/naranja.svg);
+    background-repeat: no-repeat;
+    background-position: right;
+} @media (max-width: 1000px) {
+    .bg-naranja {
+        background-position: right bottom;
+    }
+} @media (max-width: 430px) {
+    .bg-naranja {
+        background-position: right bottom;
+    }
+}
+
+.bg-naranja-3 {
+    background-image: url(/img/v1/naranja.svg);
+    background-repeat: no-repeat;
+    background-position: center right;
+}
+
+.plataforma {
+    min-height: 350px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.plataforma__info {
+text-align: center;
+}
+.docentes {
+    background-color: #002146;
+    min-height: 590px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+.docentes h2 {
+    padding-bottom: 1.3em;
+}
+.docentes__contenedor {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    gap: 30px;
+}
+.docentes__persona {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+
+}
+.maestro-img {
+    width: 230px;
+    height: auto;
+    text-align: center;
+}
+.modalidades {
+    display: flex;
+    flex: row;
+    min-height: 350px;
+    align-items: center;
+}

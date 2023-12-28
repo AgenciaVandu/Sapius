@@ -1,53 +1,10 @@
 
-/* COLORS */
-.color-orange {
-    color: #ED6A5A;
-}
 
-.color-blue {
-    color: #002146;
-}
 
-.color-lowblue{
-    color: #30D6E6;
-}
-
-.color-gray {
-    color: #4C5454;
-}
-
-.nav-link {
-    color: #fff !important;
-    font-weight: 400;
-    font-size: 15px;
-}
-
-.nav-link:hover{
-    color: #ED6A5A !important;
-}
-
-.nav-tabs .nav-link {
-    margin-bottom: -5px;
-    border: 1px solid transparent !important;
-    color: #002146 !important;
-    font-weight: 700;
-    font-size: 20px;
-}
 
 /* BACKGROUNDS */
 
-.bg-blue {
-    background-color: #002146;
-}
 
-.bg-light {
-    background-color: transparent !important;
-    transition: 0.5s ease;
-}
-
-.bg-light.scrolled {
-        background-color: #002146 !important;
-}
 
 .bg-blue-1 {
     background-image: url(/img/v1/fondos/fondo-1.svg);
@@ -190,133 +147,15 @@
     font-weight: 300;
 }
 
-.bg-naranja {
-    background-image: url(/img/v1/naranja.svg);
-    background-repeat: no-repeat;
-    background-position: right;
-} @media (max-width: 1000px) {
-    .bg-naranja {
-        background-position: right bottom;
-    }
-} @media (max-width: 430px) {
-    .bg-naranja {
-        background-position: right bottom;
-    }
-}
 
-.bg-naranja-3 {
-    background-image: url(/img/v1/naranja.svg);
-    background-repeat: no-repeat;
-    background-position: center right;
-}
 
-.orgullo-sapius {
-    padding-top: 30px;
-    padding-bottom: 30px;
-} @media (max-width: 1000px) {
-    .orgullo-sapius {
-        padding-top: 10px;
-        padding-bottom: 10px;
-    }
-}
 
-.orgullo-txt {
-    padding-top: 130px;
-} @media (max-width: 1000px) {
-    .orgullo-txt {
-        padding-top: 0px;
-    }
-}
-.orgullo-txt h1 {
-    font-size: 50px;
-} @media (max-width: 430px) {
-    .orgullo-txt h1 {
-        font-size: 35px;
-    }
-}
-
-.card {
-    position: relative;
-    left: 150px;
-    height: 400px;
-    width: 300px;
-    border-color: transparent;
-    border-radius: 20px;
-    box-shadow: .2px 0 0.8em rgba(128, 128, 128, 0.29);
-}  @media (max-width: 1000px) {
-    .card {
-        left: 0px !important; 
-    }
-    .centro-card {
-        display: flex;
-        justify-content: center;
-        text-align: center;
-    }
-}
-
-.cabecera-orgullo {
-    margin-top: 35px;
-}
-
-.maestros p {
-    font-weight: 300;
-    font-size: 16px;
-}
 
 #modalidades h2 {
     color: #3a3a3a;
     font-weight: 700;
 }
 
-li {
-    font-weight: 200;
-    line-height: 32px;
-    color: #fff;
-    list-style: none;
-}
-
-a {
-    color: #fff;
-    text-decoration: none;
-}
-a:hover {
-    color: #ED6A5A;
-    text-decoration: none;
-}
-
-.icono {
-    font-size: 25px;
-}
-
-.exani p {
-    text-align: justify;
-}
-
-.titular {
-    text-align: center;
-}
-
-.titular h2 {
-    line-height: 30px;
-}
-
-.titular span {
-    font-weight: 300;
-    font-size: 22px;
-}
-.posicion {
-    position: relative;
-    top: 135px;
-}
-.caracteristicas {
-    font-size: 20px;
-}
-
-hr {
-    position: relative;
-    right: 30px;
-    width: 305px;
-}
 .check {
     position: relative;
     left: 140px;

@@ -5,12 +5,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Sapius - Formación que te prepara para el futuro</title>
+  @yield('title')
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glider-js@1.7.3/glider.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+  <link rel="stylesheet" href="{{asset('css/system.css')}}">
+  <link rel="stylesheet" href="{{asset('css/index.css')}}">
   <link rel="stylesheet" href="{{asset('css/style.css')}}">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
-  <meta name="author" content="Agenciavandu.com" />
+  <meta name="author" content="agenciavandu.com" />
   <meta name="copyright" content="Sapius.com.mx" />
   <meta name="robots" content="index,follow" />
   <meta http-equiv="expires" content="43200" />
@@ -20,7 +22,7 @@
   </style>
 </head>
 
-<body class="d-none d-sm-none d-md-none d-lg-block">
+<body>
   <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
     <div class="container">
       <a class="navbar-brand" href="/">
@@ -54,7 +56,6 @@
 
             </div>
           </li>
-
           <li class="nav-item">
             <a class="nav-link" href="/cursos-enarm">ENARM</a>
           </li>
@@ -110,69 +111,66 @@
 
   @yield('content')
 
-  <footer>
-    <div class="bg-blue">
-      <div class="container pt-5">
-        <div class="row">
-          <div class="col-lg-3 col-md-2 col-sm-12 d-block d-sm-block d-md-none d-lg-block">
-            <img src="/img/icono-sapius.png" class="img-fluid" alt="">
+  <footer class="footer">
+    <div class="container pt-5">
+      <div class="row">
+        <div class="col-lg-3 col-md-2 col-sm-12 d-block d-sm-block d-md-none d-lg-block">
+          <img src="/img/icono-sapius.png" class="img-fluid" alt="">
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-12 pt-2">
+          <h3 class="lead" style="color: #fff;">Contáctanos</h3>
+          <li>Teléfono</li>
+          <li><a href="tel:529992988744">+52 999 298 8744</a></li>
+          <li>Email:</li>
+          <li><a href="">contacto@sapius.com</a></li>
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-12 pt-2">
+          <h3 class="lead" style="color: #fff;">Mapa del sitio</h3>
+          <div class="row">
+            <div class="col-6">
+              <li><a href="/">INICIO</a></li>
+              <li><a href="/exani-1">EXANI-I</a></li>
+              <li><a href="/exani-2">EXANI-II</a></li>
+              <li><a href="/exani-3">EXANI-III</a></li>
+            </div>
+            <div class="col-6">
+              <li><a href="/cursos-enarm">ENARM</a></li>
+            </div>
           </div>
-          <div class="col-lg-3 col-md-3 col-sm-12 pt-2">
-            <h3 class="lead" style="color: #fff;">Contáctanos</h3>
-            <li>Teléfono</li>
-            <li><a href="tel:529992988744">+52 999 298 8744</a></li>
-            <li>Email:</li>
-            <li><a href="">contacto@sapius.com</a></li>
-          </div>
-          <div class="col-lg-3 col-md-4 col-sm-12 pt-2">
-            <h3 class="lead" style="color: #fff;">Mapa del sitio</h3>
+        </div>
+        <div class="col-lg-3 col-md-5 col-sm-12 pt-2">
+          <h3 class="lead" style="color: #fff;">Síguenos</h3>
+          <li>
             <div class="row">
-              <div class="col-6">
-                <li><a href="/">INICIO</a></li>
-                <li><a href="/exani-1">EXANI-I</a></li>
-                <li><a href="/exani-2">EXANI-II</a></li>
-                <li><a href="/exani-3">EXANI-III</a></li>
-              </div>
-              <div class="col-6">
-                <li><a href="/cursos-enarm">ENARM</a></li>
-              </div>
+              <a href="https://www.facebook.com/Sapius-latinoam%C3%A9rica-104931991400060"><i class="fab fa-facebook pl-3 pr-3 icono"></i></a>
+              <a href="https://www.instagram.com/sapius_latinoamerica/"><i class="fab fa-instagram pr-3 icono"></i></a>
+              <a href=""><i class="fab fa-twitter pr-3 icono"></i></a>
+              <a href="https://www.tiktok.com/@sapiuslatinoamerica"><i class="fab fa-tiktok pr-3 icono"></i></a>
+              <a href="https://www.youtube.com/channel/UCDfPMHpBkAC2-SHi8Kxfitw"><i class="fab fa-youtube icono"></i></a>
             </div>
-          </div>
-          <div class="col-lg-3 col-md-5 col-sm-12 pt-2">
-            <h3 class="lead" style="color: #fff;">Síguenos</h3>
-            <li>
-              <div class="row">
-                <a href="https://www.facebook.com/Sapius-latinoam%C3%A9rica-104931991400060"><i class="fab fa-facebook pl-3 pr-3 icono"></i></a>
-                <a href="https://www.instagram.com/sapius_latinoamerica/"><i class="fab fa-instagram pr-3 icono"></i></a>
-                <a href=""><i class="fab fa-twitter pr-3 icono"></i></a>
-                <a href="https://www.tiktok.com/@sapiuslatinoamerica"><i class="fab fa-tiktok pr-3 icono"></i></a>
-                <a href="https://www.youtube.com/channel/UCDfPMHpBkAC2-SHi8Kxfitw"><i class="fab fa-youtube icono"></i></a>
-              </div>
-              <a href="https://api.whatsapp.com/send?phone=529992988744" class="btn btn-light mt-2">ENVIANOS UN WHATSAPP</a>
-            </li>
+            <a href="https://api.whatsapp.com/send?phone=529992988744" class="btn btn-light mt-2">ENVIANOS UN WHATSAPP</a>
+          </li>
+        </div>
+      </div>
+      <div class="row text-center">
+        <div class="col-md-12">
+          <div class="pt-5" style="color: #fff;">
+            <p class="copyright" style="text-align: center;">
+              <span class="pr-2"><a href="{{asset('/tyc.pdf')}}" target="blank_">Términos y condiciones</a><span class="pl-2">|</span></span>
+              <span class="pr-2"><a href="{{asset('/politica-sapius.pdf')}}" target="blank_">Política de privacidad</a><span class="pl-2">|</span></span> <br class="d-block d-sm-block d-md-none d-lg-none">
+              <span class="pr-2"><a href="">Política de cookies</a></span>
+              <br>
+              <small>
+                Sapius.® Todos los derechos reservados &copy;<script>
+                  document.write(new Date().getFullYear());
+                </script>
+
           </div>
         </div>
-        <div class="row text-center">
-          <div class="col-md-12">
-            <div class="pt-5" style="color: #fff;">
-              <p class="copyright" style="text-align: center;">
-                <span class="pr-2"><a href="{{asset('/tyc.pdf')}}" target="blank_">Términos y condiciones</a><span class="pl-2">|</span></span>
-                <span class="pr-2"><a href="{{asset('/politica-sapius.pdf')}}" target="blank_">Política de privacidad</a><span class="pl-2">|</span></span> <br class="d-block d-sm-block d-md-none d-lg-none">
-                <span class="pr-2"><a href="">Política de cookies</a></span>
-                <br>
-                <small>
-                  Sapius.® Todos los derechos reservados &copy;<script>
-                    document.write(new Date().getFullYear());
-                  </script>. {{-- Desarrollado por <a href="https://agenciavandu.com">Agencia Vandu.</a> --}}
 
-            </div>
-          </div>
-
-        </div>
       </div>
     </div>
   </footer>
-  <script src="https://cdn.jsdelivr.net/npm/glider-js@1.7.3/glider.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF" crossorigin="anonymous"></script>
