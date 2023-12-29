@@ -1,7 +1,10 @@
 @extends('layouts.landing')
-@section('title')
+@push('title')
 <title>Cursos online para aprobar el EGEL PLUS - Sapius®</title>
-@endsection
+@endpush
+@push('css')
+<link rel="stylesheet" href="{{asset('css/index.css')}}">
+@endpush
 @section('content')
 <header class="header__intro">
   <div class="container">
@@ -199,27 +202,27 @@
 <section class="plataforma">
   <div class="container">
     <h3 class="color-gray text-center pb-4">La plataforma diferente para ser excelente</h3>
-    <div class="row">
+    <div class="row plataforma__height">
       <div class="col text-center">
         <i class="fas fa-check-circle" style="font-size: 40px; color:#ED6A5A;"></i>
-        <p class="color-gray pt-3">El 99.1% de nuestros estudiantes acreditan</p>
+        <h5 class="color-gray pt-3">El 99.1% de nuestros <br> estudiantes acreditan</h5>
       </div>
       <div class="col text-center">
         <i class="fas fa-user-graduate" style="font-size: 40px; color:#ED6A5A;"></i>
-        <p class="color-gray pt-3">Nuestro método <b>SUMA</b>
-          maximiza tus resultados</p>
+        <h5 class="color-gray pt-3">Nuestro método <b>SUMA</b>
+          maximiza <br> tus resultados</h5>
       </div>
       <div class="col text-center">
         <i class="fas fa-book-reader" style="font-size: 40px; color:#ED6A5A;"></i>
-        <p class="color-gray pt-3">El curso más
-          completo del mercado</p>
+        <h5 class="color-gray pt-3">El curso más
+          completo <br> del mercado</h5>
       </div>
     </div>
   </div>
 </section>
 
 <section class="docentes">
-  <div class="container-fluid"> <!--Slider-->
+  <div class="container"> <!--Slider-->
     <h2 class="text-center " style="color: #fff;">Conoce a nuestros docentes</h2>
     <div class="docentes__contenedor">
       <div class="docentes__persona">
@@ -229,40 +232,37 @@
         <h5 style="color: #fff;">
           L.N. Verónica González <br> <small style="color: #30D6E6;">Premio Nacional Excelencia EGEL</small>
         </h5>
-        <small style="color: #fff;" class="pb-3">¿Quieres contactar a algún docente?</small>
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sapius-info">Contactar</butt>
+        <small style="color: #fff;" class="pb-3">Nuestro cuerpo docente esta disponible para pláticas, conferencias y ponencias.
+        </small>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sapius-info">Enviar mensaje</butt>
       </div>
       <div class="docentes__persona">
         <div class="maestro-img">
           <img src="{{asset('img/m-5.png')}}" class="img-fluid pb-3" alt="Maestro sapius">
         </div>
         <h5 style="color: #fff;">Dr. Erika González <br> <small style="color: #30D6E6;">Residente de Neurología</small></h5>
-        <small style="color: #fff;" class="pb-3">¿Quieres contactar a algún docente?</small>
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sapius-info">Contactar</butt>
+        <small style="color: #fff;" class="pb-3">Nuestro cuerpo docente esta disponible para pláticas, conferencias y ponencias.
+        </small>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sapius-info">Enviar mensaje</butt>
       </div>
-      <div class="docentes__persona">
-        <div class="maestro-img">
-          <img src="{{asset('img/m-1.png')}}" class="img-fluid pb-3" alt="Maestro sapius">
-        </div>
-        <h5 style="color: #fff;">Dr. Carlos Blando <br> <small style="color: #30D6E6; ">Residente de Cardiología</small></h5>
-        <small style="color: #fff;" class="pb-3">¿Quieres contactar a algún docente?</small>
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sapius-info">Contactar</butt>
-      </div>
+     
       <div class="docentes__persona">
         <div class="maestro-img">
           <img src="{{asset('img/m-2.png')}}" class="img-fluid pb-3" alt="Maestro sapius">
         </div>
         <h5 style="color: #fff;">Dr. César Estrada <br> <small style="color: #30D6E6; ">Cirujano Plástico Estético</small></h5>
-        <small style="color: #fff;" class="pb-3">¿Quieres contactar a algún docente?</small>
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sapius-info">Contactar</butt>
+        <small style="color: #fff;" class="pb-3">Nuestro cuerpo docente esta disponible para pláticas, conferencias y ponencias.
+        </small>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sapius-info">Enviar mensaje</butt>
       </div>
       <div class="docentes__persona">
         <div class="maestro-img">
           <img src="{{asset('img/m-3.png')}}" class="img-fluid pb-3" alt="Maestro sapius">
         </div>
         <h5 style="color: #fff;">LTS. Martín González <br> <small style="color: #30D6E6;">Docente titular del curso EGEL</small></h5>
-        <small style="color: #fff;" class="pb-3">¿Quieres contactar a algún docente?</small>
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sapius-info">Contactar</butt>
+        <small style="color: #fff;" class="pb-3">Nuestro cuerpo docente esta disponible para pláticas, conferencias y ponencias.
+        </small>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sapius-info">Enviar mensaje</butt>
       </div>
     </div>
   </div>

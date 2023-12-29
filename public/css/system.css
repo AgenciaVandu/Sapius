@@ -1,3 +1,6 @@
+* {
+    font-family: 'Roboto';
+}
 .nav-link {
     color: #fff !important;
     font-weight: 400;
@@ -42,6 +45,45 @@
         background-color: #002146 !important;
 }
 
+
+/*buttons*/
+
+.btn-primary {
+    background-color: #ED6A5A;
+    padding-right: 30px;
+    padding-left: 30px;
+    text-transform: uppercase;
+    border: none;
+    font-weight: 700;
+    border-radius: 10px;
+}
+.btn-primary:hover {
+    background-color: #30D6E6;
+    
+}
+.btn-secondary {
+    background-color: #ED6A5A;
+    padding-right: 20px;
+    padding-left: 20px;
+    text-transform: uppercase;
+    border: none;
+    font-weight: 700;
+    border-radius: 10px;
+} .btn-secondary:hover {
+    background-color: #30D6E6;
+    
+    
+}
+.btn-light {
+    background-color: #30D6E6;
+    border: none;
+    color: #fff;
+    font-weight: 500;
+    border-radius: 8px;
+
+}
+
+
 .footer {
     background-color: #002146;
 }
@@ -66,9 +108,6 @@ a:hover {
     font-size: 25px;
 }
 
-.exani p {
-    text-align: justify;
-}
 
 .titular {
     text-align: center;
@@ -95,3 +134,4 @@ hr {
     right: 30px;
     width: 305px;
 }
+
