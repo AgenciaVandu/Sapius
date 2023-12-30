@@ -30,7 +30,7 @@
             </div>
             <div class="col-md-5 col-lg-5 col-sm-12 text-center">
                 <div>
-                    <img src="{{asset('img//v1/exani-III.png')}}" class="img-fluid" alt="material exani 2">
+                    <img src="{{asset('img/webp/exani-III.webp')}}" class="img-fluid" alt="material exani 2">
                 </div>
             </div>
         </div>

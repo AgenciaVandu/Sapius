@@ -1,6 +1,6 @@
 @extends('layouts.landing')
 @push('title')
-<title>Cursos online para el EXANI 3 - Sapius®</title>
+<title>Cursos online para el EGEL PLUS - Sapius®</title>
 @endpush
 @push('css')
 <link rel="stylesheet" href="{{asset('css/exani3.css')}}">
@@ -10,7 +10,7 @@
     <div class="container text-center">
         <div class="col-12 exani-titular">
             <h1 style="color: #fff;">Prepárate con Sapius <br>
-                Acredita el <span class=color-lowblue>EGEL Plus</span> Sapius. <br class="d-none d-sm-none d-md-block d-lg-block"> <span>El 99.1% de nuestros estudiantes acreditan</span>
+                Acredita el <span class=color-lowblue>EGEL PLUS</span> Sapius. <br class="d-none d-sm-none d-md-block d-lg-block"> <span>El 99.1% de nuestros estudiantes acreditan</span>
             </h1>
             <p style="color: #fff;">"Tu formación, es nuestra pasión"</p>
             <a href="" class="btn btn-primary">Comenzar</a>
@@ -29,7 +29,7 @@
             </div>
             <div class="col-md-5 col-lg-5 col-sm-12 text-center">
                 <div>
-                    <img src="{{asset('img//v1/exani-III.png')}}" class="img-fluid" alt="material exani 2">
+                    <img src="{{asset('img/webp/egel.webp')}}" class="img-fluid" alt="Material EGEL PLUS">
                 </div>
             </div>
         </div>
@@ -62,8 +62,8 @@
                         <img src="{{asset('img/v1/icon/exni/icono-e-2.png')}}" class="img-fluid" alt="">
                     </div>
                     <div class="col-9">
-                        <h4 class="color-gray">Guía <br> EGEL PLUS</h2>
-                            <p class="color-gray">Actualizamos nuestro contenido cada año con base en la bibliografía del CENEVAL EGEL PLUS</p>
+                        <h4 class="color-gray">Guía <br> EGEL PLUS </h2>
+                            <p class="color-gray">Actualizamos nuestro contenido cada año con base en la bibliografía del CENEVAL EGEL PLUS MEDICINA</p>
                     </div>
                 </div>
             </div>
