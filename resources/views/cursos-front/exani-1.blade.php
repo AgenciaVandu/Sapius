@@ -13,7 +13,7 @@
                 Acredita el <span class=color-lowblue>EXANI-I</span> a la primera e <br class="d-none d-sm-none d-md-block d-lg-block"> ingresa a la Preparatoria
             </h1>
             <p style="color: #fff;">"Tu formación, nuestra pasión"</p>
-            <a href="" class="btn btn-primary">Comenzar</a>
+            <a href="{{ route('register') }}" class="btn btn-primary">Comenzar</a>
         </div>
 
     </div>
@@ -26,11 +26,11 @@
                     <strong>¿Qué es el EXANI-I?</strong>
                 </h3>
                 <p class="color-gray">El EXANI-I es un examen que proporciona información acerca del potencial de los aspirantes para tener un buen desempeño en estudios de tipo medio superior. Es utilizado para apoyar los procesos de admisión en las instituciones de la educación media superior.</p>
-                <a href="" class="btn btn-primary">COMENZAR</a>
+                <a href="{{ route('register') }}" class="btn btn-primary">COMENZAR</a>
             </div>
             <div class="col-md-5 col-lg-5 col-sm-12 text-center">
                 <div>
-                    <img src="{{asset('img/webp/exani-I.webp')}}" class="img-fluid" alt="Material exani 1">
+                    <img src="{{asset('img/webp/exani-I.webp')}}" class="img-fluid" alt="Material exani 1" loading="lazy">
                 </div>
             </div>
         </div>
@@ -97,139 +97,11 @@
         <div class="container text-center">
             <div class="posicion">
                 <h1 style="color: #fff;">Más de 10 años de excelencia nos respaldan</h1>
-                <a href="" class="btn btn-primary">COMENZAR</a>
+                <a href="{{ route('register') }}" class="btn btn-primary">COMENZAR</a>
             </div>
         </div>
     </div>
 </section>
-<section class="orgullos-sapius bg-naranja">
-    <div class="container">
-        <div class="orgullos-sapius__espacio">
-            <div class="row">
-                <div class="col-md-12 col-lg-6 col-sm-12 m-auto flex-1">
-                    <h2 class="color-gray">Continúa tu preparación <br>
-                        donde quieras</h2>
-                    <p class="color-gray">Nuestra plataforma ofrece la posibilidad de reproducir el contenido desde tu computadora/laptop y así continúa tu preparación en todo momento.</p>
-                    <a href="" class="btn btn-primary">COMENZAR</a>
-                </div>
-                <div class="col-md-12 col-lg-6 col-sm-12 text-center flex-2">
-                    <img src="{{asset('img//v1/plataforma.png')}}" class=" img-fluid" alt="">
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<section class="cta">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-5 col-sm-12 mb-5 cta__flex">
-                <div class="cta__incluye">
-                    <h5 class="text-center">Tu inscripción incluye</h5>
-                    <div class="cta__incluye-contenido">
-                        <span>Examen diagnóstico</span>
-                        <img src="{{asset ('img/v1/icon/check.svg')}}" width="25" alt="">
-                    </div>
-                    <div class="cta__incluye-contenido">
-                        <span>Paquete escolar</span>
-                        <img src="{{asset ('img/v1/icon/check.svg')}}" width="25" alt="">
-                    </div>
-                    <div class="cta__incluye-contenido">
-                        <span>Guía actualizada</span>
-                        <img src="{{asset ('img/v1/icon/check.svg')}}" width="25" alt="">
-                    </div>
-                    <div class="cta__incluye-contenido">
-                        <span>Plataforma 24/7</span>
-                        <img src="{{asset ('img/v1/icon/check.svg')}}" width="25" alt="">
-                    </div>
-                    <div class="cta__incluye-contenido">
-                        <span>Portabilidad</span>
-                        <img src="{{asset ('img/v1/icon/check.svg')}}" width="25" alt="">
-                    </div>
-                    <div class="cta__incluye-contenido">
-                        <span>Asesoría en vivo*</span>
-                        <img src="{{asset ('img/v1/icon/check.svg')}}" width="25" alt="">
-                    </div>
-                    <div class="cta__incluye-contenido">
-                        <span>Simuladores por tema, <br> módulos y globales</span>
-                        <img src="{{asset ('img/v1/icon/check.svg')}}" width="25" alt="">
-                    </div>
-                    <div class="cta__incluye-contenido">
-                        <span>Feedback en vivo*</span>
-                        <img src="{{asset ('img/v1/icon/check.svg')}}" width="25" alt="">
-                    </div>
-                    <div class="cta__incluye-contenido">
-                        <span>Garantía*</span>
-                        <img src="{{asset ('img/v1/icon/check.svg')}}" width="25" alt="">
-                    </div>
-                    <div class="boton">
-                        <a class="btn btn-primary">Contactar a un asesor</a>
-                    </div>
-                </div>
-                <div class="text-center pt-2">
-                    <small style="color: gray;">Duración 4, 6, 8 y 12 meses / Aplican restricciones <br> Sujeto a disponibilidad</small>
-
-                </div>
-            </div>
-            <div class="col-lg-7 col-sm-12">
-                <div class="orgullo-txt">
-                    <h4 class="lead" style="color: gray;">Forma parte de nuestra comunidad</h4>
-                    <h2 class="color-gray"><strong>Opiniones de <br>
-                        nuestros alumnos</strong></h2>
-                    <div id="carouselExampleFade" class="carousel slide carousel-fade" data-ride="carousel">
-                        <div class="carousel-inner">
-                            <div class="carousel-item active">
-                                <p class="color-gray reference">
-                                    <strong>Alvar Martín</strong> <br>
-                                    <span>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                    </span> <br>
-                                    <span>
-                                        El EXANI-I es un examen que proporciona información acerca del potencial de los aspirantes para tener un buen desempeño en estudios de tipo medio superior. Es utilizado para apoyar los procesos de admisión en las instituciones de la educación media superior.
-                                    </span>
-                                </p>
-                            </div>
-                            <div class="carousel-item">
-                                <p class="color-gray reference">
-                                    <strong>Gladys Martín</strong> <br>
-                                    <span>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                    </span> <br>
-                                    <span>
-                                        El EXANI-I es un examen que proporciona información acerca del potencial de los aspirantes para tener un buen desempeño en estudios de tipo medio superior. Es utilizado para apoyar los procesos de admisión en las instituciones de la educación media superior.
-                                    </span>
-                                </p>
-                            </div>
-                            <div class="carousel-item">
-                                <p class="color-gray reference">
-                                    <strong>Yair Martín</strong> <br>
-                                    <span>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                    </span> <br>
-                                    <span>
-                                        El EXANI-I es un examen que proporciona información acerca del potencial de los aspirantes para tener un buen desempeño en estudios de tipo medio superior. Es utilizado para apoyar los procesos de admisión en las instituciones de la educación media superior.
-                                    </span>
-                                </p>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <a href="" class="btn btn-primary">Más información</a>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+@include('components.preparacion')
+@include('components.info')
 @endsection

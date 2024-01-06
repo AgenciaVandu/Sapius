@@ -5,22 +5,23 @@
 @push('css')
 <link rel="stylesheet" href="{{asset('css/index.css')}}">
 @endpush
+@include('components.ventas')
 @section('content')
 <header class="header__intro">
   <div class="container">
     <div class="row">
-      <div class="col-lg-7 col-md-12 col-sm-12 m-auto">
+      <div class="col-lg-7 col-md-12 col-sm-12 m-auto txt-banner">
         <h1 style="color: #fff;">Prepárate con Sapius <br>
           Cursos online para el <span class=color-lowblue>EGEL PLUS</span>
         </h1>
         <p style="color: #fff;">"Tu formación, nuestra pasión"</p>
-        <a href="" class="btn btn-primary">Comenzar</a>
+        <a href="{{ route('register') }}" class="btn btn-primary">Comenzar</a>
       </div>
-      <div class="col-lg-5 col-md-12 col-sm-12">
+      <div class="col-lg-5 col-md-12 col-sm-12 banner">
         <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
           <div class="carousel-inner">
             <div class="carousel-item active">
-              <img src="{{asset ('img/v1/morritos.png')}}" class="w-100 img-fluid" alt="...">
+              <img src="{{asset ('img/v1/morritos.png')}}" class="w-100 img-fluid" alt="Estudiantes EGEL" loading="lazy">>
             </div>
           </div>
           <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
@@ -87,7 +88,7 @@
               </div>
             </div>
             <div class="col-md-4">
-              <img src="{{ asset('img/v1/1.png') }}" class="img-fluid" alt="Foto 1" />
+              <img src="{{ asset('img/v1/1.png') }}" class="img-fluid" alt="Foto 1" loading="lazy"> />
             </div>
           </div>
         </div>
@@ -105,7 +106,7 @@
               </div>
             </div>
             <div class="col-md-4">
-              <img src="{{ asset('img/v1/2.png') }}" class="img-fluid" alt="Foto 1" />
+              <img src="{{ asset('img/v1/2.png') }}" class="img-fluid" alt="Foto 1" loading="lazy">/>
             </div>
           </div>
         </div>
@@ -123,7 +124,7 @@
               </div>
             </div>
             <div class="col-md-4 pt-3 pb-2">
-              <img src="{{ asset('img/egel.png') }}" class="img-fluid" alt="Foto 1" />
+              <img src="{{ asset('img/egel.png') }}" class="img-fluid" alt="Foto 1" loading="lazy">/>
             </div>
           </div>
         </div>
@@ -141,7 +142,7 @@
               </div>
             </div>
             <div class="col-md-4">
-              <img src="{{ asset('img/v1/4.png') }}" class="img-fluid" alt="Foto 1" />
+              <img src="{{ asset('img/v1/4.png') }}" class="img-fluid" alt="Foto 1" loading="lazy">/>
             </div>
           </div>
         </div>
@@ -159,7 +160,7 @@
               </div>
             </div>
             <div class="col-md-4">
-              <img src="{{ asset('img/v1/5.png') }}" class="img-fluid" alt="Foto 1" />
+              <img src="{{ asset('img/v1/5.png') }}" class="img-fluid" alt="Foto 1" loading="lazy"> />
             </div>
           </div>
         </div>
@@ -172,8 +173,8 @@
   <div class="bg-naranja">
     <div class="container">
       <div class="row">
-        <div class="col-md-12 col-lg-6 col-sm-1 m-auto">
-          <h1 class="color-gray orgullo-txt">
+        <div class="col-md-12 col-lg-6 col-sm-1 m-auto orgullo-txt">
+          <h1 class="color-gray ">
             <strong>Conoce nuestros <br>
               orgullos Sapius.
             </strong>
@@ -183,7 +184,7 @@
         <div class="col-md-12 col-lg-6 col-sm-12 centro-card text-center">
           <div class="card">
             <div class="cabecera-orgullo">
-              <img src="{{asset('img/v1/penelope-quintanar-Gracia.png')}}" class="img-fluid" alt="">
+              <img src="{{asset('img/v1/penelope-quintanar-Gracia.png')}}" class="img-fluid" loading="lazy">>
             </div>
             <h4 class="color-gray">Penelope Quintanar G.</h4>
             <p class="color-gray">Pasante de nutrición
@@ -203,7 +204,7 @@
   <div class="container">
     <h3 class="color-gray text-center pb-4">La plataforma diferente para ser excelente</h3>
     <div class="row plataforma__height">
-      <div class="col text-center">
+      <div href="" class="col text-center">
         <i class="fas fa-check-circle" style="font-size: 40px; color:#ED6A5A;"></i>
         <h5 class="color-gray pt-3">El 99.1% de nuestros <br> estudiantes acreditan</h5>
       </div>
@@ -227,7 +228,7 @@
     <div class="docentes__contenedor">
       <div class="docentes__persona">
         <div class="maestro-img">
-          <img src="{{asset('img/m-4.png')}}" class="img-fluid pb-3" alt="">
+          <img src="{{asset('img/m-4.png')}}" class="img-fluid pb-3" alt="Verónica Sansores" loading="lazy">
         </div>
         <h5 style="color: #fff;">
           L.N. Verónica González <br> <small style="color: #30D6E6;">Premio Nacional Excelencia EGEL</small>
@@ -238,17 +239,17 @@
       </div>
       <div class="docentes__persona">
         <div class="maestro-img">
-          <img src="{{asset('img/m-5.png')}}" class="img-fluid pb-3" alt="Maestro sapius">
+          <img src="{{asset('img/m-5.png')}}" class="img-fluid pb-3" alt="Maestro sapius" loading="lazy">>
         </div>
         <h5 style="color: #fff;">Dr. Erika González <br> <small style="color: #30D6E6;">Residente de Neurología</small></h5>
         <small style="color: #fff;" class="pb-3">Nuestro cuerpo docente esta disponible para pláticas, conferencias y ponencias.
         </small>
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sapius-info">Enviar mensaje</butt>
       </div>
-     
+
       <div class="docentes__persona">
         <div class="maestro-img">
-          <img src="{{asset('img/m-2.png')}}" class="img-fluid pb-3" alt="Maestro sapius">
+          <img src="{{asset('img/m-2.png')}}" class="img-fluid pb-3" alt="Maestro sapius" loading="lazy">>
         </div>
         <h5 style="color: #fff;">Dr. César Estrada <br> <small style="color: #30D6E6; ">Cirujano Plástico Estético</small></h5>
         <small style="color: #fff;" class="pb-3">Nuestro cuerpo docente esta disponible para pláticas, conferencias y ponencias.
@@ -257,7 +258,7 @@
       </div>
       <div class="docentes__persona">
         <div class="maestro-img">
-          <img src="{{asset('img/m-3.png')}}" class="img-fluid pb-3" alt="Maestro sapius">
+          <img src="{{asset('img/m-3.png')}}" class="img-fluid pb-3" alt="Maestro sapius" loading="lazy">>
         </div>
         <h5 style="color: #fff;">LTS. Martín González <br> <small style="color: #30D6E6;">Docente titular del curso EGEL</small></h5>
         <small style="color: #fff;" class="pb-3">Nuestro cuerpo docente esta disponible para pláticas, conferencias y ponencias.
@@ -272,14 +273,23 @@
   <div class="container">
     <div class="row text-center">
       <div class="col-lg-6 col-md-12 col-sm-12">
-        <h2><strong>¿Quieres más información?</strong></h5>
-          <p class="color-gray ">Nuestros asesores están felices de ayudarte <br class="d-none d-sm-none d-md-none d-lg-block"><br class="d-none d-sm-none d-md-none d-lg-block"></p>
-          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sapius-info">Enviar mensaje</button>
+        <div class="card">
+          <h2><strong>¿Quieres más información?</strong></h5>
+            <p class="color-gray ">Nuestros asesores están felices de ayudarte <br class="d-none d-sm-none d-md-none d-lg-block"><br class="d-none d-sm-none d-md-none d-lg-block"></p>
+            <div class="boton__espacio">
+              <button type="button" class="btn btn-primary boton" data-toggle="modal" data-target="#ventas">Enviar mensaje</button>
+            </div>
+        </div>
       </div>
       <div class="col-lg-6 col-md-12 col-sm-12">
-        <h2><strong>Modalidad Presencial</strong></h5>
-          <p class="color-gray">Nuestro cuerpo docente esta disponible para consultas, asesorías, clases, pláticas, conferencias y ponencias.</p>
-          <a href="/cursos-presenciales" class="btn btn-primary">Más información</a>
+        <div class="card">
+          <h2><strong>Modalidad Presencial</strong></h5>
+            <p class="color-gray mb-3">Nuestro cuerpo docente esta disponible para consultas, asesorías, clases, pláticas, conferencias y ponencias.</p>
+            <div class="boton__espacio">
+            <a href="/cursos-presenciales" class="btn btn-primary">Más información</a>
+            </div>
+           
+        </div>
       </div>
     </div>
   </div>

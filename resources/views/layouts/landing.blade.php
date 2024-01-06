@@ -6,7 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   @stack('title')
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glider-js@1.7.3/glider.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
   <link rel="stylesheet" href="{{asset('css/system.css')}}">
   @stack('css')
@@ -115,14 +114,14 @@
     <div class="container pt-5">
       <div class="row">
         <div class="col-lg-3 col-md-2 col-sm-12 d-block d-sm-block d-md-none d-lg-block">
-          <img src="/img/icono-sapius.png" class="img-fluid" alt="">
+          <img src="/img/icono-sapius.png" class="img-fluid" alt="logotipo sapius" loading="lazy">>
         </div>
         <div class="col-lg-3 col-md-3 col-sm-12 pt-2">
           <h3 class="lead" style="color: #fff;">Contáctanos</h3>
           <li>Teléfono</li>
           <li><a href="tel:529992988744">+52 999 298 8744</a></li>
           <li>Email:</li>
-          <li><a href="">contacto@sapius.com</a></li>
+          <li><a href="mailto:contacto@sapius.com">contacto@sapius.com</a></li>
         </div>
         <div class="col-lg-3 col-md-4 col-sm-12 pt-2">
           <h3 class="lead" style="color: #fff;">Mapa del sitio</h3>

@@ -10,6 +10,9 @@
 .nav-link:hover{
     color: #ED6A5A !important;
 }
+.nav-link .dropdown-item.active{
+    background-color: #ED6A5A !important;
+}
 
 .nav-tabs .nav-link {
     margin-bottom: -5px;
@@ -18,6 +21,7 @@
     font-weight: 700;
     font-size: 20px;
 }
+
 
 /* COLORS */
 .color-orange {

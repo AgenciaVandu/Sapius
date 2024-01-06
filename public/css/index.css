@@ -5,6 +5,18 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
+} @media (max-width:991px) {
+    .header__intro {
+        padding: 4em 0;
+    }
+    .header__intro .banner {
+        padding: 2em 0;
+        order: 0;
+    }
+    .header__intro .txt-banner {
+        order: 1;
+    }
+
 }
 
 .bg-naranja{
@@ -13,11 +25,17 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    padding: 3em 0;
+} @media (max-width: 991px) {
+    .orgullo-txt {
+        text-align: center;
+        padding-bottom: 1.7em;
+    }
 }
 
 
 
-.card {
+.bg-naranja .card {
     position: relative;
     left: 150px;
     height: 400px;
@@ -26,7 +44,7 @@
     border-radius: 20px;
     box-shadow: .2px 0 0.8em rgba(128, 128, 128, 0.29);
 }  @media (max-width: 1000px) {
-    .card {
+    .bg-naranja .card {
         left: 0px !important; 
     }
     .centro-card {
@@ -67,6 +85,7 @@
     align-items: center;
 
 }
+
 .plataforma__height {
     min-height: 200px;
     display: flex;
@@ -112,7 +131,28 @@ text-align: center;
 }
 .modalidades {
     display: flex;
-    flex: row;
-    min-height: 350px;
+    flex-direction: row;
+    min-height: 500px;
     align-items: center;
+    justify-content: center;
+    padding: 3em 0;
+}
+
+.modalidades .card {
+    padding: 5em 3em;
+    box-shadow: .2px 0 0.8em rgba(128, 128, 128, 0.179);
+} @media (max-width:991px) {
+    .modalidades .card {
+        margin: 2em 0;
+    }
+}
+.card .boton__espacio {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+ 
+}
+.card .boton {
+    max-width: 320px;
+    
 }
