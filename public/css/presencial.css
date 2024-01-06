@@ -1,0 +1,132 @@
+/* BACKGROUNDS */
+.bg-blue {
+    background-image: url(/img/v1/fondos/fondo-3.svg);
+    background-position: center;
+    background-size: cover;
+    min-height: 600px;
+    
+}
+
+.bg-blue .exani-titular {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    min-height: 600px;
+}
+.exani {
+    min-height: 550px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: 3em 0 2em 0;
+}
+
+
+@media (max-width:767px) {
+    .exani__faq {
+        padding: 1.5em;
+        text-align: center;
+    }
+}
+
+.prueba {
+    min-height: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 2em 0;
+}
+
+.orgullos-sapius {
+    margin: 0 0 1em 0;
+}
+
+
+.bg-naranja {
+    background-image: url(/img/v1/naranja.svg);
+    background-repeat: no-repeat;
+    background-position: right;
+} @media (max-width: 1000px) {
+    .orgullos-sapius__flex {
+        display: flex;
+        flex-direction: row reverse;
+
+    }
+} @media (max-width: 991px) {
+    .flex-1 {
+        order: 1;
+        padding-top: 1.5em;
+        text-align: center;
+    }
+    .flex-2 {
+        order: 0;
+    }
+    .bg-naranja {
+        background-position:right;
+    }
+}
+.entregables {
+    max-width: 580px;
+    margin: 2em 0;
+}@media(max-width:658px){
+    .entregables {
+        max-width: 500px;
+    }
+}@media(max-width:515px) {
+    .entregables {
+        max-width: 340px;
+    }
+}
+.cta {
+    min-height: 700px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 2em 0;
+}
+.cta__flex{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+} 
+.cta__incluye {
+    padding: 2.5em 0;
+    background-color: #002146;
+    min-height: 300px;
+    width: 350px;
+    border-radius: 10px;
+    box-sizing: border-box;
+    box-shadow: #002146;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+}
+
+.cta__incluye-contenido {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 340px;
+    min-height: 35px;
+}
+.cta__incluye h5 {
+    padding-bottom: .5em;
+}
+.cta__incluye-contenido span  {
+    width: 245px;
+    
+    font-weight: 200;
+}
+.cta__incluye-contenido img {
+    float: right;
+}
+.cta__incluye .boton {
+    padding-top: 1em;
+}
