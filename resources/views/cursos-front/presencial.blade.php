@@ -18,6 +18,7 @@
         
     </div>
 </header>
+
 <section id="incluido" class="bg-naranja-3">
     <div class="container">
         <div class="row pt-5 align-items-center">
@@ -62,6 +63,8 @@
         </div>
     </div>
 </section>
+
+
 <section id="experiencia">
     <div class="bg-2 mt-5">
         <div class="container text-center">
@@ -124,5 +127,7 @@
       </div>
     </div>
 </section>
+
+
 @include('components.info')
 @endsection

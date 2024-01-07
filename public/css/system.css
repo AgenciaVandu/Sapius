@@ -22,7 +22,12 @@
     font-size: 20px;
 }
 
-
+.bg-2 {
+    background-image: url(/img/v1//fondos/fondo-2.svg);
+    background-position: center;
+    background-size: cover;
+    min-height: 362px;
+}
 /* COLORS */
 .color-orange {
     color: #ED6A5A;

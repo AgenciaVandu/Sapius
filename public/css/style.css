@@ -1,12 +1,7 @@
 
 
 
-.bg-2 {
-    background-image: url(/img/v1//fondos/fondo-2.svg);
-    background-position: center;
-    background-size: cover;
-    min-height: 362px;
-}
+
 .bg-blue-2 {
     background-color: #002146;
     border-radius: 28px;
