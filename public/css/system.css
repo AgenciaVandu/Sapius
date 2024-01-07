@@ -1,0 +1,146 @@
+* {
+    font-family: 'Roboto';
+}
+.nav-link {
+    color: #fff !important;
+    font-weight: 400;
+    font-size: 15px;
+}
+
+.nav-link:hover{
+    color: #ED6A5A !important;
+}
+.nav-link .dropdown-item.active{
+    background-color: #ED6A5A !important;
+}
+
+.nav-tabs .nav-link {
+    margin-bottom: -5px;
+    border: 1px solid transparent !important;
+    color: #002146 !important;
+    font-weight: 700;
+    font-size: 20px;
+}
+
+.bg-2 {
+    background-image: url(/img/v1//fondos/fondo-2.svg);
+    background-position: center;
+    background-size: cover;
+    min-height: 362px;
+}
+/* COLORS */
+.color-orange {
+    color: #ED6A5A;
+}
+
+.color-blue {
+    color: #002146;
+}
+
+.color-lowblue{
+    color: #30D6E6;
+}
+
+.color-gray {
+    color: #4C5454;
+}
+
+.bg-light {
+    background-color: transparent !important;
+    transition: 0.5s ease;
+}
+
+.bg-light.scrolled {
+        background-color: #002146 !important;
+}
+
+
+/*buttons*/
+
+.btn-primary {
+    background-color: #ED6A5A;
+    padding-right: 30px;
+    padding-left: 30px;
+    text-transform: uppercase;
+    border: none;
+    font-weight: 700;
+    border-radius: 10px;
+}
+.btn-primary:hover {
+    background-color: #30D6E6;
+    
+}
+.btn-secondary {
+    background-color: #ED6A5A;
+    padding-right: 20px;
+    padding-left: 20px;
+    text-transform: uppercase;
+    border: none;
+    font-weight: 700;
+    border-radius: 10px;
+} .btn-secondary:hover {
+    background-color: #30D6E6;
+    
+    
+}
+.btn-light {
+    background-color: #30D6E6;
+    border: none;
+    color: #fff;
+    font-weight: 500;
+    border-radius: 8px;
+
+}
+
+
+.footer {
+    background-color: #002146;
+}
+
+li {
+    font-weight: 200;
+    line-height: 32px;
+    color: #fff;
+    list-style: none;
+}
+
+a {
+    color: #fff;
+    text-decoration: none;
+}
+a:hover {
+    color: #ED6A5A;
+    text-decoration: none;
+}
+
+.icono {
+    font-size: 25px;
+}
+
+
+.titular {
+    text-align: center;
+}
+
+.titular h2 {
+    line-height: 30px;
+}
+
+.titular span {
+    font-weight: 300;
+    font-size: 22px;
+}
+.posicion {
+    position: relative;
+    top: 135px;
+}
+.caracteristicas {
+    font-size: 20px;
+}
+
+hr {
+    position: relative;
+    right: 30px;
+    width: 305px;
+}
+
