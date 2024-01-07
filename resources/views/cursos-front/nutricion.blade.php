@@ -69,6 +69,36 @@
                     Nutriológica
                 </h4>
             </div>
+            <div class="col-md-4 col-lg-4 col-sm-12">
+                <h1 class="color-orange">6</h1>
+                <h4 class="color-gray">Atención nutricia<br> 
+                    Nutriológica
+                </h4>
+                <p style="color: gray">1. Evaluación y diagnóstico del estado nutricio.<br>
+                    <span>2.Intervención y monitoreo</span> <br>
+                </p>
+            </div>
+            <div class="col-md-4 col-lg-4 col-sm-12">
+                <h1 class="color-orange">7</h1>
+                <h4 class="color-gray">Programas de intervención <br> 
+                nutricional a nivel poblacional
+                </h4>
+                <p style="color: gray">1.Diagnóstico situacional<br>
+                    <span>2. Diseño de la intervención</span> <br>
+                    <span>3. Ejecución y evaluación de la intervención</span> <br>
+                    <span>4. Sistemas alimentarios</span>
+                </p>
+            </div>
+            <div class="col-md-4 col-lg-4 col-sm-12">
+                <h1 class="color-orange">8</h1>
+                <h4 class="color-gray">Servicios<br> 
+                de alimentación
+                </h4>
+                <p style="color: gray">1. Administración del servicio<br>
+                    <span>2. Normativa alimentaria</span> <br>
+                    <span>3.Ciencias de los alimentos</span>
+                </p>
+            </div>
         </div>
     </div>
 </section>

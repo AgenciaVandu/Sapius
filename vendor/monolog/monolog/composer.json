@@ -54,5 +54,11 @@
         "test": "vendor/bin/phpunit",
         "phpstan": "vendor/bin/phpstan analyse"
     },
+<<<<<<< HEAD
     "lock": false
+=======
+    "config": {
+        "lock": false
+    }
+>>>>>>> 07da93bd3aaccaffda5f1c27a959c2fcdbece34f
 }

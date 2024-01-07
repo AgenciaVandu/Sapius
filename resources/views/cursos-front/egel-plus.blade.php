@@ -12,7 +12,7 @@
             <h1 style="color: #fff;">Prepárate con Sapius <br>
                 Acredita el <span class=color-lowblue>EGEL PLUS</span> Sapius. <br class="d-none d-sm-none d-md-block d-lg-block"> <span>El 99.1% de nuestros estudiantes acreditan</span>
             </h1>
-            <p style="color: #fff;">"Tu formación, es nuestra pasión"</p>
+            <p style="color: #fff;">"Tu formación, nuestra pasión"</p>
             <a href="" class="btn btn-primary">Comenzar</a>
         </div>
     </div>

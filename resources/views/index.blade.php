@@ -297,3 +297,5 @@
 </section>
 
 @endsection
+@section('cta')
+@endsection

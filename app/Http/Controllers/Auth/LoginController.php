@@ -96,9 +96,9 @@ class LoginController extends Controller
 
     protected function validateLogin(Request $request)
     {
-        $request->validate([
+        /* $request->validate([
             'g-recaptcha-response' => ['required', new ValidRecaptcha],
-        ],$this->messages());
+        ],$this->messages()); */
     }
 
     public function messages()

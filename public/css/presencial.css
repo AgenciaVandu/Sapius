@@ -24,6 +24,9 @@
     padding: 3em 0 2em 0;
 }
 
+.incluido {
+    padding: 3em 0;
+}
 
 @media (max-width:767px) {
     .exani__faq {

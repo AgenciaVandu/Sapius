@@ -38,9 +38,16 @@ class JsonFormatter extends NormalizerFormatter
     /**
      * @param int $batchMode
      * @param bool $appendNewline
+<<<<<<< HEAD
      */
     public function __construct($batchMode = self::BATCH_MODE_JSON, $appendNewline = true)
+=======
+     * @param int $maxDepth
+     */
+    public function __construct($batchMode = self::BATCH_MODE_JSON, $appendNewline = true, $maxDepth = 9)
+>>>>>>> 07da93bd3aaccaffda5f1c27a959c2fcdbece34f
     {
+        parent::__construct(null, $maxDepth);
         $this->batchMode = $batchMode;
         $this->appendNewline = $appendNewline;
     }
@@ -141,8 +148,13 @@ class JsonFormatter extends NormalizerFormatter
      */
     protected function normalize($data, $depth = 0)
     {
+<<<<<<< HEAD
         if ($depth > 9) {
             return 'Over 9 levels deep, aborting normalization';
+=======
+        if ($depth > $this->maxDepth) {
+            return 'Over '.$this->maxDepth.' levels deep, aborting normalization';
+>>>>>>> 07da93bd3aaccaffda5f1c27a959c2fcdbece34f
         }
 
         if (is_array($data)) {

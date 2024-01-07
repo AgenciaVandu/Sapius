@@ -23,6 +23,13 @@ use Monolog\Utils;
  */
 class StreamHandler extends AbstractProcessingHandler
 {
+<<<<<<< HEAD
+=======
+    /** @private 512KB */
+    const CHUNK_SIZE = 524288;
+
+    /** @var resource|null */
+>>>>>>> 07da93bd3aaccaffda5f1c27a959c2fcdbece34f
     protected $stream;
     protected $url;
     private $errorMessage;
@@ -45,6 +52,7 @@ class StreamHandler extends AbstractProcessingHandler
         parent::__construct($level, $bubble);
         if (is_resource($stream)) {
             $this->stream = $stream;
+            $this->streamSetChunkSize();
         } elseif (is_string($stream)) {
             $this->url = Utils::canonicalizePath($stream);
         } else {
@@ -109,6 +117,7 @@ class StreamHandler extends AbstractProcessingHandler
 
                 throw new \UnexpectedValueException(sprintf('The stream or file "%s" could not be opened in append mode: '.$this->errorMessage, $this->url));
             }
+            $this->streamSetChunkSize();
         }
 
         if ($this->useLocking) {
@@ -133,8 +142,22 @@ class StreamHandler extends AbstractProcessingHandler
         fwrite($stream, (string) $record['formatted']);
     }
 
+<<<<<<< HEAD
     private function customErrorHandler($code, $msg)
     {
+=======
+    protected function streamSetChunkSize()
+    {
+        if (version_compare(PHP_VERSION, '5.4.0', '>=')) {
+            return stream_set_chunk_size($this->stream, self::CHUNK_SIZE);
+        }
+
+        return false;
+    }
+
+    private function customErrorHandler($code, $msg)
+    {
+>>>>>>> 07da93bd3aaccaffda5f1c27a959c2fcdbece34f
         $this->errorMessage = preg_replace('{^(fopen|mkdir)\(.*?\): }', '', $msg);
     }
 

@@ -24,6 +24,7 @@ class NormalizerFormatter implements FormatterInterface
     const SIMPLE_DATE = "Y-m-d H:i:s";
 
     protected $dateFormat;
+<<<<<<< HEAD
 
     /**
      * @param string $dateFormat The format of the timestamp: one supported by DateTime::format
@@ -31,6 +32,18 @@ class NormalizerFormatter implements FormatterInterface
     public function __construct($dateFormat = null)
     {
         $this->dateFormat = $dateFormat ?: static::SIMPLE_DATE;
+=======
+    protected $maxDepth;
+
+    /**
+     * @param string $dateFormat The format of the timestamp: one supported by DateTime::format
+     * @param int $maxDepth
+     */
+    public function __construct($dateFormat = null, $maxDepth = 9)
+    {
+        $this->dateFormat = $dateFormat ?: static::SIMPLE_DATE;
+        $this->maxDepth = $maxDepth;
+>>>>>>> 07da93bd3aaccaffda5f1c27a959c2fcdbece34f
         if (!function_exists('json_encode')) {
             throw new \RuntimeException('PHP\'s json extension is required to use Monolog\'s NormalizerFormatter');
         }
@@ -56,10 +69,33 @@ class NormalizerFormatter implements FormatterInterface
         return $records;
     }
 
+<<<<<<< HEAD
     protected function normalize($data, $depth = 0)
     {
         if ($depth > 9) {
             return 'Over 9 levels deep, aborting normalization';
+=======
+    /**
+     * @return int
+     */
+    public function getMaxDepth()
+    {
+        return $this->maxDepth;
+    }
+
+    /**
+     * @param int $maxDepth
+     */
+    public function setMaxDepth($maxDepth)
+    {
+        $this->maxDepth = $maxDepth;
+    }
+
+    protected function normalize($data, $depth = 0)
+    {
+        if ($depth > $this->maxDepth) {
+            return 'Over '.$this->maxDepth.' levels deep, aborting normalization';
+>>>>>>> 07da93bd3aaccaffda5f1c27a959c2fcdbece34f
         }
 
         if (null === $data || is_scalar($data)) {

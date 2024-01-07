@@ -278,7 +278,7 @@ Route::group(['middleware' =>['alumno'],'prefix' => 'alumno'], function() {
     Route::post('/curso', 'Registro\CursoProgramadoController@cursoDetallado')->name('cursos.detallado');
     Route::post('/modulo', 'Registro\CursoProgramadoController@leccionDetallada')->name('leccion.detallada');
     Route::get('/inscripcion/{curso_id}', 'Registro\InscripcionController@inscripcion')->name('inscripcion.form');
-    Route::post('/inscripcion', 'Registro\InscripcionController@pago')->name('inscripcion.pago');
+    Route::get('/inscripcion', 'Registro\InscripcionController@pago')->name('inscripcion.pago');
     Route::get('/cursos/video', 'Cursos\CursoController@video')->name('cursos.video');
     Route::get('/cursos/token', 'Cursos\CursoController@token')->name('cursos.token');
     Route::post('/cursos/payment', 'Cursos\CursoController@payment')->name('cursos.payment');
