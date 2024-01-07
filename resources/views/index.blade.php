@@ -179,6 +179,7 @@
             </strong>
           </h1>
           <p class="color-gray">Selecciona el objetivo que quieras conseguir</p>
+          <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#sapius-info">¡Solicita una clase muestra!</button>
         </div>
         <div class="col-md-12 col-lg-6 col-sm-12 centro-card text-center">
           <div class="card">
