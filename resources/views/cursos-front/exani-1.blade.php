@@ -3,7 +3,7 @@
 <title>Cursos online para el EXANI 1 - Sapius®</title>
 @endpush
 @push('css')
-<link rel="stylesheet" href="{{asset('css/exani1.css')}}">
+<link rel="stylesheet" href="{{asset('/css/exani1.css')}}">
 @endpush
 @section('content')
 <header class="bg-blue">
