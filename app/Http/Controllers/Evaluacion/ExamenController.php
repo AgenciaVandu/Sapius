@@ -284,9 +284,9 @@ class ExamenController extends Controller
     {
         $examen = Examen::with('Prueba')->where('id',$request->examen_id)->where('retro_visualizado','no')->first();
 
-        if($examen == null)
-            return  redirect()->route('home');
-
+        if($examen == null){
+            return  redirect()->route('alumno');
+        }
         $examen->retro_visualizado = 'si';
         $examen->save();
 
@@ -324,6 +324,7 @@ class ExamenController extends Controller
                 $feedback[] = [$o,$rdb];
             }
         });
+
 
         return view('evaluacion.feedback')->with('examen',$examen)->with('feedback',$feedback);
     }
