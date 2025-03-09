@@ -6,7 +6,7 @@
             <div class="col-7 align-self-center">
                 <h3 class="page-title text-truncate text-dark font-weight-medium mb-1">Administración de Cursos</h3>
                 <div class="d-flex align-items-center">
-                    @include('genericos.menu',['form' => 'Lecciones'])
+                    @include('genericos.menu', ['form' => 'Lecciones'])
                 </div>
             </div>
             <div class="col-5 align-self-center">
@@ -54,7 +54,6 @@
                                 <th id="activoHead">Desactivar</th>
                             </tr>
                         </thead>
-
                         <tfoot class="thead-light">
                             <tr>
                                 <th>Título</th>
@@ -66,27 +65,6 @@
                                 <th id="activoFoot">Desactivar</th>
                             </tr>
                         </tfoot>
-                        {{-- <tbody>
-                            @foreach ($cursos as $curso)
-                                <td>{{ $curso->titulo }}</td>
-                                <td>
-                                    @php
-                                       echo $curso->descripcion;
-                                    @endphp
-                                </td>
-                                <td>
-                                    <form method="POST" action="{{ route('admin.lecciones.index', $curso) }}">
-                                        @csrf
-                                        <input name="curso_id" type="hidden" value="{{ $curso }}">
-                                        <input name="leccion_id" type="hidden" value="0">
-                                        <button type="submit" class="btn btn-primary">
-                                            <i class="fas fa-list"></i>
-                                        </button>
-                                    </form>
-                                </td>
-                                <td>{{ $curso->titulo }}</td>
-                            @endforeach
-                        </tbody> --}}
                     </table>
                 </div>
             </div>
@@ -218,17 +196,17 @@
                             '<form method="POST" action="{{ route('admin.lecciones.index') }}"> @csrf <input name="curso_id" type="hidden" value="' +
                             data['id'] +
                             '"><input name="leccion_id" type="hidden" value="0"> <button type="submit" class="btn btn-primary"><i class="fas fa-list"></i></button> </form>'
-                        );
+                            );
                         $(row).find('td:eq(3)').html(
                             '<form method="POST" action="{{ route('cursos.edit') }}"> @csrf <input name="id" type="hidden" value="' +
                             data['id'] +
                             '"> <button type="submit" class="btn btn-primary"><i class="fas fa-edit"></i></button> </form>'
-                        );
+                            );
                         $(row).find('td:eq(4)').html(
                             '<form method="POST" action="{{ route('schedule') }}"> @csrf <input name="curso_id" type="hidden" value="' +
                             data['id'] +
                             '"> <button type="submit" class="btn btn-primary"><i class="fas fa-calendar-alt"></i></button> </form>'
-                        );
+                            );
 
                         var s = show.replace('1', data['id']);
                         $(row).find('td:eq(5)').html(s);
@@ -238,7 +216,7 @@
                                 '<form method="POST" action="{{ route('cursos.destroy') }}"> @csrf <input name="id" type="hidden" value="' +
                                 data['id'] +
                                 '"> <button type="submit" class="btn btn-primary"><i class="fas fa-trash"></i></button> </form>'
-                            );
+                                );
                             $("#activoHead").text("Desactivar");
                             $("#activoFoot").text("Desactivar");
                         } else {
@@ -246,13 +224,12 @@
                                 '<form method="POST" action="{{ route('cursos.activate') }}"> @csrf <input name="id" type="hidden" value="' +
                                 data['id'] +
                                 '"> <button type="submit" class="btn btn-primary"><i class="fas fa-check"></i></button> </form>'
-                            );
+                                );
                             $("#activoHead").text("Activar");
                             $("#activoFoot").text("Activar");
                         }
                     },
                 });
         });
-
     </script>
 @endsection
