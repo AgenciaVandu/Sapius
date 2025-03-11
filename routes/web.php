@@ -19,7 +19,8 @@ use App\User;
 
 Route::get('/', function () {
     return view('index');
-});
+})->name('landing.home')
+;
 Route::get('terms/conditions', function () {
     return view('terms');
 });
