@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\User;
 
+
+
 Route::get('/', function () {
     return view('index');
 });
@@ -55,7 +57,7 @@ Route::post('/informacion', 'UserController@informacion')->name('informacion');
 Auth::routes();
 
 
-Route::group(['middleware' =>['admin'],'prefix' => 'admin'], function() {
+Route::group(['middleware' => ['admin','restrict.mobile'],'prefix' => 'admin'], function() {
     Route::get('/', 'HomeController@admin')->name('admin');
 
     //Admistracion de usuarios
@@ -178,7 +180,7 @@ Route::group(['middleware' =>['admin'],'prefix' => 'admin'], function() {
     Route::get('/evaluacion/resultados/{inscripcion_id}', 'Evaluacion\ExamenController@listaResultados')->name('admin.curso.lista-resultados');//{id}
 });
 
-Route::group(['middleware' =>['instructor'],'prefix' => 'instructor'], function() {
+Route::group(['middleware' =>['instructor','restrict.mobile'],'prefix' => 'instructor'], function() {
     Route::get('/', 'HomeController@instructor')->name('instructor');
     Route::post('/users/profile/p', 'UserController@profile')->name('instructor.profile');//{id}
     Route::get('/users/pase/{file}', 'UserController@pase')->name('instructor.pase');
@@ -267,7 +269,7 @@ Route::group(['middleware' =>['instructor'],'prefix' => 'instructor'], function(
     Route::post('/soporte', 'UserController@correoSoporte')->name('instructor.soporte-enviar');
 });
 
-Route::group(['middleware' =>['alumno'],'prefix' => 'alumno'], function() {
+Route::group(['middleware' =>['alumno','restrict.mobile'],'prefix' => 'alumno'], function() {
     Route::get('/', 'HomeController@index')->name('alumno');
     Route::post('/users/profile', 'UserController@profile')->name('alumno.profile');//{id}
     Route::get('/users/pase/{file}', 'UserController@pase')->name('alumno.pase');

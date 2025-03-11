@@ -18,7 +18,7 @@
         @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
     </style>
 </head>
-<body class="d-none d-sm-none d-md-none d-lg-block">
+<body class="d-lg-block">
     <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
         <div class="container">
             <a class="navbar-brand" href="/">
@@ -48,10 +48,10 @@
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <a class="dropdown-item" href="/egel-plus-medicina">Medicina</a>
                 <a class="dropdown-item" href="egel-plus-nutricion">Nutrición</a>
-                
+
               </div>
             </li>
-           
+
             <li class="nav-item">
                 <a class="nav-link" href="/cursos-enarm">ENARM</a>
             </li>
@@ -153,17 +153,17 @@
               <div class="col-md-12">
                 <div class="pt-5" style="color: #fff;">
                   <p class="copyright" style="text-align: center;">
-                    <span class="pr-2"><a href="{{asset('/tyc.pdf')}}" target="blank_">Términos y condiciones</a><span class="pl-2">|</span></span> 
+                    <span class="pr-2"><a href="{{asset('/tyc.pdf')}}" target="blank_">Términos y condiciones</a><span class="pl-2">|</span></span>
                     <span class="pr-2"><a href="{{asset('/politica-sapius.pdf')}}" target="blank_">Política de privacidad</a><span class="pl-2">|</span></span>  <br class="d-block d-sm-block d-md-none d-lg-none">
-                    <span class="pr-2"><a href="">Política de cookies</a></span> 
+                    <span class="pr-2"><a href="">Política de cookies</a></span>
                     <br>
                     <small>
-                    Sapius.®  Todos los derechos reservados &copy;<script>document.write(new Date().getFullYear()); 
+                    Sapius.®  Todos los derechos reservados &copy;<script>document.write(new Date().getFullYear());
                      </script>. {{-- Desarrollado por <a href="https://agenciavandu.com">Agencia Vandu.</a> --}}
-                    
+
                 </div>
               </div>
-              
+
             </div>
           </div>
         </div>
