@@ -9,7 +9,8 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('vendor/adminmart/assets/images/favicon.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16"
+        href="{{ asset('vendor/adminmart/assets/images/favicon.png') }}">
     <title>{{ config('app.name', 'Laravel') }}</title>
     <!-- Custom CSS -->
     <link href="{{ asset('vendor/adminmart/dist/css/style.css') }}" rel="stylesheet">
@@ -19,9 +20,17 @@
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 <![endif]-->
+    <script>
+        window.onload = function() {
+            if (navigator.maxTouchPoints > 0 || 'ontouchstart' in window) {
+                document.body.innerHTML =
+                "<h1>Acceso Restringido</h1><p>No puedes acceder desde un móvil o tablet.</p>";
+            }
+        };
+    </script>
 </head>
 
-<body @if(config('app.env') == 'production') oncontextmenu="return false;" onselectstart="return false;" @endif>
+<body @if (config('app.env') == 'production') oncontextmenu="return false;" onselectstart="return false;" @endif>
     <div class="main-wrapper">
         <!-- ============================================================== -->
         <!-- Preloader - style you can find in spinners.css -->
@@ -41,7 +50,8 @@
         <div class="auth-wrapper d-flex no-block justify-content-center align-items-center position-relative"
             style="background:url({{ asset('vendor/adminmart/assets/images/big/auth-bg.jpg') }}) no-repeat center center;">
             <div class="auth-box row">
-                <div class="col-lg-7 col-md-5 modal-bg-img" style="background-image: url({{ asset('vendor/adminmart/assets/images/big/login.png') }});">
+                <div class="col-lg-7 col-md-5 modal-bg-img"
+                    style="background-image: url({{ asset('vendor/adminmart/assets/images/big/login.png') }});">
                 </div>
                 <div class="col-lg-5 col-md-7 bg-white">
                     <div class="p-3">

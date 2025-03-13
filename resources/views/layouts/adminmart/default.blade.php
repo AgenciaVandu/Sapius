@@ -9,7 +9,8 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('vendor/adminmart/assets/images/favicon.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16"
+        href="{{ asset('vendor/adminmart/assets/images/favicon.png') }}">
     <title>{{ config('app.name', 'Laravel') }}</title>
     <!-- Custom CSS -->
 
@@ -26,9 +27,17 @@
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 <![endif]-->
+    <script>
+        window.onload = function() {
+            if (navigator.maxTouchPoints > 0 || 'ontouchstart' in window) {
+                document.body.innerHTML =
+                "<h1>Acceso Restringido</h1><p>No puedes acceder desde un móvil o tablet.</p>";
+            }
+        };
+    </script>
 </head>
 
-<body @if(config('app.env') == 'production') oncontextmenu="return false;" onselectstart="return false;" @endif>
+<body @if (config('app.env') == 'production') oncontextmenu="return false;" onselectstart="return false;" @endif>
     <!-- ============================================================== -->
     <!-- Preloader - style you can find in spinners.css -->
     <!-- ============================================================== -->
@@ -106,7 +115,8 @@
     <!-- apps -->
     <script src="{{ asset('vendor/adminmart/dist/js/app-style-switcher.js') }}"></script>
     <script src="{{ asset('vendor/adminmart/dist/js/feather.min.js') }}"></script>
-    <script src="{{ asset('vendor/adminmart/assets/libs/perfect-scrollbar/dist/perfect-scrollbar.jquery.min.js') }}"></script>
+    <script src="{{ asset('vendor/adminmart/assets/libs/perfect-scrollbar/dist/perfect-scrollbar.jquery.min.js') }}">
+    </script>
     <script src="{{ asset('vendor/adminmart/dist/js/sidebarmenu.js') }}"></script>
     <!--Custom JavaScript -->
     <script src="{{ asset('vendor/adminmart/dist/js/custom.min.js') }}"></script>
