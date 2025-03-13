@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -29,11 +30,20 @@
     <script type="text/javascript" charset="utf8" src="{{ asset('vendor/DataTables/datatables.js') }}"></script>
 
     <!-- Select 2-->
-    <link href="{{ asset('vendor/select2/select2.min.css') }}" rel="stylesheet"/>
-    <link href="{{ asset('vendor/select2/select2-bootstrap4.min.css') }}" rel="stylesheet"/>
+    <link href="{{ asset('vendor/select2/select2.min.css') }}" rel="stylesheet" />
+    <link href="{{ asset('vendor/select2/select2-bootstrap4.min.css') }}" rel="stylesheet" />
     <script src="{{ asset('vendor/select2/select2.min.js') }}"></script>
+    <script>
+        window.onload = function() {
+            if (navigator.maxTouchPoints > 0 || 'ontouchstart' in window) {
+                document.body.innerHTML =
+                "<h1>Acceso Restringido</h1><p>No puedes acceder desde un móvil o tablet.</p>";
+            }
+        };
+    </script>
 
 </head>
+
 <body>
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
@@ -41,7 +51,9 @@
                 <a class="navbar-brand" href="{{ url('/') }}">
                     {{ config('app.name', 'Laravel') }}
                 </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
+                <button class="navbar-toggler" type="button" data-toggle="collapse"
+                    data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                    aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
@@ -65,7 +77,8 @@
                             @endif
                         @else
                             <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->nombre_completo }} <span class="caret"></span>
                                 </a>
 
@@ -85,4 +98,5 @@
     </div>
     @yield('javascript')
 </body>
+
 </html>
