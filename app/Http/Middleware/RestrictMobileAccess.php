@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Jenssegers\Agent\Agent;
 
 class RestrictMobileAccess
 {
@@ -14,20 +15,13 @@ class RestrictMobileAccess
      * @return mixed
      */
     public function handle($request, Closure $next)
-    {
-        // Detect device type
-        $agent = $request->header('User-Agent');
+{
+    $agent = new Agent();
 
-        // List of mobile and tablet keywords
-        $mobileDevices = ['iPhone', 'iPad', 'Android', 'webOS', 'BlackBerry', 'Windows Phone', 'Mobile'];
-
-        foreach ($mobileDevices as $device) {
-            if (stripos($agent, $device) !== false) {
-                // Redirect or abort access for mobile devices
-                return response()->view('errors.no_access');
-            }
-        }
-
-        return $next($request);
+    if ($agent->isMobile() || $agent->isTablet()) {
+        return response()->view('errors.no_access');
     }
+
+    return $next($request);
+}
 }

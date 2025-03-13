@@ -2,7 +2,6 @@
 
 namespace Caffeinated\Shinobi\Tactics;
 
-use Illuminate\Support\Arr;
 use Illuminate\Database\Eloquent\Model;
 use Caffeinated\Shinobi\Facades\Shinobi;
 
@@ -20,7 +19,7 @@ class GivePermissionTo
      */
     public function __construct(...$permissions)
     {
-        $this->permissions = Arr::flatten($permissions);
+        $this->permissions = array_flatten($permissions);
     }
 
     /**

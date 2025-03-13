@@ -2,54 +2,17 @@
 
 namespace Illuminate\Support\Testing\Fakes;
 
-use Closure;
 use Illuminate\Contracts\Bus\Dispatcher;
-use Illuminate\Support\Arr;
 use PHPUnit\Framework\Assert as PHPUnit;
 
 class BusFake implements Dispatcher
 {
-    /**
-     * The original Bus dispatcher implementation.
-     *
-     * @var \Illuminate\Contracts\Bus\Dispatcher
-     */
-    protected $dispatcher;
-
-    /**
-     * The job types that should be intercepted instead of dispatched.
-     *
-     * @var array
-     */
-    protected $jobsToFake;
-
     /**
      * The commands that have been dispatched.
      *
      * @var array
      */
     protected $commands = [];
-
-    /**
-     * The commands that have been dispatched after the response has been sent.
-     *
-     * @var array
-     */
-    protected $commandsAfterResponse = [];
-
-    /**
-     * Create a new bus fake instance.
-     *
-     * @param  \Illuminate\Contracts\Bus\Dispatcher  $dispatcher
-     * @param  array|string  $jobsToFake
-     * @return void
-     */
-    public function __construct(Dispatcher $dispatcher, $jobsToFake = [])
-    {
-        $this->dispatcher = $dispatcher;
-
-        $this->jobsToFake = Arr::wrap($jobsToFake);
-    }
 
     /**
      * Assert if a job was dispatched based on a truth-test callback.
@@ -65,8 +28,7 @@ class BusFake implements Dispatcher
         }
 
         PHPUnit::assertTrue(
-            $this->dispatched($command, $callback)->count() > 0 ||
-            $this->dispatchedAfterResponse($command, $callback)->count() > 0,
+            $this->dispatched($command, $callback)->count() > 0,
             "The expected [{$command}] job was not dispatched."
         );
     }
@@ -78,13 +40,10 @@ class BusFake implements Dispatcher
      * @param  int  $times
      * @return void
      */
-    public function assertDispatchedTimes($command, $times = 1)
+    protected function assertDispatchedTimes($command, $times = 1)
     {
-        $count = $this->dispatched($command)->count() +
-                 $this->dispatchedAfterResponse($command)->count();
-
         PHPUnit::assertTrue(
-            $count === $times,
+            ($count = $this->dispatched($command)->count()) === $times,
             "The expected [{$command}] job was pushed {$count} times instead of {$times} times."
         );
     }
@@ -99,58 +58,8 @@ class BusFake implements Dispatcher
     public function assertNotDispatched($command, $callback = null)
     {
         PHPUnit::assertTrue(
-            $this->dispatched($command, $callback)->count() === 0 &&
-            $this->dispatchedAfterResponse($command, $callback)->count() === 0,
+            $this->dispatched($command, $callback)->count() === 0,
             "The unexpected [{$command}] job was dispatched."
-        );
-    }
-
-    /**
-     * Assert if a job was dispatched after the response was sent based on a truth-test callback.
-     *
-     * @param  string  $command
-     * @param  callable|int|null  $callback
-     * @return void
-     */
-    public function assertDispatchedAfterResponse($command, $callback = null)
-    {
-        if (is_numeric($callback)) {
-            return $this->assertDispatchedAfterResponseTimes($command, $callback);
-        }
-
-        PHPUnit::assertTrue(
-            $this->dispatchedAfterResponse($command, $callback)->count() > 0,
-            "The expected [{$command}] job was not dispatched for after sending the response."
-        );
-    }
-
-    /**
-     * Assert if a job was pushed after the response was sent a number of times.
-     *
-     * @param  string  $command
-     * @param  int  $times
-     * @return void
-     */
-    public function assertDispatchedAfterResponseTimes($command, $times = 1)
-    {
-        PHPUnit::assertTrue(
-            ($count = $this->dispatchedAfterResponse($command)->count()) === $times,
-            "The expected [{$command}] job was pushed {$count} times instead of {$times} times."
-        );
-    }
-
-    /**
-     * Determine if a job was dispatched based on a truth-test callback.
-     *
-     * @param  string  $command
-     * @param  callable|null  $callback
-     * @return void
-     */
-    public function assertNotDispatchedAfterResponse($command, $callback = null)
-    {
-        PHPUnit::assertTrue(
-            $this->dispatchedAfterResponse($command, $callback)->count() === 0,
-            "The unexpected [{$command}] job was dispatched for after sending the response."
         );
     }
 
@@ -177,28 +86,6 @@ class BusFake implements Dispatcher
     }
 
     /**
-     * Get all of the jobs dispatched after the response was sent matching a truth-test callback.
-     *
-     * @param  string  $command
-     * @param  callable|null  $callback
-     * @return \Illuminate\Support\Collection
-     */
-    public function dispatchedAfterResponse(string $command, $callback = null)
-    {
-        if (! $this->hasDispatchedAfterResponse($command)) {
-            return collect();
-        }
-
-        $callback = $callback ?: function () {
-            return true;
-        };
-
-        return collect($this->commandsAfterResponse[$command])->filter(function ($command) use ($callback) {
-            return $callback($command);
-        });
-    }
-
-    /**
      * Determine if there are any stored commands for a given class.
      *
      * @param  string  $command
@@ -210,17 +97,6 @@ class BusFake implements Dispatcher
     }
 
     /**
-     * Determine if there are any stored commands for a given class.
-     *
-     * @param  string  $command
-     * @return bool
-     */
-    public function hasDispatchedAfterResponse($command)
-    {
-        return isset($this->commandsAfterResponse[$command]) && ! empty($this->commandsAfterResponse[$command]);
-    }
-
-    /**
      * Dispatch a command to its appropriate handler.
      *
      * @param  mixed  $command
@@ -228,11 +104,7 @@ class BusFake implements Dispatcher
      */
     public function dispatch($command)
     {
-        if ($this->shouldFakeJob($command)) {
-            $this->commands[get_class($command)][] = $command;
-        } else {
-            return $this->dispatcher->dispatch($command);
-        }
+        return $this->dispatchNow($command);
     }
 
     /**
@@ -244,46 +116,7 @@ class BusFake implements Dispatcher
      */
     public function dispatchNow($command, $handler = null)
     {
-        if ($this->shouldFakeJob($command)) {
-            $this->commands[get_class($command)][] = $command;
-        } else {
-            return $this->dispatcher->dispatchNow($command, $handler);
-        }
-    }
-
-    /**
-     * Dispatch a command to its appropriate handler.
-     *
-     * @param  mixed  $command
-     * @return mixed
-     */
-    public function dispatchAfterResponse($command)
-    {
-        if ($this->shouldFakeJob($command)) {
-            $this->commandsAfterResponse[get_class($command)][] = $command;
-        } else {
-            return $this->dispatcher->dispatch($command);
-        }
-    }
-
-    /**
-     * Determine if an command should be faked or actually dispatched.
-     *
-     * @param  mixed  $command
-     * @return bool
-     */
-    protected function shouldFakeJob($command)
-    {
-        if (empty($this->jobsToFake)) {
-            return true;
-        }
-
-        return collect($this->jobsToFake)
-            ->filter(function ($job) use ($command) {
-                return $job instanceof Closure
-                            ? $job($command)
-                            : $job === get_class($command);
-            })->isNotEmpty();
+        $this->commands[get_class($command)][] = $command;
     }
 
     /**
@@ -294,8 +127,6 @@ class BusFake implements Dispatcher
      */
     public function pipeThrough(array $pipes)
     {
-        $this->dispatcher->pipeThrough($pipes);
-
         return $this;
     }
 
@@ -307,7 +138,7 @@ class BusFake implements Dispatcher
      */
     public function hasCommandHandler($command)
     {
-        return $this->dispatcher->hasCommandHandler($command);
+        return false;
     }
 
     /**
@@ -318,7 +149,7 @@ class BusFake implements Dispatcher
      */
     public function getCommandHandler($command)
     {
-        return $this->dispatcher->getCommandHandler($command);
+        return false;
     }
 
     /**
@@ -329,8 +160,6 @@ class BusFake implements Dispatcher
      */
     public function map(array $map)
     {
-        $this->dispatcher->map($map);
-
         return $this;
     }
 }

@@ -2,23 +2,14 @@
 
 namespace Illuminate\Console\Scheduling;
 
-use Closure;
 use DateTimeInterface;
 use Illuminate\Console\Application;
 use Illuminate\Container\Container;
-use Illuminate\Contracts\Bus\Dispatcher;
-use Illuminate\Contracts\Container\BindingResolutionException;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\CallQueuedClosure;
 use Illuminate\Support\ProcessUtils;
-use Illuminate\Support\Str;
-use Illuminate\Support\Traits\Macroable;
-use RuntimeException;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
 class Schedule
 {
-    use Macroable;
-
     /**
      * All of the events on the schedule.
      *
@@ -48,13 +39,6 @@ class Schedule
     protected $timezone;
 
     /**
-     * The job dispatcher implementation.
-     *
-     * @var \Illuminate\Contracts\Bus\Dispatcher
-     */
-    protected $dispatcher;
-
-    /**
      * Create a new schedule instance.
      *
      * @param  \DateTimeZone|string|null  $timezone
@@ -63,12 +47,6 @@ class Schedule
     public function __construct($timezone = null)
     {
         $this->timezone = $timezone;
-
-        if (! class_exists(Container::class)) {
-            throw new RuntimeException(
-                'A container implementation is required to use the scheduler. Please install the illuminate/container package.'
-            );
-        }
 
         $container = Container::getInstance();
 
@@ -91,7 +69,7 @@ class Schedule
     public function call($callback, array $parameters = [])
     {
         $this->events[] = $event = new CallbackEvent(
-            $this->eventMutex, $callback, $parameters, $this->timezone
+            $this->eventMutex, $callback, $parameters
         );
 
         return $event;
@@ -126,50 +104,16 @@ class Schedule
     public function job($job, $queue = null, $connection = null)
     {
         return $this->call(function () use ($job, $queue, $connection) {
-            $job = is_string($job) ? Container::getInstance()->make($job) : $job;
+            $job = is_string($job) ? resolve($job) : $job;
 
             if ($job instanceof ShouldQueue) {
-                $this->dispatchToQueue($job, $queue ?? $job->queue, $connection ?? $job->connection);
+                dispatch($job)
+                    ->onConnection($connection ?? $job->connection)
+                    ->onQueue($queue ?? $job->queue);
             } else {
-                $this->dispatchNow($job);
+                dispatch_now($job);
             }
         })->name(is_string($job) ? $job : get_class($job));
-    }
-
-    /**
-     * Dispatch the given job to the queue.
-     *
-     * @param  object  $job
-     * @param  string|null  $queue
-     * @param  string|null  $connection
-     * @return void
-     */
-    protected function dispatchToQueue($job, $queue, $connection)
-    {
-        if ($job instanceof Closure) {
-            if (! class_exists(CallQueuedClosure::class)) {
-                throw new RuntimeException(
-                    'To enable support for closure jobs, please install the illuminate/queue package.'
-                );
-            }
-
-            $job = CallQueuedClosure::create($job);
-        }
-
-        $this->getDispatcher()->dispatch(
-            $job->onConnection($connection)->onQueue($queue)
-        );
-    }
-
-    /**
-     * Dispatch the given job right now.
-     *
-     * @param  object  $job
-     * @return void
-     */
-    protected function dispatchNow($job)
-    {
-        $this->getDispatcher()->dispatchNow($job);
     }
 
     /**
@@ -200,41 +144,15 @@ class Schedule
     {
         return collect($parameters)->map(function ($value, $key) {
             if (is_array($value)) {
-                return $this->compileArrayInput($key, $value);
-            }
-
-            if (! is_numeric($value) && ! preg_match('/^(-.$|--.*)/i', $value)) {
+                $value = collect($value)->map(function ($value) {
+                    return ProcessUtils::escapeArgument($value);
+                })->implode(' ');
+            } elseif (! is_numeric($value) && ! preg_match('/^(-.$|--.*)/i', $value)) {
                 $value = ProcessUtils::escapeArgument($value);
             }
 
             return is_numeric($key) ? $value : "{$key}={$value}";
         })->implode(' ');
-    }
-
-    /**
-     * Compile array input for a command.
-     *
-     * @param  string|int  $key
-     * @param  array  $value
-     * @return string
-     */
-    public function compileArrayInput($key, $value)
-    {
-        $value = collect($value)->map(function ($value) {
-            return ProcessUtils::escapeArgument($value);
-        });
-
-        if (Str::startsWith($key, '--')) {
-            $value = $value->map(function ($value) use ($key) {
-                return "{$key}={$value}";
-            });
-        } elseif (Str::startsWith($key, '-')) {
-            $value = $value->map(function ($value) use ($key) {
-                return "{$key} {$value}";
-            });
-        }
-
-        return $value->implode(' ');
     }
 
     /**
@@ -287,26 +205,5 @@ class Schedule
         }
 
         return $this;
-    }
-
-    /**
-     * Get the job dispatcher, if available.
-     *
-     * @return \Illuminate\Contracts\Bus\Dispatcher
-     */
-    protected function getDispatcher()
-    {
-        if ($this->dispatcher === null) {
-            try {
-                $this->dispatcher = Container::getInstance()->make(Dispatcher::class);
-            } catch (BindingResolutionException $e) {
-                throw new RuntimeException(
-                    'Unable to resolve the dispatcher from the service container. Please bind it or install the illuminate/bus package.',
-                    $e->getCode(), $e
-                );
-            }
-        }
-
-        return $this->dispatcher;
     }
 }

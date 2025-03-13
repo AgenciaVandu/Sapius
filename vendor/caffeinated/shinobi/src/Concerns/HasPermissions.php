@@ -2,11 +2,9 @@
 
 namespace Caffeinated\Shinobi\Concerns;
 
-use Illuminate\Support\Arr;
 use Caffeinated\Shinobi\Facades\Shinobi;
 use Caffeinated\Shinobi\Contracts\Permission;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Caffeinated\Shinobi\Exceptions\PermissionNotFoundException;
 
 trait HasPermissions
 {
@@ -41,16 +39,18 @@ trait HasPermissions
         
         // Fetch permission if we pass through a string
         if (is_string($permission)) {
-            $permission = $this->getPermissionModel()->where('slug', $permission)->first();
+            try {
+                $model = $this->getPermissionModel();
 
-            if (! $permission) {
-                throw new PermissionNotFoundException;
+                $permission = $model->where('slug', $permission)->firstOrFail();
+            } catch (\Exception $e) {
+                // 
             }
         }
         
         // Check role permissions
         if (method_exists($this, 'hasPermissionThroughRole') and $this->hasPermissionThroughRole($permission)) {
-            return true;
+            return $this->hasPermissionThroughRole($permission);
         }
         
         // Check user permission
@@ -60,7 +60,7 @@ trait HasPermissions
 
         return false;
     }
-    
+
     /**
      * Give the specified permissions to the model.
      * 
@@ -69,7 +69,7 @@ trait HasPermissions
      */
     public function givePermissionTo(...$permissions): self
     {        
-        $permissions = Arr::flatten($permissions);
+        $permissions = array_flatten($permissions);
         $permissions = $this->getPermissions($permissions);
 
         if (! $permissions) {
@@ -89,7 +89,7 @@ trait HasPermissions
      */
     public function revokePermissionTo(...$permissions): self
     {
-        $permissions = Arr::flatten($permissions);
+        $permissions = array_flatten($permissions);
         $permissions = $this->getPermissions($permissions);
 
         $this->permissions()->detach($permissions);
@@ -105,7 +105,7 @@ trait HasPermissions
      */
     public function syncPermissions(...$permissions): self
     {
-        $permissions = Arr::flatten($permissions);
+        $permissions = array_flatten($permissions);
         $permissions = $this->getPermissions($permissions);
 
         $this->permissions()->sync($permissions);

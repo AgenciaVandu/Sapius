@@ -2,11 +2,10 @@
 
 namespace Illuminate\Routing;
 
-use Illuminate\Support\Arr;
-use Illuminate\Support\Reflector;
-use ReflectionFunctionAbstract;
 use ReflectionMethod;
 use ReflectionParameter;
+use Illuminate\Support\Arr;
+use ReflectionFunctionAbstract;
 
 trait RouteDependencyResolverTrait
 {
@@ -69,15 +68,15 @@ trait RouteDependencyResolverTrait
      */
     protected function transformDependency(ReflectionParameter $parameter, $parameters)
     {
-        $className = Reflector::getParameterClassName($parameter);
+        $class = $parameter->getClass();
 
         // If the parameter has a type-hinted class, we will check to see if it is already in
         // the list of parameters. If it is we will just skip it as it is probably a model
         // binding and we do not want to mess with those; otherwise, we resolve it here.
-        if ($className && ! $this->alreadyInParameters($className, $parameters)) {
+        if ($class && ! $this->alreadyInParameters($class->name, $parameters)) {
             return $parameter->isDefaultValueAvailable()
                 ? $parameter->getDefaultValue()
-                : $this->container->make($className);
+                : $this->container->make($class->name);
         }
     }
 

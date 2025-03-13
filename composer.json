@@ -13,6 +13,7 @@
         "codeplex/phpexcel": "^1.7",
         "conekta/conekta-php": "^4.2",
         "fideloper/proxy": "^4.0",
+        "jenssegers/agent": "^2.6",
         "laravel/framework": "5.8.*",
         "laravel/socialite": "4.x",
         "laravel/tinker": "^1.0",

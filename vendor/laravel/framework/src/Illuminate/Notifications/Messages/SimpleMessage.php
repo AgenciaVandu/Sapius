@@ -2,8 +2,8 @@
 
 namespace Illuminate\Notifications\Messages;
 
-use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Notifications\Action;
+use Illuminate\Contracts\Support\Htmlable;
 
 class SimpleMessage
 {
@@ -219,7 +219,6 @@ class SimpleMessage
             'outroLines' => $this->outroLines,
             'actionText' => $this->actionText,
             'actionUrl' => $this->actionUrl,
-            'displayableActionUrl' => str_replace(['mailto:', 'tel:'], '', $this->actionUrl),
         ];
     }
 }

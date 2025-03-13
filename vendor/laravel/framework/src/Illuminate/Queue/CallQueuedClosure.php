@@ -2,12 +2,11 @@
 
 namespace Illuminate\Queue;
 
-use Closure;
+use ReflectionFunction;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Container\Container;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use ReflectionFunction;
+use Illuminate\Contracts\Container\Container;
 
 class CallQueuedClosure implements ShouldQueue
 {
@@ -36,17 +35,6 @@ class CallQueuedClosure implements ShouldQueue
     public function __construct(SerializableClosure $closure)
     {
         $this->closure = $closure;
-    }
-
-    /**
-     * Create a new job instance.
-     *
-     * @param  \Closure  $job
-     * @return self
-     */
-    public static function create(Closure $job)
-    {
-        return new self(new SerializableClosure($job));
     }
 
     /**

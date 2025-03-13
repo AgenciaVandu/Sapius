@@ -3,21 +3,18 @@
 namespace Illuminate\Events;
 
 use Exception;
-use Illuminate\Container\Container;
-use Illuminate\Contracts\Broadcasting\Factory as BroadcastFactory;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
-use Illuminate\Contracts\Container\Container as ContainerContract;
-use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
-use Illuminate\Contracts\Queue\ShouldQueue;
+use ReflectionClass;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
-use Illuminate\Support\Traits\Macroable;
-use ReflectionClass;
+use Illuminate\Container\Container;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
+use Illuminate\Contracts\Broadcasting\Factory as BroadcastFactory;
+use Illuminate\Contracts\Container\Container as ContainerContract;
 
 class Dispatcher implements DispatcherContract
 {
-    use Macroable;
-
     /**
      * The IoC container instance.
      *
@@ -68,7 +65,7 @@ class Dispatcher implements DispatcherContract
      * Register an event listener with the dispatcher.
      *
      * @param  string|array  $events
-     * @param  \Closure|string  $listener
+     * @param  mixed  $listener
      * @return void
      */
     public function listen($events, $listener)
@@ -86,7 +83,7 @@ class Dispatcher implements DispatcherContract
      * Setup a wildcard listener callback.
      *
      * @param  string  $event
-     * @param  \Closure|string  $listener
+     * @param  mixed  $listener
      * @return void
      */
     protected function setupWildcardListen($event, $listener)
@@ -104,26 +101,7 @@ class Dispatcher implements DispatcherContract
      */
     public function hasListeners($eventName)
     {
-        return isset($this->listeners[$eventName]) ||
-               isset($this->wildcards[$eventName]) ||
-               $this->hasWildcardListeners($eventName);
-    }
-
-    /**
-     * Determine if the given event has any wildcard listeners.
-     *
-     * @param  string  $eventName
-     * @return bool
-     */
-    public function hasWildcardListeners($eventName)
-    {
-        foreach ($this->wildcards as $key => $listeners) {
-            if (Str::is($key, $eventName)) {
-                return true;
-            }
-        }
-
-        return false;
+        return isset($this->listeners[$eventName]) || isset($this->wildcards[$eventName]);
     }
 
     /**
@@ -384,9 +362,9 @@ class Dispatcher implements DispatcherContract
                 return call_user_func($this->createClassCallable($listener), $event, $payload);
             }
 
-            $callable = $this->createClassCallable($listener);
-
-            return $callable(...array_values($payload));
+            return call_user_func_array(
+                $this->createClassCallable($listener), $payload
+            );
         };
     }
 
@@ -464,10 +442,8 @@ class Dispatcher implements DispatcherContract
      */
     protected function handlerWantsToBeQueued($class, $arguments)
     {
-        $instance = $this->container->make($class);
-
-        if (method_exists($instance, 'shouldQueue')) {
-            return $instance->shouldQueue($arguments[0]);
+        if (method_exists($class, 'shouldQueue')) {
+            return $this->container->make($class)->shouldQueue($arguments[0]);
         }
 
         return true;
@@ -524,7 +500,6 @@ class Dispatcher implements DispatcherContract
     {
         return tap($job, function ($job) use ($listener) {
             $job->tries = $listener->tries ?? null;
-            $job->retryAfter = $listener->retryAfter ?? null;
             $job->timeout = $listener->timeout ?? null;
             $job->timeoutAt = method_exists($listener, 'retryUntil')
                                 ? $listener->retryUntil() : null;
@@ -543,12 +518,6 @@ class Dispatcher implements DispatcherContract
             unset($this->wildcards[$event]);
         } else {
             unset($this->listeners[$event]);
-        }
-
-        foreach ($this->wildcardsCache as $key => $listeners) {
-            if (Str::is($event, $key)) {
-                unset($this->wildcardsCache[$key]);
-            }
         }
     }
 
@@ -569,7 +538,7 @@ class Dispatcher implements DispatcherContract
     /**
      * Get the queue implementation from the resolver.
      *
-     * @return \Illuminate\Contracts\Queue\Factory
+     * @return \Illuminate\Contracts\Queue\Queue
      */
     protected function resolveQueue()
     {

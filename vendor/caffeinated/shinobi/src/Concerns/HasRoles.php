@@ -2,8 +2,6 @@
 
 namespace Caffeinated\Shinobi\Concerns;
 
-use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
 use Caffeinated\Shinobi\Contracts\Role;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
@@ -27,7 +25,7 @@ trait HasRoles
      */
     public function hasRole($role): bool
     {
-        $slug = Str::slug($role);
+        $slug = str_slug($role);
 
         return (bool) $this->roles->where('slug', $slug)->count();
     }
@@ -79,7 +77,7 @@ trait HasRoles
      */
     public function assignRoles(...$roles): self
     {
-        $roles = Arr::flatten($roles);
+        $roles = array_flatten($roles);
         $roles = $this->getRoles($roles);
 
         if (! $roles) {
@@ -99,7 +97,7 @@ trait HasRoles
      */
     public function removeRoles(...$roles): self
     {
-        $roles = Arr::flatten($roles);
+        $roles = array_flatten($roles);
         $roles = $this->getRoles($roles);
 
         $this->roles()->detach($roles);
@@ -115,7 +113,7 @@ trait HasRoles
      */
     public function syncRoles(...$roles): self
     {
-        $roles = Arr::flatten($roles);
+        $roles = array_flatten($roles);
         $roles = $this->getRoles($roles);
 
         $this->roles()->sync($roles);

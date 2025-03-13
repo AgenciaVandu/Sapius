@@ -16,7 +16,7 @@ trait HasRolesAndPermissions
     protected function hasPermissionThroughRole($permission): bool
     {
         if ($this->hasRoles()) {
-            foreach ($permission->roles as $role) {
+            foreach ($this->roles as $role) {
                 if ($this->roles->contains($role)) {
                     return true;
                 }
