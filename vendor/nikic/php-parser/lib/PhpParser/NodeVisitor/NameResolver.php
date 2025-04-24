@@ -35,7 +35,7 @@ class NameResolver extends NodeVisitorAbstract
      * @param ErrorHandler|null $errorHandler Error handler
      * @param array $options Options
      */
-    public function __construct(ErrorHandler $errorHandler = null, array $options = []) {
+    public function __construct(?ErrorHandler $errorHandler = null, array $options = []) {
         $this->nameContext = new NameContext($errorHandler ?? new ErrorHandler\Throwing);
         $this->preserveOriginalNames = $options['preserveOriginalNames'] ?? false;
         $this->replaceNodes = $options['replaceNodes'] ?? true;
@@ -86,6 +86,15 @@ class NameResolver extends NodeVisitorAbstract
 
             $this->resolveAttrGroups($node);
             $this->addNamespacedName($node);
+         } elseif ($node instanceof Stmt\Enum_) {
+            foreach ($node->implements as &$interface) {
+                $interface = $this->resolveClassName($interface);
+            }
+
+            $this->resolveAttrGroups($node);
+            if (null !== $node->name) {
+                $this->addNamespacedName($node);
+            }
         } elseif ($node instanceof Stmt\Trait_) {
             $this->resolveAttrGroups($node);
             $this->addNamespacedName($node);
@@ -109,6 +118,11 @@ class NameResolver extends NodeVisitorAbstract
                 $this->addNamespacedName($const);
             }
         } else if ($node instanceof Stmt\ClassConst) {
+            if (null !== $node->type) {
+                $node->type = $this->resolveType($node->type);
+            }
+            $this->resolveAttrGroups($node);
+        } else if ($node instanceof Stmt\EnumCase) {
             $this->resolveAttrGroups($node);
         } elseif ($node instanceof Expr\StaticCall
                   || $node instanceof Expr\StaticPropertyFetch
@@ -150,7 +164,7 @@ class NameResolver extends NodeVisitorAbstract
         return null;
     }
 
-    private function addAlias(Stmt\UseUse $use, $type, Name $prefix = null) {
+    private function addAlias(Stmt\UseUse $use, int $type, ?Name $prefix = null) {
         // Add prefix for group uses
         $name = $prefix ? Name::concat($prefix, $use->name) : $use->name;
         // Type is determined either by individual element or whole use declaration
@@ -178,7 +192,7 @@ class NameResolver extends NodeVisitorAbstract
             $node->type = $this->resolveType($node->type);
             return $node;
         }
-        if ($node instanceof Node\UnionType) {
+        if ($node instanceof Node\UnionType || $node instanceof Node\IntersectionType) {
             foreach ($node->types as &$type) {
                 $type = $this->resolveType($type);
             }
