@@ -405,7 +405,7 @@
             new Glide('.glide', {
                 perView: 4,
                 autoplay: 2000,
-                bound: true
+                bound: true,
             }).mount();
         </script>
     @endpush

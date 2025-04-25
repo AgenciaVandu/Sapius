@@ -12,6 +12,7 @@
     @stack('css')
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"
         integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+    <link rel="shortcut icon" type="image/x-icon" href="https://sapius.com.mx/img/icono-sapius.png">
     <meta name="author" content="agenciavandu.com" />
     <meta name="copyright" content="Sapius.com.mx" />
     <meta name="robots" content="index,follow" />
@@ -70,7 +71,7 @@
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item active">
                     <li class="nav-item p-link">
-                        <a class="nav-link" href="{{ route('register') }}">Registrarme</a>
+                        <a class="nav-link mr-2" href="{{ route('register') }}">Registrarme</a>
                     </li>
                     <form class="form-inline my-2 my-lg-0">
                         @if (Auth::check())
@@ -161,7 +162,15 @@
                                     class="fab fa-facebook pl-3 pr-3 icono"></i></a>
                             <a href="https://www.instagram.com/sapius_latinoamerica/"><i
                                     class="fab fa-instagram pr-3 icono"></i></a>
-                            <a href=""><i class="fab fa-twitter pr-3 icono"></i></a>
+                            <a href="">
+                                <i class="fab pr-3 icono">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                        fill="currentColor" class="bi bi-twitter-x" viewBox="0 0 16 16">
+                                        <path
+                                            d="M12.6.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867-5.07-4.425 5.07H.316l5.733-6.57L0 .75h5.063l3.495 4.633L12.601.75Zm-.86 13.028h1.36L4.323 2.145H2.865z" />
+                                    </svg>
+                                </i>
+                            </a>
                             <a href="https://www.tiktok.com/@sapiuslatinoamerica"><i
                                     class="fab fa-tiktok pr-3 icono"></i></a>
                             <a href="https://www.youtube.com/channel/UCDfPMHpBkAC2-SHi8Kxfitw"><i
