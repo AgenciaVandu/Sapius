@@ -4,6 +4,9 @@
 @endpush
 @push('css')
     <link rel="stylesheet" href="{{ asset('css/index.css') }}">
+    <!-- Glide.js CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@glidejs/glide/dist/css/glide.core.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@glidejs/glide/dist/css/glide.theme.min.css">
 @endpush
 @section('content')
     <header class="header__intro">
@@ -108,7 +111,8 @@
                                         el examen.</p>
                                 </div>
                                 <div class="container-button">
-                                    <a href="{{ route('register') }}" class="button-title-tabs btn btn-primary">COMENZAR</a>
+                                    <a href="{{ route('register') }}"
+                                        class="button-title-tabs btn btn-primary">COMENZAR</a>
                                 </div>
                             </div>
                             <div class="col-md-5 text-center objetivo">
@@ -259,81 +263,111 @@
             </div>
         </div>
     </section>
-
     <section class="docentes">
-        <div class="container"> <!--Slider-->
-            <h2 class="text-center " style="color: #fff;">Conoce a nuestros docentes</h2>
-            <div class="docentes__contenedor scroll">
-                <div class="docentes__persona">
-                    <div class="maestro-img">
-                        <img src="{{ asset('img/m-4.png') }}" class="img-fluid pb-3" alt="Verónica Sansores"
-                            loading="lazy">
-                    </div>
-                    <h5 style="color: #fff;">
-                        L.N. Verónica González <br> <small style="color: #30D6E6;">Premio Nacional Excelencia EGEL</small>
-                    </h5>
-                    <small style="color: #fff;" class="pb-3">Nuestro cuerpo docente esta disponible para pláticas,
-                        conferencias y ponencias.
-                    </small>
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sapius-info">Enviar
-                        mensaje</butt>
-                </div>
-                <div class="docentes__persona">
-                    <div class="maestro-img">
-                        <img src="{{ asset('img/m-5.png') }}" class="img-fluid pb-3" alt="Maestro sapius"
-                            loading="lazy">>
-                    </div>
-                    <h5 style="color: #fff;">Dr. Erika González <br> <small style="color: #30D6E6;">Residente de
-                            Neurología</small></h5>
-                    <small style="color: #fff;" class="pb-3">Nuestro cuerpo docente esta disponible para pláticas,
-                        conferencias y ponencias.
-                    </small>
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sapius-info">Enviar
-                        mensaje</butt>
-                </div>
+        <div class="container">
+            <!-- Carousel de Glide.js -->
+            <div class="glide">
+                <div class="glide__track" data-glide-el="track">
+                    <ul class="glide__slides">
+                        <li class="glide__slide">
+                            <div class="docentes__persona">
+                                <div class="maestro-img">
+                                    <img src="{{ asset('img/m-4.png') }}" class="img-fluid pb-3" alt="Verónica Sansores"
+                                        loading="lazy">
+                                </div>
+                                <h5 style="color: #fff;">
+                                    L.N. Verónica González <br> <small style="color: #30D6E6;">Premio Nacional Excelencia
+                                        EGEL</small>
+                                </h5>
+                                <small style="color: #fff;" class="pb-3">Nuestro cuerpo docente esta disponible para
+                                    pláticas,
+                                    conferencias y ponencias.
+                                </small>
+                                <button type="button" class="btn btn-primary" data-toggle="modal"
+                                    data-target="#sapius-info">Enviar
+                                    mensaje</button>
+                            </div>
+                        </li>
+                        <li class="glide__slide">
+                            <div class="docentes__persona">
+                                <div class="maestro-img">
+                                    <img src="{{ asset('img/m-5.png') }}" class="img-fluid pb-3" alt="Maestro sapius"
+                                        loading="lazy">
+                                </div>
+                                <h5 style="color: #fff;">Dr. Erika González <br> <small style="color: #30D6E6;">Residente
+                                        de
+                                        Neurología</small></h5>
+                                <small style="color: #fff;" class="pb-3">Nuestro cuerpo docente esta disponible para
+                                    pláticas,
+                                    conferencias y ponencias.
+                                </small>
+                                <button type="button" class="btn btn-primary" data-toggle="modal"
+                                    data-target="#sapius-info">Enviar
+                                    mensaje</button>
+                            </div>
 
-                <div class="docentes__persona">
-                    <div class="maestro-img">
-                        <img src="{{ asset('img/m-2.png') }}" class="img-fluid pb-3" alt="Maestro sapius"
-                            loading="lazy">>
-                    </div>
-                    <h5 style="color: #fff;">Dr. César Estrada <br> <small style="color: #30D6E6; ">Cirujano Plástico
-                            Estético</small></h5>
-                    <small style="color: #fff;" class="pb-3">Nuestro cuerpo docente esta disponible para pláticas,
-                        conferencias y ponencias.
-                    </small>
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sapius-info">Enviar
-                        mensaje</butt>
-                </div>
-                <div class="docentes__persona">
-                    <div class="maestro-img">
-                        <img src="{{ asset('img/m-3.png') }}" class="img-fluid pb-3" alt="Maestro sapius"
-                            loading="lazy">>
-                    </div>
-                    <h5 style="color: #fff;">LTS. Martín González <br> <small style="color: #30D6E6;">Docente titular del
-                            curso EGEL</small></h5>
-                    <small style="color: #fff;" class="pb-3">Nuestro cuerpo docente esta disponible para pláticas,
-                        conferencias y ponencias.
-                    </small>
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sapius-info">Enviar
-                        mensaje</butt>
-                </div>
-                <div class="docentes__persona">
-                    <div class="maestro-img">
-                        <img src="{{ asset('img/m-6.png') }}" class="img-fluid pb-3" alt="Maestro sapius"
-                            loading="lazy">>
-                    </div>
-                    <h5 style="color: #fff;">LN. Fernando Iván Pat Poot <br> <small style="color: #30D6E6;">Docente Sapius</small></h5>
-                    <small style="color: #fff;" class="pb-3">Nuestro cuerpo docente esta disponible para pláticas,
-                        conferencias y ponencias.
-                    </small>
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sapius-info">Enviar
-                        mensaje</butt>
+                        </li>
+                        <li class="glide__slide">
+
+                            <div class="docentes__persona">
+                                <div class="maestro-img">
+                                    <img src="{{ asset('img/m-2.png') }}" class="img-fluid pb-3" alt="Maestro sapius"
+                                        loading="lazy">
+                                </div>
+                                <h5 style="color: #fff;">Dr. César Estrada <br> <small style="color: #30D6E6; ">Cirujano
+                                        Plástico
+                                        Estético</small></h5>
+                                <small style="color: #fff;" class="pb-3">Nuestro cuerpo docente esta disponible para
+                                    pláticas,
+                                    conferencias y ponencias.
+                                </small>
+                                <button type="button" class="btn btn-primary" data-toggle="modal"
+                                    data-target="#sapius-info">Enviar
+                                    mensaje</button>
+                            </div>
+                        </li>
+                        <li class="glide__slide">
+                            <div class="docentes__persona">
+                                <div class="maestro-img">
+                                    <img src="{{ asset('img/m-3.png') }}" class="img-fluid pb-3" alt="Maestro sapius"
+                                        loading="lazy">
+                                </div>
+                                <h5 style="color: #fff;">LTS. Martín González <br> <small style="color: #30D6E6;">Docente
+                                        titular del
+                                        curso EGEL</small></h5>
+                                <small style="color: #fff;" class="pb-3">Nuestro cuerpo docente esta disponible para
+                                    pláticas,
+                                    conferencias y ponencias.
+                                </small>
+                                <button type="button" class="btn btn-primary" data-toggle="modal"
+                                    data-target="#sapius-info">Enviar
+                                    mensaje</button>
+                            </div>
+                        </li>
+                        <li class="glide__slide">
+                            <div class="docentes__persona">
+                                <div class="maestro-img">
+                                    <img src="{{ asset('img/m-6.png') }}" class="img-fluid pb-3" alt="Maestro sapius"
+                                        loading="lazy">
+                                </div>
+                                <h5 style="color: #fff;">LN. Fernando Iván Pat Poot <br> <small
+                                        style="color: #30D6E6;">Docente
+                                        Sapius</small></h5>
+                                <small style="color: #fff;" class="pb-3">Nuestro cuerpo docente esta disponible para
+                                    pláticas,
+                                    conferencias y ponencias.
+                                </small>
+                                <button type="button" class="btn btn-primary" data-toggle="modal"
+                                    data-target="#sapius-info">Enviar
+                                    mensaje</button>
+                            </div>
+
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
     </section>
-
     <section class="modalidades">
         <div class="container ">
             <div class="modalidades__espacio">
@@ -365,6 +399,16 @@
             </div>
         </div>
     </section>
+
+    @push('js')
+        <script>
+            new Glide('.glide', {
+                perView: 4,
+                autoplay: 2000,
+                bound: true
+            }).mount();
+        </script>
+    @endpush
 @endsection
 @section('cta')
 @endsection
