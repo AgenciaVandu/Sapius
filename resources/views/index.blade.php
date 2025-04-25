@@ -263,7 +263,7 @@
     <section class="docentes">
         <div class="container"> <!--Slider-->
             <h2 class="text-center " style="color: #fff;">Conoce a nuestros docentes</h2>
-            <div class="docentes__contenedor">
+            <div class="docentes__contenedor scroll">
                 <div class="docentes__persona">
                     <div class="maestro-img">
                         <img src="{{ asset('img/m-4.png') }}" class="img-fluid pb-3" alt="Verónica Sansores"
@@ -312,6 +312,18 @@
                     </div>
                     <h5 style="color: #fff;">LTS. Martín González <br> <small style="color: #30D6E6;">Docente titular del
                             curso EGEL</small></h5>
+                    <small style="color: #fff;" class="pb-3">Nuestro cuerpo docente esta disponible para pláticas,
+                        conferencias y ponencias.
+                    </small>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sapius-info">Enviar
+                        mensaje</butt>
+                </div>
+                <div class="docentes__persona">
+                    <div class="maestro-img">
+                        <img src="{{ asset('img/m-6.png') }}" class="img-fluid pb-3" alt="Maestro sapius"
+                            loading="lazy">>
+                    </div>
+                    <h5 style="color: #fff;">LN. Fernando Iván Pat Poot <br> <small style="color: #30D6E6;">Docente Sapius</small></h5>
                     <small style="color: #fff;" class="pb-3">Nuestro cuerpo docente esta disponible para pláticas,
                         conferencias y ponencias.
                     </small>
