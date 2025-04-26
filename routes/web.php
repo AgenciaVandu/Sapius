@@ -329,6 +329,7 @@ Route::group(['middleware' =>['alumno','restrict.mobile'],'prefix' => 'alumno'],
 });
 
 Route::get('email-registro', function () {
+    //esto es una prueba
     $user = User::find(1);
         return new App\Mail\RegistroEmail($user);
 });
