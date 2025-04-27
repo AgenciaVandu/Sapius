@@ -401,6 +401,14 @@
                 perView: 4,
                 autoplay: 2000,
                 bound: true,
+                breakpoints: {
+                    1024: {
+                        perView: 4
+                    },
+                    600: {
+                        perView: 2
+                    }
+                }
             }).mount();
         </script>
     @endpush
