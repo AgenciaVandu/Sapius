@@ -46,7 +46,7 @@
                                                         <img src="{{ asset('storage/' . $slide->img) }}" alt="Imagen subida"
                                                             width="100%" height="auto">
                                                         <div class="card-body">
-                                                            <a href="#" class="btn btn-primary btn-sm">Eliminar</a>
+                                                            <a href="{{ route('admin.configuracion.slide,delete',$slide) }}" class="btn btn-primary btn-sm">Eliminar</a>
                                                         </div>
                                                     </div>
                                                 </div>

@@ -92,4 +92,10 @@ class HomeController extends Controller
             return redirect()->back()->with('error', 'Failed to upload slide.');
         }
     }
+
+    public function deleteSlide(Slide $slide)
+    {
+        $slide->delete();
+        return redirect()->back();
+    }
 }

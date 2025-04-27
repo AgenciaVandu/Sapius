@@ -64,6 +64,7 @@ Route::group(['middleware' => ['admin','restrict.mobile'],'prefix' => 'admin'], 
     Route::get('/', 'HomeController@admin')->name('admin');
     Route::get('/configuraciones', 'HomeController@configuracion')->name('admin.configuracion.index');
     Route::post('/configuraciones/upload', 'HomeController@uploadslide')->name('admin.configuracion.slide');
+    Route::get('/configuraciones/delete/{slide}', 'HomeController@deleteSlide')->name('admin.configuracion.slide,delete');
 
     //Admistracion de usuarios
     Route::get('users/{activo?}', 'UserController@index')->name('users.index');

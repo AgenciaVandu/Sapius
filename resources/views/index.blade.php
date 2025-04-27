@@ -43,12 +43,14 @@
                 <div class="col-lg-5 col-md-12 col-sm-12 banner">
                     <div id="carousel-imagenes" class="carousel slide" data-ride="carousel">
                         <div class="carousel-inner">
-                            @foreach ($images as $image)
-                            <div class="carousel-item @if ($loop->first) active @endif">
-                                <img src="{{ asset('storage/' . $image->img) }}" class="w-100 img-fluid" alt="Estudiantes EGEL"
-                                    loading="lazy">>
-                            </div>
-                            @endforeach
+                            @if ($images)
+                                @foreach ($images as $image)
+                                    <div class="carousel-item @if ($loop->first) active @endif">
+                                        <img src="{{ asset('storage/' . $image->img) }}" class="w-100 img-fluid"
+                                            alt="Estudiantes EGEL" loading="lazy">>
+                                    </div>
+                                @endforeach
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -105,8 +107,7 @@
                                         el examen.</p>
                                 </div>
                                 <div class="container-button">
-                                    <a href="{{ route('register') }}"
-                                        class="button-title-tabs btn btn-primary">COMENZAR</a>
+                                    <a href="{{ route('register') }}" class="button-title-tabs btn btn-primary">COMENZAR</a>
                                 </div>
                             </div>
                             <div class="col-md-5 text-center objetivo">
