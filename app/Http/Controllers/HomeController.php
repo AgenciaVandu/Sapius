@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Registro\CursoProgramado;
 use App\Models\Registro\Inscripcion;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class HomeController extends Controller
@@ -88,7 +89,7 @@ class HomeController extends Controller
             return redirect()->back()->with('success', 'Slide uploaded successfully.');
 
         } catch (\Exception $e) {
-            \Log::error('Error uploading slide: ' . $e->getMessage());
+            Log::error('Error uploading slide: ' . $e->getMessage());
             return redirect()->back()->with('error', 'Failed to upload slide.');
         }
     }

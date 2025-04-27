@@ -75,8 +75,7 @@
                             <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
                                 data-parent="#accordionExample">
                                 <div class="card-body">
-                                    Some placeholder content for the second accordion panel. This panel is hidden by
-                                    default.
+                                    En construccion
                                 </div>
                             </div>
                         </div>
@@ -86,15 +85,14 @@
                                     <button class="btn btn-link btn-block text-left collapsed" type="button"
                                         data-toggle="collapse" data-target="#collapseThree" aria-expanded="false"
                                         aria-controls="collapseThree">
-                                        Collapsible Group Item #3
+                                        Funciones adicionales
                                     </button>
                                 </h2>
                             </div>
                             <div id="collapseThree" class="collapse" aria-labelledby="headingThree"
                                 data-parent="#accordionExample">
                                 <div class="card-body">
-                                    And lastly, the placeholder content for the third and final accordion panel. This panel
-                                    is hidden by default.
+                                    Por definir
                                 </div>
                             </div>
                         </div>
