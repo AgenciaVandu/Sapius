@@ -14,6 +14,7 @@
 use App\Models\Landing\Slide;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Artisan;
 use App\User;
 
 
@@ -21,8 +22,14 @@ use App\User;
 Route::get('/', function () {
     $images = Slide::where('section','like','slider-index')->get();
     return view('index',compact('images'));
-})->name('landing.home')
-;
+})->name('landing.home');
+
+
+Route::get('/generate-storage-link', function () {
+    Artisan::call('storage:link');
+    return 'Symlink creado exitosamente.';
+});
+
 Route::get('terms/conditions', function () {
     return view('terms');
 });
