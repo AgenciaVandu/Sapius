@@ -55,6 +55,7 @@ return array(
     'App\\Models\\Cursos\\Prueba' => $baseDir . '/app/Models/Cursos/Prueba.php',
     'App\\Models\\Cursos\\Respuesta' => $baseDir . '/app/Models/Cursos/Respuesta.php',
     'App\\Models\\Evaluacion\\Examen' => $baseDir . '/app/Models/Evaluacion/Examen.php',
+    'App\\Models\\Landing\\Slide' => $baseDir . '/app/Models/Landing/Slide.php',
     'App\\Models\\Registro\\ContenidoProgramado' => $baseDir . '/app/Models/Registro/ContenidoProgramado.php',
     'App\\Models\\Registro\\CursoProgramado' => $baseDir . '/app/Models/Registro/CursoProgramado.php',
     'App\\Models\\Registro\\Descuento' => $baseDir . '/app/Models/Registro/Descuento.php',

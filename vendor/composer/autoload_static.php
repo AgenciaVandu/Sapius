@@ -563,6 +563,7 @@ class ComposerStaticInit68f0bc3d9be4630a621f295ba3c49a88
         'App\\Models\\Cursos\\Prueba' => __DIR__ . '/../..' . '/app/Models/Cursos/Prueba.php',
         'App\\Models\\Cursos\\Respuesta' => __DIR__ . '/../..' . '/app/Models/Cursos/Respuesta.php',
         'App\\Models\\Evaluacion\\Examen' => __DIR__ . '/../..' . '/app/Models/Evaluacion/Examen.php',
+        'App\\Models\\Landing\\Slide' => __DIR__ . '/../..' . '/app/Models/Landing/Slide.php',
         'App\\Models\\Registro\\ContenidoProgramado' => __DIR__ . '/../..' . '/app/Models/Registro/ContenidoProgramado.php',
         'App\\Models\\Registro\\CursoProgramado' => __DIR__ . '/../..' . '/app/Models/Registro/CursoProgramado.php',
         'App\\Models\\Registro\\Descuento' => __DIR__ . '/../..' . '/app/Models/Registro/Descuento.php',

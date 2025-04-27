@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Landing\Slide;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Registro\CursoProgramado;
 use App\Models\Registro\Inscripcion;
+use Illuminate\Support\Facades\Storage;
 
 class HomeController extends Controller
 {
@@ -62,5 +64,32 @@ class HomeController extends Controller
             ->where('fecha_fin','>=',date('Y-m-d H:i:s'))
             ->where('user_id',Auth::user()->id)->get();
         return view('instructor.home')->with('cursos',$cursos);
+    }
+
+    public function configuracion(){
+        $slides = Slide::where('section','LIKE','slider-index')->get();
+        return view('admin.configuracion.index',compact('slides'));
+    }
+
+    public function uploadslide(Request $request)
+    {
+        $request->validate([
+            'image' => 'required|max:2048',
+        ]);
+
+        try {
+            $url = $request->file('image')->store('slider-index', 'public');
+
+            Slide::create([
+                'img' => $url,
+                'section' => 'slider-index'
+            ]);
+
+            return redirect()->back()->with('success', 'Slide uploaded successfully.');
+
+        } catch (\Exception $e) {
+            \Log::error('Error uploading slide: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Failed to upload slide.');
+        }
     }
 }

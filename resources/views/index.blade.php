@@ -43,18 +43,12 @@
                 <div class="col-lg-5 col-md-12 col-sm-12 banner">
                     <div id="carousel-imagenes" class="carousel slide" data-ride="carousel">
                         <div class="carousel-inner">
-                            <div class="carousel-item active">
-                                <img src="{{ asset('img/v1/morritos.png') }}" class="w-100 img-fluid" alt="Estudiantes EGEL"
+                            @foreach ($images as $image)
+                            <div class="carousel-item @if ($loop->first) active @endif">
+                                <img src="{{ asset('storage/' . $image->img) }}" class="w-100 img-fluid" alt="Estudiantes EGEL"
                                     loading="lazy">>
                             </div>
-                            <div class="carousel-item">
-                                <img src="{{ asset('img/v1/morritos.png') }}" class="w-100 img-fluid" alt="Estudiantes EGEL"
-                                    loading="lazy">>
-                            </div>
-                            <div class="carousel-item">
-                                <img src="{{ asset('img/v1/morritos.png') }}" class="w-100 img-fluid" alt="Estudiantes EGEL"
-                                    loading="lazy">>
-                            </div>
+                            @endforeach
                         </div>
                     </div>
                 </div>

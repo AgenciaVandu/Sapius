@@ -11,6 +11,7 @@
 |
 */
 
+use App\Models\Landing\Slide;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\User;
@@ -18,7 +19,8 @@ use App\User;
 
 
 Route::get('/', function () {
-    return view('index');
+    $images = Slide::where('section','like','slider-index')->get();
+    return view('index',compact('images'));
 })->name('landing.home')
 ;
 Route::get('terms/conditions', function () {
@@ -60,6 +62,8 @@ Auth::routes();
 
 Route::group(['middleware' => ['admin','restrict.mobile'],'prefix' => 'admin'], function() {
     Route::get('/', 'HomeController@admin')->name('admin');
+    Route::get('/configuraciones', 'HomeController@configuracion')->name('admin.configuracion.index');
+    Route::post('/configuraciones/upload', 'HomeController@uploadslide')->name('admin.configuracion.slide');
 
     //Admistracion de usuarios
     Route::get('users/{activo?}', 'UserController@index')->name('users.index');

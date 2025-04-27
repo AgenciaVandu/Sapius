@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddLeccionIdToLeccionesTable extends Migration
+class CreateSlidesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,11 @@ class AddLeccionIdToLeccionesTable extends Migration
      */
     public function up()
     {
-        Schema::table('lecciones', function (Blueprint $table) {
-            $table->unsignedBigInteger('leccion_id')->default(0)->after('id');
+        Schema::create('slides', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string('img');
+            $table->string('section');
+            $table->timestamps();
         });
     }
 
@@ -25,8 +28,6 @@ class AddLeccionIdToLeccionesTable extends Migration
      */
     public function down()
     {
-        Schema::table('lecciones', function (Blueprint $table) {
-            $table->dropColumn('leccion_id');
-        });
+        Schema::dropIfExists('slides');
     }
 }
