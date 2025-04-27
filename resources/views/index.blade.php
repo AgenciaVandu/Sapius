@@ -406,7 +406,7 @@
                         perView: 4
                     },
                     600: {
-                        perView: 2
+                        perView: 1
                     }
                 }
             }).mount();
