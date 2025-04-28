@@ -271,7 +271,7 @@
                                         loading="lazy">
                                 </div>
                                 <h5 style="color: #fff;">
-                                    L.N. Verónica González <br> <small style="color: #30D6E6;">Premio Nacional Excelencia
+                                    L.N. Elsy Verónica González Sansores <br> <small style="color: #30D6E6;">Premio Nacional Excelencia
                                         EGEL</small>
                                 </h5>
                                 <small style="color: #fff;" class="pb-3">Nuestro cuerpo docente esta disponible para
@@ -289,9 +289,7 @@
                                     <img src="{{ asset('img/m-5.png') }}" class="img-fluid pb-3" alt="Maestro sapius"
                                         loading="lazy">
                                 </div>
-                                <h5 style="color: #fff;">Dr. Erika González <br> <small style="color: #30D6E6;">Residente
-                                        de
-                                        Neurología</small></h5>
+                                <h5 style="color: #fff;">Dr. Erika Elizabeth González Sansores <br> <small style="color: #30D6E6;">Nutrióloga egresada del Centro Nacional Siglo XXI</small></h5>
                                 <small style="color: #fff;" class="pb-3">Nuestro cuerpo docente esta disponible para
                                     pláticas,
                                     conferencias y ponencias.
@@ -309,9 +307,8 @@
                                     <img src="{{ asset('img/m-2.png') }}" class="img-fluid pb-3" alt="Maestro sapius"
                                         loading="lazy">
                                 </div>
-                                <h5 style="color: #fff;">Dr. César Estrada <br> <small style="color: #30D6E6; ">Cirujano
-                                        Plástico
-                                        Estético</small></h5>
+                                <h5 style="color: #fff;">Dr. César Abraham Estrada Aguirre<br> <small style="color: #30D6E6; ">Cirujano
+                                        Plástico Estético y Reconstructivo</small></h5>
                                 <small style="color: #fff;" class="pb-3">Nuestro cuerpo docente esta disponible para
                                     pláticas,
                                     conferencias y ponencias.
@@ -327,9 +324,9 @@
                                     <img src="{{ asset('img/m-3.png') }}" class="img-fluid pb-3" alt="Maestro sapius"
                                         loading="lazy">
                                 </div>
-                                <h5 style="color: #fff;">LTS. Martín González <br> <small style="color: #30D6E6;">Docente
+                                <h5 style="color: #fff;">Lic.Trab.Soc. Martín Moises González Sansores <br> <small style="color: #30D6E6;">Docente
                                         titular del
-                                        curso EGEL</small></h5>
+                                        curso EGEL Plus</small></h5>
                                 <small style="color: #fff;" class="pb-3">Nuestro cuerpo docente esta disponible para
                                     pláticas,
                                     conferencias y ponencias.
