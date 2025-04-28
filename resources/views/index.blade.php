@@ -267,48 +267,12 @@
                         <li class="glide__slide">
                             <div class="docentes__persona">
                                 <div class="maestro-img">
-                                    <img src="{{ asset('img/m-4.png') }}" class="img-fluid pb-3" alt="Verónica Sansores"
+                                    <img src="{{ asset('img/m-6.png') }}" class="img-fluid pb-3" alt="Maestro sapius"
                                         loading="lazy">
                                 </div>
-                                <h5 style="color: #fff;">
-                                    L.N. Elsy Verónica González Sansores <br> <small style="color: #30D6E6;">Premio Nacional Excelencia
-                                        EGEL</small>
-                                </h5>
-                                <small style="color: #fff;" class="pb-3">Nuestro cuerpo docente esta disponible para
-                                    pláticas,
-                                    conferencias y ponencias.
-                                </small>
-                                <button type="button" class="btn btn-primary" data-toggle="modal"
-                                    data-target="#sapius-info">Enviar
-                                    mensaje</button>
-                            </div>
-                        </li>
-                        <li class="glide__slide">
-                            <div class="docentes__persona">
-                                <div class="maestro-img">
-                                    <img src="{{ asset('img/m-5.png') }}" class="img-fluid pb-3" alt="Maestro sapius"
-                                        loading="lazy">
-                                </div>
-                                <h5 style="color: #fff;">Dr. Erika Elizabeth González Sansores <br> <small style="color: #30D6E6;">Nutrióloga egresada del Centro Nacional Siglo XXI</small></h5>
-                                <small style="color: #fff;" class="pb-3">Nuestro cuerpo docente esta disponible para
-                                    pláticas,
-                                    conferencias y ponencias.
-                                </small>
-                                <button type="button" class="btn btn-primary" data-toggle="modal"
-                                    data-target="#sapius-info">Enviar
-                                    mensaje</button>
-                            </div>
-
-                        </li>
-                        <li class="glide__slide">
-
-                            <div class="docentes__persona">
-                                <div class="maestro-img">
-                                    <img src="{{ asset('img/m-2.png') }}" class="img-fluid pb-3" alt="Maestro sapius"
-                                        loading="lazy">
-                                </div>
-                                <h5 style="color: #fff;">Dr. César Abraham Estrada Aguirre<br> <small style="color: #30D6E6; ">Cirujano
-                                        Plástico Estético y Reconstructivo</small></h5>
+                                <h5 style="color: #fff;">LN. Fernando Iván Pat Poot <br> <small
+                                        style="color: #30D6E6;">Docente
+                                        Sapius</small></h5>
                                 <small style="color: #fff;" class="pb-3">Nuestro cuerpo docente esta disponible para
                                     pláticas,
                                     conferencias y ponencias.
@@ -324,7 +288,8 @@
                                     <img src="{{ asset('img/m-3.png') }}" class="img-fluid pb-3" alt="Maestro sapius"
                                         loading="lazy">
                                 </div>
-                                <h5 style="color: #fff;">Lic.Trab.Soc. Martín Moises González Sansores <br> <small style="color: #30D6E6;">Docente
+                                <h5 style="color: #fff;">Lic.Trab.Soc. Martín Moises González Sansores <br> <small
+                                        style="color: #30D6E6;">Docente
                                         titular del
                                         curso EGEL Plus</small></h5>
                                 <small style="color: #fff;" class="pb-3">Nuestro cuerpo docente esta disponible para
@@ -336,15 +301,16 @@
                                     mensaje</button>
                             </div>
                         </li>
+
                         <li class="glide__slide">
                             <div class="docentes__persona">
                                 <div class="maestro-img">
-                                    <img src="{{ asset('img/m-6.png') }}" class="img-fluid pb-3" alt="Maestro sapius"
+                                    <img src="{{ asset('img/m-5.png') }}" class="img-fluid pb-3" alt="Maestro sapius"
                                         loading="lazy">
                                 </div>
-                                <h5 style="color: #fff;">LN. Fernando Iván Pat Poot <br> <small
-                                        style="color: #30D6E6;">Docente
-                                        Sapius</small></h5>
+                                <h5 style="color: #fff;">Dr. Erika Elizabeth González Sansores <br> <small
+                                        style="color: #30D6E6;">Nutrióloga egresada del Centro Nacional Siglo XXI</small>
+                                </h5>
                                 <small style="color: #fff;" class="pb-3">Nuestro cuerpo docente esta disponible para
                                     pláticas,
                                     conferencias y ponencias.
@@ -355,6 +321,47 @@
                             </div>
 
                         </li>
+                        <li class="glide__slide">
+                            <div class="docentes__persona">
+                                <div class="maestro-img">
+                                    <img src="{{ asset('img/m-4.png') }}" class="img-fluid pb-3" alt="Verónica Sansores"
+                                        loading="lazy">
+                                </div>
+                                <h5 style="color: #fff;">
+                                    L.N. Elsy Verónica González Sansores <br> <small style="color: #30D6E6;">Premio
+                                        Nacional Excelencia
+                                        EGEL</small>
+                                </h5>
+                                <small style="color: #fff;" class="pb-3">Nuestro cuerpo docente esta disponible para
+                                    pláticas,
+                                    conferencias y ponencias.
+                                </small>
+                                <button type="button" class="btn btn-primary" data-toggle="modal"
+                                    data-target="#sapius-info">Enviar
+                                    mensaje</button>
+                            </div>
+                        </li>
+                        <li class="glide__slide">
+
+                            <div class="docentes__persona">
+                                <div class="maestro-img">
+                                    <img src="{{ asset('img/m-2.png') }}" class="img-fluid pb-3" alt="Maestro sapius"
+                                        loading="lazy">
+                                </div>
+                                <h5 style="color: #fff;">Dr. César Abraham Estrada Aguirre<br> <small
+                                        style="color: #30D6E6; ">Cirujano
+                                        Plástico Estético y Reconstructivo</small></h5>
+                                <small style="color: #fff;" class="pb-3">Nuestro cuerpo docente esta disponible para
+                                    pláticas,
+                                    conferencias y ponencias.
+                                </small>
+                                <button type="button" class="btn btn-primary" data-toggle="modal"
+                                    data-target="#sapius-info">Enviar
+                                    mensaje</button>
+                            </div>
+                        </li>
+
+
                     </ul>
                 </div>
             </div>
