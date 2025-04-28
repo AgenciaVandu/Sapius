@@ -406,8 +406,11 @@
                 autoplay: 2000,
                 bound: true,
                 breakpoints: {
-                    1024: {
+                    1200: {
                         perView: 4
+                    },
+                    992: {
+                        perView: 2
                     },
                     600: {
                         perView: 1
