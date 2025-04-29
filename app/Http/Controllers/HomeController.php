@@ -118,7 +118,7 @@ class HomeController extends Controller
                 'img' => $url,
                 'name' => $request->name,
                 'text' => $request->text,
-                'text2' => $request->tex2,
+                'text2' => $request->text2,
             ]);
 
             return redirect()->back()->with('success', 'Pride uploaded successfully.');
