@@ -46,7 +46,8 @@
                                                         <img src="{{ asset('storage/' . $slide->img) }}" alt="Imagen subida"
                                                             width="100%" height="auto">
                                                         <div class="card-body">
-                                                            <a href="{{ route('admin.configuracion.slide,delete',$slide) }}" class="btn btn-primary btn-sm">Eliminar</a>
+                                                            <a href="{{ route('admin.configuracion.slide,delete', $slide) }}"
+                                                                class="btn btn-primary btn-sm">Eliminar</a>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -68,14 +69,34 @@
                                     <button class="btn btn-link btn-block text-left collapsed" type="button"
                                         data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false"
                                         aria-controls="collapseTwo">
-                                        Administracion carrusel de maestros
+                                        Administracion orgullo Sapius
                                     </button>
                                 </h2>
                             </div>
                             <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
                                 data-parent="#accordionExample">
                                 <div class="card-body">
-                                    En construccion
+                                    <form action="{{ route('admin.configuracion.pride') }}" method="POST"
+                                        enctype='multipart/form-data'>
+                                        @csrf
+                                        <div class="form-group">
+                                            <label for="name">Nombre</label>
+                                            <input type="text" class="form-control" id="name" name="name">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="text">Texto1</label>
+                                            <input type="text" class="form-control" id="text" name="text">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="text">Texto2</label>
+                                            <input type="text" class="form-control" id="text" name="text2">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="img">Foto</label>
+                                            <input type="file" name="image2">
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                    </form>
                                 </div>
                             </div>
                         </div>

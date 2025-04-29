@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Landing\Pride;
 use App\Models\Landing\Slide;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -98,5 +99,33 @@ class HomeController extends Controller
     {
         $slide->delete();
         return redirect()->back();
+    }
+
+
+    public function uploadpride(Request $request){
+
+        $request->validate([
+            'name' => 'required',
+            'text' => 'required',
+            'text2' => 'required',
+            'image2' => 'required|max:2048',
+        ]);
+
+        try {
+            $url = $request->file('image2')->store('prides', 'public');
+
+            Pride::create([
+                'img' => $url,
+                'name' => $request->name,
+                'text' => $request->text,
+                'text2' => $request->tex2,
+            ]);
+
+            return redirect()->back()->with('success', 'Pride uploaded successfully.');
+
+        } catch (\Exception $e) {
+            Log::error('Error uploading slide: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Failed to upload slide.');
+        }
     }
 }

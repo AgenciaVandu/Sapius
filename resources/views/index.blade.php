@@ -217,18 +217,28 @@
                             UNA CLASE MUESTRA</a>
                     </div>
                     <div class="col-md-12 col-lg-6 col-sm-12 centro-card text-center">
-                        <div class="card">
-                            <div class="cabecera-orgullo">
-                                <img src="{{ asset('img/v1/penelope-quintanar-Gracia.png') }}" class="img-fluid"
-                                    loading="lazy">
+
+                        <!-- Carousel de Glide.js -->
+                        <div class="glide2">
+                            <div class="glide__track" data-glide-el="track">
+                                <ul class="glide__slides">
+                                    <li class="glide__slide">
+                                        <div class="card">
+                                            <div class="cabecera-orgullo">
+                                                <img src="{{ asset('img/v1/penelope-quintanar-Gracia.png') }}"
+                                                    class="img-fluid" loading="lazy">
+                                            </div>
+                                            <h4 class="color-gray">Penelope Quintanar G.</h4>
+                                            <p class="color-gray font-weight-normal mb-0">
+                                                Pasante de nutrición
+                                            </p>
+                                            <p class="color-orange font-weight-normal px-5 mt-0">
+                                                Premio Nacional a la Excelencia EGEL
+                                            </p>
+                                        </div>
+                                    </li>
+                                </ul>
                             </div>
-                            <h4 class="color-gray">Penelope Quintanar G.</h4>
-                            <p class="color-gray">Pasante de nutrición
-                                <span class="color-orange">
-                                    <br>Premio Nacional a la
-                                    <br> Excelencia EGEL
-                                </span>
-                            </p>
                         </div>
                     </div>
                 </div>
@@ -413,6 +423,27 @@
                     },
                     992: {
                         perView: 2,
+                        gap: 20
+                    },
+                    600: {
+                        perView: 1,
+                        gap: 10
+                    }
+                }
+            }).mount();
+
+            new Glide('.glide2', {
+                perView: 1,
+                gap: 10,
+                autoplay: 20000,
+                bound: true,
+                breakpoints: {
+                    1200: {
+                        perView: 1,
+                        gap: 10
+                    },
+                    992: {
+                        perView: 1,
                         gap: 20
                     },
                     600: {
