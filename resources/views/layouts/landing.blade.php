@@ -25,7 +25,7 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-light-lg bg-light fixed-top">
         <div class="container">
             <a class="navbar-brand" href="/">
                 <img src="{{ asset('img/v1/logo-sapius.svg') }}" width="130" alt="logotipo sapius">
@@ -185,7 +185,7 @@
                 <div class="col-md-12">
                     <div class="pt-5" style="color: #fff;">
                         <p class="copyright" style="text-align: center;">
-                            <span class="pr-2"><a href="{{ asset('/tyc.pdf') }}" target="blank_">Términos y
+                            <span class="pr-2"><a href="{{ route('termsandconditions') }}" >Términos y
                                     condiciones</a><span class="pl-2">|</span></span>
                             <span class="pr-2"><a href="{{ asset('/politica-sapius.pdf') }}"
                                     target="blank_">Política de privacidad</a><span class="pl-2">|</span></span> <br

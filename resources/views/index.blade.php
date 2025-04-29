@@ -308,8 +308,8 @@
                                     <img src="{{ asset('img/m-5.png') }}" class="img-fluid pb-3" alt="Maestro sapius"
                                         loading="lazy">
                                 </div>
-                                <h5 style="color: #fff;">Dr. Erika Elizabeth González Sansores <br> <small
-                                        style="color: #30D6E6;">Nutrióloga egresada del Centro Nacional Siglo XXI</small>
+                                <h5 style="color: #fff;">Dra. Erika Elizabeth González Sansores <br> <small
+                                        style="color: #30D6E6;">Neuróloga egresada del Centro Nacional Siglo XXI</small>
                                 </h5>
                                 <small style="color: #fff;" class="pb-3">Nuestro cuerpo docente esta disponible para
                                     pláticas,
@@ -403,17 +403,21 @@
         <script>
             new Glide('.glide', {
                 perView: 4,
+                gap: 10,
                 autoplay: 2000,
                 bound: true,
                 breakpoints: {
                     1200: {
-                        perView: 4
+                        perView: 4,
+                        gap: 10
                     },
                     992: {
-                        perView: 2
+                        perView: 2,
+                        gap: 20
                     },
                     600: {
-                        perView: 1
+                        perView: 1,
+                        gap: 10
                     }
                 }
             }).mount();

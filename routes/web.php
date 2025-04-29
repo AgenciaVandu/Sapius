@@ -32,7 +32,8 @@ Route::get('/generate-storage-link', function () {
 
 Route::get('terms/conditions', function () {
     return view('terms');
-});
+})->name('termsandconditions');
+
 Route::get('/exani-1', function () {
     return view('cursos-front.exani-1');
 });

@@ -10,12 +10,12 @@
     <div class="container text-center">
         <div class="col-12 exani-titular">
             <h1 style="color: #fff;">Prepárate con Sapius <br>
-                El curso de<span class=color-lowblue> residentes</span> para <br class="d-none d-sm-none d-md-block d-lg-block">futuros <span class=color-lowblue> residentes</span>  
+                El curso de<span class=color-lowblue> residentes</span> para <br class="d-none d-sm-none d-md-block d-lg-block">futuros <span class=color-lowblue> residentes</span>
             </h1>
             <p style="color: #fff;">"Tu formación, nuestra pasión"</p>
             <a href="" class="btn btn-primary">Comenzar</a>
         </div>
-        
+
     </div>
 </header>
 <section class="exani">
@@ -63,7 +63,7 @@
                     </div>
                     <div class="col-9">
                         <h4 class="color-gray">Guía <br> ENARM</h2>
-                            <p class="color-gray">Actualizamos nuestro contenido cada año con base en la bibliografía del CENEVAL ENARM</p>
+                            <p class="color-gray">Actualizamos nuestro contenido cada año con base en la bibliografía del ENARM</p>
                     </div>
                 </div>
             </div>
