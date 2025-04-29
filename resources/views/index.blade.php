@@ -47,7 +47,7 @@
                                 @foreach ($images as $image)
                                     <div class="carousel-item @if ($loop->first) active @endif">
                                         <img src="{{ asset('storage/' . $image->img) }}" class="w-100 img-fluid"
-                                            alt="Estudiantes EGEL" loading="lazy">>
+                                            alt="Estudiantes EGEL" loading="lazy">
                                     </div>
                                 @endforeach
                             @endif
@@ -222,21 +222,23 @@
                         <div class="glide2">
                             <div class="glide__track" data-glide-el="track">
                                 <ul class="glide__slides">
-                                    <li class="glide__slide">
-                                        <div class="card">
-                                            <div class="cabecera-orgullo">
-                                                <img src="{{ asset('img/v1/penelope-quintanar-Gracia.png') }}"
-                                                    class="img-fluid" loading="lazy">
+                                    @foreach ($prides as $pride)
+                                        <li class="glide__slide">
+                                            <div class="card">
+                                                <div class="cabecera-orgullo">
+                                                    <img  src="{{ asset('storage/' . $pride->img) }}"
+                                                        class="img-fluid" loading="lazy">
+                                                </div>
+                                                <h4 class="color-gray">{{ $pride->name }}</h4>
+                                                <p class="color-gray font-weight-normal mb-0">
+                                                    {{ $pride->text }}
+                                                </p>
+                                                <p class="color-orange font-weight-normal px-5 mt-0">
+                                                    {{ $pride->text2 }}
+                                                </p>
                                             </div>
-                                            <h4 class="color-gray">Penelope Quintanar G.</h4>
-                                            <p class="color-gray font-weight-normal mb-0">
-                                                Pasante de nutrición
-                                            </p>
-                                            <p class="color-orange font-weight-normal px-5 mt-0">
-                                                Premio Nacional a la Excelencia EGEL
-                                            </p>
-                                        </div>
-                                    </li>
+                                        </li>
+                                    @endforeach
                                 </ul>
                             </div>
                         </div>

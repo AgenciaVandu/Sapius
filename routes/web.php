@@ -11,6 +11,7 @@
 |
 */
 
+use App\Models\Landing\Pride;
 use App\Models\Landing\Slide;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -21,7 +22,8 @@ use App\User;
 
 Route::get('/', function () {
     $images = Slide::where('section','like','slider-index')->get();
-    return view('index',compact('images'));
+    $prides = Pride::all();
+    return view('index',compact('images','prides'));
 })->name('landing.home');
 
 
