@@ -436,21 +436,17 @@
 
             new Glide('.glide2', {
                 perView: 1,
-                gap: 10,
                 autoplay: 20000,
                 bound: true,
                 breakpoints: {
                     1200: {
                         perView: 1,
-                        gap: 10
                     },
                     992: {
                         perView: 1,
-                        gap: 20
                     },
                     600: {
                         perView: 1,
-                        gap: 10
                     }
                 }
             }).mount();
