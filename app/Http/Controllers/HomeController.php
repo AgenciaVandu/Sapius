@@ -70,7 +70,8 @@ class HomeController extends Controller
 
     public function configuracion(){
         $slides = Slide::where('section','LIKE','slider-index')->get();
-        return view('admin.configuracion.index',compact('slides'));
+        $prides = Pride::paginate(5);
+        return view('admin.configuracion.index',compact('slides','prides'));
     }
 
     public function uploadslide(Request $request)

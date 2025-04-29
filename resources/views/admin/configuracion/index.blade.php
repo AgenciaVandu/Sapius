@@ -81,22 +81,55 @@
                                         @csrf
                                         <div class="form-group">
                                             <label for="name">Nombre</label>
-                                            <input type="text" class="form-control" id="name" name="name">
+                                            <input type="text" class="form-control" id="name" name="name"
+                                                required>
                                         </div>
                                         <div class="form-group">
                                             <label for="text">Texto1</label>
-                                            <input type="text" class="form-control" id="text" name="text">
+                                            <input type="text" class="form-control" id="text" name="text"
+                                                required>
                                         </div>
                                         <div class="form-group">
                                             <label for="text">Texto2</label>
-                                            <input type="text" class="form-control" id="text" name="text2">
+                                            <input type="text" class="form-control" id="text" name="text2"
+                                                required>
                                         </div>
                                         <div class="form-group">
                                             <label for="img">Foto</label>
-                                            <input type="file" name="image2">
+                                            <input type="file" name="image2" required>
                                         </div>
-                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                        <div class="d-flex flex-row-reverse mb-4">
+
+                                            <button type="submit" class="btn btn-primary">Subir</button>
+                                        </div>
                                     </form>
+
+                                    <table class="table">
+                                        <thead class="thead-dark">
+                                            <tr>
+                                                <th scope="col">Foto</th>
+                                                <th scope="col">Nombre</th>
+                                                <th scope="col">Texto 1</th>
+                                                <th scope="col">Texto 2</th>
+                                                <th scope="col"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($prides as $pride)
+                                                <tr>
+                                                    <th scope="row">
+                                                        <img src="{{ asset('storage/' . $pride->img) }}" class="img-fluid img-thumbnail" style="width: 5.8rem;" alt="">
+                                                    </th>
+                                                    <td>{{ $pride->name }}</td>
+                                                    <td>{{ $pride->text }}</td>
+                                                    <td>{{ $pride->text2 }}</td>
+                                                    <td>
+                                                        <a href="" class="text-secondary">Editar</a>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>

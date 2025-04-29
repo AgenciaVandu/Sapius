@@ -217,29 +217,25 @@
                             UNA CLASE MUESTRA</a>
                     </div>
                     <div class="col-md-12 col-lg-6 col-sm-12 centro-card text-center">
-
-                        <!-- Carousel de Glide.js -->
-                        <div class="glide2">
-                            <div class="glide__track" data-glide-el="track">
-                                <ul class="glide__slides">
-                                    @foreach ($prides as $pride)
-                                        <li class="glide__slide">
-                                            <div class="card">
-                                                <div class="cabecera-orgullo">
-                                                    <img  src="{{ asset('storage/' . $pride->img) }}"
-                                                        class="img-fluid" loading="lazy">
-                                                </div>
-                                                <h4 class="color-gray">{{ $pride->name }}</h4>
-                                                <p class="color-gray font-weight-normal mb-0">
-                                                    {{ $pride->text }}
-                                                </p>
-                                                <p class="color-orange font-weight-normal px-5 mt-0">
-                                                    {{ $pride->text2 }}
-                                                </p>
+                        <div id="carouselExampleFade" class="carousel slide carousel-fade" data-ride="carousel">
+                            <div class="carousel-inner">
+                                @foreach ($prides as $pride)
+                                    <div class="carousel-item @if ($loop->first) active @endif">
+                                        <div class="card">
+                                            <div class="cabecera-orgullo">
+                                                <img src="{{ asset('storage/' . $pride->img) }}" class="img-fluid"
+                                                    loading="lazy">
                                             </div>
-                                        </li>
-                                    @endforeach
-                                </ul>
+                                            <h4 class="color-gray">{{ $pride->name }}</h4>
+                                            <p class="color-gray font-weight-normal mb-0">
+                                                {{ $pride->text }}
+                                            </p>
+                                            <p class="color-orange font-weight-normal px-5 mt-0">
+                                                {{ $pride->text2 }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                @endforeach
                             </div>
                         </div>
                     </div>
@@ -430,23 +426,6 @@
                     600: {
                         perView: 1,
                         gap: 10
-                    }
-                }
-            }).mount();
-
-            new Glide('.glide2', {
-                perView: 1,
-                autoplay: 20000,
-                bound: true,
-                breakpoints: {
-                    1200: {
-                        perView: 1,
-                    },
-                    992: {
-                        perView: 1,
-                    },
-                    600: {
-                        perView: 1,
                     }
                 }
             }).mount();
