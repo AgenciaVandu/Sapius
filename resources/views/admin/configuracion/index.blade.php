@@ -76,35 +76,45 @@
                             <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
                                 data-parent="#accordionExample">
                                 <div class="card-body">
-                                    <form action="{{ route('admin.configuracion.pride') }}" method="POST"
-                                        enctype='multipart/form-data'>
-                                        @csrf
-                                        <div class="form-group">
-                                            <label for="name">Nombre</label>
-                                            <input type="text" class="form-control" id="name" name="name"
-                                                required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="text">Texto1</label>
-                                            <input type="text" class="form-control" id="text" name="text"
-                                                required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="text">Texto2</label>
-                                            <input type="text" class="form-control" id="text" name="text2"
-                                                required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="img">Foto</label>
-                                            <input type="file" name="image2" required>
-                                        </div>
-                                        <div class="d-flex flex-row-reverse mb-4">
+                                    <p>
+                                        <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                          Agregar nuevo
+                                        </a>
+                                      </p>
+                                      <div class="collapse" id="collapseExample">
+                                        <div class="card card-body">
+                                            <form action="{{ route('admin.configuracion.pride') }}" method="POST"
+                                            enctype='multipart/form-data'>
+                                            @csrf
+                                            <div class="form-group">
+                                                <label for="name">Nombre</label>
+                                                <input type="text" class="form-control" id="name" name="name"
+                                                    required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="text">Texto1</label>
+                                                <input type="text" class="form-control" id="text" name="text"
+                                                    required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="text">Texto2</label>
+                                                <input type="text" class="form-control" id="text" name="text2"
+                                                    required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="img">Foto</label>
+                                                <input type="file" name="image2" required>
+                                            </div>
+                                            <div class="d-flex flex-row-reverse mb-4">
 
-                                            <button type="submit" class="btn btn-primary">Subir</button>
+                                                <button type="submit" class="btn btn-primary">Subir</button>
+                                            </div>
+                                        </form>
                                         </div>
-                                    </form>
+                                      </div>
 
-                                    <table class="table">
+
+                                    <table class="table table-sm p-5 text-center">
                                         <thead class="thead-dark">
                                             <tr>
                                                 <th scope="col">Foto</th>
@@ -118,7 +128,7 @@
                                             @foreach ($prides as $pride)
                                                 <tr>
                                                     <th scope="row">
-                                                        <img src="{{ asset('storage/' . $pride->img) }}" class="img-fluid img-thumbnail" style="width: 5.8rem;" alt="">
+                                                        <img src="{{ asset('storage/' . $pride->img) }}" class="img-fluid rounded-circle" style="width: 3.8rem;" alt="">
                                                     </th>
                                                     <td>{{ $pride->name }}</td>
                                                     <td>{{ $pride->text }}</td>
