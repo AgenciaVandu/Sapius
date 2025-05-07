@@ -114,7 +114,7 @@
                                         </div>
                                     </div>
 
-                                    <table class="table table-sm p-5 text-center">
+                                    <table class="table table-sm p-5">
                                         <thead class="thead-dark">
                                             <tr>
                                                 <th scope="col">Foto</th>
@@ -138,17 +138,21 @@
                                                     <td>
                                                         <!-- Button trigger modal -->
                                                         <button type="button" class="btn btn-sm btn-secondary"
-                                                            data-toggle="modal" data-target="#exampleModal{{ $pride->id }}">
+                                                            data-toggle="modal"
+                                                            data-target="#exampleModal{{ $pride->id }}">
                                                             Editar
                                                         </button>
 
                                                         <!-- Modal -->
-                                                        <div class="modal fade" id="exampleModal{{ $pride->id }}" tabindex="-1"
-                                                            aria-labelledby="exampleModalLabel{{ $pride->id }}" aria-hidden="true">
+                                                        <div class="modal fade" id="exampleModal{{ $pride->id }}"
+                                                            tabindex="-1"
+                                                            aria-labelledby="exampleModalLabel{{ $pride->id }}"
+                                                            aria-hidden="true">
                                                             <div class="modal-dialog">
                                                                 <div class="modal-content">
                                                                     <div class="modal-header">
-                                                                        <h5 class="modal-title" id="exampleModalLabel{{ $pride->id }}">
+                                                                        <h5 class="modal-title"
+                                                                            id="exampleModalLabel{{ $pride->id }}">
                                                                             Editar información</h5>
                                                                         <button type="button" class="close"
                                                                             data-dismiss="modal" aria-label="Close">
@@ -157,8 +161,9 @@
                                                                     </div>
                                                                     <div class="modal-body">
                                                                         <form
-                                                                            action="{{ route('admin.configuracion.pride') }}"
+                                                                            action="{{ route('admin.configuracion.pride.update', $pride) }}"
                                                                             method="POST" enctype='multipart/form-data'>
+                                                                            @method('PUT')
                                                                             @csrf
                                                                             <div class="form-group">
                                                                                 <label for="name">Nombre</label>
@@ -180,10 +185,12 @@
                                                                             </div>
                                                                             <div class="form-group">
                                                                                 <label for="img">Foto</label>
-                                                                                <input type="file" name="image2"
-                                                                                    required>
+                                                                                <input type="file" name="image3">
                                                                             </div>
                                                                             <div class="modal-footer">
+                                                                                <a href="{{ route('admin.configuracion.pride.delete', $pride) }}"
+                                                                                    class="btn btn-danger mr-auto">Eliminar</a>
+
                                                                                 <button type="button"
                                                                                     class="btn btn-secondary"
                                                                                     data-dismiss="modal">Cancelar</button>

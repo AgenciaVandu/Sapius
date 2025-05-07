@@ -77,6 +77,8 @@ Route::group(['middleware' => ['admin','restrict.mobile'],'prefix' => 'admin'], 
     Route::get('/configuraciones/delete/{slide}', 'HomeController@deleteSlide')->name('admin.configuracion.slide,delete');
 
     Route::post('/configuraciones/pride/upload', 'HomeController@uploadpride')->name('admin.configuracion.pride');
+    Route::put('/configuraciones/pride/{pride}/update', 'HomeController@updatePride')->name('admin.configuracion.pride.update');
+    Route::get('/configuraciones/pride/{pride}/delete', 'HomeController@deletePride')->name('admin.configuracion.pride.delete');
 
     //Admistracion de usuarios
     Route::get('users/{activo?}', 'UserController@index')->name('users.index');

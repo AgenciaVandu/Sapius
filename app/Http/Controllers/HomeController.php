@@ -30,48 +30,50 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $cursos = Inscripcion::whereHas('CursoProgramado', function($query){
-            $query->with('Curso')->where('fecha_inicio','<=',date('Y-m-d H:i:s'))
-            ->where('fecha_fin','>=',date('Y-m-d H:i:s'));
-        })->with('CursoProgramado.Curso')->where('user_id',Auth::user()->id)->get();
+        $cursos = Inscripcion::whereHas('CursoProgramado', function ($query) {
+            $query->with('Curso')->where('fecha_inicio', '<=', date('Y-m-d H:i:s'))
+                ->where('fecha_fin', '>=', date('Y-m-d H:i:s'));
+        })->with('CursoProgramado.Curso')->where('user_id', Auth::user()->id)->get();
 
         //dd($cursos[0]->CursoProgramado()->get());
-        if(count($cursos)) return view('alumno.home')->with('cursos',$cursos);
+        if (count($cursos)) return view('alumno.home')->with('cursos', $cursos);
 
         return $this->cursosDisponibles();
     }
 
-    public function cursosDisponibles(){
+    public function cursosDisponibles()
+    {
         $cursos = CursoProgramado::with('Curso')
-            ->whereDoesntHave('Inscritos', function($query) {
+            ->whereDoesntHave('Inscritos', function ($query) {
                 $query->where('users.id', Auth::user()->id);
             })
-            ->where('fecha_inicio','<=',date('Y-m-d H:i:s'))
-            ->where('fecha_fin','>=',date('Y-m-d H:i:s'))->get();
+            ->where('fecha_inicio', '<=', date('Y-m-d H:i:s'))
+            ->where('fecha_fin', '>=', date('Y-m-d H:i:s'))->get();
 
-        return view('alumno.cursos')->with('cursos',$cursos);
+        return view('alumno.cursos')->with('cursos', $cursos);
     }
 
     public function admin()
     {
-        $cursos = CursoProgramado::with('Curso')->where('fecha_inicio','<=',date('Y-m-d H:i:s'))
-            ->where('fecha_fin','>=',date('Y-m-d H:i:s'))->get();
-        return view('admin.home')->with('cursos',$cursos);
+        $cursos = CursoProgramado::with('Curso')->where('fecha_inicio', '<=', date('Y-m-d H:i:s'))
+            ->where('fecha_fin', '>=', date('Y-m-d H:i:s'))->get();
+        return view('admin.home')->with('cursos', $cursos);
     }
 
     public function instructor()
     {
         $cursos = CursoProgramado::with('Curso')
-            ->where('fecha_inicio','<=',date('Y-m-d H:i:s'))
-            ->where('fecha_fin','>=',date('Y-m-d H:i:s'))
-            ->where('user_id',Auth::user()->id)->get();
-        return view('instructor.home')->with('cursos',$cursos);
+            ->where('fecha_inicio', '<=', date('Y-m-d H:i:s'))
+            ->where('fecha_fin', '>=', date('Y-m-d H:i:s'))
+            ->where('user_id', Auth::user()->id)->get();
+        return view('instructor.home')->with('cursos', $cursos);
     }
 
-    public function configuracion(){
-        $slides = Slide::where('section','LIKE','slider-index')->get();
+    public function configuracion()
+    {
+        $slides = Slide::where('section', 'LIKE', 'slider-index')->get();
         $prides = Pride::paginate(5);
-        return view('admin.configuracion.index',compact('slides','prides'));
+        return view('admin.configuracion.index', compact('slides', 'prides'));
     }
 
     public function uploadslide(Request $request)
@@ -89,7 +91,6 @@ class HomeController extends Controller
             ]);
 
             return redirect()->back()->with('success', 'Slide uploaded successfully.');
-
         } catch (\Exception $e) {
             Log::error('Error uploading slide: ' . $e->getMessage());
             return redirect()->back()->with('error', 'Failed to upload slide.');
@@ -103,7 +104,8 @@ class HomeController extends Controller
     }
 
 
-    public function uploadpride(Request $request){
+    public function uploadpride(Request $request)
+    {
 
         $request->validate([
             'name' => 'required',
@@ -123,10 +125,43 @@ class HomeController extends Controller
             ]);
 
             return redirect()->back()->with('success', 'Pride uploaded successfully.');
-
         } catch (\Exception $e) {
             Log::error('Error uploading slide: ' . $e->getMessage());
             return redirect()->back()->with('error', 'Failed to upload slide.');
         }
+    }
+
+    public function updatePride(Request $request, Pride $pride)
+    {
+
+        $request->validate([
+            'name' => 'required',
+            'text' => 'required',
+            'text2' => 'required',
+        ]);
+
+        if ($request->image3) {
+            $url = $request->file('image3')->store('prides', 'public');
+            $pride->update([
+                'img' => $url,
+                'name' => $request->name,
+                'text' => $request->text,
+                'text2' => $request->text2,
+            ]);
+            return redirect()->back()->with('success', 'Pride uploaded successfully.');
+        } else {
+            $pride->update([
+                'name' => $request->name,
+                'text' => $request->text,
+                'text2' => $request->text2,
+            ]);
+            return redirect()->back()->with('success', 'Pride uploaded successfully.');
+        }
+    }
+
+    public function deletePride(Pride $pride)
+    {
+        $pride->delete();
+        return redirect()->back()->with('success', 'Pride Delete successfully.');
     }
 }
