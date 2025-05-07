@@ -54,7 +54,7 @@
                                             if (isset($contenido['hora_inicial'])) {
                                                 $hora_inicial = $contenido['hora_inicial'];
                                             } else {
-                                                $hora_inicial = null;
+                                                $hora_inicial = '00:00';
                                             }
 
                                             if (isset($contenido['fecha_final'])) {
@@ -66,7 +66,7 @@
                                             if (isset($contenido['hora_final'])) {
                                                 $hora_final = $contenido['hora_final'];
                                             } else {
-                                                $hora_final = null;
+                                                $hora_final = '23:59';
                                             }
                                             /* $fecha_inicial = $contenido['fecha_inicial'] ? $contenido['fecha_inicial'] : null;
                                                                                     $hora_inicial = $contenido['hora_inicial'] ? $contenido['hora_inicial'] : null;
@@ -120,7 +120,7 @@
                                                 if (isset($contenido['hora_inicial'])) {
                                                     $hora_inicial = $contenido['hora_inicial'];
                                                 } else {
-                                                    $hora_inicial = null;
+                                                    $hora_inicial = '00:00';
                                                 }
 
                                                 if (isset($contenido['fecha_final'])) {
@@ -132,7 +132,7 @@
                                                 if (isset($contenido['hora_final'])) {
                                                     $hora_final = $contenido['hora_final'];
                                                 } else {
-                                                    $hora_final = null;
+                                                    $hora_final = '23:59';
                                                 }
                                                 /* $fecha_inicial = $contenido['fecha_inicial'] ? $contenido['fecha_inicial'] : null; */
                                                 /* $hora_inicial = $contenido['hora_inicial'] ? $contenido['hora_inicial'] : null; */
