@@ -59,12 +59,6 @@ class NormalizerFormatter implements FormatterInterface
         return $records;
     }
 
-<<<<<<< HEAD
-    protected function normalize($data, $depth = 0)
-    {
-        if ($depth > 9) {
-            return 'Over 9 levels deep, aborting normalization';
-=======
     /**
      * @return int
      */
@@ -85,7 +79,6 @@ class NormalizerFormatter implements FormatterInterface
     {
         if ($depth > $this->maxDepth) {
             return 'Over '.$this->maxDepth.' levels deep, aborting normalization';
->>>>>>> test
         }
 
         if (null === $data || is_scalar($data)) {
@@ -203,8 +196,4 @@ class NormalizerFormatter implements FormatterInterface
     {
         return Utils::jsonEncode($data, null, $ignoreErrors);
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> test

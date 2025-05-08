@@ -1,7 +1,6 @@
 @extends('layouts.adminmart.default')
 
 @section('content')
-
     @php
         $precio = $curso->precio;
 
@@ -24,28 +23,7 @@
             <h3>
                 ${{ number_format($precio, 2) }}
             </h3>
-            <h4 class="card-title">Metodos de pago</h4>
-            <h6 class="card-subtitle">A continuación selecciona tu método de pago e introduce los datos solicitados.
-            </h6>
-            <form action="{{ route('descuentos.check') }}" method="POST" class="px-5 py-2">
-                @csrf
-                @if (session('descuento'))
-                <div class="alert alert-success">Descuento aplicado</div>
-                @endif
-                @if (session('error'))
-                <div class="alert alert-danger">No se encontro la clave o ya expiro</div>
-                @endif
-                @if (session('limit'))
-                <div class="alert alert-warning">Descuento agotado</div>
-                @endif
-                <div class="form-group">
-                    <input type="text" class="form-control" name="clave"
-                        placeholder="Código de descuento">
-                    <input type="hidden" name="curso_programado_id" value="{{ $curso->id }}">
-                    <button type="submit" class="btn btn-primary mt-2">Agregar descuento</button>
-                </div>
-            </form>
-            {{-- <form method="POST" action="{{ route('inscripcion.pago') }}" class="mt-4" id="form-pago"> --}}{{--
+            <form method="POST" action="{{ route('inscripcion.pago') }}" class="mt-4" id="form-pago">
                 @csrf
                 <ul class="nav nav-tabs mb-3">
                     <li class="nav-item">
@@ -55,132 +33,51 @@
                             <img src="{{ asset('img/logo_conekta_color.svg') }}" class="img-fluid" alt="conekta">
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a href="#profile" id="oxxo" data-toggle="tab" aria-expanded="false"
-                            class="nav-link">
+                    {{-- <li class="nav-item">
+                        <a href="#profile" id="oxxo" data-toggle="tab" aria-expanded="false" class="nav-link">
                             <i class="mdi mdi-account-circle d-lg-none d-block mr-1"></i>
                             <span class="d-none d-lg-block">Oxxo</span>
                         </a>
-                    </li>
+                    </li> --}}
                 </ul>
+                <div id="conektaIframeContainer" style="height: 700px;"></div>
+            @endsection
 
-                <div class="tab-content">
-                    <div class="tab-pane show active" id="home">
-                        <div class="form-group">
-                            <label for="nombretarjetahabiente">Nombre del tarjetahabiente</label>
-                            <input type="text" class="form-control" id="nombretarjetahabiente"
-                                placeholder="Ej. Oscar Robles Torres" size="20" data-conekta="card[name]" />
-                        </div>
-                        <div class="form-group">
-                            <label for="tarjeta">Número de la tarjeta de crédito</label>
-                            <input type="text" class="form-control" id="tarjeta" placeholder="Ej. 87129873" size="20"
-                                data-conekta="card[number]" />
-                        </div>
-                        <div class="form-row">
-                            <label>
-                                <span>CVC</span>
-                                <input type="text" size="4" data-conekta="card[cvc]" />
-                            </label>
-                        </div>
-                        <div class="form-row">
-                            <label>
-                                <span>Fecha de expiración (MM/AAAA)</span>
-                                <input type="text" size="2" data-conekta="card[exp_month]" />
-                            </label>
-                            <span>/</span>
-                            <label>
-                                <input type="text" size="4" data-conekta="card[exp_year]" />
-                            </label>
-                        </div>
-                    </div>
-                    <div class="tab-pane" id="profile">
-                        A continuacion se generara una ficha para pagar a travez de Oxxo pay.
-                    </div>
-                </div>
-                <hr>
-                <input type="hidden" id="tipo_cobro" name="tipo_cobro" value="tarjeta">
-                <input type="hidden" id="curso_programado_id" name="curso_programado_id" value="{{ $curso->id }}">
-                <div class="form-group">
-                    <div id="divAlerts"></div>
-                    <label for="">Precio</label>
-                    <label id="text_descuento"></label>
-                    <input type="text" class="form-control" id="precio" value="${{ $curso->precio_en_moneda }} MxN"
-                        disabled>
-                    <input type="hidden" id="precioh" name="precio"
-                        value="{{ str_replace(',', '', $curso->precio_en_moneda) }}">
-                    <input type="hidden" id="authName" name="authName" value="{{ auth()->user()->nombre . '' . auth()->user()->apellido }}">
-                        <input type="hidden" id="authEmail" name="authEmail" value="{{ auth()->user()->email }}">
-                        <input type="hidden" id="authPhone" name="authPhone" value="{{ auth()->user()->telefono }}">
-
-                </div> --}}
-            {{-- <div class="form-group">
-                    <input type="text" id="clave" class="form-control" name="clave"
-                        placeholder="Código de descuento">
-                    <button type="button" class="btn btn-primary" id="descuento">Agregar descuento</button>
-                </div>
-            </form> --}}
-            <div id="paypal-button-container"></div>
-        </div>
-    </div>
-@endsection
-<script src="https://www.paypal.com/sdk/js?client-id={{ config('services.paypal.client_id') }}&currency=MXN"></script>
-<script>
-    paypal.Buttons({
-        // Sets up the transaction when a payment button is clicked
-        createOrder: (data, actions) => {
-            return actions.order.create({
-                purchase_units: [{
-                    amount: {
-                        value: "{{ $precio }}" // Can also reference a variable or function
-                    }
-                }]
-            });
-        },
-        // Finalize the transaction after payer approval
-        onApprove: (data, actions) => {
-            return actions.order.capture().then(function(orderData) {
-                // Successful capture! For dev/demo purposes:
-                console.log('Capture result', orderData, JSON.stringify(orderData, null,
-                    2));
-                const transaction = orderData.purchase_units[0].payments.captures[0];
-                if (transaction.status == "COMPLETED") {
-                    actions.redirect("{{ route('inscripcion.pago') }}/?curso_programado_id=" +
-                        "{{ $curso->id }}&order=" + transaction.id);
-                }
-                alert(
-                    `Transaction ${transaction.status}: ${transaction.id}\n\nSee console for all available details`
-                );
-                // When ready to go live, remove the alert and show a success message within this page. For example:
-                // const element = document.getElementById('paypal-button-container');
-                // element.innerHTML = '<h3>Thank you for your payment!</h3>';
-                // Or go to another URL:  actions.redirect('thank_you.html');
-            });
-        }
-    }).render('#paypal-button-container');
-</script>
-@section('javascript')
-    <script>
+            @section('javascript')
+                <script type="text/javascript">
+                    window.ConektaCheckoutComponents.Integration({
+                        targetIFrame: "#conektaIframeContainer",
+                        checkoutRequestId: "42a4c95e-0db2-4ae8-9bb3-ea681acc8281", // checkout request id
+                        publicKey: "key_OKaHFsyf7d8dHe9fyKomsig",
+                        options: {},
+                        styles: {},
+                        onFinalizePayment: function(event) {
+                            console.log(event);
+                        }
+                    })
+                </script>
+                {{-- <script>
         $(document).ready(function() {
-            /*  $(".modal-title").html("Inscripción al curso " + $('#curso').val());
-             $("#pago").click(function() { */
-            //$("#form-pago").submit();
-            //event.preventDefault();
-            /* var $form = $('#form-pago'); */
-            //$form = $(this);
+            $(".modal-title").html("Inscripción al curso " + $('#curso').val());
+            $("#pago").click(function() {
+            $("#form-pago").submit();
+            event.preventDefault();
+            var $form = $('#form-pago');
+            $form = $(this);
 
             /* Previene hacer submit más de una vez */
-            /* $("#pago").prop("disabled", true);
-            Conekta.token.create($form, conektaSuccessResponseHandler, conektaErrorResponseHandler); */
+            $("#pago").prop("disabled", true);
+            Conekta.token.create($form, conektaSuccessResponseHandler, conektaErrorResponseHandler);
             /* Previene que la información de la forma sea enviada al servidor */
-            /*     return false;
-            }); */
+            return false;
+            });
             //Codigo para el tipo de transaccion
-            /* $("#tarjeta").click(function() {
+            $("#tarjeta").click(function() {
                 $("#tipo_cobro").val("tarjeta");
-            }); */
-            /* $("#oxxo").click(function() {
+            });
+            $("#oxxo").click(function() {
                 $("#tipo_cobro").val("oxxo");
-            }); */
+            });
             //Codigo para el descuento
             $("#descuento").click(function() {
                 var precio = $("#precioh").val();
@@ -218,22 +115,22 @@
                     );
                 });
             });
-            /* //Codigo para conekta........
+            //Codigo para conekta........
             var conektaSuccessResponseHandler;
             conektaSuccessResponseHandler = function(token) {
                 var $form;
                 $form = $('#form-pago');
 
                 /* Inserta el token_id en la forma para que se envíe al servidor */
-            //$form.append($("<input type=\"hidden\" name=\"conektaTokenId\" />").val(token.id));
+                $form.append($("<input type=\"hidden\" name=\"conektaTokenId\" />").val(token.id));
 
-            /* and submit */
-            //$form.get(0).submit();
-            //};
+                /* and submit */
+                $form.get(0).submit();
+            };
 
-            //conektaErrorResponseHandler = function(token) {
-            //  console.log(token);
-            //}; */
+            conektaErrorResponseHandler = function(token) {
+                console.log(token);
+            };
         });
-    </script>
-@endsection
+    </script> --}}
+            @endsection

@@ -28,11 +28,12 @@
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 <![endif]-->
+    <script type="text/javascript" src="https://pay.conekta.com/v1.0/js/conekta-checkout.min.js"></script>
     <script>
         window.onload = function() {
             if (navigator.maxTouchPoints > 0 || 'ontouchstart' in window) {
                 document.body.innerHTML =
-                "<h1>Acceso Restringido</h1><p>No puedes acceder desde un móvil o tablet.</p>";
+                    "<h1>Acceso Restringido</h1><p>No puedes acceder desde un móvil o tablet.</p>";
             }
         };
     </script>
