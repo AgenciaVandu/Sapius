@@ -99,30 +99,43 @@ class InscripcionController extends Controller
         return view('registro.inscripcion')->with('curso',$curso);
     }
 
-    public function pago(Request $request)
-    {
+        public function pago(Request $request){
 
-        //Codigo para crear la referencia de la transaccion ya sea con tarjeta o en oxxo
-        $cursoProgramado = CursoProgramado::with('Curso')->where('id', $request->curso_programado_id)->first();
-        $curso = $cursoProgramado->Curso;
+            /*  dd($request); */
+            //Codigo para crear la referencia de la transaccion ya sea con tarjeta o en oxxo
+            //$order = new Order;
+            $cursoProgramado = CursoProgramado::with('Curso')->where('id',$request->curso_programado_id)->first();
+            $curso = $cursoProgramado->Curso;
+            /* try {
+            if($request->tipo_cobro == "tarjeta"){
+                $order = $this->payment($request,$curso);
+                $this->correoTarjeta($order);
+            }else if($request->tipo_cobro == "oxxo"){
+                $order = $this->paymentOxxo($request);
+                $this->correoOxxo($order);
+            }else{
+                //tipo_cobro no definido
+            }
+            } catch (\Throwable $th) {
 
+            } */
 
-        //***********Validar si previamente el alumno fue inscrito*******************
+            //***********Validar si previamente el alumno fue inscrito*******************
 
-
-            $inscripcion = new Inscripcion();
+            /* if(is_null ($order->id) == false){ */
+            $inscripcion = New Inscripcion();
 
             $inscripcion->user_id = Auth::user()->id;
             $inscripcion->curso_programado_id = $request->curso_programado_id;
-            $inscripcion->referencia = $request->id;
-            $inscripcion->tipo_pago = $request->tipo_cobro;
-            $inscripcion->clave = $request->clave;
+            $inscripcion->referencia = null;
+            $inscripcion->tipo_pago = null;
+            $inscripcion->clave = null;
 
             $inscripcion->save();
-
-        $send = new Curso;
-        return $send->cursoDetallado($request);
-    }
+        /*      } */
+            $send = new Curso;
+            return $send->cursoDetallado($request);
+        }
 
     public function payment($request,$curso) {
         Conekta::setApiKey(config("elearning.token_conekta"));
