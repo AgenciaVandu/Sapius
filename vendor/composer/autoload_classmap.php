@@ -69,6 +69,7 @@ return array(
     'App\\Rules\\ValidRecaptcha' => $baseDir . '/app/Rules/ValidRecaptcha.php',
     'App\\Services\\SocialFacebookAccountService' => $baseDir . '/app/Services/SocialFacebookAccountService.php',
     'App\\SocialFacebookAccount' => $baseDir . '/app/SocialFacebookAccount.php',
+    'App\\Teacher' => $baseDir . '/app/Teacher.php',
     'App\\User' => $baseDir . '/app/User.php',
     'App\\Utilerias\\Importador' => $baseDir . '/app/Utilerias/Importador.php',
     'Attribute' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',

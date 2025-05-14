@@ -272,7 +272,26 @@
             <div class="glide">
                 <div class="glide__track" data-glide-el="track">
                     <ul class="glide__slides">
-                        <li class="glide__slide">
+                        @foreach ($teachers as $teacher)
+                            <li class="glide__slide">
+                                <div class="docentes__persona">
+                                    <div class="maestro-img">
+                                        <img src="{{ asset('storage/' . $teacher->img) }}" class="img-fluid pb-3"
+                                            alt="Maestro sapius" loading="lazy">
+                                    </div>
+                                    <h5 style="color: #fff;">{{ $teacher->name }} <br> <small
+                                            style="color: #30D6E6;">{{$teacher->description}}</small></h5>
+                                    <small style="color: #fff;" class="pb-3">Nuestro cuerpo docente esta disponible para
+                                        pláticas,
+                                        conferencias y ponencias.
+                                    </small>
+                                    <button type="button" class="btn btn-primary" data-toggle="modal"
+                                        data-target="#sapius-info">Enviar
+                                        mensaje</button>
+                                </div>
+                            </li>
+                        @endforeach
+                        {{-- <li class="glide__slide">
                             <div class="docentes__persona">
                                 <div class="maestro-img">
                                     <img src="{{ asset('img/m-6.png') }}" class="img-fluid pb-3" alt="Maestro sapius"
@@ -367,7 +386,7 @@
                                     data-target="#sapius-info">Enviar
                                     mensaje</button>
                             </div>
-                        </li>
+                        </li> --}}
 
 
                     </ul>

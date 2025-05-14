@@ -577,6 +577,7 @@ class ComposerStaticInit68f0bc3d9be4630a621f295ba3c49a88
         'App\\Rules\\ValidRecaptcha' => __DIR__ . '/../..' . '/app/Rules/ValidRecaptcha.php',
         'App\\Services\\SocialFacebookAccountService' => __DIR__ . '/../..' . '/app/Services/SocialFacebookAccountService.php',
         'App\\SocialFacebookAccount' => __DIR__ . '/../..' . '/app/SocialFacebookAccount.php',
+        'App\\Teacher' => __DIR__ . '/../..' . '/app/Teacher.php',
         'App\\User' => __DIR__ . '/../..' . '/app/User.php',
         'App\\Utilerias\\Importador' => __DIR__ . '/../..' . '/app/Utilerias/Importador.php',
         'Attribute' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',

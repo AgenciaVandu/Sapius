@@ -13,6 +13,7 @@
 
 use App\Models\Landing\Pride;
 use App\Models\Landing\Slide;
+use App\Models\Landing\Teacher;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
@@ -23,7 +24,8 @@ use App\User;
 Route::get('/', function () {
     $images = Slide::where('section','like','slider-index')->get();
     $prides = Pride::all();
-    return view('index',compact('images','prides'));
+    $teachers = Teacher::all();
+    return view('index',compact('images','prides','teachers'));
 })->name('landing.home');
 
 
@@ -79,6 +81,10 @@ Route::group(['middleware' => ['admin','restrict.mobile'],'prefix' => 'admin'], 
     Route::post('/configuraciones/pride/upload', 'HomeController@uploadpride')->name('admin.configuracion.pride');
     Route::put('/configuraciones/pride/{pride}/update', 'HomeController@updatePride')->name('admin.configuracion.pride.update');
     Route::get('/configuraciones/pride/{pride}/delete', 'HomeController@deletePride')->name('admin.configuracion.pride.delete');
+
+    Route::post('/configuraciones/teacher/upload', 'HomeController@uploadTeacher')->name('admin.configuracion.teacher');
+    Route::put('/configuraciones/teacher/{teacher}/update', 'HomeController@updateTeacher')->name('admin.configuracion.teacher.update');
+    Route::get('/configuraciones/teacher/{teacher}/delete', 'HomeController@deleteTeacher')->name('admin.configuracion.teacher.delete');
 
     //Admistracion de usuarios
     Route::get('users/{activo?}', 'UserController@index')->name('users.index');

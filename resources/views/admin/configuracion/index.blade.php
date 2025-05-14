@@ -217,14 +217,132 @@
                                     <button class="btn btn-link btn-block text-left collapsed" type="button"
                                         data-toggle="collapse" data-target="#collapseThree" aria-expanded="false"
                                         aria-controls="collapseThree">
-                                        Funciones adicionales
+                                        Administracion de maestros
                                     </button>
                                 </h2>
                             </div>
                             <div id="collapseThree" class="collapse" aria-labelledby="headingThree"
                                 data-parent="#accordionExample">
                                 <div class="card-body">
-                                    Por definir
+                                    <p class="d-flex flex-row-reverse">
+                                        <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample"
+                                            role="button" aria-expanded="false" aria-controls="collapseExample">
+                                            Agregar nuevo
+                                        </a>
+                                    </p>
+                                    <div class="collapse" id="collapseExample">
+                                        <div class="card card-body">
+                                            <form action="{{ route('admin.configuracion.teacher') }}" method="POST"
+                                                enctype='multipart/form-data'>
+                                                @csrf
+                                                <div class="form-group">
+                                                    <label for="name">Nombre</label>
+                                                    <input type="text" class="form-control" id="name" name="name"
+                                                        required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="text">Descripcion</label>
+                                                    <input type="text" class="form-control" id="text" name="description"
+                                                        required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="img">Foto</label>
+                                                    <input type="file" name="image4" required>
+                                                </div>
+                                                <div class="d-flex flex-row-reverse mb-4">
+
+                                                    <button type="submit" class="btn btn-primary">Subir</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+
+                                    <table class="table table-sm p-5">
+                                        <thead class="thead-dark">
+                                            <tr>
+                                                <th scope="col">Foto</th>
+                                                <th scope="col">Nombre</th>
+                                                <th scope="col">Descripcion</th>
+                                                <th scope="col"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($teachers as $teacher)
+                                                <tr>
+                                                    <th scope="row">
+                                                        <img src="{{ asset('storage/' . $teacher->img) }}"
+                                                            class="img-fluid rounded-circle" style="width: 3.8rem;"
+                                                            alt="">
+                                                    </th>
+                                                    <td>{{ $teacher->name }}</td>
+                                                    <td>{{ $teacher->description }}</td>
+                                                    <td>
+                                                        <!-- Button trigger modal -->
+                                                        <button type="button" class="btn btn-sm btn-secondary"
+                                                            data-toggle="modal"
+                                                            data-target="#exampleModalTeacher{{ $teacher->id }}">
+                                                            Editar
+                                                        </button>
+
+                                                        <!-- Modal -->
+                                                        <div class="modal fade" id="exampleModalTeacher{{ $teacher->id }}"
+                                                            tabindex="-1"
+                                                            aria-labelledby="exampleModalLabel{{ $teacher->id }}"
+                                                            aria-hidden="true">
+                                                            <div class="modal-dialog">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h5 class="modal-title"
+                                                                            id="exampleModalLabel{{ $teacher->id }}">
+                                                                            Editar información</h5>
+                                                                        <button type="button" class="close"
+                                                                            data-dismiss="modal" aria-label="Close">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <form
+                                                                            action="{{ route('admin.configuracion.teacher.update', $teacher) }}"
+                                                                            method="POST" enctype='multipart/form-data'>
+                                                                            @method('PUT')
+                                                                            @csrf
+                                                                            <div class="form-group">
+                                                                                <label for="name">Nombre</label>
+                                                                                <input type="text" class="form-control"
+                                                                                    id="name" name="name"
+                                                                                    value="{{ $teacher->name }}" required>
+                                                                            </div>
+                                                                            <div class="form-group">
+                                                                                <label for="text">Descripcion</label>
+                                                                                <input type="text" class="form-control"
+                                                                                    id="text" name="description"
+                                                                                    value="{{ $teacher->description }}" required>
+                                                                            </div>
+                                                                            <div class="form-group">
+                                                                                <label for="img">Foto</label>
+                                                                                <input type="file" name="image5">
+                                                                            </div>
+                                                                            <div class="modal-footer">
+                                                                                <a href="{{ route('admin.configuracion.teacher.delete', $teacher) }}"
+                                                                                    class="btn btn-danger mr-auto">Eliminar</a>
+
+                                                                                <button type="button"
+                                                                                    class="btn btn-secondary"
+                                                                                    data-dismiss="modal">Cancelar</button>
+                                                                                <button type="submit"
+                                                                                    class="btn btn-primary">Guardar
+                                                                                    cambios</button>
+                                                                            </div>
+                                                                        </form>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>

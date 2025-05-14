@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Landing\Pride;
 use App\Models\Landing\Slide;
+use App\Models\Landing\Teacher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Registro\CursoProgramado;
@@ -73,7 +74,8 @@ class HomeController extends Controller
     {
         $slides = Slide::where('section', 'LIKE', 'slider-index')->get();
         $prides = Pride::paginate(5);
-        return view('admin.configuracion.index', compact('slides', 'prides'));
+        $teachers = Teacher::paginate(5);
+        return view('admin.configuracion.index', compact('slides', 'prides','teachers'));
     }
 
     public function uploadslide(Request $request)
@@ -162,6 +164,66 @@ class HomeController extends Controller
     public function deletePride(Pride $pride)
     {
         $pride->delete();
+        return redirect()->back()->with('success', 'Pride Delete successfully.');
+    }
+
+
+
+    //teachers
+
+    public function uploadTeacher(Request $request)
+    {
+
+        $request->validate([
+            'name' => 'required',
+            'description' => 'required',
+            'image4' => 'required|max:2048',
+        ]);
+
+        try {
+            $url = $request->file('image4')->store('teachers', 'public');
+
+            Teacher::create([
+                'img' => $url,
+                'name' => $request->name,
+                'description' => $request->description,
+            ]);
+
+            return redirect()->back()->with('success', 'Teacher uploaded successfully.');
+        } catch (\Exception $e) {
+            Log::error('Error uploading slide: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Failed to upload slide.');
+        }
+    }
+
+    public function updateTeacher(Request $request, Teacher $teacher)
+    {
+
+        $request->validate([
+            'name' => 'required',
+            'description' => 'required',
+        ]);
+
+        if ($request->image5) {
+            $url = $request->file('image5')->store('teachers', 'public');
+            $teacher->update([
+                'img' => $url,
+                'name' => $request->name,
+                'description' => $request->description,
+            ]);
+            return redirect()->back()->with('success', 'Teacher uploaded successfully.');
+        } else {
+            $teacher->update([
+                'name' => $request->name,
+                'description' => $request->description,
+            ]);
+            return redirect()->back()->with('success', 'Teacher uploaded successfully.');
+        }
+    }
+
+    public function deleteTeacher(Teacher $teacher)
+    {
+        $teacher->delete();
         return redirect()->back()->with('success', 'Pride Delete successfully.');
     }
 }
