@@ -63,6 +63,10 @@ Route::get ('/cursos-enarm', function(){
 Route::get ('/cursos-presenciales', function (){
     return view('cursos-front.presencial');
 });
+
+
+Route::get('/checkout', 'CheckoutController@createCheckout');
+
 //Socialite
 Route::get('/redirect', 'SocialAuthFacebookController@redirect');
 Route::get('/callback', 'SocialAuthFacebookController@callback');

@@ -2175,6 +2175,51 @@
             "install-path": "../league/oauth1-client"
         },
         {
+            "name": "mercadopago/sdk",
+            "version": "v0.5.6",
+            "version_normalized": "0.5.6.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mercadopago/DEPRECATED-sdk-php.git",
+                "reference": "67f65735d5d720a7fc2569163f5c7d150adc613d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mercadopago/DEPRECATED-sdk-php/zipball/67f65735d5d720a7fc2569163f5c7d150adc613d",
+                "reference": "67f65735d5d720a7fc2569163f5c7d150adc613d",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*"
+            },
+            "time": "2019-04-15T14:29:38+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "classmap": [
+                    "lib/mercadopago.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "Horacio Casatti",
+                    "email": "horacio.casatti@mercadolibre.com"
+                }
+            ],
+            "description": "MercadoPago SDK module for Payments integration.",
+            "keywords": [
+                "mercadopago",
+                "sdk"
+            ],
+            "support": {
+                "issues": "https://github.com/mercadopago/DEPRECATED-sdk-php/issues",
+                "source": "https://github.com/mercadopago/DEPRECATED-sdk-php/tree/v0.5.6"
+            },
+            "abandoned": true,
+            "install-path": "../mercadopago/sdk"
+        },
+        {
             "name": "mobiledetect/mobiledetectlib",
             "version": "2.8.45",
             "version_normalized": "2.8.45.0",
