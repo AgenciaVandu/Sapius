@@ -10,6 +10,7 @@ use App\Models\Registro\CursoProgramado;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Conekta\Conekta;
+use Conekta\Model\Customer;
 use Conekta\Order;
 use DateTime;
 use DateInterval;
@@ -290,5 +291,44 @@ class CursoController extends Controller
           }
           //\Log::debug(dd($order));
           return view('cursos.payment')->with('order',$order);
+    }
+
+
+
+
+    public function checkout($curso_id){
+        Conekta::setApiKey("key_tVsOKcb7lpkFQUwsWWrXUT2");
+        Conekta::setApiVersion("2.2.0");
+
+        $validCustomer = [
+        'name' => "Payment Link Name",
+        'email' => "Juan Perez"
+        ];
+        $customer = Customer::create($validCustomer);
+
+                $validOrderWithCheckout = array(
+        'line_items'=> array(
+            array(
+            'name'=> 'Box of Cohiba S1s',
+            'description'=> 'Imported From Mex.',
+            'unit_price'=> 120000,
+            'quantity'=> 1,
+            'sku'=> 'cohbs1',
+            'category'=> 'food',
+            'tags' => array('food', 'mexican food')
+            )
+        ),
+        'checkout' => array(
+            'allowed_payment_methods' => array("cash", "card", "bank_transfer"),
+            'monthly_installments_enabled' => true,
+            'monthly_installments_options' => array(3, 6, 9, 12)
+        ),
+        'customer_info' => array(
+            'customer_id'	=>	'cus_2nHprwaWFn7QJ21Lj'
+        ),
+        'currency'    => 'mxn',
+        'metadata'    => array('test' => 'extra info')
+        );
+        $order = Order::create($validOrderWithCheckout);
     }
 }

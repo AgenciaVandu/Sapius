@@ -266,56 +266,66 @@
         },
         {
             "name": "conekta/conekta-php",
-            "version": "v4.3.0",
-            "version_normalized": "4.3.0.0",
+            "version": "7.0.1",
+            "version_normalized": "7.0.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/conekta/conekta-php.git",
-                "reference": "6122a1a532cc0d8940a334b3f9375152431d0781"
+                "reference": "852b14307e97f97d56030daf83efbcc80bb9ec30"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/conekta/conekta-php/zipball/6122a1a532cc0d8940a334b3f9375152431d0781",
-                "reference": "6122a1a532cc0d8940a334b3f9375152431d0781",
+                "url": "https://api.github.com/repos/conekta/conekta-php/zipball/852b14307e97f97d56030daf83efbcc80bb9ec30",
+                "reference": "852b14307e97f97d56030daf83efbcc80bb9ec30",
                 "shasum": ""
             },
             "require": {
                 "ext-curl": "*",
                 "ext-json": "*",
                 "ext-mbstring": "*",
-                "php": ">=7.2"
+                "guzzlehttp/guzzle": "^7.3",
+                "guzzlehttp/psr7": "^1.7 || ^2.0",
+                "php": "^7.4 || ^8.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "~8"
+                "friendsofphp/php-cs-fixer": "^3.5",
+                "phpstan/phpstan": "2.0.1",
+                "phpunit/phpunit": "^9.0 || ^10.0"
             },
-            "time": "2020-09-23T20:21:49+00:00",
+            "time": "2025-04-30T11:23:33+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
-                "classmap": [
-                    "lib/Conekta/"
-                ]
+                "psr-4": {
+                    "Conekta\\": "lib/"
+                }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "autoload-dev": {
+                "psr-4": {
+                    "Conekta\\Test\\": "test/"
+                }
+            },
             "license": [
                 "MIT"
             ],
             "authors": [
                 {
-                    "name": "Conekta  and contributors",
+                    "name": "engineering@conekta.com",
                     "homepage": "https://github.com/conekta/conekta-php/contributors"
                 }
             ],
             "description": "Conekta PHP Library",
-            "homepage": "https://www.conekta.io/",
+            "homepage": "https://www.conekta.com/",
             "keywords": [
                 "api",
                 "conekta",
-                "payment processing"
+                "php",
+                "rest",
+                "sdk"
             ],
             "support": {
-                "issues": "https://github.com/conekta/conekta-php/issues",
-                "source": "https://github.com/conekta/conekta-php/tree/v4.3.0"
+                "source": "https://github.com/conekta/conekta-php/tree/v7.0.1",
+                "issues": "https://github.com/conekta/conekta-php/issues"
             },
             "install-path": "../conekta/conekta-php"
         },

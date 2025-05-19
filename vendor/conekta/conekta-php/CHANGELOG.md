@@ -1,3 +1,30 @@
+## [5.0.2](https://github.com/conekta/conekta-php/pull/210) - 2023-02-16
+
+## What's Changed
+* Add GitHub actions by @fcarrero in https://github.com/conekta/conekta-php/pull/208
+* Configure Renovate by @renovate in https://github.com/conekta/conekta-php/pull/200
+* [209] avoid dynamic properties by @fcarrero in https://github.com/conekta/conekta-php/pull/210
+
+## New Contributors
+* @fcarrero made their first contribution in https://github.com/conekta/conekta-php/pull/208
+* @renovate made their first contribution in https://github.com/conekta/conekta-php/pull/200
+
+**Full Changelog**: https://github.com/conekta/conekta-php/compare/5.0.1...5.0.2
+
+## [5.0.1](https://github.com/conekta/conekta-php/pull/206) - 2022-06-15
+
+[Full Changelog](https://github.com/conekta/conekta-php/compare/v5.0.0...v5.0.1)
+
+### Fix
+- Revert Changes
+
+## [5.0.0](https://github.com/conekta/conekta-php/pull/204) - 2022-06-15
+
+[Full Changelog](https://github.com/conekta/conekta-php/compare/v4.3.0...v5.0.0)
+
+### Feature
+- Upgrade php version to 8.0
+
 ## [4.3.0](https://github.com/conekta/conekta-php/releases/tag/v4.3.0) - 2020-07-07
 ### Feature
 - Add models to support payment link (aka checkout).

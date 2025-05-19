@@ -43,6 +43,7 @@
                                         <h4> ${{ $curso->precio_en_moneda }} MxN</h4>
                                     </div>
                                     <div class="col-md-6">
+                                        {{--  <a class="btn btn-secondary" href="{{ route('checkout',$curso->id) }}">Comprar</a> --}}
                                         <!-- Button trigger modal -->
                                         <button type="button" class="btn btn-primary" data-toggle="modal"
                                             data-target="#exampleModal{{ $curso->id }}">
