@@ -64,6 +64,26 @@ Route::get ('/cursos-presenciales', function (){
     return view('cursos-front.presencial');
 });
 
+Route::get ('/guias-medicina', function (){
+    return view('cursos-front.guia-medicina');
+})->name('guias.medicina');
+
+Route::get ('/guias-nutricion', function (){
+    return view('cursos-front.guia-nutricion');
+})->name('guias.nutricion');
+
+Route::get ('/simuladores-medicina', function (){
+    return view('cursos-front.simulador-medicina');
+})->name('simuladores.medicina');
+
+Route::get ('/simuladores-nutricion', function (){
+    return view('cursos-front.simulador-nutricion');
+})->name('simuladores.nutricion');
+
+
+
+
+
 
 Route::get('/checkout', 'CheckoutController@createCheckout');
 

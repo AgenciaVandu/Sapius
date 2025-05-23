@@ -67,6 +67,28 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/cursos-enarm">ENARM</a>
                     </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle"
+                            id="navbarDropdown" role="button" data-toggle="dropdown" aria-expanded="false">
+                            SIMULADORES
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="{{ route('simuladores.medicina') }}">Medicina</a>
+                            <a class="dropdown-item" href="{{ route('simuladores.nutricion') }}">Nutrición</a>
+
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle"
+                            id="navbarDropdown" role="button" data-toggle="dropdown" aria-expanded="false">
+                            GUIAS
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="{{ route('guias.medicina') }}">Medicina</a>
+                            <a class="dropdown-item" href="{{ route('guias.nutricion') }}">Nutrición</a>
+
+                        </div>
+                    </li>
                 </ul>
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item active">
@@ -185,7 +207,7 @@
                 <div class="col-md-12">
                     <div class="pt-5" style="color: #fff;">
                         <p class="copyright" style="text-align: center;">
-                            <span class="pr-2"><a href="{{ route('termsandconditions') }}" >Términos y
+                            <span class="pr-2"><a href="{{ route('termsandconditions') }}">Términos y
                                     condiciones</a><span class="pl-2">|</span></span>
                             <span class="pr-2"><a href="{{ asset('/politica-sapius.pdf') }}"
                                     target="blank_">Política de privacidad</a><span class="pl-2">|</span></span> <br

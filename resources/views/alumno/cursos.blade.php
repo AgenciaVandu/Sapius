@@ -19,8 +19,8 @@
                 @foreach ($cursos as $curso)
                     @if ($curso->curso->activo == 'si')
                         <div class="card shadow">
-                            <a href="javscript:void(0)"
-                                onclick="event.preventDefault(); document.getElementById('curso-{{ $curso->id }}').submit();">
+                            {{-- <a href="javscript:void(0)"
+                                onclick="event.preventDefault(); document.getElementById('curso-{{ $curso->id }}').submit();"> --}}
                                 @if ($curso->Curso->imagen)
                                     <img src="{{ route(Auth::user()->rol[0]->slug . '.cursos.image', ['file' => $curso->Curso->imagen]) }}"
                                         id="img" alt="..." class="img-thumbnail">
@@ -29,7 +29,7 @@
                                         src="{{ asset('vendor/adminmart/assets/images/big/cursos.png') }}"
                                         alt="Card image cap">
                                 @endif
-                            </a>
+{{--                             </a> --}}
                             <form method="POST" action="{{ route('cursos.detallado') }}" id="curso-{{ $curso->id }}">
                                 @csrf
                                 <input name="curso_programado_id" type="hidden" value="{{ $curso->id }}">
