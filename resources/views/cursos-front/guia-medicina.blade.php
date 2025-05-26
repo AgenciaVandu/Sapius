@@ -20,7 +20,7 @@
     </header>
     <section class="exani">
         <div class="container">
-            <div class="row">
+            <div class="row d-flex justify-content-center ">
                 <div class="col-md-7 col-lg-7 col-sm-12 m-auto pb-4 exani__faq">
                     <h3 class="color-gray">
                         <strong>Guía Oficial Sapius – EGEL Plus Medicina</strong>
@@ -50,12 +50,23 @@
                         Con Sapius, tendrás las herramientas necesarias para afrontar el EGEL Plus con seguridad y
                         alcanzar el éxito académico.
                     </p>
-                    <a href="" class="btn btn-primary">COMENZAR</a>
+                    {{-- <a href="" class="btn btn-primary">COMENZAR</a> --}}
                 </div>
-                <div class="col-md-5 col-lg-5 col-sm-12 text-center">
-                    <div>
+                <div class="col-md-5 col-lg-5 col-sm-12">
+                    {{-- <div>
                         <img src="{{ asset('img/webp/egel.webp') }}" class="img-fluid" alt="Material EGEL PLUS">
-                    </div>
+                    </div> --}}
+                    @foreach ($guias as $guia)
+                        <div class="card text-center" style="width: 35rem;">
+                            <img src="{{ route(Auth::user()->rol[0]->slug . '.cursos.image', ['file' => $guia->Curso->imagen]) }}" class="card-img-top" alt="{{ $guia->titulo }}">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ $guia->Curso->titulo }}</h5>
+                                <p class="card-text">{{ $guia->identificador }}</p>
+                                {{-- <p class="card-text">{{!! $guia->Curso->descripcion !!}}</p> --}}
+                                <a href="#" class="btn btn-primary">Obtener la guía</a>
+                            </div>
+                        </div>
+                    @endforeach
                 </div>
             </div>
         </div>
@@ -131,7 +142,8 @@
             <div class="container text-center">
                 <div class="posicion">
                     <h1 class="cta-1" style="color: #fff;">ACREDITA EL EGEL PLUS CON EXCELENCIA </h1>
-                    <P style="color: #fff;">El 40% de nuestros estudiantes obtiene el premio naciona a la excelencia EGEL</P>
+                    <P style="color: #fff;">El 40% de nuestros estudiantes obtiene el premio naciona a la excelencia EGEL
+                    </P>
                     <a href="" class="btn btn-primary">SOLICITA UNA CLASE MUESTRA</a>
                 </div>
             </div>

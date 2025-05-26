@@ -14,6 +14,7 @@
 use App\Models\Landing\Pride;
 use App\Models\Landing\Slide;
 use App\Models\Landing\Teacher;
+use App\Models\Registro\CursoProgramado;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
@@ -65,7 +66,8 @@ Route::get ('/cursos-presenciales', function (){
 });
 
 Route::get ('/guias-medicina', function (){
-    return view('cursos-front.guia-medicina');
+    $guias = CursoProgramado::where('category_id', 2)->where('identificador','like','%medicina%')->where('activo','si')->get();
+    return view('cursos-front.guia-medicina', compact('guias'));
 })->name('guias.medicina');
 
 Route::get ('/guias-nutricion', function (){
