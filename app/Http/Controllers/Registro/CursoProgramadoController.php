@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Registro;
 
 use App\Http\Controllers\Controller;
+use App\Models\Cursos\Category;
 use App\Models\Registro\Inscripcion;
 use App\Models\Registro\CursoProgramado;
 use App\Models\Registro\ContenidoProgramado;
@@ -28,9 +29,9 @@ class CursoProgramadoController extends Controller
 
     public function getAllSchedule($curso_id,$active){
         if($active == "enable")
-        $cursos = CursoProgramado::with('instructor')->where('curso_id',$curso_id)->where('activo', 'si')->get();
+        $cursos = CursoProgramado::with(['instructor','category'])->where('curso_id',$curso_id)->where('activo', 'si')->get();
         elseif($active == "disable")
-        $cursos = CursoProgramado::with('instructor')->where('curso_id',$curso_id)->where('activo', 'no')->get();
+        $cursos = CursoProgramado::with(['instructor','category'])->where('curso_id',$curso_id)->where('activo', 'no')->get();
         //dd($cursos);
         return $cursos->toJson();
     }
@@ -42,11 +43,12 @@ class CursoProgramadoController extends Controller
      */
     public function create(Request $request)
     {
+        $categories = Category::all();
         $curso = Curso::find($request->curso_id);
 
         $instructor = User::whereHas('roles', function ($q) {
             $q->where('roles.slug', '=', 'instructor'); // or whatever constraint you need here
-          })->get();
+        })->get();
 
         $curso_programado = new CursoProgramado;
         $curso_programado->curso_id = $curso->id;
@@ -54,7 +56,8 @@ class CursoProgramadoController extends Controller
         return view('registro.create-schedule')
             ->with('curso',$curso)
             ->with('instructores',$instructor)
-            ->with('curso_programado',$curso_programado);
+            ->with('curso_programado',$curso_programado)
+            ->with('categories',$categories);
     }
 
     /**
@@ -73,6 +76,7 @@ class CursoProgramadoController extends Controller
         $curso->fecha_inicio = date('Y-m-d H:i:s',strtotime(str_replace('/', '-', $request->fecha_inicio))); // $request->fecha_inicio;
         $curso->fecha_fin = date('Y-m-d H:i:s',strtotime(str_replace('/', '-', $request->fecha_fin))); // $request->fecha_fin;
         $curso->precio = $request->precio;
+        $curso->category_id = $request->category_id;
         $curso->clave_descuento = $request->clave_descuento;
         //$curso->activo = "si";
         //\Log::debug(dd($curso));
@@ -100,6 +104,7 @@ class CursoProgramadoController extends Controller
      */
     public function edit(Request $request)
     {
+        $categories = Category::all();
         $curso = Curso::find($request->curso_id);
 
         $curso_programado = CursoProgramado::where('id',$request->cp_id)
@@ -107,12 +112,13 @@ class CursoProgramadoController extends Controller
 
         $instructor = User::whereHas('roles', function ($q) {
             $q->where('roles.slug', '=', 'instructor'); // or whatever constraint you need here
-          })->get();
+        })->get();
 
         return view('registro.create-schedule')
                     ->with('curso',$curso)
                     ->with('instructores',$instructor)
-                    ->with('curso_programado',$curso_programado);
+                    ->with('curso_programado',$curso_programado)
+                    ->with('categories',$categories);
     }
 
     /**
@@ -132,6 +138,7 @@ class CursoProgramadoController extends Controller
         $curso->fecha_inicio = date('Y-m-d H:i:s',strtotime(str_replace('/', '-', $request->fecha_inicio))); // $request->fecha_inicio;
         $curso->fecha_fin = date('Y-m-d H:i:s',strtotime(str_replace('/', '-', $request->fecha_fin))); // $request->fecha_fin;
         $curso->precio = $request->precio;
+        $curso->category_id = $request->category_id;
         $curso->clave_descuento = $request->clave_descuento;
         //$curso->activo = "si";
         //\Log::debug(dd($curso));

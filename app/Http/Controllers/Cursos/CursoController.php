@@ -6,6 +6,7 @@ use App\Models\Cursos\Curso;
 use App\Models\Registro\ContenidoProgramado;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Cursos\Category;
 use App\Models\Registro\CursoProgramado;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
@@ -54,7 +55,8 @@ class CursoController extends Controller
     public function create()
     {
         //vista
-        return view('cursos.create');
+        $categories = Category::all();
+        return view('cursos.create', compact('categories'));
     }
 
     /**

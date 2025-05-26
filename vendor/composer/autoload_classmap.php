@@ -49,6 +49,7 @@ return array(
     'App\\Mail\\SoporteTecnico' => $baseDir . '/app/Mail/SoporteTecnico.php',
     'App\\Mail\\TareaEmail' => $baseDir . '/app/Mail/TareaEmail.php',
     'App\\Mail\\TarjetaEmail' => $baseDir . '/app/Mail/TarjetaEmail.php',
+    'App\\Models\\Cursos\\Category' => $baseDir . '/app/Models/Cursos/Category.php',
     'App\\Models\\Cursos\\Curso' => $baseDir . '/app/Models/Cursos/Curso.php',
     'App\\Models\\Cursos\\Leccion' => $baseDir . '/app/Models/Cursos/Leccion.php',
     'App\\Models\\Cursos\\Media' => $baseDir . '/app/Models/Cursos/Media.php',

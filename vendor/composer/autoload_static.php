@@ -562,6 +562,7 @@ class ComposerStaticInit68f0bc3d9be4630a621f295ba3c49a88
         'App\\Mail\\SoporteTecnico' => __DIR__ . '/../..' . '/app/Mail/SoporteTecnico.php',
         'App\\Mail\\TareaEmail' => __DIR__ . '/../..' . '/app/Mail/TareaEmail.php',
         'App\\Mail\\TarjetaEmail' => __DIR__ . '/../..' . '/app/Mail/TarjetaEmail.php',
+        'App\\Models\\Cursos\\Category' => __DIR__ . '/../..' . '/app/Models/Cursos/Category.php',
         'App\\Models\\Cursos\\Curso' => __DIR__ . '/../..' . '/app/Models/Cursos/Curso.php',
         'App\\Models\\Cursos\\Leccion' => __DIR__ . '/../..' . '/app/Models/Cursos/Leccion.php',
         'App\\Models\\Cursos\\Media' => __DIR__ . '/../..' . '/app/Models/Cursos/Media.php',

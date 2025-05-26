@@ -2,6 +2,7 @@
 
 namespace App\Models\Registro;
 
+use App\Models\Cursos\Category;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -25,6 +26,10 @@ class CursoProgramado extends Model
     public function Inscritos(){
         return $this->belongsToMany('App\User','inscripciones','curso_programado_id','user_id')
                 ->withPivot(['created_at','aceptado','id']);
+    }
+
+    public function category(){
+        return $this->belongsTo('App\Models\Cursos\Category', 'category_id', 'id');
     }
 
     protected static function boot()
