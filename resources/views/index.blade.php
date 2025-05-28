@@ -10,8 +10,8 @@
 @endpush
 @section('content')
     <header class="header__intro">
-        <div class="container">
-            <div class="row">
+        <div class="container mt-5">
+            <div class="row mt-3">
                 <div class="col-lg-7 col-md-12 col-sm-12 m-auto txt-banner">
                     <h1 style="color: #fff;">Prepárate con Sapius <br>
 
@@ -46,7 +46,7 @@
                             @if ($images)
                                 @foreach ($images as $image)
                                     <div class="carousel-item @if ($loop->first) active @endif">
-                                        <img src="{{ asset('storage/' . $image->img) }}" class="w-100 img-fluid"
+                                        <img src="{{ asset('storage/' . $image->img) }}" class="img-ajustada"
                                             alt="Estudiantes EGEL" loading="lazy">
                                     </div>
                                 @endforeach
@@ -223,7 +223,7 @@
                                     <div class="carousel-item @if ($loop->first) active @endif">
                                         <div class="card">
                                             <div class="cabecera-orgullo">
-                                                <img src="{{ asset('storage/' . $pride->img) }}" class="img-fluid"
+                                                <img src="{{ asset('storage/' . $pride->img) }}" class="rounded-circle" style="max-width: 15.4rem; max-height: 15.4rem;"
                                                     loading="lazy">
                                             </div>
                                             <h4 class="color-gray">{{ $pride->name }}</h4>
@@ -276,7 +276,7 @@
                             <li class="glide__slide">
                                 <div class="docentes__persona">
                                     <div class="maestro-img">
-                                        <img src="{{ asset('storage/' . $teacher->img) }}" class="img-fluid pb-3"
+                                        <img src="{{ asset('storage/' . $teacher->img) }}" class="rounded-circle" style="max-width: 15.4rem; max-height: 15.4rem; background: #ffffff;"
                                             alt="Maestro sapius" loading="lazy">
                                     </div>
                                     <h5 style="color: #fff;">{{ $teacher->name }} <br> <small

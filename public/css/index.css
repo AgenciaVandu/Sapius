@@ -21,7 +21,7 @@
 .objetivos .nav a {
     font-size: 1em !important;
     line-height: 1.3em;
-} 
+}
 .pills-objetivos {
     min-height: 450px;
     display: flex;
@@ -32,7 +32,7 @@
     color: #fff;
     margin: .25em 0 0 0;
     padding: 3em 0;
-} 
+}
 .pills-objetivos span {
     color: #30D6E6;
 }
@@ -46,10 +46,10 @@
     border-radius: 10px 10px 0px 0px !important;
     color: #30D6E6 !important;
     transition: 200ms ease-in ;
-} 
+}
 .pills-objetivos .objetivo {
     animation: movimiento 3s infinite ease-in;
-} 
+}
 @keyframes movimiento {
     0% {
         transform: translateY(0px);
@@ -87,7 +87,7 @@
     box-shadow: .2px 0 0.8em rgba(128, 128, 128, 0.29);
 }  @media (max-width: 1000px) {
     .bg-naranja .card {
-        left: 0px !important; 
+        left: 0px !important;
     }
     .centro-card {
         display: flex;
@@ -210,9 +210,32 @@ text-align: center;
     width: 100%;
     display: flex;
     justify-content: center;
- 
+
 }
 .card .boton {
     max-width: 320px;
-    
+
+}
+
+.img-ajustada {
+    height: 500px;
+    width: auto;
+    max-width: 100%;
+    object-fit: cover;
+    display: block;
+    margin: 0 auto;
+}
+
+/* Para tablets y móviles (pantallas medianas) */
+@media (max-width: 768px) {
+    .img-ajustada {
+        height: 400px;
+    }
+}
+
+/* Para móviles pequeños */
+@media (max-width: 480px) {
+    .img-ajustada {
+        height: 300px;
+    }
 }
