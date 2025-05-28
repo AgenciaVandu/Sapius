@@ -11,6 +11,7 @@
 |
 */
 
+use App\Models\Cursos\Category;
 use App\Models\Landing\Pride;
 use App\Models\Landing\Slide;
 use App\Models\Landing\Teacher;
@@ -66,12 +67,15 @@ Route::get ('/cursos-presenciales', function (){
 });
 
 Route::get ('/guias-medicina', function (){
-    $guias = CursoProgramado::where('category_id', 2)->where('identificador','like','%medicina%')->where('activo','si')->get();
+    $category = Category::where('name','guias')->first();
+    $guias = CursoProgramado::where('category_id', $category->id)->where('identificador','like','%medicina%')->where('activo','si')->get();
     return view('cursos-front.guia-medicina', compact('guias'));
 })->name('guias.medicina');
 
 Route::get ('/guias-nutricion', function (){
-    return view('cursos-front.guia-nutricion');
+    $category = Category::where('name','guias')->first();
+    $guias = CursoProgramado::where('category_id', $category->id)->where('identificador','like','%nutricion%')->where('activo','si')->get();
+    return view('cursos-front.guia-nutricion', compact('guias'));
 })->name('guias.nutricion');
 
 Route::get ('/simuladores-medicina', function (){

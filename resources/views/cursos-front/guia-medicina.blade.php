@@ -4,6 +4,9 @@
 @endpush
 @push('css')
     <link rel="stylesheet" href="{{ asset('css/exani3.css') }}">
+    <!-- Glide.js CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@glidejs/glide/dist/css/glide.core.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@glidejs/glide/dist/css/glide.theme.min.css">
 @endpush
 @section('content')
     <header class="bg-blue">
@@ -20,7 +23,7 @@
     </header>
     <section class="exani">
         <div class="container">
-            <div class="row d-flex justify-content-center ">
+            <div class="row">
                 <div class="col-md-7 col-lg-7 col-sm-12 m-auto pb-4 exani__faq">
                     <h3 class="color-gray">
                         <strong>Guía Oficial Sapius – EGEL Plus Medicina</strong>
@@ -53,20 +56,26 @@
                     {{-- <a href="" class="btn btn-primary">COMENZAR</a> --}}
                 </div>
                 <div class="col-md-5 col-lg-5 col-sm-12">
-                    {{-- <div>
-                        <img src="{{ asset('img/webp/egel.webp') }}" class="img-fluid" alt="Material EGEL PLUS">
-                    </div> --}}
-                    @foreach ($guias as $guia)
-                        <div class="card text-center" style="width: 35rem;">
-                            <img src="{{ route(Auth::user()->rol[0]->slug . '.cursos.image', ['file' => $guia->Curso->imagen]) }}" class="card-img-top" alt="{{ $guia->titulo }}">
-                            <div class="card-body">
-                                <h5 class="card-title">{{ $guia->Curso->titulo }}</h5>
-                                <p class="card-text">{{ $guia->identificador }}</p>
-                                {{-- <p class="card-text">{{!! $guia->Curso->descripcion !!}}</p> --}}
-                                <a href="#" class="btn btn-primary">Obtener la guía</a>
-                            </div>
+                    <div class="glide">
+                        <div class="glide__track" data-glide-el="track">
+                            <ul class="glide__slides">
+                                @foreach ($guias as $guia)
+                                    <li class="glide__slide">
+                                        <div class="card text-center mx-auto text-secondary" style="width: 25rem;">
+                                            <img src="{{ route(Auth::user()->rol[0]->slug . '.cursos.image', ['file' => $guia->Curso->imagen]) }}"
+                                                class="card-img-top" alt="{{ $guia->titulo }}">
+                                            <div class="card-body">
+                                                <h5 class="card-title">{{ $guia->Curso->titulo }}</h5>
+                                                <p class="card-text font-blod">{{ $guia->identificador }}</p>
+                                                {{-- <p class="card-text">{{!! $guia->Curso->descripcion !!}}</p> --}}
+                                                <a href="#" class="btn btn-primary">Obtener la guía</a>
+                                            </div>
+                                        </div>
+                                    </li>
+                                @endforeach
+                            </ul>
                         </div>
-                    @endforeach
+                    </div>
                 </div>
             </div>
         </div>
@@ -151,4 +160,28 @@
     </section>
     @include('components.preparacion')
     @include('components.info')
+    @push('js')
+        <script>
+            new Glide('.glide', {
+                perView: 1,
+                gap: 10,
+                autoplay: 2000,
+                bound: true,
+                breakpoints: {
+                    1200: {
+                        perView: 1,
+                        gap: 10
+                    },
+                    992: {
+                        perView: 1,
+                        gap: 20
+                    },
+                    600: {
+                        perView: 1,
+                        gap: 10
+                    }
+                }
+            }).mount();
+        </script>
+    @endpush
 @endsection
