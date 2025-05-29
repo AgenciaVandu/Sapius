@@ -159,7 +159,7 @@
         </div>
     </section>
     @include('components.preparacion')
-    @include('components.info')
+    @include('components.info', ['content' => 'guia-nutricion'])
     @push('js')
         <script>
             new Glide('.glide', {

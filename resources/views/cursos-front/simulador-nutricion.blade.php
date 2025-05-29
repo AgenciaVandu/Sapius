@@ -142,5 +142,5 @@
         </div>
     </section>
     @include('components.preparacion')
-    @include('components.info')
+    @include('components.info',[ 'content' => 'simulador-nutricion'])
 @endsection
