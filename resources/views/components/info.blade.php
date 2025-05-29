@@ -13,54 +13,73 @@
     switch ($content) {
         case 'simulador-nutricion':
             $items = collect([
-                ['text' => 'Simulador global “Atención nutricia”','data-target' => '#simuladores'],
-                ['text' => 'Simulador global “Servicios de alimentos”','data-target' => '#simuladores'],
-                ['text' => 'Simulador global “Programas de intervención nutricional a nivel poblacional”','data-target' => '#simuladores'],
-                ['text' => 'Simulador global “Comprensión lectora y redacción indirecta”','data-target' => '#simuladores'],
-                ['text' => 'Plataforma 24/7','data-target' => '#plataforma'],
-                ['text' => 'Contenido online','data-target' => '#simuladores'],
-                ['text' => 'Descuentos especiales al adquirir el curso y/o Guía actualizada Sapius','data-target' => '#guia'],
-
+                ['text' => 'Simulador global “Atención nutricia”', 'data-target' => '#simuladores'],
+                ['text' => 'Simulador global “Servicios de alimentos”', 'data-target' => '#simuladores'],
+                [
+                    'text' => 'Simulador global “Programas de intervención nutricional a nivel poblacional”',
+                    'data-target' => '#simuladores',
+                ],
+                [
+                    'text' => 'Simulador global “Comprensión lectora y redacción indirecta”',
+                    'data-target' => '#simuladores',
+                ],
+                ['text' => 'Plataforma 24/7', 'data-target' => '#plataforma'],
+                ['text' => 'Contenido online', 'data-target' => '#simuladores'],
+                [
+                    'text' => 'Descuentos especiales al adquirir el curso y/o Guía actualizada Sapius',
+                    'data-target' => '#guia',
+                ],
             ]);
-        break;
+            break;
         case 'simulador-medicina':
             $items = collect([
-                ['text' => 'Simulador global “1”','data-target' => '#guia'],
-                ['text' => 'Simulador global “2”','data-target' => '#plataforma'],
-                ['text' => 'Simulador global “2”','data-target' => '#simuladores'],
-                ['text' => 'Simulador global “Comprensión lectora y redacción indirecta”','data-target' => '#simuladores'],
-                ['text' => 'Plataforma 24/7','data-target' => '#plataforma'],
-                ['text' => 'Contenido online','data-target' => '#simuladores'],
-                ['text' => 'Descuentos especiales al adquirir el curso y/o simuladores','data-target' => '#guia'],
-
+                ['text' => 'Simulador global “1”', 'data-target' => '#guia'],
+                ['text' => 'Simulador global “2”', 'data-target' => '#plataforma'],
+                ['text' => 'Simulador global “2”', 'data-target' => '#simuladores'],
+                [
+                    'text' => 'Simulador global “Comprensión lectora y redacción indirecta”',
+                    'data-target' => '#simuladores',
+                ],
+                ['text' => 'Plataforma 24/7', 'data-target' => '#plataforma'],
+                ['text' => 'Contenido online', 'data-target' => '#simuladores'],
+                ['text' => 'Descuentos especiales al adquirir el curso y/o simuladores', 'data-target' => '#guia'],
             ]);
             break;
         case 'guia-nutricion':
             $items = collect([
-                ['text' => 'Guía Actualizada Sapius','data-target' => '#guia'],
-                ['text' => 'Plataforma 24/7','data-target' => '#plataforma'],
-                ['text' => 'Contenido online','data-target' => '#simuladores'],
-                ['text' => 'Preguntas de repaso en temas clave','data-target' => '#simuladores'],
-                ['text' => 'Exámenes por módulo','data-target' => '#plataforma'],
-                ['text' => 'Ejercicios de repaso prácticos','data-target' => '#simuladores'],
-                ['text' => 'Descuentos especiales al adquirir el curso y/o simuladores','data-target' => '#guia'],
-
+                ['text' => 'Guía Actualizada Sapius', 'data-target' => '#guia'],
+                ['text' => 'Plataforma 24/7', 'data-target' => '#plataforma'],
+                ['text' => 'Contenido online', 'data-target' => '#simuladores'],
+                ['text' => 'Preguntas de repaso en temas clave', 'data-target' => '#simuladores'],
+                ['text' => 'Exámenes por módulo', 'data-target' => '#plataforma'],
+                ['text' => 'Ejercicios de repaso prácticos', 'data-target' => '#simuladores'],
+                ['text' => 'Descuentos especiales al adquirir el curso y/o simuladores', 'data-target' => '#guia'],
             ]);
-        break;
+            break;
         case 'guia-medicina':
             $items = collect([
-                ['text' => 'Guía Actualizada Sapius','data-target' => '#guia'],
-                ['text' => 'Plataforma 24/7','data-target' => '#plataforma'],
-                ['text' => 'Contenido online','data-target' => '#simuladores'],
-                ['text' => 'Preguntas de repaso en temas clave','data-target' => '#simuladores'],
-                ['text' => 'Exámenes por módulo','data-target' => '#plataforma'],
-                ['text' => 'Ejercicios de repaso prácticos','data-target' => '#simuladores'],
-                ['text' => 'Descuentos especiales al adquirir el curso y/o simuladores','data-target' => '#guia'],
-
+                ['text' => 'Guía Actualizada Sapius', 'data-target' => '#guia'],
+                ['text' => 'Plataforma 24/7', 'data-target' => '#plataforma'],
+                ['text' => 'Contenido online', 'data-target' => '#simuladores'],
+                ['text' => 'Preguntas de repaso en temas clave', 'data-target' => '#simuladores'],
+                ['text' => 'Exámenes por módulo', 'data-target' => '#plataforma'],
+                ['text' => 'Ejercicios de repaso prácticos', 'data-target' => '#simuladores'],
+                ['text' => 'Descuentos especiales al adquirir el curso y/o simuladores', 'data-target' => '#guia'],
             ]);
-        break;
+            break;
+        case 'info':
+            $items = collect([
+                ['text' => 'Examen diagnóstico', 'data-target' => '#popup'],
+                ['text' => 'Paquete escolar', 'data-target' => '#paquete'],
+                ['text' => 'Guía actualizada', 'data-target' => '#guia'],
+                ['text' => 'Plataforma 24/7', 'data-target' => '#plataforma'],
+                ['text' => 'Portabilidad', 'data-target' => '#portabilidad'],
+                ['text' => 'Asesoría en vivo*', 'data-target' => '#asesoria'],
+                ['text' => 'Simuladores por tema, <br> módulos y globales', 'data-target' => '#simuladores'],
+                ['text' => 'Feedback en vivo*', 'data-target' => '#feedback'],
+            ]);
+            break;
         default:
-            # code...
             break;
     }
 @endphp
@@ -73,8 +92,9 @@
                     @foreach ($items as $item)
                         <div class="cta__incluye-contenido mb-2">
                             <span class="p-2">
-                                <a href="#" data-toggle="modal" data-target="#{{ Str::slug($item['data-target']) }}">
-                                    {{ $item['text'] }}
+                                <a href="#" data-toggle="modal"
+                                    data-target="#{{ Str::slug($item['data-target']) }}">
+                                    {!! $item['text'] !!}
                                 </a>
                             </span>
                             <img src="{{ asset('img/v1/icon/check.svg') }}" width="25" alt="">

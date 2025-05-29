@@ -15,7 +15,7 @@
             <p style="color: #fff;">"Tu formación, nuestra pasión"</p>
             <a href="{{ route('register') }}" class="btn btn-primary">Comenzar</a>
         </div>
-        
+
     </div>
 </header>
 <section id="exani">
@@ -26,7 +26,7 @@
         <div class="row pt-3">
             <div class="col-lg-4 col-md-6 col-lg-3 col-sm-12">
                 <h1 class="color-orange">1</h1>
-                <h5 class="color-gray">Abordaje clínico <br> 
+                <h5 class="color-gray">Abordaje clínico <br>
                 </h5>
                 <p style="color: gray">1. Identificación del problema de salud <br>
                     <span>2. Diagnóstico de la comunidad</span> <br>
@@ -35,7 +35,7 @@
             </div>
             <div class="col-lg-4 col-md-6 col-lg-3 col-sm-12">
                 <h1 class="color-orange">2</h1>
-                <h5 class="color-gray">Promoción de la salud <br> 
+                <h5 class="color-gray">Promoción de la salud <br>
                 </h5>
                 <p style="color: gray">1. Prevención<br>
                     <span>2. Protección específica</span> <br>
@@ -57,7 +57,7 @@
             </div>
             <div class="col-lg-4 col-md-6 col-lg-3 col-sm-12">
                 <h1 class="color-orange">4</h1>
-                <h5 class="color-gray">Comprensión lectora <br> 
+                <h5 class="color-gray">Comprensión lectora <br>
                 </h5>
                 <p style="color: gray">1. Ámbito de estudio<br>
                     <span>2. Ámbito literario</span> <br>
@@ -73,7 +73,7 @@
                 </p>
             </div>
         </div>
-        
+
     </div>
 </section>
 <section class="prueba">
@@ -136,7 +136,7 @@
     <div class="bg-2 mt-5">
         <div class="container text-center">
             <div class="posicion">
-                <h1 class="cta-1" style="color: #fff;">ACREDITA EL <span class="color-lowblue">EGEL PLUS MEDICINA</span> CON EXCELENCIA <br> <span class="lead">El 40% de nuestros estudiantes obtiene 
+                <h1 class="cta-1" style="color: #fff;">ACREDITA EL <span class="color-lowblue">EGEL PLUS MEDICINA</span> CON EXCELENCIA <br> <span class="lead">El 40% de nuestros estudiantes obtiene
                     el premio nacional a la excelencia EGEL</span></h1>
                 <a href="{{ route('register') }}" class="btn btn-primary">COMENZAR</a>
             </div>
@@ -144,5 +144,5 @@
     </div>
 </section>
 @include('components.preparacion')
-@include('components.info')
+@include('components.info', ['content' => 'info'])
 @endsection
