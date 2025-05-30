@@ -267,7 +267,7 @@
         </div>
     </section>
     <section class="docentes">
-        <div class="container">
+        <div class="">
             <!-- Carousel de Glide.js -->
             <div class="glide">
                 <div class="glide__track" data-glide-el="track">
@@ -429,13 +429,13 @@
     @push('js')
         <script>
             new Glide('.glide', {
-                perView: 2.5,
+                perView: 3,
                 gap: 10,
                 autoplay: 5000,
                 bound: true,
                 breakpoints: {
                     1200: {
-                        perView: 2.5,
+                        perView: 3,
                         gap: 10
                     },
                     992: {
