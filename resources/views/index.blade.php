@@ -431,7 +431,7 @@
             new Glide('.glide', {
                 perView: 3,
                 gap: 10,
-                autoplay: 2000,
+                autoplay: 5000,
                 bound: true,
                 breakpoints: {
                     1200: {
