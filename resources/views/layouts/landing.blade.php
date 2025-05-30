@@ -209,10 +209,10 @@
                         <p class="copyright" style="text-align: center;">
                             <span class="pr-2"><a href="{{ route('termsandconditions') }}">Términos y
                                     condiciones</a><span class="pl-2">|</span></span>
-                            <span class="pr-2"><a href="{{ asset('/politica-sapius.pdf') }}"
+                            <span class="pr-2"><a href="{{ asset('privacidad') }}"
                                     target="blank_">Política de privacidad</a><span class="pl-2">|</span></span> <br
                                 class="d-block d-sm-block d-md-none d-lg-none">
-                            <span class="pr-2"><a href="">Política de cookies</a></span>
+                            <span class="pr-2"><a href="{{ ROUTE('cookies') }}">Política de cookies</a></span>
                             <br>
                             <small>
                                 Sapius.® Todos los derechos reservados &copy;

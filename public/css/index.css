@@ -253,3 +253,24 @@ text-align: center;
   text-overflow: ellipsis; /* Opcional: muestra "..." si se corta el texto */
   width: 100%; /* Define un ancho para que funcione */
 }
+
+.header__terms {
+    background-color: #002146;
+    min-height: 250px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+} @media (max-width:991px) {
+    .header__terms {
+        padding: 4em 0;
+    }
+    .header__terms .banner {
+        padding: 2em 0;
+        order: 0;
+    }
+    .header__terms .txt-banner {
+        order: 1;
+    }
+
+}

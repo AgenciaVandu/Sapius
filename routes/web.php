@@ -40,6 +40,16 @@ Route::get('terms/conditions', function () {
     return view('terms');
 })->name('termsandconditions');
 
+//Privacity
+Route::get('privacidad', function () {
+    return view('privacidad');
+})->name('privacidad');
+
+//COOKIES
+Route::get('cookies', function () {
+    return view('cookies');
+})->name('cookies');
+
 Route::get('/exani-1', function () {
     return view('cursos-front.exani-1');
 });

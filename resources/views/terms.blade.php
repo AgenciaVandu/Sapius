@@ -4,13 +4,16 @@
 @endpush
 @push('css')
     <link rel="stylesheet" href="{{ asset('css/index.css') }}">
-    <!-- Glide.js CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@glidejs/glide/dist/css/glide.core.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@glidejs/glide/dist/css/glide.theme.min.css">
 @endpush
 @section('content')
-    <div class="container mt-10 pt-10">
-        <h1>T&Eacute;RMINOS Y CONDICIONES DE USO DE LA PLATAFORMA EDUCATIVA SAPIUS</h1>
+<header class="header__terms">
+        <div class="container mt-5">
+            <h1 style="color:white;">T&Eacute;RMINOS Y CONDICIONES DE USO DE LA PLATAFORMA EDUCATIVA SAPIUS</h1>
+        </div>
+    </header>
+    <div class="objetivos">
+        <div class="container">
+
         <p><strong>&nbsp;</strong></p>
         <p>El uso de la plataforma Sapius implica la aceptaci&oacute;n de los presentes t&eacute;rminos y condiciones de
             uso. Al acceder a esta plataforma, usted (el usuario) est&aacute; aceptando los t&eacute;rminos y condiciones de
@@ -46,20 +49,20 @@
             operaci&oacute;n de formatos electr&oacute;nicos:</p>
         <p>Conceptos</p>
         <ul>
-            <li>Datos personales: informaci&oacute;n de una persona, mismo que pueden ser: correo electr&oacute;nico, nombre
-                completo, direcci&oacute;n, tel&eacute;fono, entre otros.</li>
-            <li>Registro: Consiste en proporcionar datos personales a trav&eacute;s de una serie de pasos ordenados para
-                generar un nombre de usuario y contrase&ntilde;a.</li>
-            <li>Usuario: Nombre proporcionado por la persona interesada en acceder a la plataforma</li>
-            <li>Contrase&ntilde;a: Es una clave de autentificaci&oacute;n confidencial, formada de caracteres que utiliza el
-                usuario para acceder a la plataforma.</li>
-            <li>Curso: Contenido educativo que se imparte en la plataforma</li>
-            <li>Material: Documentos que se encuentran alojados en los cursos tales como: material multimedia, videos,
+            <p>Datos personales: informaci&oacute;n de una persona, mismo que pueden ser: correo electr&oacute;nico, nombre
+                completo, direcci&oacute;n, tel&eacute;fono, entre otros.</p>
+            <p>Registro: Consiste en proporcionar datos personales a trav&eacute;s de una serie de pasos ordenados para
+                generar un nombre de usuario y contrase&ntilde;a.</p>
+            <p>Usuario: Nombre proporcionado por la persona interesada en acceder a la plataforma</p>
+            <p>Contrase&ntilde;a: Es una clave de autentificaci&oacute;n confidencial, formada de caracteres que utiliza el
+                usuario para acceder a la plataforma.</p>
+            <p>Curso: Contenido educativo que se imparte en la plataforma</p>
+            <p>Material: Documentos que se encuentran alojados en los cursos tales como: material multimedia, videos,
                 evaluaciones, material electr&oacute;nico as&iacute; como cualquier otro contenido que se aloje en la
-                plataforma.</li>
-            <li>Hackeo: Irrumpir de manera forzada a un sistema de c&oacute;mputo o a una red.</li>
+                plataforma.</p>
+            <p>Hackeo: Irrumpir de manera forzada a un sistema de c&oacute;mputo o a una red.</p>
         </ul>
-        <p>&nbsp;</p>
+
         <h2>AVISO DE PRIVACIDAD</h2>
         <p>Usted puede ver el aviso de privacidad que Sapius pone a su disposici&oacute;n con base en la Ley Federal de
             protecci&oacute;n de datos personales en posesi&oacute;n de los particulares, en la secci&oacute;n de aviso de
@@ -96,18 +99,18 @@
         <p>Queda estrictamente prohibido a los usuarios de los servicios que se ofrecen a trav&eacute;s de la plataforma:
         </p>
         <ul>
-            <li>Da&ntilde;ar, deshabilitar, sobrecargar, borrar o impedir el uso u obtenci&oacute;n de cualquier tipo de
-                informaci&oacute;n que se encuentre en la plataforma.</li>
-            <li>Ingresar a la plataforma con acceso no autorizado, con otras cuentas a sistemas o cadenas de computadoras
+            <p>Da&ntilde;ar, deshabilitar, sobrecargar, borrar o impedir el uso u obtenci&oacute;n de cualquier tipo de
+                informaci&oacute;n que se encuentre en la plataforma.</p>
+            <p>Ingresar a la plataforma con acceso no autorizado, con otras cuentas a sistemas o cadenas de computadoras
                 conectadas a cualquier servidor de Sapius a trav&eacute;s de hackeo, suplantaci&oacute;n de identidad, o
-                cualquier otro medio.</li>
-            <li>Obtener cualquier tipo de informaci&oacute;n protegida en la plataforma, sus servidores o cualquier
-                computadora asociada disponible a trav&eacute;s de la misma.</li>
-            <li>Interferir los servicios provistos por Sapius o intentar acceder a ellos usando un m&eacute;todo distinto a
-                la interfaz y a las instrucciones proporcionadas por Sapius.</li>
-            <li>Realizar acci&oacute;n alguna que pudiera inhabilitar, interferir o afectar el funcionamiento correcto de
-                Sapius o el uso de la plataforma.</li>
-            <li>Usurpar o intentar usurpar otras identidades mientras est&eacute;s usando esta plataforma.</li>
+                cualquier otro medio.</p>
+            <p>Obtener cualquier tipo de informaci&oacute;n protegida en la plataforma, sus servidores o cualquier
+                computadora asociada disponible a trav&eacute;s de la misma.</p>
+            <p>Interferir los servicios provistos por Sapius o intentar acceder a ellos usando un m&eacute;todo distinto a
+                la interfaz y a las instrucciones proporcionadas por Sapius.</p>
+            <p>Realizar acci&oacute;n alguna que pudiera inhabilitar, interferir o afectar el funcionamiento correcto de
+                Sapius o el uso de la plataforma.</p>
+            <p>Usurpar o intentar usurpar otras identidades mientras est&eacute;s usando esta plataforma.</p>
         </ul>
         <p>La reimpresi&oacute;n, distribuci&oacute;n, asignaci&oacute;n, sublicencia, venta, reproducci&oacute;n
             electr&oacute;nica o por cualquier otro medio de cualquier informaci&oacute;n, documento o gr&aacute;fico que
@@ -195,6 +198,7 @@
         <p>Siempre se ejercer&aacute; acci&oacute;n legal en contra del infractor de estos t&eacute;rminos y condiciones
             as&iacute; como de cualquiera que cometa violaci&oacute;n a los derechos de autor del contenido de la
             plataforma.</p>
+    </div>
     </div>
 
 @section('cta')
