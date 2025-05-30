@@ -239,3 +239,9 @@ text-align: center;
         height: 300px;
     }
 }
+
+
+.border-teachers {
+    border: 5px solid #dee2e6 !important;
+    border-color: #04d7f3 !important;
+}
