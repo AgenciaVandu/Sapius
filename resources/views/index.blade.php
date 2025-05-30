@@ -267,7 +267,7 @@
         </div>
     </section>
     <section class="docentes">
-        <div class="">
+        <div class="container">
             <!-- Carousel de Glide.js -->
             <div class="glide">
                 <div class="glide__track" data-glide-el="track">
