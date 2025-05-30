@@ -429,13 +429,13 @@
     @push('js')
         <script>
             new Glide('.glide', {
-                perView: 2,
+                perView: 3,
                 gap: 10,
                 autoplay: 2000,
                 bound: true,
                 breakpoints: {
                     1200: {
-                        perView: 2,
+                        perView: 3,
                         gap: 10
                     },
                     992: {
