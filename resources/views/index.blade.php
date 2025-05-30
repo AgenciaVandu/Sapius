@@ -276,7 +276,7 @@
                             <li class="glide__slide">
                                 <div class="docentes__persona">
                                     <div class="maestro-img">
-                                        <img src="{{ asset('storage/' . $teacher->img) }}" class="rounded-circle border-teachers" style="max-width: 15.4rem; max-height: 15.4rem; min-width: 10.4rem; min-height: 10.4rem; background: #ffffff;"
+                                        <img src="{{ asset('storage/' . $teacher->img) }}" class="rounded-circle border-teachers" style="max-width: 10.4rem; max-height: 10.4rem; min-width: 10.4rem; min-height: 10.4rem; background: #ffffff;"
                                             alt="Maestro sapius" loading="lazy">
                                     </div>
                                     <h5 style="color: #fff;">{{ $teacher->name }} <br> <small
