@@ -245,3 +245,11 @@ text-align: center;
     border: 5px solid #dee2e6 !important;
     border-color: #04d7f3 !important;
 }
+
+
+.text-container {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; /* Opcional: muestra "..." si se corta el texto */
+  width: 100%; /* Define un ancho para que funcione */
+}
