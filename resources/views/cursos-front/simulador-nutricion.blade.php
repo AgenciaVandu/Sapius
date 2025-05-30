@@ -4,6 +4,8 @@
 @endpush
 @push('css')
     <link rel="stylesheet" href="{{ asset('css/exani3.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@glidejs/glide/dist/css/glide.core.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@glidejs/glide/dist/css/glide.theme.min.css">
 @endpush
 @section('content')
     <header class="bg-blue">
@@ -54,8 +56,25 @@
                     <a href="" class="btn btn-primary">COMENZAR</a>
                 </div>
                 <div class="col-md-5 col-lg-5 col-sm-12 text-center">
-                    <div>
-                        <img src="{{ asset('img/webp/egel.webp') }}" class="img-fluid" alt="Material EGEL PLUS">
+                    <div class="glide">
+                        <div class="glide__track" data-glide-el="track">
+                            <ul class="glide__slides">
+                                @foreach ($simuladores as $simulador)
+                                    <li class="glide__slide">
+                                        <div class="card text-center mx-auto text-secondary" style="width: 25rem;">
+                                            <img src="{{ route(Auth::user()->rol[0]->slug . '.cursos.image', ['file' => $simulador->Curso->imagen]) }}"
+                                                class="card-img-top" alt="{{ $simulador->titulo }}">
+                                            <div class="card-body">
+                                                <h5 class="card-title">{{ $simulador->Curso->titulo }}</h5>
+                                                <p class="card-text font-blod">{{ $simulador->identificador }}</p>
+                                                {{-- <p class="card-text">{{!! $simulador->Curso->descripcion !!}}</p> --}}
+                                                <a href="#" class="btn btn-primary">Obtener el simulador</a>
+                                            </div>
+                                        </div>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -143,4 +162,29 @@
     </section>
     @include('components.preparacion')
     @include('components.info',[ 'content' => 'simulador-nutricion'])
+
+    @push('js')
+        <script>
+            new Glide('.glide', {
+                perView: 1,
+                gap: 10,
+                autoplay: 5000,
+                bound: true,
+                breakpoints: {
+                    1200: {
+                        perView: 1,
+                        gap: 10
+                    },
+                    992: {
+                        perView: 1,
+                        gap: 20
+                    },
+                    600: {
+                        perView: 1,
+                        gap: 10
+                    }
+                }
+            }).mount();
+        </script>
+    @endpush
 @endsection

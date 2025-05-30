@@ -79,11 +79,15 @@ Route::get ('/guias-nutricion', function (){
 })->name('guias.nutricion');
 
 Route::get ('/simuladores-medicina', function (){
-    return view('cursos-front.simulador-medicina');
+    $category = Category::where('name','simuladores')->first();
+    $simuladores = CursoProgramado::where('category_id', $category->id)->where('identificador','like','%medicina%')->where('activo','si')->get();
+    return view('cursos-front.simulador-medicina', compact('simuladores'));
 })->name('simuladores.medicina');
 
 Route::get ('/simuladores-nutricion', function (){
-    return view('cursos-front.simulador-nutricion');
+    $category = Category::where('name','simuladores')->first();
+    $simuladores = CursoProgramado::where('category_id', $category->id)->where('identificador','like','%nutricion%')->where('activo','si')->get();
+    return view('cursos-front.simulador-nutricion', compact('simuladores'));
 })->name('simuladores.nutricion');
 
 
