@@ -31,6 +31,10 @@ Route::get('/', function () {
 })->name('landing.home');
 
 
+Route::get('/guias', function (){
+    return view('guias');
+});
+
 Route::get('/generate-storage-link', function () {
     Artisan::call('storage:link');
     return 'Symlink creado exitosamente.';
