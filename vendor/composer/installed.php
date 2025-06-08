@@ -3,7 +3,7 @@
         'name' => 'laravel/laravel',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => 'b874bb81db0ce8587355b62b98621455b464a65c',
+        'reference' => '3dd77b5b0b64c02a01a38fe6ff3c0323629bedb9',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -418,7 +418,7 @@
         'laravel/laravel' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => 'b874bb81db0ce8587355b62b98621455b464a65c',
+            'reference' => '3dd77b5b0b64c02a01a38fe6ff3c0323629bedb9',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -549,6 +549,15 @@
             'install_path' => __DIR__ . '/../nunomaduro/collision',
             'aliases' => array(),
             'dev_requirement' => true,
+        ),
+        'openpay/sdk' => array(
+            'pretty_version' => '3.1.1',
+            'version' => '3.1.1.0',
+            'reference' => '5a922d4e95e6c68c37c6e558e33b6f7e4918f398',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../openpay/sdk',
+            'aliases' => array(),
+            'dev_requirement' => false,
         ),
         'opis/closure' => array(
             'pretty_version' => '3.6.3',

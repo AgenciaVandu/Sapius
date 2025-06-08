@@ -109,7 +109,8 @@ Route::get ('/simuladores-nutricion', function (){
 
 
 
-Route::get('/checkout', 'CheckoutController@createCheckout');
+Route::get('/checkout', 'CheckoutController@createCheckout')->name('checkout');
+Route::post('/payout', 'CheckoutController@processPay')->name('checkout.processPayout');
 
 //Socialite
 Route::get('/redirect', 'SocialAuthFacebookController@redirect');
@@ -348,7 +349,10 @@ Route::group(['middleware' =>['alumno','restrict.mobile'],'prefix' => 'alumno'],
     Route::post('/users/profile', 'UserController@profile')->name('alumno.profile');//{id}
     Route::get('/users/pase/{file}', 'UserController@pase')->name('alumno.pase');
     Route::get('/users/documento/{file}', 'UserController@documento')->name('alumno.documento');
-    Route::get('/checkout/{curso}','Cursos\CursoController@checkout')->name('checkout');
+    Route::get('/checkout/{curso}','Cursos\CursoController@checkout')->name('alumno.checkout');
+
+    Route::get('/checkout', 'CheckoutController@createCheckout')->name('checkout');
+    Route::post('/payout', 'CheckoutController@processPay')->name('checkout.processPayout');
     //Cursos
     Route::get('/cursos', 'HomeController@cursosDisponibles')->name('cursos.disponibles');
     Route::post('/curso', 'Registro\CursoProgramadoController@cursoDetallado')->name('cursos.detallado');

@@ -1,7 +1,6 @@
 @extends('layouts.adminmart.default')
 
 @section('content')
-
     @php
         $precio = $curso->precio;
 
@@ -10,154 +9,57 @@
         }
     @endphp
 
-    {{ session('descuento') }}
+    {{-- {{ session('descuento') }} --}}
     <input type="hidden" id="curso" value="{{ $curso->Curso->titulo }}">
     <div class="card">
-        <div class="card-body text-center">
-            <h1>
-                {{ $curso->Curso->titulo }}
-            </h1>
+        <div class="row justify-content-center px-5">
+            <div class="col-5 px-5">
+                <img src="{{ route(Auth::user()->rol[0]->slug . '.cursos.image', ['file' => $curso->Curso->imagen]) }}"
+                                        id="img" alt="..." class="img-thumbnail">
+            </div>
+            <div class="col-5">
+                <div class="card-body text-center">
+                    <h1>
+                        {{ $curso->Curso->titulo }}
+                    </h1>
 
-            <small>
-                {!! $curso->Curso->descripcion !!}
-            </small>
-            <h3>
-                ${{ number_format($precio, 2) }}
-            </h3>
-            <h4 class="card-title">Metodos de pago</h4>
-            <h6 class="card-subtitle">A continuación selecciona tu método de pago e introduce los datos solicitados.
-            </h6>
-            <form action="{{ route('descuentos.check') }}" method="POST" class="px-5 py-2">
-                @csrf
-                @if (session('descuento'))
-                <div class="alert alert-success">Descuento aplicado</div>
-                @endif
-                @if (session('error'))
-                <div class="alert alert-danger">No se encontro la clave o ya expiro</div>
-                @endif
-                @if (session('limit'))
-                <div class="alert alert-warning">Descuento agotado</div>
-                @endif
-                <div class="form-group">
-                    <input type="text" class="form-control" name="clave"
-                        placeholder="Código de descuento">
-                    <input type="hidden" name="curso_programado_id" value="{{ $curso->id }}">
-                    <button type="submit" class="btn btn-primary mt-2">Agregar descuento</button>
-                </div>
-            </form>
-            {{-- <form method="POST" action="{{ route('inscripcion.pago') }}" class="mt-4" id="form-pago"> --}}{{--
-                @csrf
-                <ul class="nav nav-tabs mb-3">
-                    <li class="nav-item">
-                        <a href="#home" id="tarjeta" data-toggle="tab" aria-expanded="true" class="nav-link active">
-                            <i class="mdi mdi-home-variant d-lg-none d-block mr-1"></i>
-                            <span class="d-none d-lg-block">Tarjeta Credito/Debito</span>
-                            <img src="{{ asset('img/logo_conekta_color.svg') }}" class="img-fluid" alt="conekta">
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#profile" id="oxxo" data-toggle="tab" aria-expanded="false"
-                            class="nav-link">
-                            <i class="mdi mdi-account-circle d-lg-none d-block mr-1"></i>
-                            <span class="d-none d-lg-block">Oxxo</span>
-                        </a>
-                    </li>
-                </ul>
-
-                <div class="tab-content">
-                    <div class="tab-pane show active" id="home">
-                        <div class="form-group">
-                            <label for="nombretarjetahabiente">Nombre del tarjetahabiente</label>
-                            <input type="text" class="form-control" id="nombretarjetahabiente"
-                                placeholder="Ej. Oscar Robles Torres" size="20" data-conekta="card[name]" />
-                        </div>
-                        <div class="form-group">
-                            <label for="tarjeta">Número de la tarjeta de crédito</label>
-                            <input type="text" class="form-control" id="tarjeta" placeholder="Ej. 87129873" size="20"
-                                data-conekta="card[number]" />
-                        </div>
-                        <div class="form-row">
-                            <label>
-                                <span>CVC</span>
-                                <input type="text" size="4" data-conekta="card[cvc]" />
-                            </label>
-                        </div>
-                        <div class="form-row">
-                            <label>
-                                <span>Fecha de expiración (MM/AAAA)</span>
-                                <input type="text" size="2" data-conekta="card[exp_month]" />
-                            </label>
-                            <span>/</span>
-                            <label>
-                                <input type="text" size="4" data-conekta="card[exp_year]" />
-                            </label>
-                        </div>
+                    <small>
+                        {!! $curso->Curso->descripcion !!}
+                    </small>
+                    <h3>
+                        ${{ number_format($precio, 2) }}
+                    </h3>
+                    <h4 class="card-title">Metodos de pago</h4>
+                    <h6 class="card-subtitle">A continuación selecciona tu método de pago e introduce los datos solicitados.
+                    </h6>
+                    {{--             <form action="{{ route('descuentos.check') }}" method="POST" class="px-5 py-2">
+                    @csrf
+                    @if (session('descuento'))
+                    <div class="alert alert-success">Descuento aplicado</div>
+                    @endif
+                    @if (session('error'))
+                    <div class="alert alert-danger">No se encontro la clave o ya expiro</div>
+                    @endif
+                    @if (session('limit'))
+                    <div class="alert alert-warning">Descuento agotado</div>
+                    @endif
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="clave"
+                            placeholder="Código de descuento">
+                        <input type="hidden" name="curso_programado_id" value="{{ $curso->id }}">
+                        <button type="submit" class="btn btn-primary mt-2">Agregar descuento</button>
                     </div>
-                    <div class="tab-pane" id="profile">
-                        A continuacion se generara una ficha para pagar a travez de Oxxo pay.
-                    </div>
+                </form> --}}
                 </div>
-                <hr>
-                <input type="hidden" id="tipo_cobro" name="tipo_cobro" value="tarjeta">
-                <input type="hidden" id="curso_programado_id" name="curso_programado_id" value="{{ $curso->id }}">
-                <div class="form-group">
-                    <div id="divAlerts"></div>
-                    <label for="">Precio</label>
-                    <label id="text_descuento"></label>
-                    <input type="text" class="form-control" id="precio" value="${{ $curso->precio_en_moneda }} MxN"
-                        disabled>
-                    <input type="hidden" id="precioh" name="precio"
-                        value="{{ str_replace(',', '', $curso->precio_en_moneda) }}">
-                    <input type="hidden" id="authName" name="authName" value="{{ auth()->user()->nombre . '' . auth()->user()->apellido }}">
-                        <input type="hidden" id="authEmail" name="authEmail" value="{{ auth()->user()->email }}">
-                        <input type="hidden" id="authPhone" name="authPhone" value="{{ auth()->user()->telefono }}">
-
-                </div> --}}
-            {{-- <div class="form-group">
-                    <input type="text" id="clave" class="form-control" name="clave"
-                        placeholder="Código de descuento">
-                    <button type="button" class="btn btn-primary" id="descuento">Agregar descuento</button>
-                </div>
-            </form> --}}
-            <div id="paypal-button-container"></div>
+            </div>
         </div>
+    <div>
+        {{-- Boton para ir al pago --}}
+        <a href="{{ route('alumno.checkout',$curso) }}" class="btn btn-primary btn-block">Ir al pago</a>
+    </div>
     </div>
 @endsection
-<script src="https://www.paypal.com/sdk/js?client-id={{ config('services.paypal.client_id') }}&currency=MXN"></script>
-<script>
-    paypal.Buttons({
-        // Sets up the transaction when a payment button is clicked
-        createOrder: (data, actions) => {
-            return actions.order.create({
-                purchase_units: [{
-                    amount: {
-                        value: "{{ $precio }}" // Can also reference a variable or function
-                    }
-                }]
-            });
-        },
-        // Finalize the transaction after payer approval
-        onApprove: (data, actions) => {
-            return actions.order.capture().then(function(orderData) {
-                // Successful capture! For dev/demo purposes:
-                console.log('Capture result', orderData, JSON.stringify(orderData, null,
-                    2));
-                const transaction = orderData.purchase_units[0].payments.captures[0];
-                if (transaction.status == "COMPLETED") {
-                    actions.redirect("{{ route('inscripcion.pago') }}/?curso_programado_id=" +
-                        "{{ $curso->id }}&order=" + transaction.id);
-                }
-                alert(
-                    `Transaction ${transaction.status}: ${transaction.id}\n\nSee console for all available details`
-                );
-                // When ready to go live, remove the alert and show a success message within this page. For example:
-                // const element = document.getElementById('paypal-button-container');
-                // element.innerHTML = '<h3>Thank you for your payment!</h3>';
-                // Or go to another URL:  actions.redirect('thank_you.html');
-            });
-        }
-    }).render('#paypal-button-container');
-</script>
+
 @section('javascript')
     <script>
         $(document).ready(function() {

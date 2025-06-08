@@ -50,6 +50,7 @@ return array(
     'PhpOption\\' => array($vendorDir . '/phpoption/phpoption/src/PhpOption'),
     'PHPStan\\PhpDocParser\\' => array($vendorDir . '/phpstan/phpdoc-parser/src'),
     'Opis\\Closure\\' => array($vendorDir . '/opis/closure/src'),
+    'Openpay\\' => array($vendorDir . '/openpay/sdk/Openpay'),
     'NunoMaduro\\Collision\\' => array($vendorDir . '/nunomaduro/collision/src'),
     'Monolog\\' => array($vendorDir . '/monolog/monolog/src/Monolog'),
     'League\\OAuth1\\Client\\' => array($vendorDir . '/league/oauth1-client/src'),

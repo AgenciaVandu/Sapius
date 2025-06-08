@@ -97,6 +97,7 @@ class ComposerStaticInit68f0bc3d9be4630a621f295ba3c49a88
         'O' => 
         array (
             'Opis\\Closure\\' => 13,
+            'Openpay\\' => 8,
         ),
         'N' => 
         array (
@@ -348,6 +349,10 @@ class ComposerStaticInit68f0bc3d9be4630a621f295ba3c49a88
         'Opis\\Closure\\' => 
         array (
             0 => __DIR__ . '/..' . '/opis/closure/src',
+        ),
+        'Openpay\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/openpay/sdk/Openpay',
         ),
         'NunoMaduro\\Collision\\' => 
         array (
@@ -2852,6 +2857,42 @@ class ComposerStaticInit68f0bc3d9be4630a621f295ba3c49a88
         'NunoMaduro\\Collision\\Highlighter' => __DIR__ . '/..' . '/nunomaduro/collision/src/Highlighter.php',
         'NunoMaduro\\Collision\\Provider' => __DIR__ . '/..' . '/nunomaduro/collision/src/Provider.php',
         'NunoMaduro\\Collision\\Writer' => __DIR__ . '/..' . '/nunomaduro/collision/src/Writer.php',
+        'Openpay\\Data\\Openpay' => __DIR__ . '/..' . '/openpay/sdk/Openpay/Data/Openpay.php',
+        'Openpay\\Data\\OpenpayApi' => __DIR__ . '/..' . '/openpay/sdk/Openpay/Data/OpenpayApi.php',
+        'Openpay\\Data\\OpenpayApiAuthError' => __DIR__ . '/..' . '/openpay/sdk/Openpay/Data/OpenpayApiAuthError.php',
+        'Openpay\\Data\\OpenpayApiConnectionError' => __DIR__ . '/..' . '/openpay/sdk/Openpay/Data/OpenpayApiConnectionError.php',
+        'Openpay\\Data\\OpenpayApiConnector' => __DIR__ . '/..' . '/openpay/sdk/Openpay/Data/OpenpayApiConnector.php',
+        'Openpay\\Data\\OpenpayApiConsole' => __DIR__ . '/..' . '/openpay/sdk/Openpay/Data/OpenpayApiConsole.php',
+        'Openpay\\Data\\OpenpayApiDerivedResource' => __DIR__ . '/..' . '/openpay/sdk/Openpay/Data/OpenpayApiDerivedResource.php',
+        'Openpay\\Data\\OpenpayApiError' => __DIR__ . '/..' . '/openpay/sdk/Openpay/Data/OpenpayApiError.php',
+        'Openpay\\Data\\OpenpayApiRequestError' => __DIR__ . '/..' . '/openpay/sdk/Openpay/Data/OpenpayApiRequestError.php',
+        'Openpay\\Data\\OpenpayApiResourceBase' => __DIR__ . '/..' . '/openpay/sdk/Openpay/Data/OpenpayApiResourceBase.php',
+        'Openpay\\Data\\OpenpayApiTransactionError' => __DIR__ . '/..' . '/openpay/sdk/Openpay/Data/OpenpayApiTransactionError.php',
+        'Openpay\\Resources\\OpenpayBankAccount' => __DIR__ . '/..' . '/openpay/sdk/Openpay/Resources/OpenpayBankAccount.php',
+        'Openpay\\Resources\\OpenpayBankAccountList' => __DIR__ . '/..' . '/openpay/sdk/Openpay/Resources/OpenpayBankAccountList.php',
+        'Openpay\\Resources\\OpenpayBine' => __DIR__ . '/..' . '/openpay/sdk/Openpay/Resources/OpenpayBine.php',
+        'Openpay\\Resources\\OpenpayCapture' => __DIR__ . '/..' . '/openpay/sdk/Openpay/Resources/OpenpayCapture.php',
+        'Openpay\\Resources\\OpenpayCard' => __DIR__ . '/..' . '/openpay/sdk/Openpay/Resources/OpenpayCard.php',
+        'Openpay\\Resources\\OpenpayCardList' => __DIR__ . '/..' . '/openpay/sdk/Openpay/Resources/OpenpayCardList.php',
+        'Openpay\\Resources\\OpenpayCharge' => __DIR__ . '/..' . '/openpay/sdk/Openpay/Resources/OpenpayCharge.php',
+        'Openpay\\Resources\\OpenpayChargeList' => __DIR__ . '/..' . '/openpay/sdk/Openpay/Resources/OpenpayChargeList.php',
+        'Openpay\\Resources\\OpenpayCustomer' => __DIR__ . '/..' . '/openpay/sdk/Openpay/Resources/OpenpayCustomer.php',
+        'Openpay\\Resources\\OpenpayCustomerList' => __DIR__ . '/..' . '/openpay/sdk/Openpay/Resources/OpenpayCustomerList.php',
+        'Openpay\\Resources\\OpenpayFee' => __DIR__ . '/..' . '/openpay/sdk/Openpay/Resources/OpenpayFee.php',
+        'Openpay\\Resources\\OpenpayFeeList' => __DIR__ . '/..' . '/openpay/sdk/Openpay/Resources/OpenpayFeeList.php',
+        'Openpay\\Resources\\OpenpayPayout' => __DIR__ . '/..' . '/openpay/sdk/Openpay/Resources/OpenpayPayout.php',
+        'Openpay\\Resources\\OpenpayPayoutList' => __DIR__ . '/..' . '/openpay/sdk/Openpay/Resources/OpenpayPayoutList.php',
+        'Openpay\\Resources\\OpenpayPlan' => __DIR__ . '/..' . '/openpay/sdk/Openpay/Resources/OpenpayPlan.php',
+        'Openpay\\Resources\\OpenpayPlanList' => __DIR__ . '/..' . '/openpay/sdk/Openpay/Resources/OpenpayPlanList.php',
+        'Openpay\\Resources\\OpenpayPse' => __DIR__ . '/..' . '/openpay/sdk/Openpay/Resources/OpenpayPse.php',
+        'Openpay\\Resources\\OpenpayPseList' => __DIR__ . '/..' . '/openpay/sdk/Openpay/Resources/OpenpayPseList.php',
+        'Openpay\\Resources\\OpenpayRefund' => __DIR__ . '/..' . '/openpay/sdk/Openpay/Resources/OpenpayRefund.php',
+        'Openpay\\Resources\\OpenpaySubscription' => __DIR__ . '/..' . '/openpay/sdk/Openpay/Resources/OpenpaySubscription.php',
+        'Openpay\\Resources\\OpenpaySubscriptionList' => __DIR__ . '/..' . '/openpay/sdk/Openpay/Resources/OpenpaySubscriptionList.php',
+        'Openpay\\Resources\\OpenpayToken' => __DIR__ . '/..' . '/openpay/sdk/Openpay/Resources/OpenpayToken.php',
+        'Openpay\\Resources\\OpenpayTransfer' => __DIR__ . '/..' . '/openpay/sdk/Openpay/Resources/OpenpayTransfer.php',
+        'Openpay\\Resources\\OpenpayTransferList' => __DIR__ . '/..' . '/openpay/sdk/Openpay/Resources/OpenpayTransferList.php',
+        'Openpay\\Resources\\OpenpayWebhook' => __DIR__ . '/..' . '/openpay/sdk/Openpay/Resources/OpenpayWebhook.php',
         'Opis\\Closure\\Analyzer' => __DIR__ . '/..' . '/opis/closure/src/Analyzer.php',
         'Opis\\Closure\\ClosureContext' => __DIR__ . '/..' . '/opis/closure/src/ClosureContext.php',
         'Opis\\Closure\\ClosureScope' => __DIR__ . '/..' . '/opis/closure/src/ClosureScope.php',

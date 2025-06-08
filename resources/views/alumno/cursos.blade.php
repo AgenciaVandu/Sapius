@@ -19,8 +19,8 @@
                 @foreach ($cursos as $curso)
                     @if ($curso->curso->activo == 'si')
                         <div class="card shadow">
-                            {{-- <a href="javscript:void(0)"
-                                onclick="event.preventDefault(); document.getElementById('curso-{{ $curso->id }}').submit();"> --}}
+                            <a href="javscript:void(0)"
+                                onclick="event.preventDefault(); document.getElementById('curso-{{ $curso->id }}').submit();">
                                 @if ($curso->Curso->imagen)
                                     <img src="{{ route(Auth::user()->rol[0]->slug . '.cursos.image', ['file' => $curso->Curso->imagen]) }}"
                                         id="img" alt="..." class="img-thumbnail">
@@ -29,7 +29,7 @@
                                         src="{{ asset('vendor/adminmart/assets/images/big/cursos.png') }}"
                                         alt="Card image cap">
                                 @endif
-{{--                             </a> --}}
+                            </a>
                             <form method="POST" action="{{ route('cursos.detallado') }}" id="curso-{{ $curso->id }}">
                                 @csrf
                                 <input name="curso_programado_id" type="hidden" value="{{ $curso->id }}">
@@ -42,16 +42,20 @@
                                     <div class="col-md-6">
                                         <h4> ${{ $curso->precio_en_moneda }} MxN</h4>
                                     </div>
-                                    <div class="col-md-6">
-                                        {{--  <a class="btn btn-secondary" href="{{ route('checkout',$curso->id) }}">Comprar</a> --}}
+                                    <div class="col-md-12">
+                                        <a href="{{ route('inscripcion.form',['curso_programado_id'=>$curso->id]) }}" class="btn btn-block btn-dark btn-detalle">Inscribir</a>
+                                        <a href="javscript:void(0)" class="btn btn-primary btn btn-block mt-2"
+                                            onclick="event.preventDefault(); document.getElementById('curso-{{ $curso->id }}').submit();">
+                                            Mas detalles
+                                        </a>
                                         <!-- Button trigger modal -->
-                                        <button type="button" class="btn btn-primary" data-toggle="modal"
+                                        {{-- <button type="button" class="btn btn-primary" data-toggle="modal"
                                             data-target="#exampleModal{{ $curso->id }}">
                                             Inscribir
-                                        </button>
+                                        </button> --}}
 
                                         <!-- Modal -->
-                                        <div class="modal fade" id="exampleModal{{ $curso->id }}" tabindex="-1"
+                                        {{-- <div class="modal fade" id="exampleModal{{ $curso->id }}" tabindex="-1"
                                             role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                             <div class="modal-dialog" role="document">
                                                 <div class="modal-content">
@@ -105,7 +109,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> --}}
                                     </div>
                                 </div>
                             </div>

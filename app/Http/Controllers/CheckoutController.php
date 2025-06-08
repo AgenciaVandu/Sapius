@@ -3,44 +3,52 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use MercadoPago\MercadoPagoConfig;
-use MercadoPago\Client\Preference\PreferenceClient;
-use MercadoPago\Net\MPRequestOptions;
-use Illuminate\Support\Str;
+use Openpay\Data\Openpay;
+use Openpay\Data\OpenpayApiRequestError;
 
 class CheckoutController extends Controller
 {
     public function createCheckout()
     {
-        // Configurar token de acceso
-        MercadoPagoConfig::setAccessToken(config('services.mercadopago.access_token'));
+        return view('checkout');
+    }
 
-        // Inicializar el cliente de preferencias
-        $client = new PreferenceClient();
 
-        // Crear encabezado de idempotencia (opcional pero recomendable)
-        $request_options = new MPRequestOptions();
-        $request_options->setCustomHeaders([
-            'X-Idempotency-Key: ' . Str::uuid()
-        ]);
+    public function processPay(Request $request)
+    {
+        /* return $request->token_id;*/
+        $openpay = Openpay::getInstance('m4gx48zqyw8xs4en1z1u','sk_d70ffc17846544e39488869d11fac3dc','MX','127.0.0.1');
 
-        // Crear la preferencia
-        $preference = $client->create([
-            "items" => [
-                [
-                    "title" => "Producto de ejemplo",
-                    "quantity" => 1,
-                    "unit_price" => 2000
-                ]
-            ],
-            "back_urls" => [
-                "success" => url('/checkout/success'),
-                "failure" => url('/checkout/failure'),
-                "pending" => url('/checkout/pending'),
-            ],
-            "auto_return" => "approved",
-        ], $request_options);
+        $customer = [
+            'name' => 'Alfredo',
+            'last_name' => 'Gonzalez Marenco',
+            'phone_number' => '9993629936',
+            'email' => 'marencocode@gmail.com',
+        ];
 
-        return view('checkout', ['preference' => $preference]);
+        $chargeData = [
+            'method' => 'card',
+            'source_id' => $request->token_id,
+            'amount' => 100.00, // formato númerico con hasta dos dígitos decimales.
+            'currency' => 'MXN',
+            'description' => 'Pago de pruebas',
+            'device_session_id' => $request->deviceIdHiddenFieldName,
+            'order_id' => 'ORD00012000',
+            'customer' => $customer
+        ];
+        /* return $chargeData; */
+
+        try {
+            $charge = $openpay->charges->create($chargeData);
+        } catch (OpenpayApiRequestError $e) {
+            dd([
+                'message' => $e->getMessage(),
+                'httpCode' => $e->getHttpCode(),
+                'errorCode' => $e->getErrorCode(),
+                'description' => $e->getDescription(),
+                'requestId' => $e->getRequestId()
+            ]);
+            }
+
     }
 }
