@@ -2100,7 +2100,7 @@ class PHPExcel_Calculation {
 	 */
 	public static function _unwrapResult($value) {
 		if (is_string($value)) {
-			if ((isset($value{0})) && ($value{0} == '"') && (substr($value,-1) == '"')) {
+			if ((isset($value[0])) && ($value[0] == '"') && (substr($value,-1) == '"')) {
 				return substr($value,1,-1);
 			}
 		//	Convert numeric errors to NaN error
@@ -2208,9 +2208,9 @@ class PHPExcel_Calculation {
 		//	Basic validation that this is indeed a formula
 		//	We return an empty array if not
 		$formula = trim($formula);
-		if ((!isset($formula{0})) || ($formula{0} != '=')) return array();
+		if ((!isset($formula[0])) || ($formula[0] != '=')) return array();
 		$formula = ltrim(substr($formula,1));
-		if (!isset($formula{0})) return array();
+		if (!isset($formula[0])) return array();
 
 		//	Parse the formula and return the token stack
 		return $this->_parseFormula($formula);
@@ -2263,9 +2263,9 @@ class PHPExcel_Calculation {
 		//	Basic validation that this is indeed a formula
 		//	We simply return the "cell value" (formula) if not
 		$formula = trim($formula);
-		if ($formula{0} != '=') return self::_wrapResult($formula);
+		if ($formula[0] != '=') return self::_wrapResult($formula);
 		$formula = ltrim(substr($formula,1));
-		if (!isset($formula{0})) return self::_wrapResult($formula);
+		if (!isset($formula[0])) return self::_wrapResult($formula);
 
 		$wsTitle = "\x00Wrk";
 		if ($pCell !== NULL) {
@@ -2547,7 +2547,7 @@ class PHPExcel_Calculation {
 			} else {
 				if ($value == '') {
 					return 'an empty string';
-				} elseif ($value{0} == '#') {
+				} elseif ($value[0] == '#') {
 					return 'a '.$value.' error';
 				} else {
 					$typeString = 'a string';
@@ -3808,4 +3808,3 @@ class PHPExcel_Calculation {
 	}	//	function listFunctionNames()
 
 }	//	class PHPExcel_Calculation
-
