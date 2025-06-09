@@ -6,10 +6,6 @@
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script type="text/javascript" src="https://openpay.s3.amazonaws.com/openpay.v1.min.js"></script>
     <script type='text/javascript' src="https://openpay.s3.amazonaws.com/openpay-data.v1.min.js"></script>
-    <script type="text/javascript" src="https://resources.openpay.mx/lib/openpay-js/1.2.39/openpay.v1.min.js"></script>
-
-
-
     <style>
         @charset "US-ASCII";
         @import "http://fonts.googleapis.com/css?family=Lato:300,400,700";
@@ -405,21 +401,5 @@
     });
 </script>
 
-<script>
-    OpenPay.checkout.create({
-        "amount": "100.00",
-        "currency": "MXN",
-        "description": "Botón de pago",
-        "order_id": "ord-00001",
-        "send_email": "false",
-        "customer": {
-            "name": "Juan",
-            "last_name": "Lopez",
-            "phone_number": "5555555555",
-            "email": "email@email.com",
-        },
-        "redirect_url": "https://www.sitiodelcomercio.com",
-    }, SUCCESS_CALLBACK, ERROR_CALLBACK);
-</script>
 
 </html>

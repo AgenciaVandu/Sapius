@@ -33,13 +33,21 @@ class CheckoutController extends Controller
             'currency' => 'MXN',
             'description' => 'Pago de pruebas',
             'device_session_id' => $request->deviceIdHiddenFieldName,
-            'order_id' => 'ORD00012000',
+            'order_id' => 'ORD000321'.rand(),
+            "redirect_url" => "https://sapius.com.mx",
+            "use_3d_secure" => "true",
             'customer' => $customer
         ];
         /* return $chargeData; */
 
         try {
             $charge = $openpay->charges->create($chargeData);
+            $redirectUrl = $charge->payment_method->url;
+
+            // 🔁 Redirige al usuario para completar la autenticación 3D Secure
+            return redirect($redirectUrl);
+
+            
         } catch (OpenpayApiRequestError $e) {
             dd([
                 'message' => $e->getMessage(),
