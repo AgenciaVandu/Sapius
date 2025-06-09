@@ -2951,11 +2951,11 @@ class PHPExcel_Calculation {
 				}
 			}
 			//	Ignore white space
-			while (($formula{$index} == "\n") || ($formula{$index} == "\r")) {
+			while (($formula[$index] == "\n") || ($formula[$index] == "\r")) {
 				++$index;
 			}
-			if ($formula{$index} == ' ') {
-				while ($formula{$index} == ' ') {
+			if ($formula[$index] == ' ') {
+				while ($formula[$index] == ' ') {
 					++$index;
 				}
 				//	If we're expecting an operator, but only have a space between the previous and next operands (and both are
