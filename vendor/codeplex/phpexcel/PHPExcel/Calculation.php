@@ -3369,7 +3369,7 @@ class PHPExcel_Calculation {
 //					echo 'Token is a PHPExcel constant: '.$excelConstant.'<br />';
 					$stack->push('Constant Value',self::$_ExcelConstants[$excelConstant]);
 					$this->_writeDebug('Evaluating Constant '.$excelConstant.' as '.$this->_showTypeDetails(self::$_ExcelConstants[$excelConstant]));
-				} elseif ((is_numeric($token)) || ($token === NULL) || (is_bool($token)) || ($token == '') || ($token{0} == '"') || ($token{0} == '#')) {
+				} elseif ((is_numeric($token)) || ($token === NULL) || (is_bool($token)) || ($token == '') || ($token[0] == '"') || ($token[0] == '#')) {
 //					echo 'Token is a number, boolean, string, null or an Excel error<br />';
 					$stack->push('Value',$token);
 				// if the token is a named range, push the named range name onto the stack
@@ -3404,11 +3404,11 @@ class PHPExcel_Calculation {
 		if (is_string($operand)) {
 			//	We only need special validations for the operand if it is a string
 			//	Start by stripping off the quotation marks we use to identify true excel string values internally
-			if ($operand > '' && $operand{0} == '"') { $operand = self::_unwrapResult($operand); }
+			if ($operand > '' && $operand[0] == '"') { $operand = self::_unwrapResult($operand); }
 			//	If the string is a numeric value, we treat it as a numeric, so no further testing
 			if (!is_numeric($operand)) {
 				//	If not a numeric, test to see if the value is an Excel error, and so can't be used in normal binary operations
-				if ($operand > '' && $operand{0} == '#') {
+				if ($operand > '' && $operand[0] == '#') {
 					$stack->push('Value', $operand);
 					$this->_writeDebug('Evaluation Result is '.$this->_showTypeDetails($operand));
 					return false;
@@ -3461,8 +3461,8 @@ class PHPExcel_Calculation {
 		}
 
 		//	Simple validate the two operands if they are string values
-		if (is_string($operand1) && $operand1 > '' && $operand1{0} == '"') { $operand1 = self::_unwrapResult($operand1); }
-		if (is_string($operand2) && $operand2 > '' && $operand2{0} == '"') { $operand2 = self::_unwrapResult($operand2); }
+		if (is_string($operand1) && $operand1 > '' && $operand1[0] == '"') { $operand1 = self::_unwrapResult($operand1); }
+		if (is_string($operand2) && $operand2 > '' && $operand2[0] == '"') { $operand2 = self::_unwrapResult($operand2); }
 
 		//	execute the necessary operation
 		switch ($operation) {
