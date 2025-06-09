@@ -763,7 +763,7 @@ class PHPExcel_Cell
 				return $_indexCache[$pString];
 			}
 		}
-		throw new PHPExcel_Exception("Column string index can not be " . ((isset($pString{0})) ? "longer than 3 characters" : "empty"));
+		throw new PHPExcel_Exception("Column string index can not be " . ((isset($pString[0])) ? "longer than 3 characters" : "empty"));
 	}
 
 	/**
