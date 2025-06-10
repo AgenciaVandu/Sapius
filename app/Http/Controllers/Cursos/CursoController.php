@@ -118,7 +118,9 @@ class CursoController extends Controller
         $curso->titulo = $request->titulo;
         $curso->slug = $request->slug;
         $curso->descripcion = $request->descripcion;
-        $curso->imagen = $this->imageUploadPost($request);
+        if ($this->imageUploadPost($request) != null) {
+            $curso->imagen = $this->imageUploadPost($request);
+        }
         $curso->save();
         return redirect()->route(Auth::user()->rol[0]->slug.'.cursos.index')->with('success', 'El curso ha sido actualizado correctamente');
     }
