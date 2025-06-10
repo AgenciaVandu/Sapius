@@ -73,8 +73,8 @@
 
                         <div class="form-group row">
                             <div class="col-md-12">
-                                <label for="tiempo">Tiempo (Examen)</label>
-                                <input id="tiempo" type="time" class="form-control @error('tiempo') is-invalid @enderror" name="tiempo" required autocomplete="tiempo" autofocus>
+                                <label for="tiempo">Tiempo (Examen) en minutos</label>
+                                <input id="tiempo" type="number" class="form-control @error('tiempo') is-invalid @enderror" name="tiempo" required autocomplete="tiempo" autofocus>
 
                                 @error('tiempo')
                                     <span class="invalid-feedback" role="alert">
@@ -99,8 +99,8 @@
 
                         <div class="form-group row">
                             <div class="col-md-12">
-                                <label for="tiempo_vigencia">Tiempo de vigencia (Feedback o retroalimentación)</label>
-                                <input id="tiempo_vigencia" type="time" class="form-control @error('tiempo_vigencia') is-invalid @enderror" name="tiempo_vigencia"  required autocomplete="tiempo_vigencia" autofocus>
+                                <label for="tiempo_vigencia">Tiempo de vigencia (Feedback o retroalimentación) en minutos</label>
+                                <input id="tiempo_vigencia" type="number" class="form-control @error('tiempo_vigencia') is-invalid @enderror" name="tiempo_vigencia"  required autocomplete="tiempo_vigencia" autofocus>
 
                                 @error('tiempo_vigencia')
                                     <span class="invalid-feedback" role="alert">
