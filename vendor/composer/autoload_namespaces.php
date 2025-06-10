@@ -10,5 +10,6 @@ return array(
     'PHPExcel' => array($vendorDir . '/codeplex/phpexcel'),
     'Orangehill\\Iseed' => array($vendorDir . '/orangehill/iseed/src'),
     'Mockery' => array($vendorDir . '/mockery/mockery/library'),
+    'HTMLPurifier' => array($vendorDir . '/ezyang/htmlpurifier/library'),
     'Detection' => array($vendorDir . '/mobiledetect/mobiledetectlib/namespaced'),
 );
