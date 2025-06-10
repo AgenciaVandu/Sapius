@@ -73,11 +73,8 @@
 
                         <div class="form-group row">
                             <div class="col-md-12">
-                                <label for="tiempo">Tiempo (Examen) en minutos</label>
-                                @php
-                                    $prueba->tiempo = \Carbon\Carbon::parse('00:00:00')->floatDiffInMinutes($prueba->tiempo);
-                                @endphp
-                                <input id="tiempo" type="number" class="form-control @error('tiempo') is-invalid @enderror" name="tiempo" value="{{ $prueba->tiempo }}" required autocomplete="tiempo" autofocus>
+                                <label for="tiempo">Tiempo (Examen)</label>
+                                <input id="tiempo" type="time" class="form-control @error('tiempo') is-invalid @enderror" name="tiempo" value="{{ $prueba->tiempo }}" required autocomplete="tiempo" autofocus>
 
                                 @error('tiempo')
                                     <span class="invalid-feedback" role="alert">
@@ -102,11 +99,9 @@
 
                         <div class="form-group row">
                             <div class="col-md-12">
-                                <label for="tiempo_vigencia">Tiempo de vigencia (Feedback o retroalimentación) en minutos</label>
-                                @php
-                                    $prueba->tiempo_vigencia = \Carbon\Carbon::parse('00:00:00')->floatDiffInMinutes($prueba->tiempo_vigencia);
-                                @endphp
-                                <input id="tiempo_vigencia" type="number" class="form-control @error('tiempo_vigencia') is-invalid @enderror" name="tiempo_vigencia" value="{{ $prueba->tiempo_vigencia }}" required autocomplete="tiempo_vigencia" autofocus>
+                                <label for="tiempo_vigencia">Tiempo de vigencia (Feedback o retroalimentación)</label>
+
+                                <input id="tiempo_vigencia" type="time" class="form-control @error('tiempo_vigencia') is-invalid @enderror" name="tiempo_vigencia" value="{{ $prueba->tiempo_vigencia }}" required autocomplete="tiempo_vigencia" autofocus>
 
                                 @error('tiempo_vigencia')
                                     <span class="invalid-feedback" role="alert">
@@ -152,5 +147,21 @@
                 ],
             });
         } );
+    </script>
+    <script>
+        flatpickr("#tiempo", {
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "H:i", // formato 24h sin AM/PM
+            time_24hr: true, // fuerza 24 horas
+            defaultDate: "{{ $prueba->tiempo }}"
+        });
+        flatpickr("#tiempo_vigencia", {
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "H:i", // formato 24h sin AM/PM
+            time_24hr: true, // fuerza 24 horas
+            defaultDate: "{{ $prueba->tiempo_vigencia }}"
+        });
     </script>
 @endsection

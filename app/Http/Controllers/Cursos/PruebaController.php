@@ -69,9 +69,9 @@ class PruebaController extends Controller
         $prueba->leccion_id = $request->leccion_id;
         $prueba->titulo = $request->titulo;
         $prueba->descripcion = $request->descripcion;
-        $prueba->tiempo =  Carbon::createFromTimeString('00:00:00')->addMinutes($request->tiempo);
+        $prueba->tiempo =  $request->tiempo;
         $prueba->tiempo_caducidad = $request->tiempo_caducidad;
-        $prueba->tiempo_vigencia = Carbon::createFromTimeString('00:00:00')->addMinutes($request->tiempo_vigencia);
+        $prueba->tiempo_vigencia = $request->tiempo_vigencia;
         $prueba->tipo = $request->tipo;
         $prueba->activo = "si";
         $prueba->save();
@@ -128,9 +128,9 @@ class PruebaController extends Controller
         $prueba = Prueba::find($request->id);
         $prueba->titulo = $request->titulo;
         $prueba->descripcion = $request->descripcion;
-        $prueba->tiempo = Carbon::createFromTimeString('00:00:00')->addMinutes($request->tiempo);
+        $prueba->tiempo = $request->tiempo;
         $prueba->tiempo_caducidad = $request->tiempo_caducidad;
-        $prueba->tiempo_vigencia = Carbon::createFromTimeString('00:00:00')->addMinutes($request->tiempo_vigencia);
+        $prueba->tiempo_vigencia = $request->tiempo_vigencia;
         $prueba->tipo = $request->tipo;
         $prueba->save();
         $leccion = Leccion::find($prueba->leccion_id);

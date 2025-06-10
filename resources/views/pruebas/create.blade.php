@@ -6,7 +6,7 @@
             <div class="col-7 align-self-center">
                 <h3 class="page-title text-truncate text-dark font-weight-medium mb-1">Agregar prueba</h3>
                 <div class="d-flex align-items-center">
-                    @include('genericos.breadcrum',['route' => 'pruebas.create'])
+                    @include('genericos.breadcrum', ['route' => 'pruebas.create'])
                 </div>
             </div>
             <div class="col-5 align-self-center">
@@ -23,7 +23,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-body">
-                    <form method="POST" action="{{ route(Auth::user()->rol[0]->slug.'.pruebas.store') }}">
+                    <form method="POST" action="{{ route(Auth::user()->rol[0]->slug . '.pruebas.store') }}">
                         @csrf
 
                         <input name="curso_id" type="hidden" value="{{ $curso->id }}">
@@ -31,7 +31,7 @@
 
                         <div class="form-group row">
                             <div class="col-md-12">
-                            <label for="tipo">Tipo</label>
+                                <label for="tipo">Tipo</label>
                                 <select name="tipo" id="tipo" class="form-control">
                                     <option value="EXANI">EXANI</option>
                                     <option value="EGEL">EGEL</option>
@@ -47,8 +47,10 @@
 
                         <div class="form-group row">
                             <div class="col-md-12">
-                            <label for="titulo">Título</label>
-                            <input id="titulo" type="text" class="form-control @error('nombre') is-invalid @enderror" name="titulo" value="" required autocomplete="titulo" autofocus>
+                                <label for="titulo">Título</label>
+                                <input id="titulo" type="text"
+                                    class="form-control @error('nombre') is-invalid @enderror" name="titulo" value=""
+                                    required autocomplete="titulo" autofocus>
 
                                 @error('titulo')
                                     <span class="invalid-feedback" role="alert">
@@ -61,7 +63,8 @@
                         <div class="form-group row">
                             <div class="col-md-12">
                                 <label for="descripcion">Descripción</label>
-                                <textarea id="descripcion" type="text" class="form-control @error('descripcion') is-invalid @enderror" name="descripcion" required autocomplete="descripcion" autofocus>{{ old('descripcion') }}</textarea>
+                                <textarea id="descripcion" type="text" class="form-control @error('descripcion') is-invalid @enderror"
+                                    name="descripcion" required autocomplete="descripcion" autofocus>{{ old('descripcion') }}</textarea>
 
                                 @error('descripcion')
                                     <span class="invalid-feedback" role="alert">
@@ -73,8 +76,10 @@
 
                         <div class="form-group row">
                             <div class="col-md-12">
-                                <label for="tiempo">Tiempo (Examen) en minutos</label>
-                                <input id="tiempo" type="number" class="form-control @error('tiempo') is-invalid @enderror" name="tiempo" required autocomplete="tiempo" autofocus>
+                                <label for="tiempo">Tiempo (Examen)</label>
+                                <input id="tiempo" type="time"
+                                    class="form-control @error('tiempo') is-invalid @enderror" name="tiempo" required
+                                    autocomplete="tiempo" autofocus>
 
                                 @error('tiempo')
                                     <span class="invalid-feedback" role="alert">
@@ -87,7 +92,9 @@
                         <div class="form-group row">
                             <div class="col-md-12">
                                 <label for="tiempo_caducidad">Tiempo de caducidad (Días del examen)</label>
-                                <input id="tiempo_caducidad" type="number" min="0" class="form-control @error('tiempo_caducidad') is-invalid @enderror" name="tiempo_caducidad"  required autocomplete="tiempo_caducidad" autofocus>
+                                <input id="tiempo_caducidad" type="number" min="0"
+                                    class="form-control @error('tiempo_caducidad') is-invalid @enderror"
+                                    name="tiempo_caducidad" required autocomplete="tiempo_caducidad" autofocus>
 
                                 @error('tiempo_caducidad')
                                     <span class="invalid-feedback" role="alert">
@@ -99,8 +106,10 @@
 
                         <div class="form-group row">
                             <div class="col-md-12">
-                                <label for="tiempo_vigencia">Tiempo de vigencia (Feedback o retroalimentación) en minutos</label>
-                                <input id="tiempo_vigencia" type="number" class="form-control @error('tiempo_vigencia') is-invalid @enderror" name="tiempo_vigencia"  required autocomplete="tiempo_vigencia" autofocus>
+                                <label for="tiempo_vigencia">Tiempo de vigencia (Feedback o retroalimentación)</label>
+                                <input id="tiempo_vigencia" type="number"
+                                    class="form-control @error('tiempo_vigencia') is-invalid @enderror"
+                                    name="tiempo_vigencia" required autocomplete="tiempo_vigencia" autofocus>
 
                                 @error('tiempo_vigencia')
                                     <span class="invalid-feedback" role="alert">
@@ -132,7 +141,7 @@
     <script src="{{ asset('vendor/summernote/summernote.min.js') }}"></script>
 
     <script>
-        $(document).ready( function () {
+        $(document).ready(function() {
             $('#descripcion').summernote({
                 height: 200,
                 toolbar: [
@@ -145,6 +154,22 @@
                     ['view', ['fullscreen', 'codeview', 'help']],
                 ],
             });
-        } );
+        });
+    </script>
+    <script>
+        flatpickr("#tiempo", {
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "H:i", // formato 24h sin AM/PM
+            time_24hr: true, // fuerza 24 horas
+            defaultDate: "00:00"
+        });
+        flatpickr("#tiempo_vigencia", {
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "H:i", // formato 24h sin AM/PM
+            time_24hr: true, // fuerza 24 horas
+            defaultDate: "00:00"
+        });
     </script>
 @endsection

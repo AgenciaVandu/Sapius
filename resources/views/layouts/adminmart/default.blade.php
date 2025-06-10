@@ -32,10 +32,12 @@
         window.onload = function() {
             if (navigator.maxTouchPoints > 0 || 'ontouchstart' in window) {
                 document.body.innerHTML =
-                "<h1>Acceso Restringido</h1><p>No puedes acceder desde un móvil o tablet.</p>";
+                    "<h1>Acceso Restringido</h1><p>No puedes acceder desde un móvil o tablet.</p>";
             }
         };
     </script>
+    <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 </head>
 
 <body @if (config('app.env') == 'production') oncontextmenu="return false;" onselectstart="return false;" @endif>
