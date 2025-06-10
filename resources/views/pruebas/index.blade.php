@@ -114,7 +114,7 @@
             var activo = true;
             var endpoint = '{{ URL::route(Auth::user()->rol[0]->slug.".gpru",["leccion_id" => $leccion->id,"active" => "enable"]) }}';
             var show = '<a class="btn btn-primary btn-detalle" href="javascript:void(0)" id="{{ route(Auth::user()->rol[0]->slug.'.pruebas.show',1) }}"><i class="fas fa-eye"></i></a>';
-            var importPreg = '<a class="btn btn-primary btn-detalle" href="javascript:void(0)" id="{{ route(Auth::user()->rol[0]->slug.'.preguntas.form-importar',1) }}"><i class="fas fa-upload"></i></a>';
+            var importPreg = '<a class="btn btn-primary btn-detalle" href="javascript:void(0)" id="{{ route(Auth::user()->rol[0]->slug.'.preguntas.form.importar','__ID__') }}"><i class="fas fa-upload"></i></a>';
 
             $( "#btnActivo" ).click(function() {
                 if(activo){
@@ -183,9 +183,9 @@
                     // preguntas
                     $(row).find('td:eq(2)').html( '<form method="POST" action="{{ route(Auth::user()->rol[0]->slug.'.preguntas.index') }}"> @csrf <input name="prueba_id" type="hidden" value="'+data['id']+'"> <button type="submit" class="btn btn-primary"><i class="fas fa-list"></i></button> </form>' );
                      // duplicar puebas
-                     $(row).find('td:eq(3)').html( '<form method="POST" action="{{ route(Auth::user()->rol[0]->slug.'.pruebas.duplicate') }}"> @csrf <input name="id" type="hidden" value="'+data['id']+'"> <button type="submit" class="btn btn-primary"><i class="fas fa-copy"></i></button> </form>' );
+                    $(row).find('td:eq(3)').html( '<form method="POST" action="{{ route(Auth::user()->rol[0]->slug.'.pruebas.duplicate') }}"> @csrf <input name="id" type="hidden" value="'+data['id']+'"> <button type="submit" class="btn btn-primary"><i class="fas fa-copy"></i></button> </form>' );
                     // importar preguntas
-                    var i = importPreg.replace('1', data['id']);
+                    var i = importPreg.replace('__ID__', data['id']);
                     $(row).find('td:eq(4)').html(i);
 
                     // editar
