@@ -355,6 +355,15 @@
                                 <div class="sctn-col half l"><input type="text" placeholder="3 dígitos"
                                         autocomplete="off" data-openpay-card="cvv2"></div>
                             </div>
+                            <div>
+                                <input type="hidden" name="curso_id" value="{{ $curso->id }}">
+                                <input type="hidden" name="curso_precio" value="{{ $curso->precio }}">
+                                <input type="hidden" name="curso_descripcion" value="{{ $curso->identificador }}">
+                                <input type="hidden" name="user_name" value="{{ $user->nombre }}">
+                                <input type="hidden" name="user_lastname" value="{{ $user->apellido }}">
+                                <input type="hidden" name="user_email" value="{{ $user->email }}">
+                                <input type="hidden" name="user_phone" value="{{ $user->telefono }}">
+                            </div>
                         </div>
                         <div class="openpay">
                             <div class="logo">Transacciones realizadas vía:</div>

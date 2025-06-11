@@ -345,11 +345,12 @@ Route::group(['middleware' =>['instructor','restrict.mobile'],'prefix' => 'instr
 });
 
 Route::group(['middleware' =>['alumno','restrict.mobile'],'prefix' => 'alumno'], function() {
-    Route::get('/', 'HomeController@index')->name('alumno');
+    Route::get('/', 'HomeController@index')->name('alumno.home');
     Route::post('/users/profile', 'UserController@profile')->name('alumno.profile');//{id}
     Route::get('/users/pase/{file}', 'UserController@pase')->name('alumno.pase');
     Route::get('/users/documento/{file}', 'UserController@documento')->name('alumno.documento');
-    Route::get('/checkout/{curso}','Cursos\CursoController@checkout')->name('alumno.checkout');
+    Route::get('/checkout/{curso_id}','CheckoutController@createCheckout')->name('alumno.checkout');
+    Route::get('/errorPayment','CheckoutController@errorPayment')->name('errors.payment');
 
     Route::get('/checkout', 'CheckoutController@createCheckout')->name('checkout');
     Route::post('/payout', 'CheckoutController@processPay')->name('checkout.processPayout');
@@ -358,7 +359,7 @@ Route::group(['middleware' =>['alumno','restrict.mobile'],'prefix' => 'alumno'],
     Route::post('/curso', 'Registro\CursoProgramadoController@cursoDetallado')->name('cursos.detallado');
     Route::post('/modulo', 'Registro\CursoProgramadoController@leccionDetallada')->name('leccion.detallada');
     Route::get('/inscripcion/{curso_id}', 'Registro\InscripcionController@inscripcion')->name('inscripcion.form');
-    Route::post('/inscripcion', 'Registro\InscripcionController@pago')->name('inscripcion.pago');
+    Route::get('/inscribir/{curso_id}', 'CheckoutController@pago')->name('inscripcion.pago');
     Route::get('/cursos/video', 'Cursos\CursoController@video')->name('cursos.video');
     Route::get('/cursos/token', 'Cursos\CursoController@token')->name('cursos.token');
     Route::post('/cursos/payment', 'Cursos\CursoController@payment')->name('cursos.payment');

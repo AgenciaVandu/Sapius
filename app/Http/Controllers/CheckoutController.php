@@ -5,36 +5,42 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Openpay\Data\Openpay;
 use Openpay\Data\OpenpayApiRequestError;
+use App\Models\Registro\CursoProgramado;
+use App\Models\Registro\Inscripcion;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Registro\CursoProgramadoController as Curso;
 
 class CheckoutController extends Controller
 {
-    public function createCheckout()
+    public function createCheckout($curso_id)
     {
-        return view('checkout');
+        $curso = CursoProgramado::with('Curso')->where('id',$curso_id)->first();
+        $user = auth()->user();
+        return view('checkout', compact('curso','user'));
     }
 
 
     public function processPay(Request $request)
     {
-        /* return $request->token_id;*/
-        $openpay = Openpay::getInstance('m4gx48zqyw8xs4en1z1u','sk_d70ffc17846544e39488869d11fac3dc','MX','127.0.0.1');
+        $openpay = Openpay::getInstance(config('openpay.merchant_id'), config('openpay.private_key'), config('openpay.currency'), config('openpay.ip'));
+
 
         $customer = [
-            'name' => 'Alfredo',
-            'last_name' => 'Gonzalez Marenco',
-            'phone_number' => '9993629936',
-            'email' => 'marencocode@gmail.com',
+            'name' => $request->user_name,
+            'last_name' => $request->user_lastname,
+            'phone_number' => $request->user_phone,
+            'email' => $request->user_email,
         ];
 
         $chargeData = [
             'method' => 'card',
             'source_id' => $request->token_id,
-            'amount' => 100.00, // formato númerico con hasta dos dígitos decimales.
+            'amount' => $request->curso_precio, // formato númerico con hasta dos dígitos decimales.
             'currency' => 'MXN',
-            'description' => 'Pago de pruebas',
+            'description' => $request->curso_descripcion,
             'device_session_id' => $request->deviceIdHiddenFieldName,
-            'order_id' => 'ORD000321'.rand(),
-            "redirect_url" => "https://sapius.com.mx",
+            'order_id' => 'SAPIUS'.$request->curso_id.''.rand(),
+            "redirect_url" => route('inscripcion.pago', $request->curso_id),
             "use_3d_secure" => "true",
             'customer' => $customer
         ];
@@ -47,16 +53,63 @@ class CheckoutController extends Controller
             // 🔁 Redirige al usuario para completar la autenticación 3D Secure
             return redirect($redirectUrl);
 
-            
-        } catch (OpenpayApiRequestError $e) {
-            dd([
-                'message' => $e->getMessage(),
-                'httpCode' => $e->getHttpCode(),
-                'errorCode' => $e->getErrorCode(),
-                'description' => $e->getDescription(),
-                'requestId' => $e->getRequestId()
-            ]);
+
+        } catch (\Exception $e) {
+            // Verifica si es una excepción de Openpay
+            if ($e instanceof \Openpay\Data\OpenpayApiRequestError ||
+                $e instanceof \Openpay\Data\OpenpayApiTransactionError ||
+                $e instanceof \Openpay\Data\OpenpayApiAuthError ||
+                $e instanceof \Openpay\Data\OpenpayApiConnectionError) {
+
+                // Accede a los métodos de Openpay
+                $code = method_exists($e, 'getErrorCode') ? $e->getErrorCode() : 'Desconocido';
+                $description = method_exists($e, 'getDescription') ? $e->getDescription() : $e->getMessage();
+
+                return redirect()->route('errors.payment')->with([
+                    'error' => $description,
+                    'code' => $code,
+                ]);
             }
 
+            // Si no es de Openpay, maneja el error general
+            return redirect()->route('errors.payment')->with([
+                'error' => $e->getMessage(),
+                'code' => $e->getCode(), // este es el "code" general de PHP, no el error_code de Openpay
+            ]);
+                }
+
     }
+
+    public function pago(Request $request, $curso_id){
+
+            /* return $_GET['id']; */
+            $id_carge = $_GET['id'];
+            $openpay = Openpay::getInstance(config('openpay.merchant_id'), config('openpay.private_key'), config('openpay.currency'), config('openpay.ip'));
+            $charge = $openpay->charges->get($id_carge);
+
+            if ($charge->status === 'completed') {
+                $cursoProgramado = CursoProgramado::with('Curso')->where('id',$curso_id)->first();
+                $curso = $cursoProgramado->Curso;
+
+                $inscripcion = New Inscripcion();
+
+                $inscripcion->user_id = Auth::user()->id;
+                $inscripcion->curso_programado_id = $curso_id;
+                $inscripcion->referencia = null;
+                $inscripcion->tipo_pago = null;
+                $inscripcion->clave = null;
+
+                $inscripcion->save();
+
+                $send = new Curso;
+                return redirect()->route('alumno.home');
+            }else{
+                dd('Pago no completado');
+            }
+        }
+
+
+        public function errorPayment(){
+            return view('errors.payment');
+        }
 }

@@ -15,7 +15,7 @@
         <div class="row justify-content-center px-5">
             <div class="col-5 px-5">
                 <img src="{{ route(Auth::user()->rol[0]->slug . '.cursos.image', ['file' => $curso->Curso->imagen]) }}"
-                                        id="img" alt="..." class="img-thumbnail">
+                    id="img" alt="..." class="img-thumbnail">
             </div>
             <div class="col-5">
                 <div class="card-body text-center">
@@ -53,10 +53,10 @@
                 </div>
             </div>
         </div>
-    <div>
-        {{-- Boton para ir al pago --}}
-        <a href="{{ route('alumno.checkout',$curso) }}" class="btn btn-primary btn-block">Ir al pago</a>
-    </div>
+        <div>
+            {{-- Boton para ir al pago --}}
+            <a href="{{ route('alumno.checkout', $curso) }}" class="btn btn-primary btn-block">Ir al pago</a>
+        </div>
     </div>
 @endsection
 
@@ -120,22 +120,6 @@
                     );
                 });
             });
-            /* //Codigo para conekta........
-            var conektaSuccessResponseHandler;
-            conektaSuccessResponseHandler = function(token) {
-                var $form;
-                $form = $('#form-pago');
-
-                /* Inserta el token_id en la forma para que se envíe al servidor */
-            //$form.append($("<input type=\"hidden\" name=\"conektaTokenId\" />").val(token.id));
-
-            /* and submit */
-            //$form.get(0).submit();
-            //};
-
-            //conektaErrorResponseHandler = function(token) {
-            //  console.log(token);
-            //}; */
         });
     </script>
 @endsection

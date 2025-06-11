@@ -39,7 +39,8 @@ class HomeController extends Controller
         //dd($cursos[0]->CursoProgramado()->get());
         if (count($cursos)) return view('alumno.home')->with('cursos', $cursos);
 
-        return $this->cursosDisponibles();
+        return view('alumno.home')->with('cursos', $cursos);
+        /* return $this->cursosDisponibles(); */
     }
 
     public function cursosDisponibles()
@@ -50,6 +51,7 @@ class HomeController extends Controller
             })
             ->where('fecha_inicio', '<=', date('Y-m-d H:i:s'))
             ->where('fecha_fin', '>=', date('Y-m-d H:i:s'))->get();
+
 
         return view('alumno.cursos')->with('cursos', $cursos);
     }
