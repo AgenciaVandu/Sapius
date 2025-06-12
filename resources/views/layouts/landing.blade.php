@@ -184,7 +184,7 @@
                                     class="fab fa-facebook pl-3 pr-3 icono"></i></a>
                             <a href="https://www.instagram.com/sapius_latinoamerica/"><i
                                     class="fab fa-instagram pr-3 icono"></i></a>
-                            <a href="">
+                            <a href="https://x.com/SapiusMx">
                                 <i class="fab pr-3 icono">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                         fill="currentColor" class="bi bi-twitter-x" viewBox="0 0 16 16">
