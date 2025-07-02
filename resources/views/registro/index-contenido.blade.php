@@ -72,7 +72,6 @@
                                     @endphp
                                     <tr style="border-block-start: medium solid blue;">
                                         <td>
-                                            {{ $leccion->titulo }} -{{ $leccion->id }}
                                             <input id="leccion_id_{{ $leccion->id }}" type="hidden"
                                                 name="leccion_id_{{ $leccion->id }}" value="{{ $leccion->id }}">
                                         </td>
