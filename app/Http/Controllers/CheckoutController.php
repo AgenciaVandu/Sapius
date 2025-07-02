@@ -16,7 +16,7 @@ class CheckoutController extends Controller
     {
         $curso = CursoProgramado::with('Curso')->where('id',$curso_id)->first();
         $user = auth()->user();
-        return view('checkout', compact('curso','user'));
+        return view('alumno.checkout', compact('curso','user'));
     }
 
 

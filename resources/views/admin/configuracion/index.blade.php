@@ -39,16 +39,19 @@
                                 data-parent="#accordionExample">
                                 <div class="card-body">
                                     <div>
-                                        <div class="row justify-content-md-center mb-4">
+                                        <div class="row justify-content-md-center mb-4" id="slides">
                                             @foreach ($slides as $slide)
-                                                <div class="col col-lg-2">
+                                                <div class="col col-lg-2 handle" data-id="{{ $slide->id }}">
                                                     <div class="card" style="width: 8rem;">
                                                         <img src="{{ asset('storage/' . $slide->img) }}" alt="Imagen subida"
-                                                            width="100%" height="auto">
+                                                            width="100%" style="min-height: 8rem; max-height:8rem;">
                                                         <div class="card-body">
                                                             <a href="{{ route('admin.configuracion.slide,delete', $slide) }}"
                                                                 class="btn btn-primary btn-sm">Eliminar</a>
                                                         </div>
+                                                    </div>
+                                                    <div class="handle">
+                                                        <i class="fas fa-arrows-alt"></i>
                                                     </div>
                                                 </div>
                                             @endforeach
@@ -117,6 +120,7 @@
                                     <table class="table table-sm p-5">
                                         <thead class="thead-dark">
                                             <tr>
+                                                <th scope="col"></th>
                                                 <th scope="col">Foto</th>
                                                 <th scope="col">Nombre</th>
                                                 <th scope="col">Texto 1</th>
@@ -124,9 +128,12 @@
                                                 <th scope="col"></th>
                                             </tr>
                                         </thead>
-                                        <tbody>
+                                        <tbody id="prides">
                                             @foreach ($prides as $pride)
-                                                <tr>
+                                                <tr data-id="{{ $pride->id }}">
+                                                    <td class="handle">
+                                                        <i class="fas fa-arrows-alt"></i>
+                                                    </td>
                                                     <th scope="row">
                                                         <img src="{{ asset('storage/' . $pride->img) }}"
                                                             class="img-fluid rounded-circle" style="width: 3.8rem;"
@@ -237,13 +244,13 @@
                                                 @csrf
                                                 <div class="form-group">
                                                     <label for="name">Nombre</label>
-                                                    <input type="text" class="form-control" id="name" name="name"
-                                                        required>
+                                                    <input type="text" class="form-control" id="name"
+                                                        name="name" required>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="text">Descripcion</label>
-                                                    <input type="text" class="form-control" id="text" name="description"
-                                                        required>
+                                                    <input type="text" class="form-control" id="text"
+                                                        name="description" required>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="img">Foto</label>
@@ -260,15 +267,19 @@
                                     <table class="table table-sm p-5">
                                         <thead class="thead-dark">
                                             <tr>
+                                                <th scope="col"></th>
                                                 <th scope="col">Foto</th>
                                                 <th scope="col">Nombre</th>
                                                 <th scope="col">Descripcion</th>
                                                 <th scope="col"></th>
                                             </tr>
                                         </thead>
-                                        <tbody>
+                                        <tbody id="teachers">
                                             @foreach ($teachers as $teacher)
-                                                <tr>
+                                                <tr data-id="{{ $teacher->id }}">
+                                                    <td class="handle">
+                                                        <i class="fas fa-arrows-alt"></i>
+                                                    </td>
                                                     <th scope="row">
                                                         <img src="{{ asset('storage/' . $teacher->img) }}"
                                                             class="img-fluid rounded-circle" style="width: 3.8rem;"
@@ -285,8 +296,8 @@
                                                         </button>
 
                                                         <!-- Modal -->
-                                                        <div class="modal fade" id="exampleModalTeacher{{ $teacher->id }}"
-                                                            tabindex="-1"
+                                                        <div class="modal fade"
+                                                            id="exampleModalTeacher{{ $teacher->id }}" tabindex="-1"
                                                             aria-labelledby="exampleModalLabel{{ $teacher->id }}"
                                                             aria-hidden="true">
                                                             <div class="modal-dialog">
@@ -316,7 +327,8 @@
                                                                                 <label for="text">Descripcion</label>
                                                                                 <input type="text" class="form-control"
                                                                                     id="text" name="description"
-                                                                                    value="{{ $teacher->description }}" required>
+                                                                                    value="{{ $teacher->description }}"
+                                                                                    required>
                                                                             </div>
                                                                             <div class="form-group">
                                                                                 <label for="img">Foto</label>
@@ -351,4 +363,66 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('javascript')
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <!-- jsDelivr :: Sortable :: Latest (https://www.jsdelivr.com/package/npm/sortablejs) -->
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            new Sortable(teachers, {
+                animation: 150,
+                ghostClass: 'bg-primary',
+                handle: '.handle',
+                store: {
+                    set: function(sortable) {
+                        const teachers = sortable.toArray();
+                        axios.post('{{ route('api.sort.teachers') }}', {
+                            teachers: teachers
+                        }).catch(function(error) {
+                            console.error(error);
+                        });
+                    }
+                }
+
+            });
+
+            new Sortable(prides, {
+                animation: 150,
+                ghostClass: 'bg-primary',
+                handle: '.handle',
+                store: {
+                    set: function(sortable) {
+                        const prides = sortable.toArray();
+                        axios.post('{{ route('api.sort.prides') }}', {
+                            prides: prides
+                        }).catch(function(error) {
+                            console.error(error);
+                        });
+                    }
+                }
+
+            });
+
+
+            new Sortable(slides, {
+                animation: 150,
+                ghostClass: 'bg-primary',
+                handle: '.handle',
+                store: {
+                    set: function(sortable) {
+                        const slides = sortable.toArray();
+                        axios.post('{{ route('api.sort.slides') }}', {
+                            slides: slides
+                        }).catch(function(error) {
+                            console.error(error);
+                        });
+                    }
+                }
+
+            });
+        });
+    </script>
 @endsection

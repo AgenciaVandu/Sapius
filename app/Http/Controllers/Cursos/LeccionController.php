@@ -22,6 +22,7 @@ class LeccionController extends Controller
      */
     public function index(Request $request)
     {
+        /* dd($request); */
         $curso = Curso::find($request->curso_id);
         $modulo = Leccion::find($request->leccion_id);
 
@@ -32,10 +33,18 @@ class LeccionController extends Controller
 
     public function getAll($curso_id,$leccion_id,$active)
     {
-        if($active == "enable")
-        $lecciones = Leccion::where('curso_id',$curso_id)->where('leccion_id',$leccion_id)->where('activo', 'si')->get();
-        elseif($active == "disable")
-        $lecciones = Leccion::where('curso_id',$curso_id)->where('leccion_id',$leccion_id)->where('activo', 'no')->get();
+        $query = Leccion::where('curso_id', $curso_id)
+                        ->where('leccion_id', $leccion_id);
+
+        if ($active == "enable") {
+            $query->where('activo', 'si');
+        } elseif ($active == "disable") {
+            $query->where('activo', 'no');
+        }
+
+        // Ordenar por posición ascendente
+        $lecciones = $query->orderBy('posicion', 'asc')->get();
+
         return $lecciones->toJson();
     }
 
@@ -215,4 +224,20 @@ class LeccionController extends Controller
                                       ->with('leccion',$leccion)
                                       ->with('curso_programado',$curso_programado);
     }
+
+
+
+
+
+    public function reordenar(Request $request)
+{
+    $posiciones = $request->input('posiciones', []);
+
+    foreach ($posiciones as $item) {
+        Leccion::where('id', $item['id'])->update(['posicion' => $item['posicion']]);
+    }
+
+    return response()->json(['success' => true]);
+}
+
 }

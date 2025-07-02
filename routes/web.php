@@ -24,9 +24,9 @@ use App\User;
 
 
 Route::get('/', function () {
-    $images = Slide::where('section','like','slider-index')->get();
-    $prides = Pride::all();
-    $teachers = Teacher::all();
+    $images = Slide::where('section','like','slider-index')->orderBy('position', 'asc')->get();
+    $prides = Pride::orderBy('position', 'asc')->get();
+    $teachers = Teacher::orderBy('position', 'asc')->get();
     return view('index',compact('images','prides','teachers'));
 })->name('landing.home');
 
@@ -175,6 +175,7 @@ Route::group(['middleware' => ['admin','restrict.mobile'],'prefix' => 'admin'], 
     Route::post('/modulos/activate', 'Cursos\LeccionController@activate')->name('admin.lecciones.activate');//{id}
     Route::get('/modulos/getall/{curso_id}/{leccion_id}/{active}', 'Cursos\LeccionController@getAll')->name('admin.gle');
     Route::get('/modulos/image/{file}', 'Cursos\LeccionController@cursoPicture')->name('admin.lecciones.image');
+    Route::post('/lecciones/reordenar', 'Cursos\LeccionController@reordenar')->name('admin.lecciones.reordenar');
 
     // Pruebas
     Route::post('/cursos/modulos/pruebas', 'Cursos\PruebaController@index')->name('admin.pruebas.index');//{leccion_id}
@@ -281,6 +282,8 @@ Route::group(['middleware' =>['instructor','restrict.mobile'],'prefix' => 'instr
     Route::post('/modulos/activate', 'Cursos\LeccionController@activate')->name('instructor.lecciones.activate');//{id}
     Route::get('/modulos/getall/{curso_id}/{leccion_id}/{active}', 'Cursos\LeccionController@getAll')->name('instructor.gle');
     Route::get('/modulos/image/{file}', 'Cursos\LeccionController@cursoPicture')->name('instructor.lecciones.image');
+
+
 
     // Pruebas
     Route::post('/cursos/modulos/pruebas', 'Cursos\PruebaController@index')->name('instructor.pruebas.index');//{leccion_id}

@@ -151,13 +151,6 @@
 
 @section('javascript')
     <script src="{{ asset('js/funciones.js') }}"></script>
-    <script type="text/javascript" src="https://cdn.conekta.io/js/latest/conekta.js"></script>
-    <script type="text/javascript">
-        // Conekta Public Key
-        Conekta.setPublishableKey('key_OKaHFsyf7d8dHe9fyKomsig');
-        // ...
-    </script>
-
     <script>
         $('#exampleModal').on('show.bs.modal', function(event) {
             var button = $(event.relatedTarget) // Button that triggered the modal

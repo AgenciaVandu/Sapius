@@ -74,9 +74,9 @@ class HomeController extends Controller
 
     public function configuracion()
     {
-        $slides = Slide::where('section', 'LIKE', 'slider-index')->get();
-        $prides = Pride::paginate(5);
-        $teachers = Teacher::paginate(5);
+        $slides = Slide::where('section', 'LIKE', 'slider-index')->orderBy('position', 'asc')->get();
+        $prides = Pride::orderBy('position', 'asc')->get();
+        $teachers = Teacher::orderBy('position', 'asc')->get();
         return view('admin.configuracion.index', compact('slides', 'prides','teachers'));
     }
 
