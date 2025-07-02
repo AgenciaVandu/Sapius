@@ -105,6 +105,8 @@ Route::get ('/simuladores-nutricion', function (){
 })->name('simuladores.nutricion');
 
 
+Route::get('/cursos/image/{file}', 'Cursos\CursoController@cursoPicture')->name('public.cursos.image');
+
 
 
 

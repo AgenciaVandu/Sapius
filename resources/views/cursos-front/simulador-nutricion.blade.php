@@ -23,7 +23,7 @@
     <section class="exani">
         <div class="container">
             <div class="row">
-                <div class="col-md-7 col-lg-7 col-sm-12 m-auto pb-4 exani__faq">
+                <div class="col-md-6 col-lg-6 col-sm-12 m-auto pb-4 exani__faq">
                     <h3 class="color-gray">
                         <strong>Simuladores Globales - EGEL Plus Nutrición</strong>
                     </h3>
@@ -55,20 +55,21 @@
                     </p>
                     <a href="" class="btn btn-primary">COMENZAR</a>
                 </div>
-                <div class="col-md-5 col-lg-5 col-sm-12 text-center">
+                <div class="col-md-6 col-lg-6 col-sm-12 text-center">
                     <div class="glide">
                         <div class="glide__track" data-glide-el="track">
                             <ul class="glide__slides">
+
                                 @foreach ($simuladores as $simulador)
                                     <li class="glide__slide">
-                                        <div class="card text-center mx-auto text-secondary" style="width: 25rem;">
-                                            <img src="{{ route(Auth::user()->rol[0]->slug . '.cursos.image', ['file' => $simulador->Curso->imagen]) }}"
+                                        <div class="card text-center mx-auto text-secondary" style="width: 30rem;">
+                                            <img src="{{ route('public.cursos.image', ['file' => $simulador->Curso->imagen]) }}"
                                                 class="card-img-top" alt="{{ $simulador->titulo }}">
                                             <div class="card-body">
                                                 <h5 class="card-title">{{ $simulador->Curso->titulo }}</h5>
-                                                <p class="card-text font-blod">{{ $simulador->identificador }}</p>
-                                                {{-- <p class="card-text">{{!! $simulador->Curso->descripcion !!}}</p> --}}
-                                                <a href="#" class="btn btn-primary">Obtener el simulador</a>
+                                                <p class="card-text font-blod text-sm">{{ $simulador->identificador }}</p>
+                                                <h2 class="card-text">${{ number_format($simulador->precio, 2) }}</h2>
+                                                <a href="{{ route('inscripcion.form',  $simulador->id) }}" class="btn btn-primary">Obtener el simulador</a>
                                             </div>
                                         </div>
                                     </li>
