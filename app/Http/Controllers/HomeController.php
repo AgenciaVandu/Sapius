@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cursos\Category;
 use App\Models\Landing\Pride;
 use App\Models\Landing\Slide;
 use App\Models\Landing\Teacher;
@@ -45,6 +46,7 @@ class HomeController extends Controller
 
     public function cursosDisponibles()
     {
+        $category = Category::where('name', 'Cursos')->first();
         $cursos = CursoProgramado::with('Curso')
             ->whereDoesntHave('Inscritos', function ($query) {
                 $query->where('users.id', Auth::user()->id);
@@ -53,7 +55,35 @@ class HomeController extends Controller
             ->where('fecha_fin', '>=', date('Y-m-d H:i:s'))->get();
 
 
-        return view('alumno.cursos')->with('cursos', $cursos);
+        return view('alumno.cursos')->with('cursos', $cursos)->with('category', $category);
+    }
+
+    public function guiasDisponibles()
+    {
+        $category = Category::where('name', 'Guias')->first();
+        $cursos = CursoProgramado::with('Curso')
+            ->whereDoesntHave('Inscritos', function ($query) {
+                $query->where('users.id', Auth::user()->id);
+            })
+            ->where('fecha_inicio', '<=', date('Y-m-d H:i:s'))
+            ->where('fecha_fin', '>=', date('Y-m-d H:i:s'))->get();
+
+
+        return view('alumno.guias')->with('cursos', $cursos)->with('category', $category);
+    }
+
+    public function simuladoresDisponibles()
+    {
+        $category = Category::where('name', 'Simuladores')->first();
+        $cursos = CursoProgramado::with('Curso')
+            ->whereDoesntHave('Inscritos', function ($query) {
+                $query->where('users.id', Auth::user()->id);
+            })
+            ->where('fecha_inicio', '<=', date('Y-m-d H:i:s'))
+            ->where('fecha_fin', '>=', date('Y-m-d H:i:s'))->get();
+
+
+        return view('alumno.simuladores')->with('cursos', $cursos)->with('category', $category);
     }
 
     public function admin()

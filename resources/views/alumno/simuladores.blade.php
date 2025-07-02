@@ -6,7 +6,7 @@
             <div class="col-12 align-self-center">
                 <h2 class="page-title text-truncate text-dark font-weight-medium mb-1">
                     {{ Auth::user()->nombre_completo }}</h2>
-                <h3 class="page-title text-truncate text-dark font-weight-medium mb-1">Cursos disponibles</h3>
+                <h3 class="page-title text-truncate text-dark font-weight-medium mb-1">Simuladores disponibles</h3>
             </div>
         </div>
     </div>

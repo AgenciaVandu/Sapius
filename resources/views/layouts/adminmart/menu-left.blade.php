@@ -56,7 +56,19 @@
                         <li class="sidebar-item">
                             <a class="sidebar-link" href="{{ route('cursos.disponibles') }}" aria-expanded="false">
                                 <i data-feather="flag" class="feather-icon"></i>
-                                <span class="hide-menu">Cursos</span>
+                                <span class="hide-menu">Cursos disponibles</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link" href="{{ route('guias.disponibles') }}" aria-expanded="false">
+                                <i data-feather="flag" class="feather-icon"></i>
+                                <span class="hide-menu">Guias disponibles</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link" href="{{ route('simuladores.disponibles') }}" aria-expanded="false">
+                                <i data-feather="flag" class="feather-icon"></i>
+                                <span class="hide-menu">Simuladores disponibles</span>
                             </a>
                         </li>
 

@@ -359,6 +359,8 @@ Route::group(['middleware' =>['alumno','restrict.mobile'],'prefix' => 'alumno'],
     Route::post('/payout', 'CheckoutController@processPay')->name('checkout.processPayout');
     //Cursos
     Route::get('/cursos', 'HomeController@cursosDisponibles')->name('cursos.disponibles');
+    Route::get('/guias', 'HomeController@guiasDisponibles')->name('guias.disponibles');
+    Route::get('/simuladores', 'HomeController@simuladoresDisponibles')->name('simuladores.disponibles');
     Route::post('/curso', 'Registro\CursoProgramadoController@cursoDetallado')->name('cursos.detallado');
     Route::post('/modulo', 'Registro\CursoProgramadoController@leccionDetallada')->name('leccion.detallada');
     Route::get('/inscripcion/{curso_id}', 'Registro\InscripcionController@inscripcion')->name('inscripcion.form');
