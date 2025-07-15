@@ -80,25 +80,29 @@ Route::get ('/cursos-presenciales', function (){
 
 Route::get ('/guias-medicina', function (){
     $category = Category::where('name','guias')->first();
-    $guias = CursoProgramado::where('category_id', $category->id)->where('identificador','like','%medicina%')->where('activo','si')->get();
+    $guias = CursoProgramado::where('category_id', $category->id)->where('identificador','like','%medicina%')->where('activo','si')->where('fecha_inicio', '<=', date('Y-m-d H:i:s'))
+            ->where('fecha_fin', '>=', date('Y-m-d H:i:s'))->get();
     return view('cursos-front.guia-medicina', compact('guias'));
 })->name('guias.medicina');
 
 Route::get ('/guias-nutricion', function (){
     $category = Category::where('name','guias')->first();
-    $guias = CursoProgramado::where('category_id', $category->id)->where('identificador','like','%nutricion%')->where('activo','si')->get();
+    $guias = CursoProgramado::where('category_id', $category->id)->where('identificador','like','%nutricion%')->where('activo','si')->where('fecha_inicio', '<=', date('Y-m-d H:i:s'))
+            ->where('fecha_fin', '>=', date('Y-m-d H:i:s'))->get();
     return view('cursos-front.guia-nutricion', compact('guias'));
 })->name('guias.nutricion');
 
 Route::get ('/simuladores-medicina', function (){
     $category = Category::where('name','simuladores')->first();
-    $simuladores = CursoProgramado::where('category_id', $category->id)->where('identificador','like','%medicina%')->where('activo','si')->get();
+    $simuladores = CursoProgramado::where('category_id', $category->id)->where('identificador','like','%medicina%')->where('activo','si')->where('fecha_inicio', '<=', date('Y-m-d H:i:s'))
+            ->where('fecha_fin', '>=', date('Y-m-d H:i:s'))->get();
     return view('cursos-front.simulador-medicina', compact('simuladores'));
 })->name('simuladores.medicina');
 
 Route::get ('/simuladores-nutricion', function (){
     $category = Category::where('name','simuladores')->first();
-    $simuladores = CursoProgramado::where('category_id', $category->id)->where('identificador','like','%nutricion%')->where('activo','si')->get();
+    $simuladores = CursoProgramado::where('category_id', $category->id)->where('identificador','like','%nutricion%')->where('activo','si')->where('fecha_inicio', '<=', date('Y-m-d H:i:s'))
+            ->where('fecha_fin', '>=', date('Y-m-d H:i:s'))->get();
     return view('cursos-front.simulador-nutricion', compact('simuladores'));
 })->name('simuladores.nutricion');
 
