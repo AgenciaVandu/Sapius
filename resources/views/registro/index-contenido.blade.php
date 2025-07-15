@@ -70,6 +70,7 @@
                                             }
                                         }
                                     @endphp
+
                                     <tr style="border-block-start: medium solid blue;">
                                         <td>
                                             {{ $leccion->titulo }} -{{ $leccion->id }}
@@ -91,12 +92,12 @@
                                         <td>
                                             <input type="time" name="hora_inicial_{{ $leccion->id }}" required
                                                 autocomplete="hora_inicial_{{ $leccion->id }}"
-                                                value="@if ($hora_inicial) {{ $hora_inicial }} @endif">
+                                                value="{{ $hora_inicial ? substr($hora_inicial, 0, 5) : '' }}">
                                         </td>
                                         <td>
                                             <input type="time" name="hora_final_{{ $leccion->id }}" required
                                                 autocomplete="hora_final_{{ $leccion->id }}"
-                                                value="@if ($hora_final) {{ $hora_final }} @endif">
+                                                value="{{ $hora_final ? substr($hora_final, 0, 5) : '' }}">
                                         </td>
                                     </tr>
                                     @foreach ($leccion['Clases'] as $clase)
@@ -152,12 +153,12 @@
                                             <td>
                                                 <input type="time" name="hora_inicial_{{ $clase->id }}" required
                                                     autocomplete="hora_inicial_{{ $clase->id }}" autofocus
-                                                    value="@if ($hora_inicial) {{ $hora_inicial }} @endif">
+                                                    value="{{ $hora_inicial ? substr($hora_inicial, 0, 5) : '' }}">
                                             </td>
                                             <td>
                                                 <input type="time" name="hora_final_{{ $clase->id }}" required
                                                     autocomplete="hora_final_{{ $clase->id }}" autofocus
-                                                    value="@if ($hora_final) {{ $hora_final }} @endif">
+                                                    value="{{ $hora_final ? substr($hora_final, 0, 5) : '' }}">
                                             </td>
                                         </tr>
                                     @endforeach
