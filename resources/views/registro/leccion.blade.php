@@ -8,9 +8,7 @@
             }
         }
         }
-
     </style>
-
 @endsection
 
 @section('breadcrumb')
@@ -36,17 +34,20 @@
         <div class="col-md-8">
             <div class="card">
                 @if (isset($video) || isset($videoext))
-                    <!-- @if (isset($video)) -->
-                            <div style="text-align: center">
-                                <video style="width:100%" src="https://sapius.com.mx/storage/{{ $video->ruta }}" controls controlsList="nodownload">
-                                    Tu navegador no soporta la etiqueta video.
-                                </video>
-                            </div>
-                    <!--@elseif (isset($videoext))
-                             <div style="text-align: center">
-                                <iframe width="100%" height="360" src="{{ $videoext->ruta }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                               </div> @endif-->
-
+                    <!-- @if (isset($video))
+    -->
+                    <div style="text-align: center">
+                        <video style="width:100%" src="https://sapius.com.mx/storage/{{ $video->ruta }}" controls
+                            controlsList="nodownload">
+                            Tu navegador no soporta la etiqueta video.
+                        </video>
+                    </div>
+                    <!--
+@elseif (isset($videoext))
+    <div style="text-align: center">
+                                    <iframe width="100%" height="360" src="{{ $videoext->ruta }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                   </div>
+    @endif-->
                 @else
                     @if ($leccion->imagen !== null && $leccion->imagen !== '')
                         <img class="card-img-top img-fluid"
@@ -75,14 +76,26 @@
                                             ->first();
                                         $fecha_inicial = $contenido['fecha_inicial'];
                                         $array_fecha_inicial = explode('/', $fecha_inicial);
-                                        $fecha_inicial = $contenido['fecha_inicial'] ? $array_fecha_inicial[1] . '/' . $array_fecha_inicial[0] . '/' . $array_fecha_inicial[2] : null;
+                                        $fecha_inicial = $contenido['fecha_inicial']
+                                            ? $array_fecha_inicial[1] .
+                                                '/' .
+                                                $array_fecha_inicial[0] .
+                                                '/' .
+                                                $array_fecha_inicial[2]
+                                            : null;
                                         $hora_inicial = $contenido['hora_inicial'] ? $contenido['hora_inicial'] : null;
                                         $date_start = new DateTime($fecha_inicial . ' ' . $hora_inicial);
                                         /* $fecha_inicial = ($contenido['fecha_inicial'])? strtotime(str_replace('/','-',$contenido['fecha_inicial'])) : null; */
                                         /* $fecha_final = ($contenido['fecha_final'])? strtotime(str_replace('/','-',$contenido['fecha_final'])) :null; */
                                         $fecha_final = $contenido['fecha_final'];
                                         $array_fecha_final = explode('/', $fecha_final);
-                                        $fecha_final = $contenido['fecha_final'] ? $array_fecha_final[1] . '/' . $array_fecha_final[0] . '/' . $array_fecha_final[2] : null;
+                                        $fecha_final = $contenido['fecha_final']
+                                            ? $array_fecha_final[1] .
+                                                '/' .
+                                                $array_fecha_final[0] .
+                                                '/' .
+                                                $array_fecha_final[2]
+                                            : null;
                                         $hora_final = $contenido['hora_final'] ? $contenido['hora_final'] : null;
                                         $date_end = new DateTime($fecha_final . ' ' . $hora_final);
                                     }
@@ -93,7 +106,8 @@
                                 @endphp
                                 {{-- {{ dd($date_diff_start) }} --}}
                                 @if ($date_diff_end->invert == 1 && $date_diff_start->invert == 0)
-                                    <a href="javascript:void(0)" class="list-group-item" onclick="event.preventDefault();
+                                    <a href="javascript:void(0)" class="list-group-item"
+                                        onclick="event.preventDefault();
                                                     document.getElementById('form{{ $item->id }}').submit();">
                                         {{ $item->titulo }}
                                     </a>
@@ -133,37 +147,55 @@
                                         {{-- <i class="fas fa-eye"></i> --}}
                                         Ir a la liga
                                     </a>
-                                @elseif($m->tipo == "imagen")
+                                @elseif($m->tipo == 'imagen')
                                     <a class="list-group-item btn-detalle" href="javascript:void(0)"
                                         id="{{ route('alumnos.medias.show', $m->id) }}">
                                         {{-- <i class="fas fa-eye"></i> --}}
                                         Ver la imagen
                                     </a>
-                                @elseif($m->tipo == "archivo")
-                                    <a class="list-group-item"
-                                        href="{{ URL::route(Auth::user()->rol[0]->slug . '.medias.archivo', ['file' => $m->ruta]) }}">
-                                        {{-- <i class="fas fa-eye"></i> --}}
-                                        Descargar archivo
-                                    </a>
+                                @elseif($m->tipo == 'archivo')
+                                    @if ($curso_programado->category->name == 'Guias')
+
+                                        <form action="{{ route('alumno.view.guias') }}" method="post">
+                                            @csrf
+                                            <input type="hidden" name="file" value="{{ URL::route(Auth::user()->rol[0]->slug . '.medias.archivo', ['file' => $m->ruta]) }}">
+                                            <button type="submit" class="list-group-item"
+                                                href="{{ route('alumno.view.guias') }}">
+                                                {{-- <i class="fas fa-eye"></i> --}}
+                                                Ver Guia
+                                            </button>
+                                        </form>
+                                    @else
+                                        <a class="list-group-item"
+                                            href="{{ URL::route(Auth::user()->rol[0]->slug . '.medias.archivo', ['file' => $m->ruta]) }}">
+                                            {{-- <i class="fas fa-eye"></i> --}}
+                                            Descargar archivo
+                                        </a>
+                                    @endif
                                 @endif
                             @endforeach
                         </div>
                     </div>
                 </div>
             @endif
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">Tareas</h4>
-                    <div class="list-group">
-                        <a class="list-group-item"
-                            href="{{ route('alumno.lecciones.tarea', ['leccion_id' => $leccion->id, 'curso_programado_id' => $curso_programado_id]) }}"
-                            target="_blank">
-                            {{-- <i class="fas fa-eye"></i> --}}
-                            Enviar tarea {{ strtolower($leccion->titulo) }}
-                        </a>
+            @if ($curso_programado->category->name == 'Guias')
+                Recurso aqui
+            @else
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Tareas</h4>
+                        <div class="list-group">
+                            <a class="list-group-item"
+                                href="{{ route('alumno.lecciones.tarea', ['leccion_id' => $leccion->id, 'curso_programado_id' => $curso_programado_id]) }}"
+                                target="_blank">
+                                {{-- <i class="fas fa-eye"></i> --}}
+                                Enviar tarea {{ strtolower($leccion->titulo) }}
+                            </a>
+                        </div>
                     </div>
                 </div>
-            </div>
+            @endif
+
             @if ($leccion->Pruebas->count())
                 <div class="card examen">
                     <div class="card-body">
@@ -200,13 +232,18 @@
                                                 ->where('id', $item->id)
                                                 ->first();
                                         }
-                                        $fecha_inicial = $contenido['fecha_inicial'] ? strtotime(str_replace('/', '-', $contenido['fecha_inicial'])) : null;
-                                        $fecha_final = $contenido['fecha_final'] ? strtotime(str_replace('/', '-', $contenido['fecha_final'])) : null;
+                                        $fecha_inicial = $contenido['fecha_inicial']
+                                            ? strtotime(str_replace('/', '-', $contenido['fecha_inicial']))
+                                            : null;
+                                        $fecha_final = $contenido['fecha_final']
+                                            ? strtotime(str_replace('/', '-', $contenido['fecha_final']))
+                                            : null;
                                     }
                                     $verifica_fecha = $hoy >= $fecha_inicial && $hoy <= $fecha_final;
                                 @endphp
                                 @if ($verifica_fecha)
-                                    <a href="javascript:void(0)" class="list-group-item" onclick="event.preventDefault();
+                                    <a href="javascript:void(0)" class="list-group-item"
+                                        onclick="event.preventDefault();
                                     document.getElementById('form{{ $item->id }}').submit();">
                                         {{ $item->titulo }}
                                     </a>
@@ -219,7 +256,8 @@
                                         <input name="inscripcion_id" type="hidden" value="{{ $inscripcion_id }}">
                                     </form>
                                 @else
-                                    <a href="javascript:void(0)" class="list-group-item disabled" onclick="event.preventDefault();
+                                    <a href="javascript:void(0)" class="list-group-item disabled"
+                                        onclick="event.preventDefault();
                                     document.getElementById('form{{ $item->id }}').submit();">
                                         {{ $item->titulo }}
                                     </a>
@@ -281,13 +319,15 @@
                     reader.readAsDataURL(xhr.response);
                 };
                 @if (auth()->user()->hasRole('alumno') == false)
-                    xhr.open('GET', '{{ route(Auth::user()->rol[0]->slug . '.medias.stream2', ['filename' => $video->ruta]) }}');
+                    xhr.open('GET',
+                        '{{ route(Auth::user()->rol[0]->slug . '.medias.stream2', ['filename' => $video->ruta]) }}'
+                        );
                 @else
-                    xhr.open('GET', '{{ route(Auth::user()->rol[0]->slug . '.medias.stream', ['filename' => $video->ruta]) }}');
+                    xhr.open('GET',
+                        '{{ route(Auth::user()->rol[0]->slug . '.medias.stream', ['filename' => $video->ruta]) }}');
                 @endif
                 xhr.send();
             });
-
         </script>
         <script type="text/javascript">
             $(document).ready(function() {
@@ -297,7 +337,6 @@
                 });
 
             });
-
         </script>
         <script type="text/javascript">
             $(document).ready(function() {
@@ -306,8 +345,6 @@
                     e.preventDefault();
                 });
             });
-
         </script>
-
     @endif
 @endsection

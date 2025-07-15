@@ -30,10 +30,8 @@ Route::get('/', function () {
     return view('index',compact('images','prides','teachers'));
 })->name('landing.home');
 
+Route::post('/view','Registro\CursoProgramadoController@viewGuia')->name('alumno.view.guias');
 
-Route::get('/guias', function (){
-    return view('guias');
-});
 
 Route::get('/generate-storage-link', function () {
     Artisan::call('storage:link');
@@ -359,6 +357,7 @@ Route::group(['middleware' =>['alumno','restrict.mobile'],'prefix' => 'alumno'],
 
     Route::get('/checkout', 'CheckoutController@createCheckout')->name('checkout');
     Route::post('/payout', 'CheckoutController@processPay')->name('checkout.processPayout');
+
     //Cursos
     Route::get('/cursos', 'HomeController@cursosDisponibles')->name('cursos.disponibles');
     Route::get('/guias', 'HomeController@guiasDisponibles')->name('guias.disponibles');
@@ -411,6 +410,11 @@ Route::group(['middleware' =>['alumno','restrict.mobile'],'prefix' => 'alumno'],
 
     //Descuentos
     Route::post('descuentos/check', 'Registro\DescuentoController@check')->name('descuentos.check');
+
+
+
+
+
 });
 
 Route::get('email-registro', function () {

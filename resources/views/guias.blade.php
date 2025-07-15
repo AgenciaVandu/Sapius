@@ -28,10 +28,59 @@
 <script src="{{ asset('js/pdf.min.js') }}"></script>
 <script src="{{ asset('js/3dflipbook.min.js') }}"></script>
 
+<!-- To create 3D FlipBook from PDF -->
+{{-- <script type="text/javascript">
+    $('.solid-container').FlipBook({
+        pdf: '{{ asset('templates/FoxitPdfSdk.pdf') }}',
+        controlsProps: {
+            downloadURL: 'books/pdf/FoxitPdfSdk.pdf',
+            actions: {
+                cmdSmartPan: {
+                    enabled: false,
+                    enabledInNarrow: false
+                },
+                cmdPan: {
+                    enabled: false,
+                    enabledInNarrow: false
+                },
+                cmdZoomIn: {
+                    enabled: false,
+                    enabledInNarrow: false
+                },
+                cmdZoomOut: {
+                    enabled: false,
+                    enabledInNarrow: false
+                },
+                cmdFullScreen: {
+                    enabled: false,
+                    enabledInNarrow: false
+                },
+                cmdShare: {
+                    enabled: false,
+                    enabledInNarrow: false
+                },
+                cmdPrint: {
+                    enabled: false,
+                    enabledInNarrow: false
+                },
+                cmdSave: {
+                    enabled: false,
+                    enabledInNarrow: false
+                },
+                cmdFastBackward: {
+                    enabled: false,
+                    enabledInNarrow: false
+                },
+
+            },
+        }
+    });
+</script> --}}
+
 
 <script>
     var options = {
-        pdf: '{{ asset('templates/FoxitPdfSdk.pdf') }}', // you should use this property or pageCallback and pages to specify your book
+        pdf: '{{ $file }}', // you should use this property or pageCallback and pages to specify your book
         pageCallback: function(n) { // this function has to return source description for FlipBook page
             // for image sources
             var imageDescription = {

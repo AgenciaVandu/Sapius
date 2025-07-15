@@ -268,4 +268,17 @@ class CursoProgramadoController extends Controller
         return view('admin.registro.index')->with('curso_programado',$curso);
     }
 
+
+
+
+
+    public function viewGuia(Request $request){
+
+        /* return $request->all(); */
+
+        return view('guias')->with('file',$request->file);
+
+    }
+
+
 }
