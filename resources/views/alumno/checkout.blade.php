@@ -325,17 +325,17 @@
 
 @section('content')
     <div class="content">
-        <div class="row">
-            <div class="col-6">
-                <div class="bkng-tb-cntnt">
-                    <div class="pymnts">
-                        <form action="{{ route('checkout.processPayout') }}" method="POST" id="payment-form">
+        <div class="row" style="min-height: 650px;">
+            <div class="col-6 d-flex align-items-stretch">
+                <div class="bkng-tb-cntnt w-100 h-100">
+                    <div class="pymnts h-100">
+                        <form action="{{ route('checkout.processPayout') }}" method="POST" id="payment-form" class="h-100">
                             @csrf
                             @method('POST')
                             <input type="hidden" name="token_id" id="token_id">
-                            <div class="pymnt-itm card active">
+                            <div class="pymnt-itm card active h-100 d-flex flex-column justify-content-between">
                                 <h2>Tarjeta de crédito o débito</h2>
-                                <div class="pymnt-cntnt">
+                                <div class="pymnt-cntnt flex-grow-1">
                                     <div class="card-expl">
                                         <div class="credit">
                                             <h4>Tarjetas de crédito</h4>
@@ -348,7 +348,8 @@
                                         <div class="sctn-col l">
                                             <label>Nombre del titular</label><input type="text"
                                                 placeholder="Como aparece en la tarjeta" autocomplete="off"
-                                                data-openpay-card="holder_name" value="{{ $user->nombre . ' ' . $user->apellido }}">
+                                                data-openpay-card="holder_name"
+                                                value="{{ $user->nombre . ' ' . $user->apellido }}">
                                         </div>
                                         <div class="sctn-col">
                                             <label>Número de tarjeta</label><input type="text" maxlength="16"
@@ -372,13 +373,15 @@
                                         </div>
                                         <div>
                                             <input type="hidden" name="curso_id" value="{{ $curso->id }}">
-                                            <input type="hidden" name="curso_precio" value="{{ $curso->precio }}">
-                                            <input type="hidden" name="curso_descripcion"
-                                                value="{{ $curso->identificador }}">
+                                            <input type="hidden" name="curso_precio" value="{{ session()->has('descuento') ? $curso->precio - $curso->precio * (session('descuento') / 100) : $curso->precio }}">
+                                            <input type="hidden" name="curso_descripcion" value="{{ $curso->identificador }}">
                                             <input type="hidden" name="user_name" value="{{ $user->nombre }}">
                                             <input type="hidden" name="user_lastname" value="{{ $user->apellido }}">
                                             <input type="hidden" name="user_email" value="{{ $user->email }}">
                                             <input type="hidden" name="user_phone" value="{{ $user->telefono }}">
+                                            @if(session()->has('cupon_codigo'))
+                                                <input type="hidden" name="cupon" value="{{ session('cupon_codigo') }}">
+                                            @endif
                                         </div>
                                     </div>
                                     <div class="openpay">
@@ -388,7 +391,7 @@
                                         </div>
                                     </div>
                                     <div class="sctn-row">
-                                        <a class="button rght" id="pay-button">Pagar</a>
+                                        <a class="button rght" id="pay-button" style="pointer-events: auto;">Pagar</a>
                                     </div>
                                 </div>
                             </div>
@@ -396,15 +399,48 @@
                     </div>
                 </div>
             </div>
-            <div class="col-6">
-                {{-- Informacion del curso --}}
-                <div class="card ml-4">
-                    {{-- <img src="{{ route(Auth::user()->rol[0]->slug . '.cursos.image', ['file' => $curso->Curso->imagen]) }}"
-                        id="img" alt="..." class="img-thumbnail" style="height: 120px"> --}}
-                    <div class="card-body">
-                        <h2 class="card-title">{{ $curso->curso->titulo }}</h2>
-                        <p class="card-text">{!! $curso->curso->descripcion !!}</p>
-                        <h2>Total: ${{ number_format($curso->precio, 2) }} MXN</h2>
+            <div class="col-6 d-flex align-items-stretch justify-content-center">
+                <!-- Información del curso mejorada -->
+                <div class="card shadow border-0 w-100 h-100 d-flex flex-column justify-content-between" style="max-width: 650px;">
+                    <div class="card-header bg-gradient-primary text-white text-center py-3">
+                        <h3 class="mb-0 font-weight-bold">{{ $curso->curso->titulo }}</h3>
+                    </div>
+                    <div class="card-body px-4 py-3 flex-grow-1 d-flex flex-column justify-content-between">
+                        <p class="card-text text-secondary" style="min-height: 30px;">{!! $curso->curso->descripcion !!}</p>
+                        <hr>
+                        @if (session()->has('descuento'))
+                            @php
+                                $descuento = session('descuento');
+                                $precio_final = $curso->precio - $curso->precio * ($descuento / 100);
+                            @endphp
+                            <div class="mb-3 d-flex justify-content-between align-items-center">
+                                <span class="h6 font-weight-bold">
+                                    <del>Precio original</del>
+                                </span>
+                                <span class="h6 font-weight-bold">
+                                    <del>${{ number_format($curso->precio, 2) }} MXN</del>
+                                </span>
+                            </div>
+                            <div class="mb-2 d-flex justify-content-between align-items-center">
+                                <small class="text-muted">Descuento ({{ $descuento }}%)</small>
+                                <span style="font-size:1.2rem;">
+                                    -${{ number_format($curso->precio * ($descuento / 100), 2) }} MXN
+                                </span>
+                            </div>
+                            <div class="mt-3 d-flex justify-content-between align-items-center">
+                                <span class="h2 font-weight-bold">Total a pagar:</span>
+                                <span class="h2 font-weight-bold" style="font-size:2.5rem;">
+                                    ${{ number_format($precio_final, 2) }} MXN
+                                </span>
+                            </div>
+                        @else
+                            <div class="mb-3 d-flex justify-content-between align-items-center">
+                                <span class="h2 font-weight-bold">Total a pagar:</span>
+                                <span class="h2 font-weight-bold" style="font-size:2.5rem;">
+                                    ${{ number_format($curso->precio, 2) }} MXN
+                                </span>
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -413,35 +449,35 @@
 @endsection
 
 @section('javascript')
-<script type="text/javascript">
-    $(document).ready(function() {
+    <script type="text/javascript">
+        $(document).ready(function() {
 
-        OpenPay.setId('m4gx48zqyw8xs4en1z1u');
-        OpenPay.setApiKey('pk_de55d471af484c4080a63e7463fc9cd4');
-        OpenPay.setSandboxMode(true);
-        //Se genera el id de dispositivo
-        var deviceSessionId = OpenPay.deviceData.setup("payment-form", "deviceIdHiddenFieldName");
-        /* console.log(deviceSessionId); */
+            OpenPay.setId('mxnvofvvgnkgcstixn7n');
+            OpenPay.setApiKey('pk_9624d56fe5e7405ca6f7fc9df44f6edf');
+            OpenPay.setSandboxMode(true);
+            //Se genera el id de dispositivo
+            var deviceSessionId = OpenPay.deviceData.setup("payment-form", "deviceIdHiddenFieldName");
 
-        $('#pay-button').on('click', function(event) {
-            event.preventDefault();
-            $("#pay-button").prop("disabled", true);
-            OpenPay.token.extractFormAndCreate('payment-form', sucess_callbak, error_callbak);
+            $('#pay-button').on('click', function(event) {
+                event.preventDefault();
+                // Deshabilita el botón para evitar múltiples envíos
+                $(this).addClass('disabled').css('pointer-events', 'none').text('Procesando...');
+                OpenPay.token.extractFormAndCreate('payment-form', sucess_callbak, error_callbak);
+            });
+
+            var sucess_callbak = function(response) {
+                var token_id = response.data.id;
+                $('#token_id').val(token_id);
+                $('#payment-form').submit();
+            };
+
+            var error_callbak = function(response) {
+                var desc = response.data.description != undefined ? response.data.description : response.message;
+                alert("ERROR [" + response.status + "] " + desc);
+                // Habilita el botón nuevamente si hay error
+                $('#pay-button').removeClass('disabled').css('pointer-events', 'auto').text('Pagar');
+            };
+
         });
-
-        var sucess_callbak = function(response) {
-            var token_id = response.data.id;
-            $('#token_id').val(token_id);
-            $('#payment-form').submit();
-        };
-
-        var error_callbak = function(response) {
-            var desc = response.data.description != undefined ? response.data.description : response
-                .message;
-            alert("ERROR [" + response.status + "] " + desc);
-            $("#pay-button").prop("disabled", false);
-        };
-
-    });
-</script>
+    </script>
 @endsection

@@ -101,13 +101,18 @@ class DescuentoController extends Controller
             $descuento = New Descuento;
             $descuento->mensaje = "Descuentos agotados";
             return back()->with('limit', 'Descuentos agotados');
-        }else{
-            $descuento->limite = $descuento->limite - 1;
-            $descuento->save();
         }
 
-        return back()->with([
+        session([
             'descuento' => $descuento->descuento,
+            'cupon' => $request->clave
         ]);
+        return back();
+    }
+
+
+    public function cancel(){
+        session()->forget(['descuento', 'cupon']);
+        return back();
     }
 }

@@ -9,6 +9,7 @@ use App\Models\Registro\CursoProgramado;
 use App\Models\Registro\Inscripcion;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Registro\CursoProgramadoController as Curso;
+use App\Models\Registro\Descuento;
 
 class CheckoutController extends Controller
 {
@@ -24,6 +25,7 @@ class CheckoutController extends Controller
     {
         $openpay = Openpay::getInstance(config('openpay.merchant_id'), config('openpay.private_key'), config('openpay.currency'), config('openpay.ip'));
 
+        /* dd($request->all()); */
 
         $customer = [
             'name' => $request->user_name,
@@ -39,7 +41,7 @@ class CheckoutController extends Controller
             'currency' => 'MXN',
             'description' => $request->curso_descripcion,
             'device_session_id' => $request->deviceIdHiddenFieldName,
-            'order_id' => 'SAPIUS'.$request->curso_id.''.rand(),
+            'order_id' => $request->curso_id . '-' . auth()->id() . '-' . rand(100, 999),
             "redirect_url" => route('inscripcion.pago', $request->curso_id),
             "use_3d_secure" => "true",
             'customer' => $customer
@@ -89,18 +91,31 @@ class CheckoutController extends Controller
 
             if ($charge->status === 'completed') {
                 $cursoProgramado = CursoProgramado::with('Curso')->where('id',$curso_id)->first();
+
+                $descuento = null;
+                if (session()->has('cupon')) {
+                    $descuento = Descuento::where('clave', session('cupon'))
+                        ->where('curso_programado_id', $curso_id)
+                        ->where('activo', 'si')
+                        ->first();
+                    $descuento->limite = $descuento->limite - 1;
+                    $descuento->save();
+                }
+
                 $curso = $cursoProgramado->Curso;
 
                 $inscripcion = New Inscripcion();
 
                 $inscripcion->user_id = Auth::user()->id;
                 $inscripcion->curso_programado_id = $curso_id;
-                $inscripcion->referencia = null;
-                $inscripcion->tipo_pago = null;
-                $inscripcion->clave = null;
+                $inscripcion->referencia = $id_carge;
+                $inscripcion->tipo_pago = 'Pasarela Openpay';
+                $inscripcion->clave = session()->has('cupon') ? session('cupon') : null;
 
                 $inscripcion->save();
-
+                //Eliminar la variable de session cupon y descuento
+                session()->forget('cupon');
+                session()->forget('descuento');
                 $send = new Curso;
                 return redirect()->route('alumno.home');
             }else{

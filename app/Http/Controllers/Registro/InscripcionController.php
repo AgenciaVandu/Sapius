@@ -14,6 +14,7 @@ use DateTime;
 use DateInterval;
 use App\Mail\TarjetaEmail;
 use App\Mail\OxxoEmail;
+use App\Models\Registro\Descuento;
 use Mail;
 
 class InscripcionController extends Controller
@@ -100,7 +101,19 @@ class InscripcionController extends Controller
     }
 
     public function inscripcion($curso_programado_id){
-        $curso = CursoProgramado::with('Curso')->where('id',$curso_programado_id)->first();
+
+        if (session('cupon')) {
+            $descuento = Descuento::where('clave', '=', session('cupon'))
+                                ->where('curso_programado_id', '=', $curso_programado_id)
+                                ->where('activo', '=', 'si')
+                                ->first();
+            if(!$descuento){
+                //destruye las variables de session precio y descuento
+                session()->forget(['precio', 'descuento']);
+            }
+        }
+            $curso = CursoProgramado::with('Curso')->where('id',$curso_programado_id)->first();
+
         return view('registro.inscripcion')->with('curso',$curso);
     }
 

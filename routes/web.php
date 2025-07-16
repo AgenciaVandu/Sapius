@@ -414,6 +414,7 @@ Route::group(['middleware' =>['alumno','restrict.mobile'],'prefix' => 'alumno'],
 
     //Descuentos
     Route::post('descuentos/check', 'Registro\DescuentoController@check')->name('descuentos.check');
+    Route::post('descuentos/cancel', 'Registro\DescuentoController@cancel')->name('descuentos.cancel');
 
 
 
