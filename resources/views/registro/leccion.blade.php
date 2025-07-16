@@ -159,10 +159,12 @@
                                         <form action="{{ route('alumno.view.guias') }}" method="post">
                                             @csrf
                                             <input type="hidden" name="file" value="{{ URL::route(Auth::user()->rol[0]->slug . '.medias.archivo', ['file' => $m->ruta]) }}">
+                                            <input type="hidden" name="titulo" value="{{ $leccion->Curso->titulo }}">
                                             <button type="submit" class="list-group-item"
                                                 href="{{ route('alumno.view.guias') }}">
                                                 {{-- <i class="fas fa-eye"></i> --}}
                                                 Ver Guia
+                                                {{ $inscripcion_id }}
                                             </button>
                                         </form>
                                     @else
@@ -179,7 +181,7 @@
                 </div>
             @endif
             @if ($curso_programado->category->name == 'Guias')
-                Recurso aqui
+
             @else
                 <div class="card">
                     <div class="card-body">

@@ -21,6 +21,13 @@ class CursoProgramadoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+
     public function index(Request $request)
     {
         $curso = Curso::find($request->curso_id);
@@ -165,6 +172,8 @@ class CursoProgramadoController extends Controller
 
     public function cursoDetallado(Request $request){
 
+
+
         $inscripcion = Inscripcion::where('curso_programado_id',$request->curso_programado_id)->where('user_id',Auth::user()->id)->first();
 
         $curso = CursoProgramado::with(['Curso' => function($r){
@@ -274,9 +283,7 @@ class CursoProgramadoController extends Controller
 
     public function viewGuia(Request $request){
 
-        /* return $request->all(); */
-
-        return view('guias')->with('file',$request->file);
+        return view('guias')->with('file',$request->file)->with('titulo',$request->titulo);
 
     }
 

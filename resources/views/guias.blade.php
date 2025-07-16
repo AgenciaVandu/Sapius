@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>3D FlipBook</title>
+    <title>{{ $titulo }}</title>
     <style type="text/css">
         body {
             margin: 0;
