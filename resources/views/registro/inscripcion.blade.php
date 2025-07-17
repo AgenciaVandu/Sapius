@@ -55,7 +55,8 @@
                                 <div class="d-flex justify-content-between align-items-center fw-bold">
                                     <span class="text-dark">Total a pagar:</span>
                                     <span class="text-end">
-                                        <strong class="fs-4 text-primary">${{ number_format($curso->precio, 2) }} MXN</strong>
+                                        <strong class="fs-4 text-primary">${{ number_format($curso->precio, 2) }}
+                                            MXN</strong>
                                     </span>
                                 </div>
                             </div>
@@ -94,10 +95,25 @@
                         </form>
                     @endif
                     <div class="mt-4">
-                        <a href="{{ route('alumno.checkout', $curso) }}" class="btn btn-primary btn-lg w-100 shadow-sm d-flex align-items-center justify-content-center gap-2 py-3 fs-5">
+                        <a href="{{ route('alumno.checkout', $curso) }}"
+                            class="btn btn-primary btn-lg w-100 shadow-sm d-flex align-items-center justify-content-center gap-2 py-3 fs-5">
                             <i class="fas fa-credit-card"></i>
                             <span>Ir al pago</span>
                         </a>
+                    </div>
+
+                    <div class="mb-4"
+                        style="background-color: #eef2ff; padding: 1.5rem; border-left: 5px solid #3b82f6; margin-top: 1.5rem; border-radius: 0.5rem; ">
+                        <p style="margin: 0; font-weight: bold; color: #1e3a8a;">
+                            Aviso importante sobre pagos:
+                        </p>
+                        <p style="margin: 0; color: #1e40af;">
+                            Todos los pagos realizados en esta plataforma se procesan de forma segura a través de la
+                            pasarela de
+                            pagos de <strong>Openpay</strong>. Al realizar una compra, el usuario acepta los términos y
+                            condiciones
+                            de Openpay y autoriza el uso de dicha pasarela para procesar su transacción.
+                        </p>
                     </div>
                 </div>
             </div>
