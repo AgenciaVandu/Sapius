@@ -38,10 +38,18 @@
                     <!-- Adminisración de Cursos-->
                     <li class="nav-small-cap"><span class="hide-menu">Configuraciones</span></li>
                     <li class="sidebar-item"> <a class="sidebar-link" href="{{ route('admin.configuracion.index') }}"
-                        aria-expanded="false"><i data-feather="list" class="feather-icon"></i><span
-                            class="hide-menu">Landing
-                        </span></a>
-                </li>
+                            aria-expanded="false"><i data-feather="list" class="feather-icon"></i><span
+                                class="hide-menu">Landing
+                            </span></a>
+
+                    <li class="list-divider"></li>
+                    <!-- Adminisración de Cursos-->
+                    <li class="nav-small-cap"><span class="hide-menu">Reportes</span></li>
+                    <li class="sidebar-item"> <a class="sidebar-link" href="{{ route('admin.reports.index') }}"
+                            aria-expanded="false"><i data-feather="list" class="feather-icon"></i><span
+                                class="hide-menu">Reportes
+                            </span></a>
+                    </li>
                 @else
                     @if (Auth::user()->hasRole('alumno'))
                         <li class="nav-small-cap"><span class="hide-menu">Opciones</span></li>
@@ -103,7 +111,8 @@
                             </li>
 
                             <li class="sidebar-item">
-                                <a class="sidebar-link" href="{{ route('instructor.soporte') }}" aria-expanded="false">
+                                <a class="sidebar-link" href="{{ route('instructor.soporte') }}"
+                                    aria-expanded="false">
                                     <i data-feather="info" class="feather-icon"></i>
                                     <span class="hide-menu">Soporte Técnico</span>
                                 </a>

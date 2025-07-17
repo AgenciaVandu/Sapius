@@ -139,6 +139,11 @@ Route::group(['middleware' => ['admin','restrict.mobile'],'prefix' => 'admin'], 
     Route::put('/configuraciones/teacher/{teacher}/update', 'HomeController@updateTeacher')->name('admin.configuracion.teacher.update');
     Route::get('/configuraciones/teacher/{teacher}/delete', 'HomeController@deleteTeacher')->name('admin.configuracion.teacher.delete');
 
+    //Reportes
+    Route::get('/reports', 'Reports\ReportsController@index')->name('admin.reports.index');
+    Route::get('/reports/inscriptions', 'Reports\ReportsController@inscriptions')->name('admin.reports.inscriptions');
+    Route::get('/reports/inscriptions/{id}/show', 'Reports\ReportsController@showInscription')->name('admin.reports.inscriptions.show');
+
     //Admistracion de usuarios
     Route::get('users/{activo?}', 'UserController@index')->name('users.index');
     Route::put('users/{id}', 'UserController@update')->name('users.update');
@@ -415,7 +420,6 @@ Route::group(['middleware' =>['alumno','restrict.mobile'],'prefix' => 'alumno'],
     //Descuentos
     Route::post('descuentos/check', 'Registro\DescuentoController@check')->name('descuentos.check');
     Route::post('descuentos/cancel', 'Registro\DescuentoController@cancel')->name('descuentos.cancel');
-
 
 
 
