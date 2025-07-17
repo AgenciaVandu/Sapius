@@ -116,13 +116,16 @@ class CheckoutController extends Controller
                 //Eliminar la variable de session cupon y descuento
                 session()->forget('cupon');
                 session()->forget('descuento');
-                $send = new Curso;
-                return redirect()->route('alumno.home');
+                /* $send = new Curso; */
+                return redirect()->route('checkout.payout.approved',$id_carge);
             }else{
                 dd('Pago no completado');
             }
         }
 
+        public function chargeApproved($id){
+            return view('alumno.approved', compact('id'));
+        }
 
         public function errorPayment(){
             return view('errors.payment');

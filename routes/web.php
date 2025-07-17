@@ -367,6 +367,10 @@ Route::group(['middleware' =>['alumno','restrict.mobile'],'prefix' => 'alumno'],
     Route::get('/checkout', 'CheckoutController@createCheckout')->name('checkout');
     Route::post('/payout', 'CheckoutController@processPay')->name('checkout.processPayout');
 
+
+
+    Route::get('/payout/approved/{id}','CheckoutController@chargeApproved')->name('checkout.payout.approved');
+
     //Cursos
     Route::get('/cursos', 'HomeController@cursosDisponibles')->name('cursos.disponibles');
     Route::get('/guias', 'HomeController@guiasDisponibles')->name('guias.disponibles');
