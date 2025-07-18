@@ -164,7 +164,6 @@
                                                 href="{{ route('alumno.view.guias') }}">
                                                 {{-- <i class="fas fa-eye"></i> --}}
                                                 Ver Guia
-                                                {{ $inscripcion_id }}
                                             </button>
                                         </form>
                                     @else

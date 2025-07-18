@@ -172,8 +172,6 @@ class CursoProgramadoController extends Controller
 
     public function cursoDetallado(Request $request){
 
-
-
         $inscripcion = Inscripcion::where('curso_programado_id',$request->curso_programado_id)->where('user_id',Auth::user()->id)->first();
 
         $curso = CursoProgramado::with(['Curso' => function($r){
@@ -184,7 +182,13 @@ class CursoProgramadoController extends Controller
 
         $contenido_programado = ContenidoProgramado::where('curso_programado_id',$request->curso_programado_id)->first();
 
-        return view('registro.curso')->with('curso_programado',$curso)->with('inscrito',$inscripcion)->with('contenido_programado',$contenido_programado);
+        if ($curso->category->name == "Guias") {
+            /* return "Aqui la guia"; */
+            return view('registro.curso')->with('curso_programado',$curso)->with('inscrito',$inscripcion)->with('contenido_programado',$contenido_programado);
+        }else{
+            return view('registro.curso')->with('curso_programado',$curso)->with('inscrito',$inscripcion)->with('contenido_programado',$contenido_programado);
+        }
+
     }
 
     public function leccionDetallada(Request $request){

@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>{{ $titulo }}</title>
+    <title>3D FlipBook</title>
     <style type="text/css">
         body {
             margin: 0;
@@ -13,200 +13,197 @@
         .solid-container {
             height: 100vh;
         }
+
+        #warning-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #052443;
+            color: white;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            display: none;
+        }
+
+        #warning-overlay img {
+            max-width: 200px;
+            margin-bottom: 20px;
+        }
+
+        #warning-overlay p {
+            font-size: 20px;
+        }
+
+        /* IMPEDIR impresión mostrando solo advertencia */
+        @media print {
+            body * {
+                visibility: hidden !important;
+            }
+
+            #warning-overlay,
+            #warning-overlay * {
+                visibility: visible !important;
+            }
+
+            #warning-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                background-color: #052443 !important;
+                display: flex !important;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+                color: white !important;
+                font-size: 24px;
+            }
+        }
     </style>
 </head>
 
-<body>
-    <div class="solid-container">
 
+<body>
+    <div class="solid-container"></div>
+
+    <div id="warning-overlay">
+        <img src="https://sapius.com.mx/img/logo-sapius.png" alt="Logo Sapius">
+        <p>Está prohibido tomar capturas de pantalla o imprimir este contenido.<br>No se permite plagiar esta obra.</p>
     </div>
 
+    <script src="{{ asset('js/jquery.min.js') }}"></script>
+    <script src="{{ asset('js/html2canvas.min.js') }}"></script>
+    <script src="{{ asset('js/three.min.js') }}"></script>
+    <script src="{{ asset('js/pdf.min.js') }}"></script>
+    <script src="{{ asset('js/3dflipbook.js') }}"></script>
+
+    <script>
+        const showWarning = () => {
+            const warning = document.getElementById('warning-overlay');
+            warning.style.display = 'flex';
+            setTimeout(() => {
+                warning.style.display = 'none';
+            }, 5000);
+        };
+
+        document.addEventListener('keydown', function(e) {
+            const forbiddenKeyCodes = [16, 17, 18, 44, 51, 52, 91, 93];
+
+            if (forbiddenKeyCodes.includes(e.keyCode || e.which)) {
+                showWarning();
+            }
+
+            // Bloquear impresión (Ctrl+P o Cmd+P)
+            if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'p') {
+                e.preventDefault();
+                showWarning();
+            }
+
+            // Detectar PrintScreen
+            if (e.key === 'PrintScreen') {
+                e.preventDefault();
+                navigator.clipboard.writeText('');
+                showWarning();
+            }
+
+            // Detectar combinaciones comunes en Mac (Cmd+Shift+4, Cmd+Shift+3)
+            if ((e.metaKey && e.shiftKey && (e.key === '3' || e.key === '4'))) {
+                showWarning();
+            }
+        });
+
+        // Detectar intento de abrir herramientas de desarrollo (opcional)
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C'))) {
+                e.preventDefault();
+                showWarning();
+            }
+        });
+
+        var options = {
+            pdf: '{{ $file }}',
+            pageCallback: function(n) {
+                return {
+                    type: 'html',
+                    src: 'example/' + n + '.html',
+                    interactive: true
+                };
+            },
+            controlsProps: {
+                downloadURL: '{{ asset('templates/FoxitPdfSdk.pdf') }}',
+                actions: {
+                    cmdSmartPan: {
+                        enabled: false,
+                        enabledInNarrow: false
+                    },
+                    cmdPan: {
+                        enabled: false,
+                        enabledInNarrow: false
+                    },
+                    cmdZoomIn: {
+                        enabled: false,
+                        enabledInNarrow: false
+                    },
+                    cmdZoomOut: {
+                        enabled: false,
+                        enabledInNarrow: false
+                    },
+                    cmdShare: {
+                        enabled: false,
+                        enabledInNarrow: false
+                    },
+                    cmdPrint: {
+                        enabled: false,
+                        enabledInNarrow: false
+                    },
+                    cmdSave: {
+                        enabled: false,
+                        enabledInNarrow: false
+                    },
+                    cmdFastBackward: {
+                        enabled: false,
+                        enabledInNarrow: false
+                    },
+                },
+            },
+            template: {
+                html: '{{ asset('templates/default-book-view.html') }}',
+                styles: ['{{ asset('css/black-book-view.css') }}'],
+                links: [{
+                    rel: 'stylesheet',
+                    href: '{{ asset('css/font-awesome.min.css') }}'
+                }],
+                script: '{{ asset('js/default-book-view.js') }}',
+                printStyle: undefined,
+                sounds: {
+                    startFlip: '{{ asset('sounds/start-flip.mp3') }}',
+                    endFlip: '{{ asset('sounds/end-flip.mp3') }}'
+                }
+            },
+            pdfLinks: {
+                handler: function(type, destination) {
+                    return true;
+                }
+            },
+            autoNavigation: {
+                urlParam: 'fb3d-page',
+                navigates: 1,
+                pageN: undefined
+            },
+            bookStyle: 'volume'
+        };
+
+        var book = $('.solid-container').FlipBook(options);
+    </script>
 </body>
-<script src="{{ asset('js/jquery.min.js') }}"></script>
-<script src="{{ asset('js/html2canvas.min.js') }}"></script>
-<script src="{{ asset('js/three.min.js') }}"></script>
-<script src="{{ asset('js/pdf.min.js') }}"></script>
-<script src="{{ asset('js/3dflipbook.min.js') }}"></script>
-
-<!-- To create 3D FlipBook from PDF -->
-{{-- <script type="text/javascript">
-    $('.solid-container').FlipBook({
-        pdf: '{{ asset('templates/FoxitPdfSdk.pdf') }}',
-        controlsProps: {
-            downloadURL: 'books/pdf/FoxitPdfSdk.pdf',
-            actions: {
-                cmdSmartPan: {
-                    enabled: false,
-                    enabledInNarrow: false
-                },
-                cmdPan: {
-                    enabled: false,
-                    enabledInNarrow: false
-                },
-                cmdZoomIn: {
-                    enabled: false,
-                    enabledInNarrow: false
-                },
-                cmdZoomOut: {
-                    enabled: false,
-                    enabledInNarrow: false
-                },
-                cmdFullScreen: {
-                    enabled: false,
-                    enabledInNarrow: false
-                },
-                cmdShare: {
-                    enabled: false,
-                    enabledInNarrow: false
-                },
-                cmdPrint: {
-                    enabled: false,
-                    enabledInNarrow: false
-                },
-                cmdSave: {
-                    enabled: false,
-                    enabledInNarrow: false
-                },
-                cmdFastBackward: {
-                    enabled: false,
-                    enabledInNarrow: false
-                },
-
-            },
-        }
-    });
-</script> --}}
-
-
-<script>
-    var options = {
-        pdf: '{{ $file }}', // you should use this property or pageCallback and pages to specify your book
-        pageCallback: function(n) { // this function has to return source description for FlipBook page
-            // for image sources
-            var imageDescription = {
-                type: 'image',
-                src: 'example/' + n + '.jpg',
-                interactive: false
-            };
-            // for html sources
-            var htmlDescription = {
-                type: 'html',
-                src: 'example/' + n + '.html',
-                interactive: true // or false - if your page interact with the user then use true
-            };
-            // for blank page
-            var blankDescription = {
-                type: 'blank'
-            };
-            return htmlDescription; // or imageDescription or blankDescription
-        },
-        controlsProps: { // set of optional properties that allow to customize 3D FlipBook control
-            downloadURL: '{{ asset('templates/FoxitPdfSdk.pdf') }}',
-            actions: {
-                cmdSmartPan: {
-                    enabled: false,
-                    enabledInNarrow: false
-                },
-                cmdPan: {
-                    enabled: false,
-                    enabledInNarrow: false
-                },
-                cmdZoomIn: {
-                    enabled: false,
-                    enabledInNarrow: false
-                },
-                cmdZoomOut: {
-                    enabled: false,
-                    enabledInNarrow: false
-                },
-                cmdShare: {
-                    enabled: false,
-                    enabledInNarrow: false
-                },
-                cmdPrint: {
-                    enabled: false,
-                    enabledInNarrow: false
-                },
-                cmdSave: {
-                    enabled: false,
-                    enabledInNarrow: false
-                },
-                cmdFastBackward: {
-                    enabled: false,
-                    enabledInNarrow: false
-                },
-
-            },
-        },
-        /* propertiesCallback: function(props) {
-            props.page.depth /= 2;
-            props.cover.binderTexture = 'exampleTexture.jpg';
-            props.cssLayersLoader = function(n, clb) {
-                clb([{
-                    css: '.heading {margin-top: 200px;background-color: red;}',
-                    html: '<h1 class="heading">Hello</h1>',
-                    js: function(jContainer,
-                    props) {
-                        console.log('init');
-                        return { // set of callbacks
-                            hide: function() {
-                                console.log('hide');
-                            },
-                            hidden: function() {
-                                console.log('hidden');
-                            },
-                            show: function() {
-                                console.log('show');
-                            },
-                            shown: function() {
-                                console.log('shown');
-                            },
-                            dispose: function() {
-                                console.log('dispose');
-                            }
-                        };
-                    }
-                }]);
-            };
-            return props;
-        }, */
-        template: { // by means this property you can choose appropriate skin
-            html: '{{ asset('templates/default-book-view.html') }}',
-            styles: [
-                '{{ asset('css/black-book-view.css') }}' // or one of white-book-view.css, short-white-book-view.css, shart-black-book-view.css
-            ],
-            links: [{
-                rel: 'stylesheet',
-                href: '{{ asset('css/font-awesome.min.css') }}'
-            }],
-            script: '{{ asset('js/default-book-view.js') }}',
-            printStyle: undefined, // or you can set your stylesheet for printing ('print-style.css')
-            sounds: {
-                startFlip: '{{ asset('sounds/start-flip.mp3') }}',
-                endFlip: '{{ asset('sounds/end-flip.mp3') }}'
-            }
-        },
-        pdfLinks: {
-            handler: function(type,
-            destination) { // type: 'internal' (destination - page number), 'external' (destination - url)
-                return true; // true - prevent default handler, false - call default handler
-            }
-        },
-        autoNavigation: {
-            urlParam: 'fb3d-page', // url query param name for deep linking: http://example.com?fb3d-page=10
-            navigates: 1, // number of instances that will be navigated automatically,
-            pageN: undefined // auto open page pageN
-        },
-        bookStyle: 'volume', // volume, flat or volume-paddings
-        /* activateFullScreen: false, // activate fullscreen if it is possible (API can only be initiated by a user gesture) */
-        ready: function(scene) { // optional function - this function executes when loading is complete
-
-        },
-        error: function(e) { // optional function for notification about errors
-
-        }
-    };
-    var book = $('.solid-container').FlipBook(options);
-</script>
 
 </html>
