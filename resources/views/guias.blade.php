@@ -18,7 +18,8 @@
             border-bottom: 1px solid #ddd;
             display: flex;
             align-items: center;
-            justify-content: center;
+            justify-content: space-between;
+            /* <-- cambio aquí */
             position: sticky;
             top: 0;
             z-index: 1000;
@@ -28,10 +29,27 @@
             max-height: 60px;
         }
 
+        .back-button {
+            background-color: #eb8006;
+            color: #ffffff;
+            border: 1px solid #eb8006;
+            padding: 8px 16px;
+            font-size: 14px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .back-button:hover {
+            background-color: #f0f0f0;
+            color: #052443;
+        }
+
         .solid-container {
             background-color: #ffffff;
             height: calc(100vh - 80px);
-            padding: 10px;
+            /* padding: 10px; */
             box-sizing: border-box;
         }
 
@@ -95,7 +113,9 @@
 
     <header>
         <img src="https://sapius.com.mx/img/logo-sapius.png" alt="Logo Sapius">
+        <button onclick="history.back()" class="back-button">Regresar al sitio de cursos</button>
     </header>
+
 
     <div class="solid-container"></div>
 
@@ -196,7 +216,6 @@
 
     <!-- Script que detecta teclas y llama a la función de advertencia -->
     <script>
-        // Esperar a que el DOM esté completamente cargado por seguridad
         document.addEventListener("DOMContentLoaded", function() {
             const advertencia = window.parent?.mostrarAdvertenciaCaptura || window.mostrarAdvertenciaCaptura;
 
@@ -209,11 +228,13 @@
                     if (typeof advertencia === 'function') advertencia();
                 }
 
+                // Ctrl+P o Cmd+P
                 if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'p') {
                     e.preventDefault();
                     if (typeof advertencia === 'function') advertencia();
                 }
 
+                // PrintScreen
                 if (e.key === 'PrintScreen' || e.keyCode === 44) {
                     e.preventDefault();
                     try {
@@ -222,10 +243,12 @@
                     if (typeof advertencia === 'function') advertencia();
                 }
 
+                // Cmd+Shift+3 o 4 (MacOS screenshots)
                 if (e.metaKey && e.shiftKey && (e.key === '3' || e.key === '4')) {
                     if (typeof advertencia === 'function') advertencia();
                 }
 
+                // F12 o Ctrl+Shift+I/J/C
                 if (
                     e.key === 'F12' ||
                     (e.ctrlKey && e.shiftKey && ['I', 'J', 'C'].includes(e.key.toUpperCase()))
@@ -238,9 +261,15 @@
             document.addEventListener('keydown', (e) => handleKeyEvent(e, 'keydown'));
             document.addEventListener('keyup', (e) => handleKeyEvent(e, 'keyup'));
             document.addEventListener('keypress', (e) => handleKeyEvent(e, 'keypress'));
+
+            // Bloqueo del clic derecho (menú contextual)
+            document.addEventListener('contextmenu', function(e) {
+                e.preventDefault();
+                if (typeof advertencia === 'function') advertencia();
+                console.log('[contextmenu] Clic derecho bloqueado');
+            });
         });
     </script>
-
 
 </body>
 

@@ -6,7 +6,7 @@
     <script type='text/javascript' src="https://openpay.s3.amazonaws.com/openpay-data.v1.min.js"></script>
     <style>
         @charset "US-ASCII";
-        @import "http://fonts.googleapis.com/css?family=Lato:300,400,700";
+        @import "https://fonts.googleapis.com/css?family=Lato:300,400,700";
 
         * {
             color: #444;
