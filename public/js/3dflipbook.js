@@ -11450,28 +11450,131 @@
                 this.key(e, 'keydown');
                 console.log('Tecla presionada:', e.key); // Debug
 
-                // Detectar PrintScreen
-                if (e.key === 'PrintScreen') {
-                    if (window.parent && typeof window.parent.mostrarAdvertenciaCaptura === 'function') {
-                        window.parent.mostrarAdvertenciaCaptura();
-                    }
+                // Función global expuesta en el HTML
+                const advertencia = window.parent?.mostrarAdvertenciaCaptura || window.mostrarAdvertenciaCaptura;
+
+                // Teclas clave para bloquear
+                const forbiddenKeyCodes = [16, 17, 18, 44, 51, 52, 91, 93];
+                if (forbiddenKeyCodes.includes(e.keyCode || e.which)) {
+                    if (typeof advertencia === 'function') advertencia();
                 }
 
-                // Detectar combinaciones como Ctrl+Shift+S
-                if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 's') {
-                    if (window.parent && typeof window.parent.mostrarAdvertenciaCaptura === 'function') {
-                        window.parent.mostrarAdvertenciaCaptura();
-                    }
+                // Ctrl+P o Cmd+P
+                if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'p') {
+                    e.preventDefault();
+                    if (typeof advertencia === 'function') advertencia();
+                }
+
+                // PrintScreen
+                if (e.key === 'PrintScreen' || e.keyCode === 44) {
+                    e.preventDefault();
+                    try {
+                        navigator.clipboard.writeText(''); // Borra portapapeles
+                    } catch (err) { }
+                    if (typeof advertencia === 'function') advertencia();
+                }
+
+                // Cmd+Shift+3 o 4 en Mac
+                if ((e.metaKey && e.shiftKey && (e.key === '3' || e.key === '4'))) {
+                    if (typeof advertencia === 'function') advertencia();
+                }
+
+                // F12 o Ctrl+Shift+I/J/C
+                if (
+                    e.key === 'F12' ||
+                    (e.ctrlKey && e.shiftKey && ['I', 'J', 'C'].includes(e.key.toUpperCase()))
+                ) {
+                    e.preventDefault();
+                    if (typeof advertencia === 'function') advertencia();
                 }
             };
+
 
 
             EventsToActions.prototype.keyPress = function keyPress(e) {
                 this.key(e, 'keypress');
+
+                console.log('Tecla presionada:', e.key); // Debug
+
+                // Función global expuesta en el HTML
+                const advertencia = window.parent?.mostrarAdvertenciaCaptura || window.mostrarAdvertenciaCaptura;
+
+                // Teclas clave para bloquear
+                const forbiddenKeyCodes = [16, 17, 18, 44, 51, 52, 91, 93];
+                if (forbiddenKeyCodes.includes(e.keyCode || e.which)) {
+                    if (typeof advertencia === 'function') advertencia();
+                }
+
+                // Ctrl+P o Cmd+P
+                if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'p') {
+                    e.preventDefault();
+                    if (typeof advertencia === 'function') advertencia();
+                }
+
+                // PrintScreen
+                if (e.key === 'PrintScreen' || e.keyCode === 44) {
+                    e.preventDefault();
+                    try {
+                        navigator.clipboard.writeText(''); // Borra portapapeles
+                    } catch (err) { }
+                    if (typeof advertencia === 'function') advertencia();
+                }
+
+                // Cmd+Shift+3 o 4 en Mac
+                if ((e.metaKey && e.shiftKey && (e.key === '3' || e.key === '4'))) {
+                    if (typeof advertencia === 'function') advertencia();
+                }
+
+                // F12 o Ctrl+Shift+I/J/C
+                if (
+                    e.key === 'F12' ||
+                    (e.ctrlKey && e.shiftKey && ['I', 'J', 'C'].includes(e.key.toUpperCase()))
+                ) {
+                    e.preventDefault();
+                    if (typeof advertencia === 'function') advertencia();
+                }
             };
 
             EventsToActions.prototype.keyUp = function keyUp(e) {
                 this.key(e, 'keyup');
+                console.log('Tecla levantada:', e.key); // Debug
+                // Función global expuesta en el HTML
+                const advertencia = window.parent?.mostrarAdvertenciaCaptura || window.mostrarAdvertenciaCaptura;
+
+                // Teclas clave para bloquear
+                const forbiddenKeyCodes = [16, 17, 18, 44, 51, 52, 91, 93];
+                if (forbiddenKeyCodes.includes(e.keyCode || e.which)) {
+                    if (typeof advertencia === 'function') advertencia();
+                }
+
+                // Ctrl+P o Cmd+P
+                if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'p') {
+                    e.preventDefault();
+                    if (typeof advertencia === 'function') advertencia();
+                }
+
+                // PrintScreen
+                if (e.key === 'PrintScreen' || e.keyCode === 44) {
+                    e.preventDefault();
+                    try {
+                        navigator.clipboard.writeText(''); // Borra portapapeles
+                    } catch (err) { }
+                    if (typeof advertencia === 'function') advertencia();
+                }
+
+                // Cmd+Shift+3 o 4 en Mac
+                if ((e.metaKey && e.shiftKey && (e.key === '3' || e.key === '4'))) {
+                    if (typeof advertencia === 'function') advertencia();
+                }
+
+                // F12 o Ctrl+Shift+I/J/C
+                if (
+                    e.key === 'F12' ||
+                    (e.ctrlKey && e.shiftKey && ['I', 'J', 'C'].includes(e.key.toUpperCase()))
+                ) {
+                    e.preventDefault();
+                    if (typeof advertencia === 'function') advertencia();
+                }
             };
 
             EventsToActions.prototype.dispose = function dispose() {

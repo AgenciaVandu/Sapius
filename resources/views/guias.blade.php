@@ -1,17 +1,38 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 
 <head>
     <meta charset="utf-8">
-    <title>3D FlipBook</title>
-    <style type="text/css">
+    <title>3D FlipBook - Sapius</title>
+    <style>
         body {
             margin: 0;
             padding: 0;
+            background-color: #f5f5f5;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        header {
+            background-color: #052443;
+            padding: 10px 20px;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        header img {
+            max-height: 60px;
         }
 
         .solid-container {
-            height: 100vh;
+            background-color: #ffffff;
+            height: calc(100vh - 80px);
+            padding: 10px;
+            box-sizing: border-box;
         }
 
         #warning-overlay {
@@ -42,7 +63,6 @@
             font-size: 20px;
         }
 
-        /* IMPEDIR impresión mostrando solo advertencia */
         @media print {
             body * {
                 visibility: hidden !important;
@@ -71,8 +91,12 @@
     </style>
 </head>
 
-
 <body>
+
+    <header>
+        <img src="https://sapius.com.mx/img/logo-sapius.png" alt="Logo Sapius">
+    </header>
+
     <div class="solid-container"></div>
 
     <div id="warning-overlay">
@@ -87,48 +111,6 @@
     <script src="{{ asset('js/3dflipbook.js') }}"></script>
 
     <script>
-        const showWarning = () => {
-            const warning = document.getElementById('warning-overlay');
-            warning.style.display = 'flex';
-            setTimeout(() => {
-                warning.style.display = 'none';
-            }, 5000);
-        };
-
-        document.addEventListener('keydown', function(e) {
-            const forbiddenKeyCodes = [16, 17, 18, 44, 51, 52, 91, 93];
-
-            if (forbiddenKeyCodes.includes(e.keyCode || e.which)) {
-                showWarning();
-            }
-
-            // Bloquear impresión (Ctrl+P o Cmd+P)
-            if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'p') {
-                e.preventDefault();
-                showWarning();
-            }
-
-            // Detectar PrintScreen
-            if (e.key === 'PrintScreen') {
-                e.preventDefault();
-                navigator.clipboard.writeText('');
-                showWarning();
-            }
-
-            // Detectar combinaciones comunes en Mac (Cmd+Shift+4, Cmd+Shift+3)
-            if ((e.metaKey && e.shiftKey && (e.key === '3' || e.key === '4'))) {
-                showWarning();
-            }
-        });
-
-        // Detectar intento de abrir herramientas de desarrollo (opcional)
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C'))) {
-                e.preventDefault();
-                showWarning();
-            }
-        });
-
         var options = {
             pdf: '{{ $file }}',
             pageCallback: function(n) {
@@ -142,38 +124,30 @@
                 downloadURL: '{{ asset('templates/FoxitPdfSdk.pdf') }}',
                 actions: {
                     cmdSmartPan: {
-                        enabled: false,
-                        enabledInNarrow: false
+                        enabled: false
                     },
                     cmdPan: {
-                        enabled: false,
-                        enabledInNarrow: false
+                        enabled: false
                     },
                     cmdZoomIn: {
-                        enabled: false,
-                        enabledInNarrow: false
+                        enabled: false
                     },
                     cmdZoomOut: {
-                        enabled: false,
-                        enabledInNarrow: false
+                        enabled: false
                     },
                     cmdShare: {
-                        enabled: false,
-                        enabledInNarrow: false
+                        enabled: false
                     },
                     cmdPrint: {
-                        enabled: false,
-                        enabledInNarrow: false
+                        enabled: false
                     },
                     cmdSave: {
-                        enabled: false,
-                        enabledInNarrow: false
+                        enabled: false
                     },
                     cmdFastBackward: {
-                        enabled: false,
-                        enabledInNarrow: false
-                    },
-                },
+                        enabled: false
+                    }
+                }
             },
             template: {
                 html: '{{ asset('templates/default-book-view.html') }}',
@@ -204,6 +178,70 @@
 
         var book = $('.solid-container').FlipBook(options);
     </script>
+
+
+    <!-- Script que define y expone la función de advertencia -->
+    <script>
+        function showWarning() {
+            const warning = document.getElementById('warning-overlay');
+            warning.style.display = 'flex';
+            setTimeout(() => {
+                warning.style.display = 'none';
+            }, 5000);
+        }
+
+        // Exponer la función globalmente para que pueda ser llamada desde otros contextos
+        window.mostrarAdvertenciaCaptura = showWarning;
+    </script>
+
+    <!-- Script que detecta teclas y llama a la función de advertencia -->
+    <script>
+        // Esperar a que el DOM esté completamente cargado por seguridad
+        document.addEventListener("DOMContentLoaded", function() {
+            const advertencia = window.parent?.mostrarAdvertenciaCaptura || window.mostrarAdvertenciaCaptura;
+
+            const forbiddenKeyCodes = [16, 17, 18, 44, 91, 93]; // Shift, Ctrl, Alt, PrintScreen, Cmd
+
+            function handleKeyEvent(e, tipo) {
+                console.log(`[${tipo}] Tecla: ${e.key} | Código: ${e.keyCode || e.which}`);
+
+                if (forbiddenKeyCodes.includes(e.keyCode || e.which)) {
+                    if (typeof advertencia === 'function') advertencia();
+                }
+
+                if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'p') {
+                    e.preventDefault();
+                    if (typeof advertencia === 'function') advertencia();
+                }
+
+                if (e.key === 'PrintScreen' || e.keyCode === 44) {
+                    e.preventDefault();
+                    try {
+                        navigator.clipboard.writeText('');
+                    } catch (err) {}
+                    if (typeof advertencia === 'function') advertencia();
+                }
+
+                if (e.metaKey && e.shiftKey && (e.key === '3' || e.key === '4')) {
+                    if (typeof advertencia === 'function') advertencia();
+                }
+
+                if (
+                    e.key === 'F12' ||
+                    (e.ctrlKey && e.shiftKey && ['I', 'J', 'C'].includes(e.key.toUpperCase()))
+                ) {
+                    e.preventDefault();
+                    if (typeof advertencia === 'function') advertencia();
+                }
+            }
+
+            document.addEventListener('keydown', (e) => handleKeyEvent(e, 'keydown'));
+            document.addEventListener('keyup', (e) => handleKeyEvent(e, 'keyup'));
+            document.addEventListener('keypress', (e) => handleKeyEvent(e, 'keypress'));
+        });
+    </script>
+
+
 </body>
 
 </html>
