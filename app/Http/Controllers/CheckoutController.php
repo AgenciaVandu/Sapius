@@ -23,7 +23,10 @@ class CheckoutController extends Controller
 
     public function processPay(Request $request)
     {
-        Openpay::setProductionMode(true);
+        /* dd(config('openpay.sandbox')); */
+        if (config('openpay.sandbox') == false) {
+            Openpay::setProductionMode(true);
+        }
         $openpay = Openpay::getInstance(config('openpay.merchant_id'), config('openpay.private_key'), config('openpay.currency'), config('openpay.ip'));
 
         /* dd($request->all()); */
@@ -87,7 +90,10 @@ class CheckoutController extends Controller
 
             /* return $_GET['id']; */
             $id_carge = $_GET['id'];
-            Openpay::setProductionMode(true);
+            /* dd(config('openpay.sandbox')); */
+            if (config('openpay.sandbox') == false) {
+                Openpay::setProductionMode(true);
+            }
             $openpay = Openpay::getInstance(config('openpay.merchant_id'), config('openpay.private_key'), config('openpay.currency'), config('openpay.ip'));
             $charge = $openpay->charges->get($id_carge);
 
