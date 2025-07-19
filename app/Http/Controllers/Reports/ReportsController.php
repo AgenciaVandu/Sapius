@@ -21,6 +21,8 @@ class ReportsController extends Controller
     }
 
     public function showInscription($id){
+        Openpay::setProductionMode(true);
+
         $openpay = Openpay::getInstance(config('openpay.merchant_id'), config('openpay.private_key'), config('openpay.currency'), config('openpay.ip'));
 
         $charge = $openpay->charges->get($id);

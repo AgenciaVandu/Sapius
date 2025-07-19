@@ -23,6 +23,7 @@ class CheckoutController extends Controller
 
     public function processPay(Request $request)
     {
+        Openpay::setProductionMode(true);
         $openpay = Openpay::getInstance(config('openpay.merchant_id'), config('openpay.private_key'), config('openpay.currency'), config('openpay.ip'));
 
         /* dd($request->all()); */
