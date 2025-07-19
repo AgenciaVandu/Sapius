@@ -329,7 +329,8 @@
             <div class="col-6 d-flex align-items-stretch">
                 <div class="bkng-tb-cntnt w-100 h-100">
                     <div class="pymnts h-100">
-                        <form action="{{ route('checkout.processPayout') }}" method="POST" id="payment-form" class="h-100">
+                        <form action="{{ route('checkout.processPayout') }}" method="POST" id="payment-form"
+                            class="h-100">
                             @csrf
                             @method('POST')
                             <input type="hidden" name="token_id" id="token_id">
@@ -373,13 +374,15 @@
                                         </div>
                                         <div>
                                             <input type="hidden" name="curso_id" value="{{ $curso->id }}">
-                                            <input type="hidden" name="curso_precio" value="{{ session()->has('descuento') ? $curso->precio - $curso->precio * (session('descuento') / 100) : $curso->precio }}">
-                                            <input type="hidden" name="curso_descripcion" value="{{ $curso->identificador }}">
+                                            <input type="hidden" name="curso_precio"
+                                                value="{{ session()->has('descuento') ? $curso->precio - $curso->precio * (session('descuento') / 100) : $curso->precio }}">
+                                            <input type="hidden" name="curso_descripcion"
+                                                value="{{ $curso->identificador }}">
                                             <input type="hidden" name="user_name" value="{{ $user->nombre }}">
                                             <input type="hidden" name="user_lastname" value="{{ $user->apellido }}">
                                             <input type="hidden" name="user_email" value="{{ $user->email }}">
                                             <input type="hidden" name="user_phone" value="{{ $user->telefono }}">
-                                            @if(session()->has('cupon_codigo'))
+                                            @if (session()->has('cupon_codigo'))
                                                 <input type="hidden" name="cupon" value="{{ session('cupon_codigo') }}">
                                             @endif
                                         </div>
@@ -401,7 +404,8 @@
             </div>
             <div class="col-6 d-flex align-items-stretch justify-content-center">
                 <!-- Información del curso mejorada -->
-                <div class="card shadow border-0 w-100 h-100 d-flex flex-column justify-content-between" style="max-width: 650px;">
+                <div class="card shadow border-0 w-100 h-100 d-flex flex-column justify-content-between"
+                    style="max-width: 650px;">
                     <div class="card-header bg-gradient-primary text-white text-center py-3">
                         <h3 class="mb-0 font-weight-bold">{{ $curso->curso->titulo }}</h3>
                     </div>
@@ -451,10 +455,19 @@
 @section('javascript')
     <script type="text/javascript">
         $(document).ready(function() {
+            const openpaySandbox = {{ env('OPENPAY_SANDBOX') ? 'true' : 'false' }};
 
-            OpenPay.setId('mxnvofvvgnkgcstixn7n');
-            OpenPay.setApiKey('pk_9624d56fe5e7405ca6f7fc9df44f6edf');
-            OpenPay.setSandboxMode(true);
+            OpenPay.setId('{{ config('openpay.merchant_id') }}');
+            OpenPay.setApiKey('{{ config('openpay.public_key') }}');
+            if (openpaySandbox) {
+                console.log("Modo sandbox activado");
+                // Configura Openpay en modo pruebas
+                OpenPay.setSandboxMode(true);
+            } else {
+                console.log("Modo producción activado");
+                // Configura Openpay en modo live
+                OpenPay.setSandboxMode(false);
+            }
             //Se genera el id de dispositivo
             var deviceSessionId = OpenPay.deviceData.setup("payment-form", "deviceIdHiddenFieldName");
 
@@ -472,7 +485,8 @@
             };
 
             var error_callbak = function(response) {
-                var desc = response.data.description != undefined ? response.data.description : response.message;
+                var desc = response.data.description != undefined ? response.data.description : response
+                    .message;
                 alert("ERROR [" + response.status + "] " + desc);
                 // Habilita el botón nuevamente si hay error
                 $('#pay-button').removeClass('disabled').css('pointer-events', 'auto').text('Pagar');
