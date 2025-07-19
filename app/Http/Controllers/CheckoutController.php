@@ -87,6 +87,7 @@ class CheckoutController extends Controller
 
             /* return $_GET['id']; */
             $id_carge = $_GET['id'];
+            Openpay::setProductionMode(true);
             $openpay = Openpay::getInstance(config('openpay.merchant_id'), config('openpay.private_key'), config('openpay.currency'), config('openpay.ip'));
             $charge = $openpay->charges->get($id_carge);
 
