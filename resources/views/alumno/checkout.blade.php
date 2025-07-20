@@ -402,7 +402,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-4 d-flex align-items-stretch justify-content-center">
+            <div class="col-6 d-flex align-items-stretch justify-content-center">
                 <!-- Información del curso mejorada -->
                 <div class="card shadow border-0 w-100 h-100 d-flex flex-column justify-content-between"
                     style="max-width: 650px;">
