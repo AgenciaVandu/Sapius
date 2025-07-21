@@ -32,7 +32,8 @@
             <div class="card">
                 <div class="card-body">
                     <form method="POST"
-                        action="@if ($curso_programado->id) {{ route('schedule.update') }} @else {{ route('schedule.store') }} @endif">
+                        action="@if ($curso_programado->id) {{ route('schedule.update') }} @else {{ route('schedule.store') }} @endif"
+                        enctype="multipart/form-data">
                         @csrf
                         <input name="curso_id" type="hidden" value="{{ $curso->id }}">
                         <input name="curso_programado_id" type="hidden" value="{{ $curso_programado->id }}">
@@ -123,11 +124,11 @@
                             <label for="instructor" class="col-md-4 col-form-label text-md-right">Categoria</label>
                             <div class="col-md-6">
                                 <select name="category_id" id="category" class="form-control">
-
                                     @foreach ($categories as $category)
-                                        <option value="{{ $category->id }}"
+                                        <option value="{{ $category->id }}" data-name="{{ $category->name }}"
                                             @if ($curso_programado->category_id == $category->id) selected @endif>
-                                            {{ $category->name }}</option>
+                                            {{ $category->name }}
+                                        </option>
                                     @endforeach
                                 </select>
 
@@ -136,6 +137,14 @@
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
+                            </div>
+                        </div>
+
+                        {{-- Input file oculto inicialmente --}}
+                        <div class="form-group row d-none" id="file-upload-group">
+                            <label class="col-md-4 col-form-label text-md-right">Subir Archivo</label>
+                            <div class="col-md-6">
+                                <input type="file" name="guia_file" class="form-control-file">
                             </div>
                         </div>
 
@@ -174,20 +183,43 @@
 
     <script>
         $(document).ready(function() {
+            // Inicializar Select2
             $('#instructor').select2({
                 theme: 'bootstrap4',
                 width: 'style',
             });
+
             $('#category').select2({
                 theme: 'bootstrap4',
                 width: 'style',
             });
-        });
 
-        $('#fecha_inicio,#fecha_fin').datepicker({
-            language: "es",
-            clearBtn: true,
-            todayHighlight: true
+            // Función para mostrar/ocultar input file si la categoría es "Guias"
+            function toggleFileInput() {
+                const selectedOption = $('#category').find(':selected');
+                const selectedName = selectedOption.data('name'); // obtiene el data-name
+
+                if (selectedName === 'Guias') {
+                    $('#file-upload-group').removeClass('d-none');
+                } else {
+                    $('#file-upload-group').addClass('d-none');
+                }
+            }
+
+            // Llamar al cargar la página por si ya está seleccionada "Guias"
+            toggleFileInput();
+
+            // Escuchar el evento select de Select2
+            $('#category').on('select2:select', function() {
+                toggleFileInput();
+            });
+
+            // Inicializar datepickers
+            $('#fecha_inicio,#fecha_fin').datepicker({
+                language: "es",
+                clearBtn: true,
+                todayHighlight: true
+            });
         });
     </script>
 @endsection

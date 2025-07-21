@@ -32,6 +32,11 @@ class CursoProgramado extends Model
         return $this->belongsTo('App\Models\Cursos\Category', 'category_id', 'id');
     }
 
+    //Relacion con file_guia 1 a 1
+    public function file_guia(){
+        return $this->hasOne('App\FileGuia','curso_programado_id','id');
+    }
+
     protected static function boot()
     {
         parent::boot();
