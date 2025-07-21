@@ -107,11 +107,18 @@
                         </form>
                     @endif
                     <div class="mt-4">
-                        <a href="{{ route('alumno.checkout', $curso) }}"
-                            class="btn btn-primary btn-lg w-100 shadow-sm d-flex align-items-center justify-content-center gap-2 py-3 fs-5">
-                            <i class="fas fa-credit-card"></i>
-                            <span>Ir al pago</span>
-                        </a>
+                        @if ($descuento == 100)
+                            <a href="{{ route('inscripcion.pago', $curso) }}"
+                                class="btn btn-primary btn-lg w-100 shadow-sm d-flex align-items-center justify-content-center gap-2 py-3 fs-5">
+                                <span>Redimir Cúpon</span>
+                            </a>
+                        @else
+                            <a href="{{ route('alumno.checkout', $curso) }}"
+                                class="btn btn-primary btn-lg w-100 shadow-sm d-flex align-items-center justify-content-center gap-2 py-3 fs-5">
+                                <i class="fas fa-credit-card"></i>
+                                <span>Ir al pago</span>
+                            </a>
+                        @endif
                     </div>
 
                     <div class="mb-4"
