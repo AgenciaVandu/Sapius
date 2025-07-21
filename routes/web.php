@@ -144,6 +144,11 @@ Route::group(['middleware' => ['admin','restrict.mobile'],'prefix' => 'admin'], 
     //Secciones administrables de paginas
     Route::get('/manageable', 'ManageableController@index')->name('admin.manageable.index');
     Route::post('/manageable/store', 'ManageableController@store')->name('admin.manageable.store');
+    Route::put('/manageable/update', 'ManageableController@update')->name('admin.manageable.update');
+    Route::get('/manageable/simulators/medicine/delete/{id}', 'ManageableController@deleteManageablesimulatormedicine')->name('admin.manageablesimulatormedicine.delete');
+    Route::get('/manageable/simulators/nutrition/delete/{id}', 'ManageableController@deleteManageablesimulatornutrition')->name('admin.manageablesimulatornutrition.delete');
+    Route::get('/manageable/guides/medicine/delete/{id}', 'ManageableController@deleteManageableguiamedicine')->name('admin.manageableguiamedicine.delete');
+    Route::get('/manageable/guides/nutrition/delete/{id}', 'ManageableController@deleteManageableguianutrition')->name('admin.manageableguianutrition.delete');
 
 
     //Reportes
