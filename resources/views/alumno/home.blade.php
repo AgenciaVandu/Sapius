@@ -27,38 +27,75 @@
                 @else
                     @foreach ($cursos as $inscripcion)
                         @foreach ($inscripcion->CursoProgramado()->get() as $cursop)
-                            @foreach ($cursop->Curso()->get() as $curso)
-                                <div class="card shadow">
-                                    @if ($curso->imagen)
-                                        <img src="{{ route(Auth::user()->rol[0]->slug . '.cursos.image', ['file' => $curso->imagen]) }}"
-                                            id="img" alt="..." class="img-thumbnail">
-                                    @else
-                                        <img class="card-img-top img-fluid"
-                                            src="{{ asset('vendor/adminmart/assets/images/big/cursos.png') }}"
-                                            alt="Card image cap">
-                                    @endif
-                                    <div class="card-body">
-                                        <h4 class="card-title">
-                                            {{ $curso->titulo }}
-                                            <span class="badge badge-primary">{{ $cursop->identificador }}</span>
-                                        </h4>
-                                        <p class="card-text">{!! $curso->descripcion !!}</p>
-                                        <form method="POST" action="{{ route('cursos.detallado') }}">
-                                            @csrf
-                                            <input name="curso_programado_id" type="hidden" value="{{ $cursop->id }}">
-                                            @if ($inscripcion->aceptado == 'no')
-                                                <button type="submit" class="btn btn-warning btn-block rounded-10">
-                                                    Aprobración Pendiente
-                                                </button>
-                                            @elseif($inscripcion->aceptado == 'si')
-                                                <button type="submit" class="btn btn-success btn-block rounded-10">
-                                                    En Curso
-                                                </button>
-                                            @endif
-                                        </form>
+                            @if ($cursop->category->name == 'Guias')
+                                @foreach ($cursop->Curso()->get() as $curso)
+                                    <div class="card shadow">
+                                        @if ($curso->imagen)
+                                            <img src="{{ route(Auth::user()->rol[0]->slug . '.cursos.image', ['file' => $curso->imagen]) }}"
+                                                id="img" alt="..." class="img-thumbnail">
+                                        @else
+                                            <img class="card-img-top img-fluid"
+                                                src="{{ asset('vendor/adminmart/assets/images/big/cursos.png') }}"
+                                                alt="Card image cap">
+                                        @endif
+                                        <div class="card-body">
+                                            <h4 class="card-title">
+                                                {{ $curso->titulo }}
+                                                <span class="badge badge-primary">{{ $cursop->identificador }}</span>
+                                            </h4>
+                                            <p class="card-text">{!! $curso->descripcion !!}</p>
+                                            <form method="POST" action="{{ route('alumno.view.guias') }}">
+                                                @csrf
+                                                <input name="curso_programado_id" type="hidden"
+                                                    value="{{ $cursop->id }}">
+                                                @if ($inscripcion->aceptado == 'no')
+                                                    <button type="submit" class="btn btn-warning btn-block rounded-10">
+                                                        Aprobración Pendiente
+                                                    </button>
+                                                @elseif($inscripcion->aceptado == 'si')
+                                                    <button type="submit" class="btn btn-success btn-block rounded-10">
+                                                        En Curso
+                                                    </button>
+                                                @endif
+                                            </form>
+                                        </div>
                                     </div>
-                                </div>
-                            @endforeach
+                                @endforeach
+                            @else
+                                @foreach ($cursop->Curso()->get() as $curso)
+                                    <div class="card shadow">
+                                        @if ($curso->imagen)
+                                            <img src="{{ route(Auth::user()->rol[0]->slug . '.cursos.image', ['file' => $curso->imagen]) }}"
+                                                id="img" alt="..." class="img-thumbnail">
+                                        @else
+                                            <img class="card-img-top img-fluid"
+                                                src="{{ asset('vendor/adminmart/assets/images/big/cursos.png') }}"
+                                                alt="Card image cap">
+                                        @endif
+                                        <div class="card-body">
+                                            <h4 class="card-title">
+                                                {{ $curso->titulo }}
+                                                <span class="badge badge-primary">{{ $cursop->identificador }}</span>
+                                            </h4>
+                                            <p class="card-text">{!! $curso->descripcion !!}</p>
+                                            <form method="POST" action="{{ route('cursos.detallado') }}">
+                                                @csrf
+                                                <input name="curso_programado_id" type="hidden"
+                                                    value="{{ $cursop->id }}">
+                                                @if ($inscripcion->aceptado == 'no')
+                                                    <button type="submit" class="btn btn-warning btn-block rounded-10">
+                                                        Aprobración Pendiente
+                                                    </button>
+                                                @elseif($inscripcion->aceptado == 'si')
+                                                    <button type="submit" class="btn btn-success btn-block rounded-10">
+                                                        En Curso
+                                                    </button>
+                                                @endif
+                                            </form>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            @endif
                         @endforeach
                     @endforeach
                 @endif

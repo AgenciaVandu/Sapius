@@ -13,6 +13,7 @@ use App\Models\Cursos\Leccion;
 use App\Models\Cursos\Prueba;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use App\User;
 
 class CursoProgramadoController extends Controller
@@ -96,10 +97,12 @@ class CursoProgramadoController extends Controller
 
         if ($category_name->name == 'Guias') {
             //Obtenemos la url del documento de esta forma $imageUrl = $request->file('image')->store('simuladores', 'public');
-            $fileUrl = $request->file('guia_file')->store('guias', 'public');
+            $fileUrl = $request->file('guia_file');
+            $url = basename(Storage::put('files/medias', $fileUrl));
+
 
             FileGuia::create([
-                'url' => $fileUrl,
+                'url' => $url,
                 'curso_programado_id' => $id_curso_programado
             ]);
 
@@ -135,18 +138,6 @@ class CursoProgramadoController extends Controller
         $instructor = User::whereHas('roles', function ($q) {
             $q->where('roles.slug', '=', 'instructor'); // or whatever constraint you need here
         })->get();
-
-        /* if ($curso_programado->category->name == 'Guias') {
-            $fileUrl = FileGuia::where('curso_programado_id', $curso_programado->id)->first();
-            $fileUrl = $fileUrl->url;
-
-            return view('registro.create-schedule')
-                    ->with('curso',$curso)
-                    ->with('instructores',$instructor)
-                    ->with('curso_programado',$curso_programado)
-                    ->with('categories',$categories)
-                    ->with('fileUrl',$fileUrl);
-        } */
 
         return view('registro.create-schedule')
                     ->with('curso',$curso)
@@ -185,12 +176,13 @@ class CursoProgramadoController extends Controller
         if ($category_name->name == 'Guias') {
             if ($request->file('guia_file')) {
                 //Obtenemos la url del documento de esta forma $imageUrl = $request->file('image')->store('simuladores', 'public');
-                $fileUrl = $request->file('guia_file')->store('guias', 'public');
+                $fileUrl = $request->file('guia_file');
+                $url = basename(Storage::put('files/medias', $fileUrl));
 
                 //Busca el registro actual y reemplaza la url
                 $fileGuia = FileGuia::where('curso_programado_id', $request->curso_programado_id)->first();
                 if ($fileGuia) {
-                    $fileGuia->url = $fileUrl;
+                    $fileGuia->url = $url;
                     $fileGuia->save();
                 }else{
                     FileGuia::create([
@@ -337,7 +329,11 @@ class CursoProgramadoController extends Controller
 
     public function viewGuia(Request $request){
 
-        return view('guias')->with('file',$request->file)->with('titulo',$request->titulo);
+        /* dd($request); */
+        $file = FileGuia::where('curso_programado_id', $request->curso_programado_id)->first();
+        $file = 'alumno/medias/archivo/'.$file->url;
+
+        return view('guias')->with('file',$file)->with('titulo','Guia');
 
     }
 
