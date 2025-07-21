@@ -138,17 +138,17 @@
                     @foreach ($manageable_simuladores_medicina as $index => $item)
                         <div class="simulador-descripcion d-none" id="descripcion-{{ $index }}">
                             {{-- Imagen arriba del título --}}
-                            {{-- @if (!empty($item->image))
-                                <div class="text-center mb-3">
-                                    <img src="{{ asset('storage/' . $item->image) }}" alt="Imagen de {{ $item->titulo }}"
-                                        style="max-width: 150px; height: auto;">
-                                </div>
-                            @endif --}}
 
                             <h2 class="color-gray"><strong>{{ $item->titulo }}</strong></h2>
                             <p class="color-gray reference">
                                 {!! $item->descripcion !!}
                             </p>
+                            @if (!empty($item->image))
+                                <div class="text-center mb-3">
+                                    <img src="{{ asset('storage/' . $item->image) }}" alt="Imagen de {{ $item->titulo }}"
+                                        style="max-width: 150px; height: auto;">
+                                </div>
+                            @endif
                         </div>
                     @endforeach
                 </div>
