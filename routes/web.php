@@ -11,6 +11,7 @@
 |
 */
 
+use App\ManageableSimulatorMedicine;
 use App\Models\Cursos\Category;
 use App\Models\Landing\Pride;
 use App\Models\Landing\Slide;
@@ -96,7 +97,8 @@ Route::get ('/simuladores-medicina', function (){
     $category = Category::where('name','simuladores')->first();
     $simuladores = CursoProgramado::where('category_id', $category->id)->where('identificador','like','%medicina%')->where('activo','si')->where('fecha_inicio', '<=', date('Y-m-d H:i:s'))
             ->where('fecha_fin', '>=', date('Y-m-d H:i:s'))->get();
-    return view('cursos-front.simulador-medicina', compact('simuladores'));
+    $manageable_simuladores_medicina = ManageableSimulatorMedicine::orderBy('position', 'desc')->get();
+    return view('cursos-front.simulador-medicina', compact('simuladores', 'manageable_simuladores_medicina'));
 })->name('simuladores.medicina');
 
 Route::get ('/simuladores-nutricion', function (){
@@ -138,6 +140,11 @@ Route::group(['middleware' => ['admin','restrict.mobile'],'prefix' => 'admin'], 
     Route::post('/configuraciones/teacher/upload', 'HomeController@uploadTeacher')->name('admin.configuracion.teacher');
     Route::put('/configuraciones/teacher/{teacher}/update', 'HomeController@updateTeacher')->name('admin.configuracion.teacher.update');
     Route::get('/configuraciones/teacher/{teacher}/delete', 'HomeController@deleteTeacher')->name('admin.configuracion.teacher.delete');
+
+    //Secciones administrables de paginas
+    Route::get('/manageable', 'ManageableController@index')->name('admin.manageable.index');
+    Route::post('/manageable/store', 'ManageableController@store')->name('admin.manageable.store');
+
 
     //Reportes
     Route::get('/reports', 'Reports\ReportsController@index')->name('admin.reports.index');

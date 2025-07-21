@@ -9,27 +9,51 @@
 @include('components.garantia')
 @include('components.ventas')
 
+<style>
+    .simulador-descripcion li {
+        color: black !important;
+    }
+
+    .simulador-descripcion {
+        opacity: 0;
+        transform: translateX(30px);
+        transition: all 0.5s ease-in-out;
+    }
+
+    .simulador-descripcion.active {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    .simulador-descripcion.d-none {
+        display: none;
+    }
+
+    .descripcion-estilizada ul {
+        list-style: none;
+        padding-left: 1.2rem;
+    }
+
+    .descripcion-estilizada li {
+        position: relative;
+        padding-left: 1.2rem;
+        margin-bottom: 0.5rem;
+        color: black;
+    }
+
+    .descripcion-estilizada li::before {
+        content: "➤";
+        position: relative;
+        left: 0;
+        color: orange;
+        /* Puedes cambiarlo por el color que quieras */
+        font-size: 0.9rem;
+        line-height: 1;
+    }
+</style>
 @php
     switch ($content) {
         case 'simulador-nutricion':
-            $items = collect([
-                ['text' => 'Simulador global “Atención nutricia”', 'data-target' => '#simuladores'],
-                ['text' => 'Simulador global “Servicios de alimentos”', 'data-target' => '#simuladores'],
-                [
-                    'text' => 'Simulador global “Programas de intervención nutricional a nivel poblacional”',
-                    'data-target' => '#simuladores',
-                ],
-                [
-                    'text' => 'Simulador global “Comprensión lectora y redacción indirecta”',
-                    'data-target' => '#simuladores',
-                ],
-                ['text' => 'Plataforma 24/7', 'data-target' => '#plataforma'],
-                ['text' => 'Contenido online', 'data-target' => '#simuladores'],
-                [
-                    'text' => 'Descuentos especiales al adquirir el curso y/o Guía actualizada Sapius',
-                    'data-target' => '#guia',
-                ],
-            ]);
             break;
         case 'simulador-medicina':
             $items = collect([
@@ -86,166 +110,124 @@
 <section class="cta">
     <div class="container">
         <div class="row">
+            <!-- Lado izquierdo -->
             <div class="col-lg-5 col-sm-12 mb-5 cta__flex">
                 <div class="cta__incluye">
                     <h5 class="text-center">Tu inscripción incluye</h5>
-                    @foreach ($items as $item)
-                        <div class="cta__incluye-contenido mb-2">
+                    @foreach ($manageable_simuladores_medicina as $index => $item)
+                        <div class="cta__incluye-contenido mb-2" id="link-container-{{ $index }}">
                             <span class="p-2">
-                                <a href="#" data-toggle="modal"
-                                    data-target="#{{ Str::slug($item['data-target']) }}">
-                                    {!! $item['text'] !!}
+                                <a href="#" class="simulador-link" data-index="{{ $index }}">
+                                    {{ $item->titulo }}
                                 </a>
                             </span>
-                            <img src="{{ asset('img/v1/icon/check.svg') }}" width="25" alt="">
+                            <img id="check-icon-{{ $index }}" src="{{ asset('img/v1/icon/check.svg') }}"
+                                width="25" alt="">
                         </div>
                     @endforeach
-                    {{-- <div class="cta__incluye-contenido">
-                        <span>
-                            <a href="#" data-toggle="modal" data-target="#popup">
-                                Examen diagnóstico
-                            </a>
-                        </span>
-                        <img src="{{ asset('img/v1/icon/check.svg') }}" width="25" alt="">
-                    </div>
-                    <div class="cta__incluye-contenido">
-                        <span>
-                            <a href="#" data-toggle="modal" data-target="#paquete">
-                                Paquete escolar
-                            </a> </span>
-                        <img src="{{ asset('img/v1/icon/check.svg') }}" width="25" alt="">
-                    </div>
-                    <div class="cta__incluye-contenido">
-                        <span>
-                            <a href="#" data-toggle="modal" data-target="#guia">
-                                Guía actualizada
-                            </a> </span>
-                        <img src="{{ asset('img/v1/icon/check.svg') }}" width="25" alt="">
-                    </div>
-                    <div class="cta__incluye-contenido">
-                        <span>
-                            <a href="#" data-toggle="modal" data-target="#plataforma">
-                                Plataforma 24/7
-                            </a>
-                        </span>
-                        <img src="{{ asset('img/v1/icon/check.svg') }}" width="25" alt="">
-                    </div>
-                    <div class="cta__incluye-contenido">
-                        <span><a href="#" data-toggle="modal" data-target="#portabilidad">
-                                Portabilidad
-                            </a></span>
-                        <img src="{{ asset('img/v1/icon/check.svg') }}" width="25" alt="">
-                    </div>
-                    <div class="cta__incluye-contenido">
-                        <span>
-
-                            <a href="#" data-toggle="modal" data-target="#asesoria">
-                                Asesoría en vivo*
-                            </a></span>
-                        <img src="{{ asset('img/v1/icon/check.svg') }}" width="25" alt="">
-                    </div>
-                    <div class="cta__incluye-contenido">
-
-                        <span>
-                            <a href="#" data-toggle="modal" data-target="#simuladores">
-                                Simuladores por tema, <br> módulos y globales
-                            </a>
-                        </span>
-                        <img src="{{ asset('img/v1/icon/check.svg') }}" width="25" alt="">
-                    </div>
-                    <div class="cta__incluye-contenido">
-                        <span>
-                            <a href="#" data-toggle="modal" data-target="#feedback">
-                                Feedback en vivo*
-                            </a></span>
-                        <img src="{{ asset('img/v1/icon/check.svg') }}" width="25" alt="">
-                    </div>
-                    <div class="cta__incluye-contenido">
-                        <span>
-                            <a href="#" data-toggle="modal" data-target="#garantia">
-                                Garantía*
-                            </a></span>
-                        <img src="{{ asset('img/v1/icon/check.svg') }}" width="25" alt="">
-                    </div>
-                    <div class="boton">
-                        <a data-toggle="modal" data-target="#ventas" class="btn btn-primary">Contactar a un asesor</a>
-                    </div> --}}
                 </div>
                 <div class="text-center pt-2">
                     <small style="color: gray;">Duración 4, 6, 8 y 12 semanas / Aplican restricciones <br> Sujeto a
                         disponibilidad</small>
-
                 </div>
             </div>
+
+            <!-- Lado derecho -->
             <div class="col-lg-7 col-sm-12">
-                <div class="orgullo-txt">
-                    <h4 class="lead" style="color: gray;">Forma parte de nuestra comunidad</h4>
-                    <h2 class="color-gray"><strong>Opiniones de <br>
-                            nuestros alumnos</strong></h2>
-                    <div id="carouselExampleFade" class="carousel slide carousel-fade" data-ride="carousel">
-                        <div class="carousel-inner">
-                            <div class="carousel-item active">
-                                <p class="color-gray reference">
-                                    <strong>Alvar Martín</strong> <br>
-                                    <span>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                    </span> <br>
-                                    <span>
-                                        El EXANI-I es un examen que proporciona información acerca del potencial de los
-                                        aspirantes para tener un buen desempeño en estudios de tipo medio superior. Es
-                                        utilizado para apoyar los procesos de admisión en las instituciones de la
-                                        educación media superior.
-                                    </span>
-                                </p>
-                            </div>
-                            <div class="carousel-item">
-                                <p class="color-gray reference">
-                                    <strong>Gladys Martín</strong> <br>
-                                    <span>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                    </span> <br>
-                                    <span>
-                                        El EXANI-I es un examen que proporciona información acerca del potencial de los
-                                        aspirantes para tener un buen desempeño en estudios de tipo medio superior. Es
-                                        utilizado para apoyar los procesos de admisión en las instituciones de la
-                                        educación media superior.
-                                    </span>
-                                </p>
-                            </div>
-                            <div class="carousel-item">
-                                <p class="color-gray reference">
-                                    <strong>Yair Martín</strong> <br>
-                                    <span>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                    </span> <br>
-                                    <span>
-                                        El EXANI-I es un examen que proporciona información acerca del potencial de los
-                                        aspirantes para tener un buen desempeño en estudios de tipo medio superior. Es
-                                        utilizado para apoyar los procesos de admisión en las instituciones de la
-                                        educación media superior.
-                                    </span>
-                                </p>
-                            </div>
+                <div id="simulador-content" class="orgullo-txt">
+                    @foreach ($manageable_simuladores_medicina as $index => $item)
+                        <div class="simulador-descripcion d-none" id="descripcion-{{ $index }}">
+                            {{-- Imagen arriba del título --}}
+                            {{-- @if (!empty($item->image))
+                                <div class="text-center mb-3">
+                                    <img src="{{ asset('storage/' . $item->image) }}" alt="Imagen de {{ $item->titulo }}"
+                                        style="max-width: 150px; height: auto;">
+                                </div>
+                            @endif --}}
+
+                            <h2 class="color-gray"><strong>{{ $item->titulo }}</strong></h2>
+                            <p class="color-gray reference">
+                                {!! $item->descripcion !!}
+                            </p>
                         </div>
-
-                    </div>
-
-                    <a href="" data-toggle="modal" data-target="#ventas" class="btn btn-primary">Más
-                        información</a>
+                    @endforeach
                 </div>
             </div>
+
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const descripciones = document.querySelectorAll('.simulador-descripcion');
+            const checkIcons = document.querySelectorAll('[id^="check-icon-"]');
+            const simuladorLinks = document.querySelectorAll('.simulador-link');
+            const total = descripciones.length;
+            let currentIndex = 0;
+            let intervalTime = 5000; // 10 segundos
+            let paused = false;
+
+            function showDescripcion(index) {
+                // Ocultar todas las descripciones
+                descripciones.forEach((desc) => {
+                    desc.classList.add('d-none');
+                    desc.classList.remove('active');
+                });
+
+                const currentDesc = document.getElementById(`descripcion-${index}`);
+                if (currentDesc) {
+                    currentDesc.classList.remove('d-none');
+
+                    // Reiniciar animación
+                    void currentDesc.offsetWidth;
+                    currentDesc.classList.add('active');
+                }
+
+                // Resetear íconos de check
+                checkIcons.forEach(icon => icon.style.filter = 'none');
+
+                // Resaltar ícono activo
+                const iconActivo = document.getElementById(`check-icon-${index}`);
+                if (iconActivo) {
+                    iconActivo.style.filter =
+                        'invert(39%) sepia(97%) saturate(738%) hue-rotate(2deg) brightness(101%) contrast(102%)';
+                }
+
+                currentIndex = index;
+            }
+
+            // Mostrar primero al cargar
+            showDescripcion(0);
+
+            // Activar clic manual
+            simuladorLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const index = parseInt(this.getAttribute('data-index'));
+                    showDescripcion(index);
+                });
+
+                // Pausar en hover
+                link.addEventListener('mouseenter', () => paused = true);
+                link.addEventListener('mouseleave', () => paused = false);
+            });
+
+            // Pausar también cuando el mouse está sobre el contenido
+            descripciones.forEach(desc => {
+                desc.addEventListener('mouseenter', () => paused = true);
+                desc.addEventListener('mouseleave', () => paused = false);
+            });
+
+            // Cambio automático solo si no está en pausa
+            setInterval(() => {
+                if (!paused) {
+                    let nextIndex = (currentIndex + 1) % total;
+                    showDescripcion(nextIndex);
+                }
+            }, intervalTime);
+        });
+    </script>
+
+
+
 </section>

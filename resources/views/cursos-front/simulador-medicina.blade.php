@@ -69,7 +69,8 @@
                                                 <h5 class="card-title">{{ $simulador->Curso->titulo }}</h5>
                                                 <p class="card-text font-blod">{{ $simulador->identificador }}</p>
                                                 <h2 class="card-text">${{ number_format($simulador->precio, 2) }}</h2>
-                                                <a href="{{ route('inscripcion.form',$simulador->id) }}" class="btn btn-primary">Obtener el simulador</a>
+                                                <a href="{{ route('inscripcion.form', $simulador->id) }}"
+                                                    class="btn btn-primary">Obtener el simulador</a>
                                             </div>
                                         </div>
                                     </li>
@@ -162,7 +163,10 @@
         </div>
     </section>
     @include('components.preparacion')
-    @include('components.info', ['content' => 'simulador-medicina'])
+    @include('components.info', [
+        'content' => 'simulador-medicina',
+        'manageable_simuladores_medicina' => $manageable_simuladores_medicina,
+    ])
 
     @push('js')
         <script>

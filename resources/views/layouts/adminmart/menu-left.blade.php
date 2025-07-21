@@ -41,7 +41,12 @@
                             aria-expanded="false"><i data-feather="list" class="feather-icon"></i><span
                                 class="hide-menu">Landing
                             </span></a>
-
+                    </li>
+                    <li class="sidebar-item"> <a class="sidebar-link" href="{{ route('admin.manageable.index') }}"
+                            aria-expanded="false"><i data-feather="layers" class="feather-icon"></i><span
+                                class="hide-menu">Administrables
+                            </span></a>
+                    </li>
                     <li class="list-divider"></li>
                     <!-- Adminisración de Cursos-->
                     <li class="nav-small-cap"><span class="hide-menu">Reportes</span></li>
@@ -74,7 +79,8 @@
                             </a>
                         </li>
                         <li class="sidebar-item">
-                            <a class="sidebar-link" href="{{ route('simuladores.disponibles') }}" aria-expanded="false">
+                            <a class="sidebar-link" href="{{ route('simuladores.disponibles') }}"
+                                aria-expanded="false">
                                 <i data-feather="flag" class="feather-icon"></i>
                                 <span class="hide-menu">Simuladores disponibles</span>
                             </a>
