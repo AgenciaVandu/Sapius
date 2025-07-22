@@ -28,14 +28,14 @@
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 <![endif]-->
-    <script>
+    {{-- <script>
         window.onload = function() {
             if (navigator.maxTouchPoints > 0 || 'ontouchstart' in window) {
                 document.body.innerHTML =
                     "<h1>Acceso Restringido</h1><p>No puedes acceder desde un móvil o tablet.</p>";
             }
         };
-    </script>
+    </script> --}}
     <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 </head>
