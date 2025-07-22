@@ -83,14 +83,16 @@ Route::get ('/guias-medicina', function (){
     $category = Category::where('name','guias')->first();
     $guias = CursoProgramado::where('category_id', $category->id)->where('identificador','like','%medicina%')->where('activo','si')->where('fecha_inicio', '<=', date('Y-m-d H:i:s'))
             ->where('fecha_fin', '>=', date('Y-m-d H:i:s'))->get();
-    return view('cursos-front.guia-medicina', compact('guias'));
+    $manageable_guias = ManageableSimulatorMedicine::orderBy('position', 'desc')->get();
+    return view('cursos-front.guia-medicina', compact('guias', 'manageable_guias'));
 })->name('guias.medicina');
 
 Route::get ('/guias-nutricion', function (){
     $category = Category::where('name','guias')->first();
     $guias = CursoProgramado::where('category_id', $category->id)->where('identificador','like','%nutricion%')->where('activo','si')->where('fecha_inicio', '<=', date('Y-m-d H:i:s'))
             ->where('fecha_fin', '>=', date('Y-m-d H:i:s'))->get();
-    return view('cursos-front.guia-nutricion', compact('guias'));
+    $manageable_guias_nutricion = ManageableSimulatorMedicine::orderBy('position', 'desc')->get();
+    return view('cursos-front.guia-nutricion', compact('guias', 'manageable_guias_nutricion'));
 })->name('guias.nutricion');
 
 Route::get ('/simuladores-medicina', function (){
@@ -105,7 +107,8 @@ Route::get ('/simuladores-nutricion', function (){
     $category = Category::where('name','simuladores')->first();
     $simuladores = CursoProgramado::where('category_id', $category->id)->where('identificador','like','%nutricion%')->where('activo','si')->where('fecha_inicio', '<=', date('Y-m-d H:i:s'))
             ->where('fecha_fin', '>=', date('Y-m-d H:i:s'))->get();
-    return view('cursos-front.simulador-nutricion', compact('simuladores'));
+    $manageable_simuladores_nutricion = ManageableSimulatorMedicine::orderBy('position', 'desc')->get();
+    return view('cursos-front.simulador-nutricion', compact('simuladores', 'manageable_simuladores_nutricion'));
 })->name('simuladores.nutricion');
 
 
