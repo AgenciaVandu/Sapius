@@ -15,13 +15,20 @@ class RestrictMobileAccess
      * @return mixed
      */
     public function handle($request, Closure $next)
-{
-    $agent = new Agent();
+    {
+        $agent = new Agent();
 
-    if ($agent->isMobile() || $agent->isTablet()) {
-        return response()->view('errors.no_access');
+        $isMobileOrTablet = $agent->isMobile() || $agent->isTablet();
+        $platform = $agent->platform();
+
+        // Sistemas operativos que suelen estar en laptops/PCs
+        $allowedDesktopPlatforms = ['Windows', 'Macintosh', 'Linux'];
+
+        // Si es móvil o tablet Y no está en la lista de plataformas permitidas, se bloquea
+        if ($isMobileOrTablet && !in_array($platform, $allowedDesktopPlatforms)) {
+            return response()->view('errors.no_access');
+        }
+
+        return $next($request);
     }
-
-    return $next($request);
-}
 }
