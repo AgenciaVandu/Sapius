@@ -154,20 +154,19 @@
                                         Ver la imagen
                                     </a>
                                 @elseif($m->tipo == 'archivo')
-                                    @if ($curso_programado->category->name == 'Guias')
-
+                                    @if (!$m->downloadable)
                                         <form action="{{ route('alumno.view.guias') }}" method="post">
                                             @csrf
                                             <input type="hidden" name="file" value="{{ URL::route(Auth::user()->rol[0]->slug . '.medias.archivo', ['file' => $m->ruta]) }}">
                                             <input type="hidden" name="titulo" value="{{ $leccion->Curso->titulo }}">
-                                            <button type="submit" class="list-group-item"
+                                            <button type="submit" class="list-group-item btn-block text-left"
                                                 href="{{ route('alumno.view.guias') }}">
                                                 {{-- <i class="fas fa-eye"></i> --}}
-                                                Ver Guia
+                                                Ver Documento
                                             </button>
                                         </form>
                                     @else
-                                        <a class="list-group-item"
+                                        <a class="list-group-item my-2"
                                             href="{{ URL::route(Auth::user()->rol[0]->slug . '.medias.archivo', ['file' => $m->ruta]) }}">
                                             {{-- <i class="fas fa-eye"></i> --}}
                                             Descargar archivo

@@ -332,11 +332,15 @@ class CursoProgramadoController extends Controller
     public function viewGuia(Request $request){
 
         /* dd($request); */
-        $file = FileGuia::where('curso_programado_id', $request->curso_programado_id)->first();
-        $file = 'alumno/medias/archivo/'.$file->url;
 
-        return view('guias')->with('file',$file)->with('titulo','Guia');
-
+        if($request->file){
+            $file = $request->file;
+            return view('guias')->with('file',$file)->with('titulo','Contenido Protegido');
+        }else{
+            $file = FileGuia::where('curso_programado_id', $request->curso_programado_id)->first();
+            $file = 'alumno/medias/archivo/'.$file->url;
+            return view('guias')->with('file',$file)->with('titulo','Contenido Protegido');
+        }
     }
 
 

@@ -73,6 +73,7 @@ class MediaController extends Controller
      */
     public function store(Request $request)
     {
+        /* dd($request); */
         $media = new Media();
 
         $media->leccion_id = $request->leccion_id;
@@ -83,6 +84,9 @@ class MediaController extends Controller
         }
         if($media->tipo == "archivo"){
             $media->ruta = $this->fileUploadPost($request);
+            if ($request->downloadable) {
+                $media->downloadable = 1;
+            }
         }
         if($media->tipo == "liga" || $media->tipo == "video" || $media->tipo == "videoext"){
             $media->ruta = $request->ruta;

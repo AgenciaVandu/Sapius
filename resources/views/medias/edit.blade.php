@@ -94,6 +94,10 @@
                                     <label class="custom-file-label" for="inputGroupFile02" aria-describedby="inputGroupFileAddon02">Selecciona</label>
                                 </div>
                             </div>
+                            <label for="descripcion" class="col-md-4 col-form-label text-md-right mt-1">Descargable</label>
+                            <div class="col-md-6 d-flex align-items-center">
+                                    <input type="checkbox" class="form-check-input ml-1" name="downloadable" value="{{ $media->downloadable }}" >
+                            </div>
                         </div>
 
                         <div class="form-group row mb-0">
