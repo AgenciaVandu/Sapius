@@ -42,8 +42,9 @@
         }
 
         .back-button:hover {
-            background-color: #001a45;
-            color: #ffffff;
+            background-color: #f0f0f0;
+            border: 1px solid #f0f0f0;
+            color: #052443;
         }
 
         .solid-container {
