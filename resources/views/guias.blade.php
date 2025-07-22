@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>3D FlipBook - Sapius</title>
+    <title>Visualizador de archivos Sapius</title>
     <style>
         body {
             margin: 0;
