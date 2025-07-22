@@ -18,14 +18,24 @@ class RestrictMobileAccess
     {
         $agent = new Agent();
 
-        $isMobileOrTablet = $agent->isMobile() || $agent->isTablet();
-        $platform = $agent->platform();
+        $isMobile = $agent->isMobile();
+        $isTablet = $agent->isTablet();
+        $platform = strtolower($agent->platform());
+        $device = strtolower($agent->device());
+        $userAgent = strtolower($request->header('User-Agent'));
 
-        // Sistemas operativos que suelen estar en laptops/PCs
-        $allowedDesktopPlatforms = ['Windows', 'Macintosh', 'Linux'];
+        // Permitir plataformas que claramente son de escritorio
+        $desktopPlatforms = ['windows', 'mac', 'linux', 'ubuntu'];
 
-        // Si es móvil o tablet Y no está en la lista de plataformas permitidas, se bloquea
-        if ($isMobileOrTablet && !in_array($platform, $allowedDesktopPlatforms)) {
+        // Si la plataforma es una de escritorio, se permite el acceso
+        foreach ($desktopPlatforms as $desktopPlatform) {
+            if (str_contains($platform, $desktopPlatform) || str_contains($userAgent, $desktopPlatform)) {
+                return $next($request);
+            }
+        }
+
+        // Si no es plataforma de escritorio y es móvil o tablet, se bloquea
+        if ($isMobile || $isTablet) {
             return response()->view('errors.no_access');
         }
 
