@@ -24,19 +24,34 @@ class RestrictMobileAccess
         $device = strtolower($agent->device());
         $userAgent = strtolower($request->header('User-Agent'));
 
-        // Permitir plataformas que claramente son de escritorio
-        $desktopPlatforms = ['windows', 'mac', 'linux', 'ubuntu'];
+        // 🧪 Log para pruebas
+        \Log::info('User Agent: ' . $request->header('User-Agent'));
+        \Log::info([
+            'platform' => $platform,
+            'device' => $device,
+            'isMobile' => $isMobile,
+            'isTablet' => $isTablet,
+        ]);
 
-        // Si la plataforma es una de escritorio, se permite el acceso
-        foreach ($desktopPlatforms as $desktopPlatform) {
-            if (str_contains($platform, $desktopPlatform) || str_contains($userAgent, $desktopPlatform)) {
-                return $next($request);
-            }
-        }
-
-        // Si no es plataforma de escritorio y es móvil o tablet, se bloquea
+        // Primero, bloquea si es claramente un dispositivo móvil o tablet
         if ($isMobile || $isTablet) {
-            return response()->view('errors.no_access');
+            // Solo permite si el sistema operativo es Windows o Mac y el navegador es de escritorio
+            $desktopPlatforms = ['windows', 'macintosh', 'linux']; // Linux puede causar falsos positivos, opcional
+            $desktopBrowsers = ['chrome', 'firefox', 'edge', 'safari', 'opera'];
+
+            $platformAllowed = in_array($platform, $desktopPlatforms);
+            $browserAllowed = false;
+
+            foreach ($desktopBrowsers as $browser) {
+                if (str_contains($userAgent, $browser)) {
+                    $browserAllowed = true;
+                    break;
+                }
+            }
+
+            if (!($platformAllowed && $browserAllowed)) {
+                return response()->view('errors.no_access');
+            }
         }
 
         return $next($request);
