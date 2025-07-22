@@ -397,7 +397,7 @@
         </div>
     </section>
 
-    <section class="modalidades">
+{{--     <section class="modalidades">
         <div class="container">
             <div class="row ">
                 <div class="col-lg-12 col-sm-12">
@@ -473,7 +473,7 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> --}}
     <section class="modalidades">
         <div class="container ">
             <div class="modalidades__espacio">
