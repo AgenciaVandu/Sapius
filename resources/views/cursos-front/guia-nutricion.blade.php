@@ -26,10 +26,10 @@
             <div class="row">
                 <div class="col-md-6 col-lg-6 col-sm-12 m-auto pb-4 exani__faq">
                     <h3 class="color-gray">
-                        <strong>Guía Oficial Sapius – EGEL Plus Medicina</strong>
+                        <strong>Guía Oficial Sapius – EGEL Plus Nutrición</strong>
                     </h3>
                     <p class="color-gray">La Guía Oficial Sapius está 100% actualizada según la bibliografía del EGEL Plus
-                        Medicina, ofreciendo un enfoque práctico y dinámico para optimizar tu aprendizaje.</p>
+                        Nutrición, ofreciendo un enfoque práctico y dinámico para optimizar tu aprendizaje.</p>
                     <p>
                         ¿Qué encontrarás en nuestra guía?
                     </p>
