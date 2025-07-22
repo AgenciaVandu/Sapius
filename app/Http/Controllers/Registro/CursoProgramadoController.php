@@ -164,6 +164,8 @@ class CursoProgramadoController extends Controller
         $curso->curso_id = $request->curso_id;
         $curso->fecha_inicio = date('Y-m-d H:i:s',strtotime(str_replace('/', '-', $request->fecha_inicio))); // $request->fecha_inicio;
         $curso->fecha_fin = date('Y-m-d H:i:s',strtotime(str_replace('/', '-', $request->fecha_fin))); // $request->fecha_fin;
+        $curso->fecha_inicio_venta = date('Y-m-d H:i:s',strtotime(str_replace('/', '-', $request->fecha_inicio_venta))); // $request->fecha_inicio_venta;
+        $curso->fecha_fin_venta = date('Y-m-d H:i:s',strtotime(str_replace('/', '-', $request->fecha_fin_venta))); // $request->fecha_fin_venta;
         $curso->precio = $request->precio;
         $curso->category_id = $request->category_id;
         $curso->clave_descuento = $request->clave_descuento;
