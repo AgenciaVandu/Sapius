@@ -33,8 +33,8 @@ class HomeController extends Controller
     public function index()
     {
         $cursos = Inscripcion::whereHas('CursoProgramado', function ($query) {
-            $query->with('Curso')->where('fecha_inicio', '<=', date('Y-m-d H:i:s'))
-                ->where('fecha_fin', '>=', date('Y-m-d H:i:s'));
+            $query->with('Curso')->where('fecha_inicio_venta', '<=', date('Y-m-d H:i:s'))
+                ->where('fecha_fin_venta', '>=', date('Y-m-d H:i:s'));
         })->with('CursoProgramado.Curso')->where('user_id', Auth::user()->id)->get();
 
         //dd($cursos[0]->CursoProgramado()->get());
@@ -51,8 +51,8 @@ class HomeController extends Controller
             ->whereDoesntHave('Inscritos', function ($query) {
                 $query->where('users.id', Auth::user()->id);
             })
-            ->where('fecha_inicio', '<=', date('Y-m-d H:i:s'))
-            ->where('fecha_fin', '>=', date('Y-m-d H:i:s'))->get();
+            ->where('fecha_inicio_venta', '<=', date('Y-m-d H:i:s'))
+            ->where('fecha_fin_venta', '>=', date('Y-m-d H:i:s'))->get();
 
 
         return view('alumno.cursos')->with('cursos', $cursos)->with('category', $category);
@@ -65,8 +65,8 @@ class HomeController extends Controller
             ->whereDoesntHave('Inscritos', function ($query) {
                 $query->where('users.id', Auth::user()->id);
             })
-            ->where('fecha_inicio', '<=', date('Y-m-d H:i:s'))
-            ->where('fecha_fin', '>=', date('Y-m-d H:i:s'))->get();
+            ->where('fecha_inicio_venta', '<=', date('Y-m-d H:i:s'))
+            ->where('fecha_fin_venta', '>=', date('Y-m-d H:i:s'))->get();
 
 
         return view('alumno.guias')->with('cursos', $cursos)->with('category', $category);
@@ -79,8 +79,8 @@ class HomeController extends Controller
             ->whereDoesntHave('Inscritos', function ($query) {
                 $query->where('users.id', Auth::user()->id);
             })
-            ->where('fecha_inicio', '<=', date('Y-m-d H:i:s'))
-            ->where('fecha_fin', '>=', date('Y-m-d H:i:s'))->get();
+            ->where('fecha_inicio_venta', '<=', date('Y-m-d H:i:s'))
+            ->where('fecha_fin_venta', '>=', date('Y-m-d H:i:s'))->get();
 
 
         return view('alumno.simuladores')->with('cursos', $cursos)->with('category', $category);

@@ -307,7 +307,6 @@
                                     <thead class="thead-dark">
                                         <tr>
                                             <th scope="col"></th>
-                                            <th scope="col">Imagen</th>
                                             <th scope="col">Titulo</th>
                                             <th scope="col">Description</th>
                                             <th scope="col"></th>
@@ -319,11 +318,6 @@
                                                 <td class="handle">
                                                     <i class="fas fa-arrows-alt"></i>
                                                 </td>
-                                                <th scope="row">
-                                                    <img src="{{ asset('storage/' . $manageable_simulator_nutrition_item->image) }}"
-                                                        class="img-fluid rounded-circle" style="width: 3.8rem;"
-                                                        alt="">
-                                                </th>
                                                 <td>{{ $manageable_simulator_nutrition_item->titulo }}</td>
                                                 <td>{!! $manageable_simulator_nutrition_item->descripcion !!}</td>
                                                 <td>
@@ -498,7 +492,6 @@
                                     <thead class="thead-dark">
                                         <tr>
                                             <th scope="col"></th>
-                                            <th scope="col">Imagen</th>
                                             <th scope="col">Titulo</th>
                                             <th scope="col">Description</th>
                                             <th scope="col"></th>
@@ -510,11 +503,6 @@
                                                 <td class="handle">
                                                     <i class="fas fa-arrows-alt"></i>
                                                 </td>
-                                                <th scope="row">
-                                                    <img src="{{ asset('storage/' . $manageable_guia_medicine_item->image) }}"
-                                                        class="img-fluid rounded-circle" style="width: 3.8rem;"
-                                                        alt="">
-                                                </th>
                                                 <td>{{ $manageable_guia_medicine_item->titulo }}</td>
                                                 <td>{!! $manageable_guia_medicine_item->descripcion !!}</td>
                                                 <td>
@@ -684,7 +672,6 @@
                                     <thead class="thead-dark">
                                         <tr>
                                             <th scope="col"></th>
-                                            <th scope="col">Imagen</th>
                                             <th scope="col">Titulo</th>
                                             <th scope="col">Description</th>
                                             <th scope="col"></th>
@@ -696,11 +683,6 @@
                                                 <td class="handle">
                                                     <i class="fas fa-arrows-alt"></i>
                                                 </td>
-                                                <th scope="row">
-                                                    <img src="{{ asset('storage/' . $manageable_guia_nutrition_item->image) }}"
-                                                        class="img-fluid rounded-circle" style="width: 3.8rem;"
-                                                        alt="">
-                                                </th>
                                                 <td>{{ $manageable_guia_nutrition_item->titulo }}</td>
                                                 <td>{!! $manageable_guia_nutrition_item->descripcion !!}</td>
                                                 <td>

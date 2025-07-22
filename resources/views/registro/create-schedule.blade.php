@@ -76,7 +76,6 @@
 
                         <div class="form-group row">
                             <label for="fecha_inicio" class="col-md-4 col-form-label text-md-right">Fecha Inicial</label>
-
                             <div class="col-md-6">
                                 <input id="fecha_inicio" type="text"
                                     class="form-control @error('fecha_inicio') is-invalid @enderror" name="fecha_inicio"
@@ -92,13 +91,42 @@
 
                         <div class="form-group row">
                             <label for="fecha_fin" class="col-md-4 col-form-label text-md-right">Fecha Final</label>
-
                             <div class="col-md-6">
                                 <input id="fecha_fin" type="text"
                                     class="form-control @error('fecha_fin') is-invalid @enderror" name="fecha_fin" required
                                     autocomplete="fecha_fin" autofocus
                                     value="@if ($curso_programado->id) {{ date('d/m/Y', strtotime($curso_programado->fecha_fin)) }} @endif">
                                 @error('fecha_fin')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="fecha_inicio" class="col-md-4 col-form-label text-md-right">Fecha Inicial Venta</label>
+                            <div class="col-md-6">
+                                <input id="fecha_inicio_venta" type="text"
+                                    class="form-control @error('fecha_inicio_venta') is-invalid @enderror" name="fecha_inicio_venta"
+                                    required autocomplete="fecha_inicio_venta" autofocus
+                                    value="@if ($curso_programado->id) {{ date('d/m/Y', strtotime($curso_programado->fecha_inicio_venta)) }} @endif">
+                                @error('fecha_inicio_venta')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="fecha_fin" class="col-md-4 col-form-label text-md-right">Fecha Final Venta</label>
+                            <div class="col-md-6">
+                                <input id="fecha_fin_venta" type="text"
+                                    class="form-control @error('fecha_fin_venta') is-invalid @enderror" name="fecha_fin_venta" required
+                                    autocomplete="fecha_fin_venta" autofocus
+                                    value="@if ($curso_programado->id) {{ date('d/m/Y', strtotime($curso_programado->fecha_fin_venta)) }} @endif">
+                                @error('fecha_fin_venta')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -216,6 +244,12 @@
 
             // Inicializar datepickers
             $('#fecha_inicio,#fecha_fin').datepicker({
+                language: "es",
+                clearBtn: true,
+                todayHighlight: true
+            });
+            // Inicializar datepickers
+            $('#fecha_inicio_venta,#fecha_fin_venta').datepicker({
                 language: "es",
                 clearBtn: true,
                 todayHighlight: true

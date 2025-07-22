@@ -24,7 +24,7 @@
             <span style="font-size: 20px">Sección Disciplinar Específica</span>
         </h2>
         <div class="row pt-3">
-            <div class="col-lg-4 col-md-6 col-lg-3 col-sm-12">
+            <div class="col-lg-4 col-md-6 col-lg-3 col-sm-12 text-center">
                 <h1 class="color-orange">1</h1>
                 <h5 class="color-gray">Abordaje clínico <br>
                 </h5>
@@ -33,7 +33,7 @@
                     <span>3. Terapéutica</span> <br>
                 </p>
             </div>
-            <div class="col-lg-4 col-md-6 col-lg-3 col-sm-12">
+            <div class="col-lg-4 col-md-6 col-lg-3 col-sm-12 text-center">
                 <h1 class="color-orange">2</h1>
                 <h5 class="color-gray">Promoción de la salud <br>
                 </h5>
@@ -42,7 +42,7 @@
                     <span>3. Educación para la salud</span> <br>
                 </p>
             </div>
-            <div class="col-lg-4 col-md-6 col-lg-3 col-sm-12">
+            <div class="col-lg-4 col-md-6 col-lg-3 col-sm-12 text-center">
                 <h1 class="color-orange">3</h1>
                 <h5 class="color-gray">Fundamento de las decisiones médicas
                 </h5>
@@ -55,7 +55,7 @@
             <div class="col-12">
                 <h2 class="color-gray text-center pt-3 pb-3">Sección Transversal de Lenguaje y Comunicación</h2>
             </div>
-            <div class="col-lg-4 col-md-6 col-lg-3 col-sm-12">
+            <div class="col-lg-4 col-md-6 col-lg-3 col-sm-12 text-center">
                 <h1 class="color-orange">4</h1>
                 <h5 class="color-gray">Comprensión lectora <br>
                 </h5>
@@ -64,7 +64,7 @@
                     <span>3. Ámbito de participación social</span> <br>
                 </p>
             </div>
-            <div class="col-lg-4 col-md-6 col-lg-4 col-sm-12">
+            <div class="col-lg-4 col-md-6 col-lg-4 col-sm-12 text-center">
                 <h1 class="color-orange">5</h1>
                 <h5 class="color-gray">Redacción indirecta nutriológica
                 </h5>
