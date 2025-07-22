@@ -30,9 +30,9 @@
         }
 
         .back-button {
-            background-color: #eb8006;
+            background-color: #ed6a5a;
             color: #ffffff;
-            border: 1px solid #eb8006;
+            border: 1px solid #ed6a5a;
             padding: 8px 16px;
             font-size: 14px;
             border-radius: 4px;
