@@ -209,7 +209,7 @@ class ExamenController extends Controller
         $examen = Examen::with('Prueba')->where('id',$request->examen_id)->where('retro_visualizado','no')->first();
 
         if($examen == null){
-            return  redirect()->route('alumno');
+            return  redirect()->route('alumno.home');
         }
         $examen->retro_visualizado = 'si';
         $examen->save();

@@ -4,7 +4,7 @@
     <div class="page-breadcrumb">
         <div class="row">
             <div class="col-12 align-self-center">
-                <h2 class="page-title text-truncate text-dark font-weight-medium mb-1">Hola
+                <h2 class="page-title text-truncate text-dark font-weight-medium mb-1">
                     {{ Auth::user()->nombre_completo }}</h2>
                 <h3 class="page-title text-truncate text-dark font-weight-medium mb-1">Cursos disponibles</h3>
             </div>
@@ -17,7 +17,7 @@
         <div class="col-md-12">
             <div class="card-columns">
                 @foreach ($cursos as $curso)
-                    @if ($curso->curso->activo == 'si')
+                    @if ($curso->curso->activo == 'si' && $curso->category_id == $category->id)
                         <div class="card shadow">
                             <a href="javscript:void(0)"
                                 onclick="event.preventDefault(); document.getElementById('curso-{{ $curso->id }}').submit();">
@@ -42,16 +42,21 @@
                                     <div class="col-md-6">
                                         <h4> ${{ $curso->precio_en_moneda }} MxN</h4>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-12">
+                                        <a href="{{ route('inscripcion.form',['curso_programado_id'=>$curso->id]) }}" class="btn btn-block btn-dark btn-detalle">Inscribir</a>
+                                        <a href="javscript:void(0)" class="btn btn-primary btn btn-block mt-2"
+                                            onclick="event.preventDefault(); document.getElementById('curso-{{ $curso->id }}').submit();">
+                                            Mas detalles
+                                        </a>
                                         <!-- Button trigger modal -->
-                                        <button type="button" class="btn btn-primary" data-toggle="modal"
-                                            data-target="#exampleModal">
+                                        {{-- <button type="button" class="btn btn-primary" data-toggle="modal"
+                                            data-target="#exampleModal{{ $curso->id }}">
                                             Inscribir
-                                        </button>
+                                        </button> --}}
 
                                         <!-- Modal -->
-                                        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
-                                            aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        {{-- <div class="modal fade" id="exampleModal{{ $curso->id }}" tabindex="-1"
+                                            role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                             <div class="modal-dialog" role="document">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
@@ -96,14 +101,15 @@
                                                         <form action="{{ route('inscripcion.pago') }}" method="POST">
                                                             @csrf
                                                             @method('POST')
-                                                            <input name="curso_programado_id" type="hidden" value="{{ $curso->id }}">
+                                                            <input name="curso_programado_id" type="hidden"
+                                                                value="{{ $curso->id }}">
                                                             <button type="submit"
                                                                 class="btn btn-primary">Confirmar</button>
                                                         </form>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> --}}
                                     </div>
                                 </div>
                             </div>
@@ -116,8 +122,8 @@
 
 
 
-    <!-- Modal -->
-    {{-- <div class="modal fade" id="myModal" role="dialog">
+    {{-- <!-- Modal -->
+    <div class="modal fade" id="myModal" role="dialog">
         <div class="modal-dialog modal-lg">
             <!-- Modal content-->
             <div class="modal-content">
@@ -145,10 +151,21 @@
 
 @section('javascript')
     <script src="{{ asset('js/funciones.js') }}"></script>
-    <script type="text/javascript" src="https://cdn.conekta.io/js/latest/conekta.js"></script>
-    <script type="text/javascript">
-        // Conekta Public Key
-        Conekta.setPublishableKey('key_OKaHFsyf7d8dHe9fyKomsig');
-        // ...
+    <script>
+        $('#exampleModal').on('show.bs.modal', function(event) {
+            var button = $(event.relatedTarget) // Button that triggered the modal
+            var id = button.data('cursoid') // Extract info from data-* attributes
+            console.log(id)
+            //var id = button.getAttribute('data-cursoid');
+            // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+            // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+            //var modal = $(this)
+            //console.log(id)
+            var b = document.querySelector(".modal-footer form input")
+            console.log(b)
+            //modal.find('.modal-footer form button').setAttribute('value',''+recipient);
+            //var buttonid = console.log(modal.find('.modal-footer form button'))
+            b.setAttribute("value", id)
+        })
     </script>
 @endsection

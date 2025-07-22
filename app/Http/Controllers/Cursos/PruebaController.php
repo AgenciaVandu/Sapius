@@ -9,6 +9,7 @@ use App\Models\Cursos\Leccion;
 use App\Models\Cursos\Curso;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 
 class PruebaController extends Controller
 {
@@ -68,7 +69,7 @@ class PruebaController extends Controller
         $prueba->leccion_id = $request->leccion_id;
         $prueba->titulo = $request->titulo;
         $prueba->descripcion = $request->descripcion;
-        $prueba->tiempo = $request->tiempo;
+        $prueba->tiempo =  $request->tiempo;
         $prueba->tiempo_caducidad = $request->tiempo_caducidad;
         $prueba->tiempo_vigencia = $request->tiempo_vigencia;
         $prueba->tipo = $request->tipo;

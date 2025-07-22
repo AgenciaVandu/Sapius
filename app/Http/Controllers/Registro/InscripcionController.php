@@ -14,10 +14,16 @@ use DateTime;
 use DateInterval;
 use App\Mail\TarjetaEmail;
 use App\Mail\OxxoEmail;
+use App\Models\Registro\Descuento;
 use Mail;
 
 class InscripcionController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -95,18 +101,30 @@ class InscripcionController extends Controller
     }
 
     public function inscripcion($curso_programado_id){
-        $curso = CursoProgramado::with('Curso')->where('id',$curso_programado_id)->first();
+
+        if (session('cupon')) {
+            $descuento = Descuento::where('clave', '=', session('cupon'))
+                                ->where('curso_programado_id', '=', $curso_programado_id)
+                                ->where('activo', '=', 'si')
+                                ->first();
+            if(!$descuento){
+                //destruye las variables de session precio y descuento
+                session()->forget(['precio', 'descuento']);
+            }
+        }
+            $curso = CursoProgramado::with('Curso')->where('id',$curso_programado_id)->first();
+
         return view('registro.inscripcion')->with('curso',$curso);
     }
 
-    public function pago(Request $request){
+    public function pago(Request $request, $curso_id){
 
-        /*  dd($request); */
-        //Codigo para crear la referencia de la transaccion ya sea con tarjeta o en oxxo
-        //$order = new Order;
-        $cursoProgramado = CursoProgramado::with('Curso')->where('id',$request->curso_programado_id)->first();
-        $curso = $cursoProgramado->Curso;
-        /* try {
+            /* dd($request); */
+            //Codigo para crear la referencia de la transaccion ya sea con tarjeta o en oxxo
+            //$order = new Order;
+            $cursoProgramado = CursoProgramado::with('Curso')->where('id',$curso_id)->first();
+            $curso = $cursoProgramado->Curso;
+            /* try {
             if($request->tipo_cobro == "tarjeta"){
                 $order = $this->payment($request,$curso);
                 $this->correoTarjeta($order);
@@ -116,135 +134,27 @@ class InscripcionController extends Controller
             }else{
                 //tipo_cobro no definido
             }
-        } catch (\Throwable $th) {
+            } catch (\Throwable $th) {
 
-        } */
+            } */
 
-        //***********Validar si previamente el alumno fue inscrito*******************
+            //***********Validar si previamente el alumno fue inscrito*******************
 
-        /* if(is_null ($order->id) == false){ */
+            /* if(is_null ($order->id) == false){ */
             $inscripcion = New Inscripcion();
 
             $inscripcion->user_id = Auth::user()->id;
-            $inscripcion->curso_programado_id = $request->curso_programado_id;
+            $inscripcion->curso_programado_id = $curso_id;
             $inscripcion->referencia = null;
             $inscripcion->tipo_pago = null;
             $inscripcion->clave = null;
 
             $inscripcion->save();
-    /*      } */
-        $send = new Curso;
-        return $send->cursoDetallado($request);
-    }
-
-    public function payment($request,$curso) {
-        Conekta::setApiKey(config("elearning.token_conekta"));
-        try{
-            $order = Order::create(
-            [
-                "line_items" => [
-                [
-                    "name" => $curso->titulo,
-                    "unit_price" => (intval(str_replace(",","",$request->precio)) * 100),
-                    "quantity" => 1 //siempre es un curso
-                ]
-                ],
-                // "shipping_lines" => [
-                //   [
-                //     "amount" => 1500,
-                //     "carrier" => "FEDEX"
-                //   ]
-                // ], //optional - shipping_lines are only required for physical goods
-                "currency" => "MXN",
-                "customer_info" => [
-                "name" => "nombre",//Auth::user()->nombre." ".Auth::user()->apellido,
-                "email" => "fulanito@conekta.com", //Auth::user()->email,
-                "phone" => "5512345678"//Auth::user()->telefono
-                ],
-                // "shipping_contact" => [
-                //   "address" => [
-                //     "street1" => "Calle 123, int 2",
-                //     "postal_code" => "06100",
-                //     "country" => "MX"
-                //   ]
-                // ], //optional - shipping_contact is only required for physical goods
-                // "metadata" => ["reference" => "12987324097", "more_info" => "lalalalala"],
-                "charges" => [
-                [
-                    "payment_method" => [
-                    //"monthly_installments" => 3, //optional
-                    "type" => "card",
-                    "token_id" => $request->conektaTokenId
-                    ] //payment_method - use customer's default - a card
-                    //to charge a card, different from the default,
-                    //you can indicate the card's source_id as shown in the Retry Card Section
-                ]
-                ]
-            ]
-            );
-        } catch (\Conekta\ProcessingError $error){
-            echo $error->getMessage();
-        } catch (\Conekta\ParameterValidationError $error){
-            echo $error->getMessage();
-        } catch (\Conekta\Handler $error){
-            echo $error->getMessage();
+        /*      } */
+            $send = new Curso;
+            return redirect()->route('alumno.home');
         }
 
-        return $order;
-    }
-
-    public function paymentOxxo() {
-        Conekta::setApiKey(config("elearning.token_conekta"));
-        try{
-            $thirty_days_from_now = (new DateTime())->add(new DateInterval('P30D'))->getTimestamp();
-
-            $order = Order::create(
-            [
-                "line_items" => [
-                [
-                    "name" => "Tacos",
-                    "unit_price" => 1000,
-                    "quantity" => 12
-                ]
-                ],
-                "shipping_lines" => [
-                [
-                    "amount" => 1500,
-                    "carrier" => "FEDEX"
-                ]
-                ], //shipping_lines - physical goods only
-                "currency" => "MXN",
-                "customer_info" => [
-                "name" => "Fulanito Pérez",
-                "email" => "fulanito@conekta.com",
-                "phone" => "+5218181818181"
-                ],
-                "shipping_contact" => [
-                "address" => [
-                    "street1" => "Calle 123, int 2",
-                    "postal_code" => "06100",
-                    "country" => "MX"
-                ]
-                ], //shipping_contact - required only for physical goods
-                "charges" => [
-                [
-                    "payment_method" => [
-                    "type" => "oxxo_cash",
-                    "expires_at" => $thirty_days_from_now
-                    ]
-                ]
-                ]
-            ]
-            );
-        } catch (\Conekta\ParameterValidationError $error){
-            echo $error->getMessage();
-        } catch (\Conekta\Handler $error){
-            echo $error->getMessage();
-        }
-        //\Log::debug(dd($order));
-        //return view('cursos.payment')->with('order',$order);
-        return $order;
-    }
 
     public function correoTarjeta($orden)
     {

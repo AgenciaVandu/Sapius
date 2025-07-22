@@ -11,19 +11,48 @@
 |
 */
 
+use App\ManageableSimulatorMedicine;
+use App\Models\Cursos\Category;
+use App\Models\Landing\Pride;
+use App\Models\Landing\Slide;
+use App\Models\Landing\Teacher;
+use App\Models\Registro\CursoProgramado;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Artisan;
 use App\User;
 
 
 
 Route::get('/', function () {
-    return view('index');
-})->name('landing.home')
-;
+    $images = Slide::where('section','like','slider-index')->orderBy('position', 'asc')->get();
+    $prides = Pride::orderBy('position', 'asc')->get();
+    $teachers = Teacher::orderBy('position', 'asc')->get();
+    return view('index',compact('images','prides','teachers'));
+})->name('landing.home');
+
+Route::post('/view','Registro\CursoProgramadoController@viewGuia')->name('alumno.view.guias');
+
+
+Route::get('/generate-storage-link', function () {
+    Artisan::call('storage:link');
+    return 'Symlink creado exitosamente.';
+});
+
 Route::get('terms/conditions', function () {
     return view('terms');
-});
+})->name('termsandconditions');
+
+//Privacity
+Route::get('privacidad', function () {
+    return view('privacidad');
+})->name('privacidad');
+
+//COOKIES
+Route::get('cookies', function () {
+    return view('cookies');
+})->name('cookies');
+
 Route::get('/exani-1', function () {
     return view('cursos-front.exani-1');
 });
@@ -49,6 +78,49 @@ Route::get ('/cursos-enarm', function(){
 Route::get ('/cursos-presenciales', function (){
     return view('cursos-front.presencial');
 });
+
+Route::get ('/guias-medicina', function (){
+    $category = Category::where('name','guias')->first();
+    $guias = CursoProgramado::where('category_id', $category->id)->where('identificador','like','%medicina%')->where('activo','si')->where('fecha_inicio', '<=', date('Y-m-d H:i:s'))
+            ->where('fecha_fin', '>=', date('Y-m-d H:i:s'))->get();
+    $manageable_guias = ManageableSimulatorMedicine::orderBy('position', 'desc')->get();
+    return view('cursos-front.guia-medicina', compact('guias', 'manageable_guias'));
+})->name('guias.medicina');
+
+Route::get ('/guias-nutricion', function (){
+    $category = Category::where('name','guias')->first();
+    $guias = CursoProgramado::where('category_id', $category->id)->where('identificador','like','%nutricion%')->where('activo','si')->where('fecha_inicio', '<=', date('Y-m-d H:i:s'))
+            ->where('fecha_fin', '>=', date('Y-m-d H:i:s'))->get();
+    $manageable_guias_nutricion = ManageableSimulatorMedicine::orderBy('position', 'desc')->get();
+    return view('cursos-front.guia-nutricion', compact('guias', 'manageable_guias_nutricion'));
+})->name('guias.nutricion');
+
+Route::get ('/simuladores-medicina', function (){
+    $category = Category::where('name','simuladores')->first();
+    $simuladores = CursoProgramado::where('category_id', $category->id)->where('identificador','like','%medicina%')->where('activo','si')->where('fecha_inicio', '<=', date('Y-m-d H:i:s'))
+            ->where('fecha_fin', '>=', date('Y-m-d H:i:s'))->get();
+    $manageable_simuladores_medicina = ManageableSimulatorMedicine::orderBy('position', 'desc')->get();
+    return view('cursos-front.simulador-medicina', compact('simuladores', 'manageable_simuladores_medicina'));
+})->name('simuladores.medicina');
+
+Route::get ('/simuladores-nutricion', function (){
+    $category = Category::where('name','simuladores')->first();
+    $simuladores = CursoProgramado::where('category_id', $category->id)->where('identificador','like','%nutricion%')->where('activo','si')->where('fecha_inicio', '<=', date('Y-m-d H:i:s'))
+            ->where('fecha_fin', '>=', date('Y-m-d H:i:s'))->get();
+    $manageable_simuladores_nutricion = ManageableSimulatorMedicine::orderBy('position', 'desc')->get();
+    return view('cursos-front.simulador-nutricion', compact('simuladores', 'manageable_simuladores_nutricion'));
+})->name('simuladores.nutricion');
+
+
+Route::get('/cursos/image/{file}', 'Cursos\CursoController@cursoPicture')->name('public.cursos.image');
+
+
+
+
+
+Route::get('/checkout', 'CheckoutController@createCheckout')->name('checkout');
+Route::post('/payout', 'CheckoutController@processPay')->name('checkout.processPayout');
+
 //Socialite
 Route::get('/redirect', 'SocialAuthFacebookController@redirect');
 Route::get('/callback', 'SocialAuthFacebookController@callback');
@@ -60,6 +132,32 @@ Auth::routes();
 
 Route::group(['middleware' => ['admin','restrict.mobile'],'prefix' => 'admin'], function() {
     Route::get('/', 'HomeController@admin')->name('admin');
+    Route::get('/configuraciones', 'HomeController@configuracion')->name('admin.configuracion.index');
+    Route::post('/configuraciones/upload', 'HomeController@uploadslide')->name('admin.configuracion.slide');
+    Route::get('/configuraciones/delete/{slide}', 'HomeController@deleteSlide')->name('admin.configuracion.slide,delete');
+
+    Route::post('/configuraciones/pride/upload', 'HomeController@uploadpride')->name('admin.configuracion.pride');
+    Route::put('/configuraciones/pride/{pride}/update', 'HomeController@updatePride')->name('admin.configuracion.pride.update');
+    Route::get('/configuraciones/pride/{pride}/delete', 'HomeController@deletePride')->name('admin.configuracion.pride.delete');
+
+    Route::post('/configuraciones/teacher/upload', 'HomeController@uploadTeacher')->name('admin.configuracion.teacher');
+    Route::put('/configuraciones/teacher/{teacher}/update', 'HomeController@updateTeacher')->name('admin.configuracion.teacher.update');
+    Route::get('/configuraciones/teacher/{teacher}/delete', 'HomeController@deleteTeacher')->name('admin.configuracion.teacher.delete');
+
+    //Secciones administrables de paginas
+    Route::get('/manageable', 'ManageableController@index')->name('admin.manageable.index');
+    Route::post('/manageable/store', 'ManageableController@store')->name('admin.manageable.store');
+    Route::put('/manageable/update', 'ManageableController@update')->name('admin.manageable.update');
+    Route::get('/manageable/simulators/medicine/delete/{id}', 'ManageableController@deleteManageablesimulatormedicine')->name('admin.manageablesimulatormedicine.delete');
+    Route::get('/manageable/simulators/nutrition/delete/{id}', 'ManageableController@deleteManageablesimulatornutrition')->name('admin.manageablesimulatornutrition.delete');
+    Route::get('/manageable/guides/medicine/delete/{id}', 'ManageableController@deleteManageableguiamedicine')->name('admin.manageableguiamedicine.delete');
+    Route::get('/manageable/guides/nutrition/delete/{id}', 'ManageableController@deleteManageableguianutrition')->name('admin.manageableguianutrition.delete');
+
+
+    //Reportes
+    Route::get('/reports', 'Reports\ReportsController@index')->name('admin.reports.index');
+    Route::get('/reports/inscriptions', 'Reports\ReportsController@inscriptions')->name('admin.reports.inscriptions');
+    Route::get('/reports/inscriptions/{id}/show', 'Reports\ReportsController@showInscription')->name('admin.reports.inscriptions.show');
 
     //Admistracion de usuarios
     Route::get('users/{activo?}', 'UserController@index')->name('users.index');
@@ -101,6 +199,7 @@ Route::group(['middleware' => ['admin','restrict.mobile'],'prefix' => 'admin'], 
     Route::post('/modulos/activate', 'Cursos\LeccionController@activate')->name('admin.lecciones.activate');//{id}
     Route::get('/modulos/getall/{curso_id}/{leccion_id}/{active}', 'Cursos\LeccionController@getAll')->name('admin.gle');
     Route::get('/modulos/image/{file}', 'Cursos\LeccionController@cursoPicture')->name('admin.lecciones.image');
+    Route::post('/lecciones/reordenar', 'Cursos\LeccionController@reordenar')->name('admin.lecciones.reordenar');
 
     // Pruebas
     Route::post('/cursos/modulos/pruebas', 'Cursos\PruebaController@index')->name('admin.pruebas.index');//{leccion_id}
@@ -119,7 +218,7 @@ Route::group(['middleware' => ['admin','restrict.mobile'],'prefix' => 'admin'], 
     Route::post('/preguntas/create', 'Cursos\PreguntaController@create')->name('admin.preguntas.create');//{prueba_id}
     Route::post('/preguntas/store', 'Cursos\PreguntaController@store')->name('admin.preguntas.store');
     Route::get('preguntas/{id}/view', 'Cursos\PreguntaController@show')->name('admin.preguntas.show');//{id}
-    Route::get('preguntas/{prueba_id}/form', 'Cursos\PreguntaController@showimportar')->name('admin.preguntas.form-importar');//{prueba_id}
+    Route::get('preguntas/{prueba_id}/form', 'Cursos\PreguntaController@showimportar')->name('admin.preguntas.form.importar');//{prueba_id}
     Route::post('preguntas/importar', 'Cursos\PreguntaController@importar')->name('admin.preguntas.importar');
     Route::post('/preguntas/edit', 'Cursos\PreguntaController@edit')->name('admin.preguntas.edit');//{id}
     Route::post('/preguntas/update', 'Cursos\PreguntaController@update')->name('admin.preguntas.update');
@@ -208,6 +307,8 @@ Route::group(['middleware' =>['instructor','restrict.mobile'],'prefix' => 'instr
     Route::get('/modulos/getall/{curso_id}/{leccion_id}/{active}', 'Cursos\LeccionController@getAll')->name('instructor.gle');
     Route::get('/modulos/image/{file}', 'Cursos\LeccionController@cursoPicture')->name('instructor.lecciones.image');
 
+
+
     // Pruebas
     Route::post('/cursos/modulos/pruebas', 'Cursos\PruebaController@index')->name('instructor.pruebas.index');//{leccion_id}
     Route::post('/pruebas/create', 'Cursos\PruebaController@create')->name('instructor.pruebas.create');//{leccion_id}
@@ -271,17 +372,28 @@ Route::group(['middleware' =>['instructor','restrict.mobile'],'prefix' => 'instr
 });
 
 Route::group(['middleware' =>['alumno','restrict.mobile'],'prefix' => 'alumno'], function() {
-    Route::get('/', 'HomeController@index')->name('alumno');
+    Route::get('/', 'HomeController@index')->name('alumno.home');
     Route::post('/users/profile', 'UserController@profile')->name('alumno.profile');//{id}
     Route::get('/users/pase/{file}', 'UserController@pase')->name('alumno.pase');
     Route::get('/users/documento/{file}', 'UserController@documento')->name('alumno.documento');
+    Route::get('/checkout/{curso_id}','CheckoutController@createCheckout')->name('alumno.checkout');
+    Route::get('/errorPayment','CheckoutController@errorPayment')->name('errors.payment');
+
+    Route::get('/checkout', 'CheckoutController@createCheckout')->name('checkout');
+    Route::post('/payout', 'CheckoutController@processPay')->name('checkout.processPayout');
+
+
+
+    Route::get('/payout/approved/{id}','CheckoutController@chargeApproved')->name('checkout.payout.approved');
 
     //Cursos
     Route::get('/cursos', 'HomeController@cursosDisponibles')->name('cursos.disponibles');
+    Route::get('/guias', 'HomeController@guiasDisponibles')->name('guias.disponibles');
+    Route::get('/simuladores', 'HomeController@simuladoresDisponibles')->name('simuladores.disponibles');
     Route::post('/curso', 'Registro\CursoProgramadoController@cursoDetallado')->name('cursos.detallado');
     Route::post('/modulo', 'Registro\CursoProgramadoController@leccionDetallada')->name('leccion.detallada');
     Route::get('/inscripcion/{curso_id}', 'Registro\InscripcionController@inscripcion')->name('inscripcion.form');
-    Route::post('/inscripcion', 'Registro\InscripcionController@pago')->name('inscripcion.pago');
+    Route::get('/inscribir/{curso_id}', 'CheckoutController@pago')->name('inscripcion.pago');
     Route::get('/cursos/video', 'Cursos\CursoController@video')->name('cursos.video');
     Route::get('/cursos/token', 'Cursos\CursoController@token')->name('cursos.token');
     Route::post('/cursos/payment', 'Cursos\CursoController@payment')->name('cursos.payment');
@@ -326,9 +438,15 @@ Route::group(['middleware' =>['alumno','restrict.mobile'],'prefix' => 'alumno'],
 
     //Descuentos
     Route::post('descuentos/check', 'Registro\DescuentoController@check')->name('descuentos.check');
+    Route::post('descuentos/cancel', 'Registro\DescuentoController@cancel')->name('descuentos.cancel');
+
+
+
+
 });
 
 Route::get('email-registro', function () {
+    //esto es una prueba
     $user = User::find(1);
         return new App\Mail\RegistroEmail($user);
 });

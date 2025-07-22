@@ -106,7 +106,7 @@
             var activo = true;
             var endpoint = '{{ URL::route(Auth::user()->rol[0]->slug . '.gcu', ['active' => 'enable']) }}';
             var show =
-                '<a class="btn btn-primary btn-detalle" href="javascript:void(0)" id="{{ route('admin.cursos.show', 1) }}"><i class="fas fa-eye"></i></a>';
+                '<a class="btn btn-primary btn-detalle" href="javascript:void(0)" id="{{ route('admin.cursos.show', '__ID__') }}"><i class="fas fa-eye"></i></a>';
             $("#btnActivo").click(function() {
                 if (activo) {
                     activo = false;
@@ -208,7 +208,7 @@
                             '"> <button type="submit" class="btn btn-primary"><i class="fas fa-calendar-alt"></i></button> </form>'
                             );
 
-                        var s = show.replace('1', data['id']);
+                        var s = show.replace('__ID__', data['id']);
                         $(row).find('td:eq(5)').html(s);
 
                         if (data['activo'] == 'si') {

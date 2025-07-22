@@ -32,7 +32,6 @@ $(document).on('click','.pagination a, a[class ~= "final"]',function(e){
             pr.name = $(this).attr('name');
             pr.value = $(this).val();
             selected.push(pr);
-            console.log(selected)
     });
 
     $.ajax({

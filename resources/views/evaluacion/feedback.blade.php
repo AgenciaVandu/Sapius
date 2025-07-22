@@ -18,7 +18,7 @@ de la plataforma y violación de las restricciones previstas en el contrato de s
 de los términos y condiciones. Por ello, no podrá continuar con el examen y se le
 negará la retroalimentación correspondiente, nos reservamos el derecho de negar el
 acceso permanente a la plataforma." id="myInput" style="display: none">
-    <form method="GET" action="{{ route('alumno') }}" class="mt-4" id="form-redirect">
+    <form method="GET" action="{{ route('alumno.home') }}" class="mt-4" id="form-redirect">
         @csrf
     </form>
 @endsection

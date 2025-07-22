@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Registro;
 
+use App\FileGuia;
 use App\Http\Controllers\Controller;
+use App\Models\Cursos\Category;
 use App\Models\Registro\Inscripcion;
 use App\Models\Registro\CursoProgramado;
 use App\Models\Registro\ContenidoProgramado;
@@ -11,6 +13,7 @@ use App\Models\Cursos\Leccion;
 use App\Models\Cursos\Prueba;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use App\User;
 
 class CursoProgramadoController extends Controller
@@ -20,6 +23,13 @@ class CursoProgramadoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+
     public function index(Request $request)
     {
         $curso = Curso::find($request->curso_id);
@@ -28,9 +38,9 @@ class CursoProgramadoController extends Controller
 
     public function getAllSchedule($curso_id,$active){
         if($active == "enable")
-        $cursos = CursoProgramado::with('instructor')->where('curso_id',$curso_id)->where('activo', 'si')->get();
+        $cursos = CursoProgramado::with(['instructor','category'])->where('curso_id',$curso_id)->where('activo', 'si')->get();
         elseif($active == "disable")
-        $cursos = CursoProgramado::with('instructor')->where('curso_id',$curso_id)->where('activo', 'no')->get();
+        $cursos = CursoProgramado::with(['instructor','category'])->where('curso_id',$curso_id)->where('activo', 'no')->get();
         //dd($cursos);
         return $cursos->toJson();
     }
@@ -42,11 +52,12 @@ class CursoProgramadoController extends Controller
      */
     public function create(Request $request)
     {
+        $categories = Category::all();
         $curso = Curso::find($request->curso_id);
 
         $instructor = User::whereHas('roles', function ($q) {
             $q->where('roles.slug', '=', 'instructor'); // or whatever constraint you need here
-          })->get();
+        })->get();
 
         $curso_programado = new CursoProgramado;
         $curso_programado->curso_id = $curso->id;
@@ -54,7 +65,8 @@ class CursoProgramadoController extends Controller
         return view('registro.create-schedule')
             ->with('curso',$curso)
             ->with('instructores',$instructor)
-            ->with('curso_programado',$curso_programado);
+            ->with('curso_programado',$curso_programado)
+            ->with('categories',$categories);
     }
 
     /**
@@ -65,7 +77,7 @@ class CursoProgramadoController extends Controller
      */
     public function store(Request $request)
     {
-        //dd($request);
+        /* dd($request); */
         $curso = new CursoProgramado();
         $curso->identificador = $request->identificador;
         $curso->user_id = $request->instructor;
@@ -73,11 +85,28 @@ class CursoProgramadoController extends Controller
         $curso->fecha_inicio = date('Y-m-d H:i:s',strtotime(str_replace('/', '-', $request->fecha_inicio))); // $request->fecha_inicio;
         $curso->fecha_fin = date('Y-m-d H:i:s',strtotime(str_replace('/', '-', $request->fecha_fin))); // $request->fecha_fin;
         $curso->precio = $request->precio;
+        $curso->category_id = $request->category_id;
         $curso->clave_descuento = $request->clave_descuento;
         //$curso->activo = "si";
         //\Log::debug(dd($curso));
         $curso->save();
+        $id_curso_programado = $curso->id;
         $curso = Curso::find($curso->curso_id);
+
+        $category_name = Category::find($request->category_id);
+
+        if ($category_name->name == 'Guias') {
+            //Obtenemos la url del documento de esta forma $imageUrl = $request->file('image')->store('simuladores', 'public');
+            $fileUrl = $request->file('guia_file');
+            $url = basename(Storage::put('files/medias', $fileUrl));
+
+
+            FileGuia::create([
+                'url' => $url,
+                'curso_programado_id' => $id_curso_programado
+            ]);
+
+        }
         return view('registro.index-schedule')->with('curso',$curso);
     }
 
@@ -100,6 +129,7 @@ class CursoProgramadoController extends Controller
      */
     public function edit(Request $request)
     {
+        $categories = Category::all();
         $curso = Curso::find($request->curso_id);
 
         $curso_programado = CursoProgramado::where('id',$request->cp_id)
@@ -107,12 +137,13 @@ class CursoProgramadoController extends Controller
 
         $instructor = User::whereHas('roles', function ($q) {
             $q->where('roles.slug', '=', 'instructor'); // or whatever constraint you need here
-          })->get();
+        })->get();
 
         return view('registro.create-schedule')
                     ->with('curso',$curso)
                     ->with('instructores',$instructor)
-                    ->with('curso_programado',$curso_programado);
+                    ->with('curso_programado',$curso_programado)
+                    ->with('categories',$categories);
     }
 
     /**
@@ -132,11 +163,36 @@ class CursoProgramadoController extends Controller
         $curso->fecha_inicio = date('Y-m-d H:i:s',strtotime(str_replace('/', '-', $request->fecha_inicio))); // $request->fecha_inicio;
         $curso->fecha_fin = date('Y-m-d H:i:s',strtotime(str_replace('/', '-', $request->fecha_fin))); // $request->fecha_fin;
         $curso->precio = $request->precio;
+        $curso->category_id = $request->category_id;
         $curso->clave_descuento = $request->clave_descuento;
         //$curso->activo = "si";
         //\Log::debug(dd($curso));
         $curso->save();
         $curso = Curso::find($curso->curso_id);
+
+        $id_curso_programado = $curso->id;
+        $category_name = Category::find($request->category_id);
+        //Valida si es guia y si $request->file('guia_file') no es vacio
+        if ($category_name->name == 'Guias') {
+            if ($request->file('guia_file')) {
+                //Obtenemos la url del documento de esta forma $imageUrl = $request->file('image')->store('simuladores', 'public');
+                $fileUrl = $request->file('guia_file');
+                $url = basename(Storage::put('files/medias', $fileUrl));
+
+                //Busca el registro actual y reemplaza la url
+                $fileGuia = FileGuia::where('curso_programado_id', $request->curso_programado_id)->first();
+                if ($fileGuia) {
+                    $fileGuia->url = $url;
+                    $fileGuia->save();
+                }else{
+                    FileGuia::create([
+                        'url' => $fileUrl,
+                        'curso_programado_id' => $request->curso_programado_id
+                    ]);
+                }
+                /* dd($fileGuia); */
+            }
+        }
         return view('registro.index-schedule')->with('curso',$curso);
     }
 
@@ -168,7 +224,13 @@ class CursoProgramadoController extends Controller
 
         $contenido_programado = ContenidoProgramado::where('curso_programado_id',$request->curso_programado_id)->first();
 
-        return view('registro.curso')->with('curso_programado',$curso)->with('inscrito',$inscripcion)->with('contenido_programado',$contenido_programado);
+        if ($curso->category->name == "Guias") {
+            /* return "Aqui la guia"; */
+            return view('registro.curso')->with('curso_programado',$curso)->with('inscrito',$inscripcion)->with('contenido_programado',$contenido_programado);
+        }else{
+            return view('registro.curso')->with('curso_programado',$curso)->with('inscrito',$inscripcion)->with('contenido_programado',$contenido_programado);
+        }
+
     }
 
     public function leccionDetallada(Request $request){
@@ -260,5 +322,20 @@ class CursoProgramadoController extends Controller
         $curso = CursoProgramado::with('Curso')->find($inscripcion->curso_programado_id);
         return view('admin.registro.index')->with('curso_programado',$curso);
     }
+
+
+
+
+
+    public function viewGuia(Request $request){
+
+        /* dd($request); */
+        $file = FileGuia::where('curso_programado_id', $request->curso_programado_id)->first();
+        $file = 'alumno/medias/archivo/'.$file->url;
+
+        return view('guias')->with('file',$file)->with('titulo','Guia');
+
+    }
+
 
 }

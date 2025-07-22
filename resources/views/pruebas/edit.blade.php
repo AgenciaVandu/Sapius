@@ -100,6 +100,7 @@
                         <div class="form-group row">
                             <div class="col-md-12">
                                 <label for="tiempo_vigencia">Tiempo de vigencia (Feedback o retroalimentación)</label>
+
                                 <input id="tiempo_vigencia" type="time" class="form-control @error('tiempo_vigencia') is-invalid @enderror" name="tiempo_vigencia" value="{{ $prueba->tiempo_vigencia }}" required autocomplete="tiempo_vigencia" autofocus>
 
                                 @error('tiempo_vigencia')
@@ -146,5 +147,21 @@
                 ],
             });
         } );
+    </script>
+    <script>
+        flatpickr("#tiempo", {
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "H:i", // formato 24h sin AM/PM
+            time_24hr: true, // fuerza 24 horas
+            defaultDate: "{{ $prueba->tiempo }}"
+        });
+        flatpickr("#tiempo_vigencia", {
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "H:i", // formato 24h sin AM/PM
+            time_24hr: true, // fuerza 24 horas
+            defaultDate: "{{ $prueba->tiempo_vigencia }}"
+        });
     </script>
 @endsection

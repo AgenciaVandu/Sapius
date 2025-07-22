@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,3 +17,10 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+Route::post('sort/teachers','Api\SortController@teachers')->name('api.sort.teachers');
+Route::post('sort/prides','Api\SortController@prides')->name('api.sort.prides');
+Route::post('sort/slides','Api\SortController@slides')->name('api.sort.slides');
+Route::post('sort/simuladores-medicina','Api\SortController@manageableSimulatorMedicine')->name('api.sort.simuladores.medicina');
+Route::post('sort/simuladores-nutricion','Api\SortController@manageableSimulatorNutrition')->name('api.sort.simuladores.nutricion');
+Route::post('sort/guias-medicina','Api\SortController@manageableGuiasMedicine')->name('api.sort.guias.medicines');
+Route::post('sort/guias-nutricion','Api\SortController@manageableGuiasNutrition')->name('api.sort.guias.nutricion');

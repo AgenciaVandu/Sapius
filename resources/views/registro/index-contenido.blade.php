@@ -6,7 +6,7 @@
             <div class="col-12 align-self-center">
                 <h3 class="page-title text-truncate text-dark font-weight-medium mb-1">Programar contenido del curso</h3>
                 <div class="d-flex align-items-center">
-                    @include('genericos.breadcrum',['route' => 'contenido.index'])
+                    @include('genericos.breadcrum', ['route' => 'contenido.index'])
                 </div>
             </div>
         </div>
@@ -54,7 +54,7 @@
                                             if (isset($contenido['hora_inicial'])) {
                                                 $hora_inicial = $contenido['hora_inicial'];
                                             } else {
-                                                $hora_inicial = null;
+                                                $hora_inicial = '00:00';
                                             }
 
                                             if (isset($contenido['fecha_final'])) {
@@ -66,23 +66,20 @@
                                             if (isset($contenido['hora_final'])) {
                                                 $hora_final = $contenido['hora_final'];
                                             } else {
-                                                $hora_final = null;
+                                                $hora_final = '23:59';
                                             }
-                                            /* $fecha_inicial = $contenido['fecha_inicial'] ? $contenido['fecha_inicial'] : null;
-                                                                                    $hora_inicial = $contenido['hora_inicial'] ? $contenido['hora_inicial'] : null;
-                                                                                    $fecha_final = $contenido['fecha_final'] ? $contenido['fecha_final'] : null;
-                                                                                    $hora_final = $contenido['hora_final'] ? $contenido['hora_final'] : null; */
                                         }
                                     @endphp
+
                                     <tr style="border-block-start: medium solid blue;">
                                         <td>
-                                            {{ $leccion->titulo }}
+                                            {{ $leccion->titulo }} -{{ $leccion->id }}
                                             <input id="leccion_id_{{ $leccion->id }}" type="hidden"
                                                 name="leccion_id_{{ $leccion->id }}" value="{{ $leccion->id }}">
                                         </td>
                                         <td>
-                                            <input id="fecha_inicial_{{ $leccion->id }}" type="text"
-                                                class="calendar" name="fecha_inicial_{{ $leccion->id }}" required
+                                            <input id="fecha_inicial_{{ $leccion->id }}" type="text" class="calendar"
+                                                name="fecha_inicial_{{ $leccion->id }}" required
                                                 autocomplete="fecha_inicial_{{ $leccion->id }}" autofocus
                                                 value="@if ($fecha_inicial) {{ $fecha_inicial }} @endif">
                                         </td>
@@ -90,22 +87,21 @@
                                             <input id="fecha_final_{{ $leccion->id }}" type="text" class="calendar"
                                                 name="fecha_final_{{ $leccion->id }}" required
                                                 autocomplete="fecha_final_{{ $leccion->id }}"
-                                                value="@if ($fecha_final){{ $fecha_final }}@endif">
+                                                value="@if ($fecha_final) {{ $fecha_final }} @endif">
                                         </td>
                                         <td>
                                             <input type="time" name="hora_inicial_{{ $leccion->id }}" required
                                                 autocomplete="hora_inicial_{{ $leccion->id }}"
-                                                value="@if ($hora_inicial){{ $hora_inicial }}@endif">
+                                                value="{{ $hora_inicial ? substr($hora_inicial, 0, 5) : '' }}">
                                         </td>
                                         <td>
                                             <input type="time" name="hora_final_{{ $leccion->id }}" required
                                                 autocomplete="hora_final_{{ $leccion->id }}"
-                                                value="@if ($hora_final){{ $hora_final }}@endif">
+                                                value="{{ $hora_final ? substr($hora_final, 0, 5) : '' }}">
                                         </td>
                                     </tr>
                                     @foreach ($leccion['Clases'] as $clase)
                                         @php
-                                            /* dd($clase); */
                                             $fecha_inicial = $fecha_final = null;
                                             if ($contenido_programado) {
                                                 $contenido = collect($contenido_programado->contenido)
@@ -120,7 +116,7 @@
                                                 if (isset($contenido['hora_inicial'])) {
                                                     $hora_inicial = $contenido['hora_inicial'];
                                                 } else {
-                                                    $hora_inicial = null;
+                                                    $hora_inicial = '00:00';
                                                 }
 
                                                 if (isset($contenido['fecha_final'])) {
@@ -132,12 +128,8 @@
                                                 if (isset($contenido['hora_final'])) {
                                                     $hora_final = $contenido['hora_final'];
                                                 } else {
-                                                    $hora_final = null;
+                                                    $hora_final = '23:59';
                                                 }
-                                                /* $fecha_inicial = $contenido['fecha_inicial'] ? $contenido['fecha_inicial'] : null; */
-                                                /* $hora_inicial = $contenido['hora_inicial'] ? $contenido['hora_inicial'] : null; */
-                                                /* $fecha_final = $contenido['fecha_final'] ? $contenido['fecha_final'] : null; */
-                                                /* $hora_final = $contenido['hora_final'] ? $contenido['hora_final'] : null; */
                                             }
                                         @endphp
                                         <tr>
@@ -148,25 +140,25 @@
                                             </td>
                                             <td>
                                                 <input id="fecha_inicial_{{ $clase->id }}" type="text"
-                                                    class="calendar" name="fecha_inicial_{{ $clase->id }}"
-                                                    required autocomplete="fecha_inicial_{{ $clase->id }}" autofocus
+                                                    class="calendar" name="fecha_inicial_{{ $clase->id }}" required
+                                                    autocomplete="fecha_inicial_{{ $clase->id }}" autofocus
                                                     value="@if ($fecha_inicial) {{ $fecha_inicial }} @endif">
                                             </td>
                                             <td>
-                                                <input id="fecha_final_{{ $clase->id }}" type="text"
-                                                    class="calendar" name="fecha_final_{{ $clase->id }}" required
+                                                <input id="fecha_final_{{ $clase->id }}" type="text" class="calendar"
+                                                    name="fecha_final_{{ $clase->id }}" required
                                                     autocomplete="fecha_final_{{ $clase->id }}" autofocus
                                                     value="@if ($fecha_final) {{ $fecha_final }} @endif">
                                             </td>
                                             <td>
                                                 <input type="time" name="hora_inicial_{{ $clase->id }}" required
                                                     autocomplete="hora_inicial_{{ $clase->id }}" autofocus
-                                                    value="@if ($hora_inicial){{ $hora_inicial }}@endif">
+                                                    value="{{ $hora_inicial ? substr($hora_inicial, 0, 5) : '' }}">
                                             </td>
                                             <td>
                                                 <input type="time" name="hora_final_{{ $clase->id }}" required
                                                     autocomplete="hora_final_{{ $clase->id }}" autofocus
-                                                    value="@if ($hora_final){{ $hora_final }}@endif">
+                                                    value="{{ $hora_final ? substr($hora_final, 0, 5) : '' }}">
                                             </td>
                                         </tr>
                                     @endforeach
