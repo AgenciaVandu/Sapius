@@ -744,7 +744,7 @@
                                                                                     for="guias_nutrition{{ $manageable_guia_nutrition_item->id }}">Descripción</label>
                                                                                 <textarea id="guias_nutrition{{ $manageable_guia_nutrition_item->id }}"
                                                                                     class="form-control @error('descripcion') is-invalid @enderror" name="descripcion" required
-                                                                                    autocomplete="descripcion" autofocus>{{ old('descripcion') }}</textarea>
+                                                                                    autocomplete="descripcion" autofocus>{{ $manageable_guia_nutrition_item->descripcion }}</textarea>
                                                                                 @error('descripcion')
                                                                                     <span class="invalid-feedback"
                                                                                         role="alert">

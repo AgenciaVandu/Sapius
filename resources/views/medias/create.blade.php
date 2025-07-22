@@ -85,8 +85,8 @@
                                 </div>
                             </div>
                             <label for="descripcion" class="col-md-4 col-form-label text-md-right mt-3">Archivo</label>
-                            <div class="col-md-6">
-                                <div class="custom-file">
+                            <div class="col-md-6 row">
+                                <div class="">
                                     <input type="checkbox" name="downloadble" id="">
                                 </div>
                             </div>
