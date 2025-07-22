@@ -78,11 +78,16 @@
 
                         <div class="form-group row" id="rowArchivo">
                             <label for="descripcion" class="col-md-4 col-form-label text-md-right">Archivo</label>
-
                             <div class="col-md-6">
                                 <div class="custom-file">
                                     <input type="file" name="file" class="custom-file-input" id="inputGroupFile02">
                                     <label class="custom-file-label" for="inputGroupFile02" aria-describedby="inputGroupFileAddon02">Selecciona</label>
+                                </div>
+                            </div>
+                            <label for="descripcion" class="col-md-4 col-form-label text-md-right mt-3">Archivo</label>
+                            <div class="col-md-6">
+                                <div class="custom-file">
+                                    <input type="checkbox" name="downloadble" id="">
                                 </div>
                             </div>
                         </div>
