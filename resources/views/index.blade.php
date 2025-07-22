@@ -223,8 +223,8 @@
                                     <div class="carousel-item @if ($loop->first) active @endif">
                                         <div class="card">
                                             <div class="cabecera-orgullo">
-                                                <img src="{{ asset('storage/' . $pride->img) }}" class="rounded-circle" style="max-width: 15.4rem; max-height: 15.4rem;"
-                                                    loading="lazy">
+                                                <img src="{{ asset('storage/' . $pride->img) }}" class="rounded-circle"
+                                                    style="max-width: 15.4rem; max-height: 15.4rem;" loading="lazy">
                                             </div>
                                             <h4 class="color-gray">{{ $pride->name }}</h4>
                                             <p class="color-gray font-weight-normal mb-0">
@@ -276,11 +276,13 @@
                             <li class="glide__slide">
                                 <div class="docentes__persona">
                                     <div class="maestro-img">
-                                        <img src="{{ asset('storage/' . $teacher->img) }}" class="rounded-circle border-teachers" style="max-width: 10.4rem; max-height: 10.4rem; min-width: 10.4rem; min-height: 10.4rem; background: #ffffff;"
+                                        <img src="{{ asset('storage/' . $teacher->img) }}"
+                                            class="rounded-circle border-teachers"
+                                            style="max-width: 10.4rem; max-height: 10.4rem; min-width: 10.4rem; min-height: 10.4rem; background: #ffffff;"
                                             alt="Maestro sapius" loading="lazy">
                                     </div>
                                     <h5 style="color: #fff;">{{ $teacher->name }} <br> <small
-                                            style="color: #30D6E6;">{{$teacher->description}}</small></h5>
+                                            style="color: #30D6E6;">{{ $teacher->description }}</small></h5>
                                     <small style="color: #fff;" class="pb-3">Nuestro cuerpo docente esta disponible para
                                         pláticas,
                                         conferencias y ponencias.
@@ -394,6 +396,84 @@
             </div>
         </div>
     </section>
+
+    <section class="modalidades">
+        <div class="container">
+            <div class="row ">
+                <div class="col-lg-12 col-sm-12">
+                    <div class="orgullo-txt">
+                        <h4 class="lead text-center" style="color: gray;">Forma parte de nuestra comunidad</h4>
+                        <h2 class="color-gray text-center"><strong>Opiniones de <br>
+                                nuestros alumnos</strong></h2>
+                        <div id="carouselExampleFade" class="carousel slide carousel-fade" data-ride="carousel">
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <p class="color-gray reference">
+                                        <strong>Alvar Martín</strong> <br>
+                                        <span>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                        </span> <br>
+                                        <span>
+                                            El EXANI-I es un examen que proporciona información acerca del potencial de
+                                            los
+                                            aspirantes para tener un buen desempeño en estudios de tipo medio superior.
+                                            Es
+                                            utilizado para apoyar los procesos de admisión en las instituciones de la
+                                            educación media superior.
+                                        </span>
+                                    </p>
+                                </div>
+                                <div class="carousel-item">
+                                    <p class="color-gray reference">
+                                        <strong>Gladys Martín</strong> <br>
+                                        <span>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                        </span> <br>
+                                        <span>
+                                            El EXANI-I es un examen que proporciona información acerca del potencial de
+                                            los
+                                            aspirantes para tener un buen desempeño en estudios de tipo medio superior.
+                                            Es
+                                            utilizado para apoyar los procesos de admisión en las instituciones de la
+                                            educación media superior.
+                                        </span>
+                                    </p>
+                                </div>
+                                <div class="carousel-item">
+                                    <p class="color-gray reference">
+                                        <strong>Yair Martín</strong> <br>
+                                        <span>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                        </span> <br>
+                                        <span>
+                                            El EXANI-I es un examen que proporciona información acerca del potencial de
+                                            los
+                                            aspirantes para tener un buen desempeño en estudios de tipo medio superior.
+                                            Es
+                                            utilizado para apoyar los procesos de admisión en las instituciones de la
+                                            educación media superior.
+                                        </span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
     <section class="modalidades">
         <div class="container ">
             <div class="modalidades__espacio">
@@ -425,6 +505,7 @@
             </div>
         </div>
     </section>
+
 
     @push('js')
         <script>

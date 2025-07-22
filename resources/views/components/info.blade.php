@@ -126,10 +126,19 @@
                             </div>
                         @endforeach
                     </div>
-                    <div class="text-center pt-2">
-                        <small style="color: gray;">Duración 4, 6, 8 y 12 semanas / Aplican restricciones <br> Sujeto a
-                            disponibilidad</small>
-                    </div>
+                    @if ($section == 'egel-plus')
+                        <div class="text-center pt-2">
+                            <small style="color: gray;">Duración 8 y 10 semanas / Aplican restricciones <br>
+                                Sujeto a
+                                disponibilidad</small>
+                        </div>
+                    @else
+                        <div class="text-center pt-2">
+                            <small style="color: gray;">Duración 4, 6, 8 y 12 semanas / Aplican restricciones <br>
+                                Sujeto a
+                                disponibilidad</small>
+                        </div>
+                    @endif
                 </div>
                 <div class="col-lg-7 col-sm-12">
                     <div class="orgullo-txt">

@@ -69,7 +69,7 @@
                         <div class="col-9">
                             <h4 class="color-gray">Guía <br> EGEL PLUS </h2>
                                 <p class="color-gray">Actualizamos nuestro contenido cada año con base en la bibliografía
-                                    del CENEVAL EGEL PLUS MEDICINA</p>
+                                    del CENEVAL EGEL PLUS</p>
                         </div>
                     </div>
                 </div>
@@ -114,5 +114,8 @@
         </div>
     </section>
     @include('components.preparacion')
-    @include('components.info', ['content' => 'info'])
+    @include('components.info', [
+        'content' => 'info',
+        'section' => 'egel-plus',
+    ])
 @endsection
