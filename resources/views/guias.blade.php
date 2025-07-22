@@ -167,10 +167,7 @@
                     },
                     cmdFastBackward: {
                         enabled: false
-                    },
-                    cmdToc: {
-                        enabled: true
-                    },
+                    }
                 }
             },
             template: {

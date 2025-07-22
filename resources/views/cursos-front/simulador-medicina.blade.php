@@ -26,7 +26,7 @@
             <div class="row">
                 <div class="col-md-6 col-lg-6 col-sm-12 m-auto pb-4 exani__faq">
                     <h3 class="color-gray">
-                        <strong>Simuladores Globales - EGEL Plus Nutrición</strong>
+                        <strong>Simuladores Globales - EGEL Plus Medicina</strong>
                     </h3>
                     <p class="color-gray">En Sapius, hemos desarrollado simuladores globales 100% actualizados con la
                         bibliografía oficial del EGEL Plus en Medicina, diseñados para optimizar tu
