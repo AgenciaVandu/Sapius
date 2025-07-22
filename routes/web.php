@@ -36,7 +36,7 @@ Route::post('/view','Registro\CursoProgramadoController@viewGuia')->name('alumno
 
 Route::get('/generate-storage-link', function () {
     Artisan::call('storage:link');
-    return 'Symlink creado exitosamente.';
+    return 'Symlink creado exitosamente aver.';
 });
 
 Route::get('terms/conditions', function () {
