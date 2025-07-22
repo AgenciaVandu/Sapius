@@ -104,5 +104,5 @@
     </div>
 </section>
 @include('components.preparacion')
-{{-- @include('components.info', ['content' => 'info']) --}}
+@include('components.info', ['content' => 'info'])
 @endsection

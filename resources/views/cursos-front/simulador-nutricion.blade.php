@@ -162,7 +162,9 @@
         </div>
     </section>
     @include('components.preparacion')
-    @include('components.info',[ 'content' => 'simulador-nutricion'])
+    @include('components.info',[ 'content' => 'simulador-nutricion',
+        'manageable' => $manageable_simuladores_nutricion,
+    ])
 
     @push('js')
         <script>

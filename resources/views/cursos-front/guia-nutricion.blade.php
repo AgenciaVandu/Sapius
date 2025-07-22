@@ -159,7 +159,9 @@
         </div>
     </section>
     @include('components.preparacion')
-    @include('components.info', ['content' => 'guia-nutricion'])
+    @include('components.info', ['content' => 'guia-nutricion',
+        'manageable' => $manageable_guias_nutricion,
+    ])
     @push('js')
         <script>
             new Glide('.glide', {

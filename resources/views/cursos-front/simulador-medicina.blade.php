@@ -165,7 +165,7 @@
     @include('components.preparacion')
     @include('components.info', [
         'content' => 'simulador-medicina',
-        'manageable_simuladores_medicina' => $manageable_simuladores_medicina,
+        'manageable' => $manageable_simuladores_medicina,
     ])
 
     @push('js')
