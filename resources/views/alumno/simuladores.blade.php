@@ -52,7 +52,7 @@
 
                             <p class="text-dark mb-2">
                                 <strong>Inicio:</strong>
-                                {{ \Carbon\Carbon::parse($curso->fecha_inicio)->format('d/m/Y') }}<br>
+                                {{ \Carbon\Carbon::parse($curso->fecha_inicio)->format('d/m/Y') }} -
                                 <strong>Fin:</strong> {{ \Carbon\Carbon::parse($curso->fecha_fin)->format('d/m/Y') }}
                             </p>
 
