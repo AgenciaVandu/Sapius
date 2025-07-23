@@ -172,7 +172,7 @@
             },
             template: {
                 html: '{{ asset('templates/default-book-view.html') }}',
-                styles: ['{{ asset('css/black-book-view.css') }}'],
+                styles: ['{{ asset('css/short-black-book-view.css') }}'],
                 links: [{
                     rel: 'stylesheet',
                     href: '{{ asset('css/font-awesome.min.css') }}'
