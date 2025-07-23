@@ -42,7 +42,7 @@
 
                             <p class="mb-2 text-success small">
                                 <i class="fas fa-clock mr-1"></i>
-                                {{ \Carbon\Carbon::now()->diffForHumans(\Carbon\Carbon::parse($curso->fecha_fin_venta), ['syntax' => \Carbon\CarbonInterface::DIFF_ABSOLUTE]) }}
+                                Quedan {{ \Carbon\Carbon::now()->diffForHumans(\Carbon\Carbon::parse($curso->fecha_fin_venta), ['syntax' => \Carbon\CarbonInterface::DIFF_ABSOLUTE]) }}
                                 para cerrar inscripciones
                             </p>
 
