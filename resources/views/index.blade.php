@@ -241,7 +241,7 @@
                             </strong>
                         </h1>
                         <p class="color-gray">Selecciona el objetivo que quieras conseguir</p>
-                        <a href="" class="btn btn-primary" data-toggle="modal" data-target="#ventas">SOLICITAR
+                        <a href="https://api.whatsapp.com/send?phone=529992988744" class="btn btn-primary" {{-- data-toggle="modal" data-target="#ventas" --}}>SOLICITAR
                             UNA CLASE MUESTRA</a>
                     </div>
                     <div class="col-md-12 col-lg-6 col-sm-12 centro-card text-center">

@@ -162,5 +162,6 @@
     </section>
 
 
-    @include('components.info', ['content' => 'info'])
+    @include('components.info', ['content' => 'info',
+    'section' => 'presenciales'])
 @endsection
