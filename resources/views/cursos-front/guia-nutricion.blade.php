@@ -61,7 +61,7 @@
                             <ul class="glide__slides">
                                 @foreach ($guias as $guia)
                                     <li class="glide__slide">
-                                        <div class="card text-center mx-auto text-secondary" style="width: 30rem;">
+                                        <div class="card text-center mx-auto text-secondary" style="width: 100%; border: 0px solid rgb(252, 251, 251);">
                                             <img src="{{ route('public.cursos.image', ['file' => $guia->Curso->imagen]) }}"
                                                 class="card-img-top" alt="{{ $guia->titulo }}">
                                             <div class="card-body">
