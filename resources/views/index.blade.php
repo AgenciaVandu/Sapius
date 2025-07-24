@@ -10,11 +10,10 @@
 @endpush
 @section('content')
     <header class="header__intro">
-        <div class="container mt-5">
+        <div class="container mt-md-5">
             <div class="row mt-3">
-                <div class="col-lg-7 col-md-12 col-sm-12 m-auto txt-banner">
+                <div class="col-lg-7 col-md-12 col-sm-12 m-auto txt-banner d-none d-md-block">
                     <h1 style="color: #fff;">Prepárate con Sapius <br>
-
                         <div id="textos" class="carousel slide carousel-fade" data-ride="carousel">
                             Cursos online para el
                             <div class="carousel-inner">
@@ -35,12 +34,37 @@
                                 </div>
                             </div>
                         </div>
-
                     </h1>
                     <p style="color: #fff;">"Tu formación, nuestra pasión"</p>
                     <a href="{{ route('register') }}" class="btn btn-primary">Comenzar</a>
                 </div>
-                <div class="col-lg-5 col-md-12 col-sm-12 banner">
+                <div class="col-lg-7 col-md-12 col-sm-12 m-auto txt-banner d-block d-md-none text-center">
+                    <h3 style="color: #fff;">Prepárate con Sapius <br>
+                        <div id="textos" class="carousel slide carousel-fade" data-ride="carousel">
+                            Cursos online para el
+                            <div class="carousel-inner">
+                                <div class="carousel-item active" data-interval="2500">
+                                    <span class="color-lowblue">EXANI-I</span>
+                                </div>
+                                <div class="carousel-item" data-interval="2500">
+                                    <span class="color-lowblue">EXANI-II</span>
+                                </div>
+                                <div class="carousel-item" data-interval="2500">
+                                    <span class="color-lowblue">EXANI-III</span>
+                                </div>
+                                <div class="carousel-item" data-interval="2500">
+                                    <span class="color-lowblue">ENARM</span>
+                                </div>
+                                <div class="carousel-item" data-interval="2500">
+                                    <span class="color-lowblue">EGEL PLUS</span>
+                                </div>
+                            </div>
+                        </div>
+                    </h3>
+                    <p style="color: #fff;">"Tu formación, nuestra pasión"</p>
+                    <a href="{{ route('register') }}" class="btn btn-primary">Comenzar</a>
+                </div>
+                <div class="col-lg-5 col-md-12 col-sm-12 mb-4">
                     <div id="carousel-imagenes" class="carousel slide" data-ride="carousel">
                         <div class="carousel-inner">
                             @if ($images)
@@ -61,11 +85,16 @@
     <section class="objetivos pt-3">
         <div class="pt-5">
             <div class="container">
-                <h1 class="text-center pb-5">
+                <h1 class="text-center pb-5 d-none d-md-block">
                     <strong>¿Cuál es tu objetivo?</strong> <br> <span
                         style="font-size:18px; font-weight:300; color: gray;">Selecciona el objetivo que quieras
                         conseguir</span>
                 </h1>
+                <h2 class="text-center pb-5 d-block d-md-none">
+                    <strong>¿Cuál es tu objetivo?</strong> <br> <span
+                        style="font-size:18px; font-weight:300; color: gray;">Selecciona el objetivo que quieras
+                        conseguir</span>
+                </h2>
                 <ul class="nav nav-tabs nav-justified" id="pills-tab" role="tablist">
                     <li class="nav-item">
                         <a class="nav-link active text-title2" id="pills-prepa-tab" data-toggle="pill" href="#prepa">
@@ -92,7 +121,6 @@
                             <span>Aprobar<br class="d-none d-sm-none d-md-none d-lg-block"> el ENARM</span>
                         </a>
                     </li>
-
                 </ul>
             </div>
 
