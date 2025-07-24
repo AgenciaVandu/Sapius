@@ -25,16 +25,18 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light-lg bg-light fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top" style="background-color: #002146 !important;">
         <div class="container">
             <a class="navbar-brand" href="/">
                 <img src="{{ asset('img/v1/logo-sapius.svg') }}" width="130" alt="logotipo sapius">
             </a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler"
+                style="padding: .25rem .75rem; font-size: 1.25rem; line-height: 1; background-color: white; border: 1px solid;  border-color: white; border-radius: .25rem;"
+                type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav"
+                aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
                         <a class="nav-link" href="/">INICIO<span class="sr-only">(current)</span></a>
@@ -68,8 +70,8 @@
                         <a class="nav-link" href="/cursos-enarm">ENARM</a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle"
-                            id="navbarDropdown" role="button" data-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown"
+                            aria-expanded="false">
                             SIMULADORES
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -79,8 +81,8 @@
                         </div>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle"
-                            id="navbarDropdown" role="button" data-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown"
+                            aria-expanded="false">
                             GUIAS
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -209,8 +211,8 @@
                         <p class="copyright" style="text-align: center;">
                             <span class="pr-2"><a href="{{ route('termsandconditions') }}">Términos y
                                     condiciones</a><span class="pl-2">|</span></span>
-                            <span class="pr-2"><a href="{{ asset('privacidad') }}"
-                                    target="blank_">Política de privacidad</a><span class="pl-2">|</span></span> <br
+                            <span class="pr-2"><a href="{{ asset('privacidad') }}" target="blank_">Política de
+                                    privacidad</a><span class="pl-2">|</span></span> <br
                                 class="d-block d-sm-block d-md-none d-lg-none">
                             <span class="pr-2"><a href="{{ ROUTE('cookies') }}">Política de cookies</a></span>
                             <br>

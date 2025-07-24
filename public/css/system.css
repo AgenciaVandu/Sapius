@@ -68,11 +68,11 @@
 }
 .btn-primary:hover {
     background-color: #30D6E6;
-    
+
 }
 .btn-secondary {
     background-color: #ED6A5A;
-    padding-right: 20px;
+    padding-right:     20px;
     padding-left: 20px;
     text-transform: uppercase;
     border: none;
@@ -80,14 +80,14 @@
     border-radius: 10px;
 } .btn-secondary:hover {
     background-color: #30D6E6;
-    
-    
+
+
 }
 .btn-light {
     background-color: #30D6E6;
     border: none;
     color: #fff;
-    font-weight: 500;
+        font-weight: 500;
     border-radius: 8px;
 
 }
@@ -144,3 +144,12 @@ hr {
     width: 305px;
 }
 
+.navbar-toggler {
+    padding: .25rem .75rem;
+    font-size: 1.25rem;
+    line-height: 1;
+    /* background-color: transparent; */
+    border: 1px solid;
+    border-color: white;
+    border-radius: .25rem;
+}
