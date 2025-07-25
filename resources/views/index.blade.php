@@ -513,8 +513,7 @@
                                         class="d-none d-sm-none d-md-none d-lg-block"><br
                                         class="d-none d-sm-none d-md-none d-lg-block"></p>
                                 <div class="boton__espacio">
-                                    <button type="button" class="btn btn-primary boton" data-toggle="modal"
-                                        data-target="#ventas">Enviar mensaje</button>
+                                    <a href="https://api.whatsapp.com/send?phone=529992988744" class="btn btn-primary boton" {{-- data-toggle="modal" data-target="#ventas" --}}>Enviar mensaje</a>
                                 </div>
                         </div>
                     </div>
