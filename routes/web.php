@@ -374,20 +374,27 @@ Route::group(['middleware' =>['instructor','restrict.mobile'],'prefix' => 'instr
     Route::post('/soporte', 'UserController@correoSoporte')->name('instructor.soporte-enviar');
 });
 
-Route::group(['middleware' =>['alumno','restrict.mobile'],'prefix' => 'alumno'], function() {
+
+Route::group(['middleware' =>['alumno'],'prefix' => 'alumno'], function() {
     Route::get('/', 'HomeController@index')->name('alumno.home');
+    Route::get('/inscripcion/{curso_id}', 'Registro\InscripcionController@inscripcion')->name('inscripcion.form');// Paso 1
+    Route::get('/checkout/{curso_id}','CheckoutController@createCheckout')->name('alumno.checkout');
+    Route::post('/payout', 'CheckoutController@processPay')->name('checkout.processPayout');
+    Route::get('/payout/approved/{id}','CheckoutController@chargeApproved')->name('checkout.payout.approved');
+    Route::get('/errorPayment','CheckoutController@errorPayment')->name('errors.payment');
+    Route::get('/inscribir/{curso_id}', 'CheckoutController@pago')->name('inscripcion.pago');
+    Route::get('/checkout', 'CheckoutController@createCheckout')->name('checkout');
+    //Descuentos
+    Route::post('descuentos/check', 'Registro\DescuentoController@check')->name('descuentos.check');
+    Route::post('descuentos/cancel', 'Registro\DescuentoController@cancel')->name('descuentos.cancel');
+});
+
+
+Route::group(['middleware' =>['alumno','restrict.mobile'],'prefix' => 'alumno'], function() {
     Route::post('/users/profile', 'UserController@profile')->name('alumno.profile');//{id}
     Route::get('/users/pase/{file}', 'UserController@pase')->name('alumno.pase');
     Route::get('/users/documento/{file}', 'UserController@documento')->name('alumno.documento');
-    Route::get('/checkout/{curso_id}','CheckoutController@createCheckout')->name('alumno.checkout');
-    Route::get('/errorPayment','CheckoutController@errorPayment')->name('errors.payment');
 
-    Route::get('/checkout', 'CheckoutController@createCheckout')->name('checkout');
-    Route::post('/payout', 'CheckoutController@processPay')->name('checkout.processPayout');
-
-
-
-    Route::get('/payout/approved/{id}','CheckoutController@chargeApproved')->name('checkout.payout.approved');
 
     //Cursos
     Route::get('/cursos', 'HomeController@cursosDisponibles')->name('cursos.disponibles');
@@ -395,8 +402,6 @@ Route::group(['middleware' =>['alumno','restrict.mobile'],'prefix' => 'alumno'],
     Route::get('/simuladores', 'HomeController@simuladoresDisponibles')->name('simuladores.disponibles');
     Route::post('/curso', 'Registro\CursoProgramadoController@cursoDetallado')->name('cursos.detallado');
     Route::post('/modulo', 'Registro\CursoProgramadoController@leccionDetallada')->name('leccion.detallada');
-    Route::get('/inscripcion/{curso_id}', 'Registro\InscripcionController@inscripcion')->name('inscripcion.form');
-    Route::get('/inscribir/{curso_id}', 'CheckoutController@pago')->name('inscripcion.pago');
     Route::get('/cursos/video', 'Cursos\CursoController@video')->name('cursos.video');
     Route::get('/cursos/token', 'Cursos\CursoController@token')->name('cursos.token');
     Route::post('/cursos/payment', 'Cursos\CursoController@payment')->name('cursos.payment');
@@ -439,9 +444,7 @@ Route::group(['middleware' =>['alumno','restrict.mobile'],'prefix' => 'alumno'],
     //Calendario
     Route::get('/calendario', 'UserController@calendario')->name('alumno.calendario');
 
-    //Descuentos
-    Route::post('descuentos/check', 'Registro\DescuentoController@check')->name('descuentos.check');
-    Route::post('descuentos/cancel', 'Registro\DescuentoController@cancel')->name('descuentos.cancel');
+
 
 
 
