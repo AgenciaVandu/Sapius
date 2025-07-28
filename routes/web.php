@@ -387,6 +387,10 @@ Route::group(['middleware' =>['alumno'],'prefix' => 'alumno'], function() {
     //Descuentos
     Route::post('descuentos/check', 'Registro\DescuentoController@check')->name('descuentos.check');
     Route::post('descuentos/cancel', 'Registro\DescuentoController@cancel')->name('descuentos.cancel');
+    Route::get('/cursos', 'HomeController@cursosDisponibles')->name('cursos.disponibles');
+    Route::get('/guias', 'HomeController@guiasDisponibles')->name('guias.disponibles');
+    Route::get('/simuladores', 'HomeController@simuladoresDisponibles')->name('simuladores.disponibles');
+    Route::post('/curso', 'Registro\CursoProgramadoController@cursoDetallado')->name('cursos.detallado');
 });
 
 
@@ -397,10 +401,6 @@ Route::group(['middleware' =>['alumno','restrict.mobile'],'prefix' => 'alumno'],
 
 
     //Cursos
-    Route::get('/cursos', 'HomeController@cursosDisponibles')->name('cursos.disponibles');
-    Route::get('/guias', 'HomeController@guiasDisponibles')->name('guias.disponibles');
-    Route::get('/simuladores', 'HomeController@simuladoresDisponibles')->name('simuladores.disponibles');
-    Route::post('/curso', 'Registro\CursoProgramadoController@cursoDetallado')->name('cursos.detallado');
     Route::post('/modulo', 'Registro\CursoProgramadoController@leccionDetallada')->name('leccion.detallada');
     Route::get('/cursos/video', 'Cursos\CursoController@video')->name('cursos.video');
     Route::get('/cursos/token', 'Cursos\CursoController@token')->name('cursos.token');
