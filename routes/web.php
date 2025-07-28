@@ -390,7 +390,6 @@ Route::group(['middleware' =>['alumno'],'prefix' => 'alumno'], function() {
     Route::get('/cursos', 'HomeController@cursosDisponibles')->name('cursos.disponibles');
     Route::get('/guias', 'HomeController@guiasDisponibles')->name('guias.disponibles');
     Route::get('/simuladores', 'HomeController@simuladoresDisponibles')->name('simuladores.disponibles');
-    Route::post('/curso', 'Registro\CursoProgramadoController@cursoDetallado')->name('cursos.detallado');
 });
 
 
@@ -401,6 +400,7 @@ Route::group(['middleware' =>['alumno','restrict.mobile'],'prefix' => 'alumno'],
 
 
     //Cursos
+    Route::post('/curso', 'Registro\CursoProgramadoController@cursoDetallado')->name('cursos.detallado');
     Route::post('/modulo', 'Registro\CursoProgramadoController@leccionDetallada')->name('leccion.detallada');
     Route::get('/cursos/video', 'Cursos\CursoController@video')->name('cursos.video');
     Route::get('/cursos/token', 'Cursos\CursoController@token')->name('cursos.token');
