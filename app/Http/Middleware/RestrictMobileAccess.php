@@ -25,13 +25,13 @@ class RestrictMobileAccess
         $userAgent = strtolower($request->header('User-Agent'));
 
         // 🧪 Log para pruebas
-        \Log::info('User Agent: ' . $request->header('User-Agent'));
+        /* \Log::info('User Agent: ' . $request->header('User-Agent'));
         \Log::info([
             'platform' => $platform,
             'device' => $device,
             'isMobile' => $isMobile,
             'isTablet' => $isTablet,
-        ]);
+        ]); */
 
         // Primero, bloquea si es claramente un dispositivo móvil o tablet
         if ($isMobile || $isTablet) {
