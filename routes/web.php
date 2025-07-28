@@ -456,3 +456,8 @@ Route::get('email-registro', function () {
     $user = User::find(1);
         return new App\Mail\RegistroEmail($user);
 });
+
+
+Route::get('/forzar-503', function () {
+    abort(503);
+});

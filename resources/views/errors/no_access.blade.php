@@ -1,23 +1,19 @@
-@extends('layouts.adminmart.error')
+@extends('layouts.landing')
 
 @section('content')
-<div class="container-fluid">
-        <div class="row">
-            <div class="col-md-12 text-center padding-2" >
-                <div class="contaner-title-tabs-black">
-                <i class="fas fa-ban"></i>
-                Esta acción no esta permitida en el sistema (error 500)
-                <i class="fas fa-ban"></i>
-                </div>
-                <p class="p-5">La parte del sitio al que deseas ingresar no es posible desde dispositivos como smartphones o tabletas, debes ingresar por medio de una laptop u ordenador </p>
-                <div class="container-button">
-                    <a class="btn btn-info btn-lg"
-                    href="{{ route('landing.home') }}">
-                    <i class="fas fa-home"></i>
-                    Regresar
-                    </a>
-                </div>
+    <div class="d-flex align-items-center justify-content-center min-vh-100 bg-light">
+        <div class="text-center p-5 rounded shadow-lg bg-white" style="max-width: 480px; width: 100%;">
+            <div class="mb-4">
+                <i class="fas fa-mobile-alt fa-4x text-danger"></i>
             </div>
+            <h2 class="mb-3 text-dark font-weight-bold">Acceso Restringido</h2>
+            <p class="mb-4 text-secondary">
+                Esta sección del sitio no está disponible desde dispositivos móviles o tabletas.<br>
+                Por favor, accede desde un ordenador o laptop para continuar.
+            </p>
+            <a class="btn btn-primary btn-lg px-4" href="{{ route('landing.home') }}">
+                <i class="fas fa-home"></i> Volver al inicio
+            </a>
         </div>
     </div>
 @endsection
