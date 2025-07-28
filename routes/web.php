@@ -374,7 +374,7 @@ Route::group(['middleware' =>['instructor','restrict.mobile'],'prefix' => 'instr
     Route::post('/soporte', 'UserController@correoSoporte')->name('instructor.soporte-enviar');
 });
 
-
+//Rutas de alumno sin restricciones de mobile
 Route::group(['middleware' =>['alumno'],'prefix' => 'alumno'], function() {
     Route::get('/', 'HomeController@index')->name('alumno.home');
     Route::get('/inscripcion/{curso_id}', 'Registro\InscripcionController@inscripcion')->name('inscripcion.form');// Paso 1
@@ -392,7 +392,7 @@ Route::group(['middleware' =>['alumno'],'prefix' => 'alumno'], function() {
     Route::get('/simuladores', 'HomeController@simuladoresDisponibles')->name('simuladores.disponibles');
 });
 
-
+//Rutas de alumno con restricciones de mobile
 Route::group(['middleware' =>['alumno','restrict.mobile'],'prefix' => 'alumno'], function() {
     Route::post('/users/profile', 'UserController@profile')->name('alumno.profile');//{id}
     Route::get('/users/pase/{file}', 'UserController@pase')->name('alumno.pase');
@@ -458,6 +458,6 @@ Route::get('email-registro', function () {
 });
 
 
-Route::get('/forzar-503', function () {
+/* Route::get('/forzar-503', function () {
     abort(503);
-});
+}); */
