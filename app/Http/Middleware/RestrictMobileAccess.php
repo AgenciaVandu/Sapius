@@ -32,6 +32,7 @@ class RestrictMobileAccess
             'isMobile' => $isMobile,
             'isTablet' => $isTablet,
         ]); */
+        // Si es un dispositivo móvil o tablet, verifica el sistema operativo y navegador
 
         // Primero, bloquea si es claramente un dispositivo móvil o tablet
         if ($isMobile || $isTablet) {
