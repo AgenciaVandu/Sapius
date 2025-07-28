@@ -39,7 +39,7 @@
         <!-- ============================================================== -->
         <!-- Login box.scss -->
         <!-- ============================================================== -->
-        <div class="auth-wrapper d-flex no-block justify-content-center align-items-center position-relative"
+        {{-- <div class="auth-wrapper d-flex no-block justify-content-center align-items-center position-relative"
             style="background:url({{ asset('vendor/adminmart/assets/images/big/auth-bg.jpg') }}) no-repeat center center;">
             <div class="auth-box row">
                 <div class="col-lg-7 col-md-5 modal-bg-img" style="background-image: url({{ asset('vendor/adminmart/assets/images/big/login.png') }});">
@@ -49,11 +49,11 @@
                         <div class="text-center">
                             <img src="{{ asset('vendor/adminmart/assets/images/big/icon.png') }}" alt="wrapkit">
                         </div>
-                        @yield('content')
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
+        @yield('content')
         <!-- ============================================================== -->
         <!-- Login box.scss -->
         <!-- ============================================================== -->
