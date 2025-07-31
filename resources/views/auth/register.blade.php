@@ -1,7 +1,7 @@
 @extends('layouts.adminmart.login')
 
 @section('content')
-    <div class="auth-wrapper d-flex align-items-center justify-content-center" style="min-height: 100vh; background: linear-gradient(135deg, #101a26 20%, #ed6a5a 100%);">
+    <div class="auth-wrapper d-flex align-items-center justify-content-center" style="min-height: 100vh; background: linear-gradient(135deg, #101a26 20%, #101a26 100%);">
         <div class="auth-box bg-white rounded-3 shadow-lg overflow-hidden" style="max-width: 400px; width: 100%;">
             <div class="p-4">
                 <div class="text-center mb-4">

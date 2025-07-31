@@ -59,20 +59,39 @@
                     <div class="glide">
                         <div class="glide__track" data-glide-el="track">
                             <ul class="glide__slides">
-                                @foreach ($guias as $guia)
-                                    <li class="glide__slide">
-                                        <div class="card text-center mx-auto text-secondary" style="width: 100%; border: 0px solid rgb(252, 251, 251);">
-                                            <img src="{{ route('public.cursos.image', ['file' => $guia->Curso->imagen]) }}"
-                                                class="card-img-top" alt="{{ $guia->titulo }}">
-                                            <div class="card-body">
-                                                <h5 class="card-title">{{ $guia->Curso->titulo }}</h5>
-                                                <p class="card-text font-blod">{{ $guia->identificador }}</p>
-                                                <h2 class="card-text">${{ number_format($guia->precio, 2) }}</h2>
-                                                <a href="{{ route('inscripcion.form',$guia->id) }}" class="btn btn-primary">Obtener la guía</a>
+                                @if ($guias->count() > 0)
+                                    @foreach ($guias as $guia)
+                                        <li class="glide__slide">
+                                            <div class="card text-center mx-auto text-secondary"
+                                                style="width: 100%; border: 0px solid rgb(252, 251, 251);">
+                                                <img src="{{ route('public.cursos.image', ['file' => $guia->Curso->imagen]) }}"
+                                                    class="card-img-top" alt="{{ $guia->titulo }}">
+                                                <div class="card-body">
+                                                    <h5 class="card-title">{{ $guia->Curso->titulo }}</h5>
+                                                    <p class="card-text font-blod">{{ $guia->identificador }}</p>
+                                                    <h2 class="card-text">${{ number_format($guia->precio, 2) }}</h2>
+                                                    <a href="{{ route('inscripcion.form', $guia->id) }}"
+                                                        class="btn btn-primary">Obtener la guía</a>
+                                                </div>
                                             </div>
+                                        </li>
+                                    @endforeach
+                                @else
+                                    <li class="glide__slide">
+                                        <div class="card text-center mx-auto text-secondary"
+                                            style="width: 100%; border: 0px solid rgb(252, 251, 251);">
+                                            <img src="{{ asset('img/webp/egel.webp') }}" class="card-img-top">
+                                            {{-- <div class="card-body">
+                                                <h5 class="card-title">Guia Oficial Medicina</h5>
+                                                <p class="card-text font-blod">Sapius</p>
+                                                <h2 class="card-text">La guía más
+                                                    actualizada a un solo clic</h2>
+                                                <a href="{{ route('register') }}"
+                                                    class="btn btn-primary">Registrarse</a>
+                                            </div> --}}
                                         </div>
                                     </li>
-                                @endforeach
+                                @endif
                             </ul>
                         </div>
                     </div>
@@ -159,7 +178,8 @@
         </div>
     </section>
     @include('components.preparacion')
-    @include('components.info', ['content' => 'guia-nutricion',
+    @include('components.info', [
+        'content' => 'guia-nutricion',
         'manageable' => $manageable_guias_nutricion,
     ])
     @push('js')

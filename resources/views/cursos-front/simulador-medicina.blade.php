@@ -60,21 +60,39 @@
                     <div class="glide">
                         <div class="glide__track" data-glide-el="track">
                             <ul class="glide__slides">
-                                @foreach ($simuladores as $simulador)
-                                    <li class="glide__slide">
-                                        <div class="card text-center mx-auto text-secondary" style="width: 100%; border: 0px solid rgb(252, 251, 251);">
-                                            <img src="{{ route('public.cursos.image', ['file' => $simulador->Curso->imagen]) }}"
-                                                class="card-img-top" alt="{{ $simulador->titulo }}">
-                                            <div class="card-body">
-                                                <h5 class="card-title">{{ $simulador->Curso->titulo }}</h5>
-                                                <p class="card-text font-blod">{{ $simulador->identificador }}</p>
-                                                <h2 class="card-text">${{ number_format($simulador->precio, 2) }}</h2>
-                                                <a href="{{ route('inscripcion.form', $simulador->id) }}"
-                                                    class="btn btn-primary">Obtener el simulador</a>
+                                @if ($simuladores->count() > 0)
+                                    @foreach ($simuladores as $simulador)
+                                        <li class="glide__slide">
+                                            <div class="card text-center mx-auto text-secondary"
+                                                style="width: 100%; border: 0px solid rgb(252, 251, 251);">
+                                                <img src="{{ route('public.cursos.image', ['file' => $simulador->Curso->imagen]) }}"
+                                                    class="card-img-top" alt="{{ $simulador->titulo }}">
+                                                <div class="card-body">
+                                                    <h5 class="card-title">{{ $simulador->Curso->titulo }}</h5>
+                                                    <p class="card-text font-blod">{{ $simulador->identificador }}</p>
+                                                    <h2 class="card-text">${{ number_format($simulador->precio, 2) }}</h2>
+                                                    <a href="{{ route('inscripcion.form', $simulador->id) }}"
+                                                        class="btn btn-primary">Obtener el simulador</a>
+                                                </div>
                                             </div>
+                                        </li>
+                                    @endforeach
+                                @else
+                                    <li class="glide__slide">
+                                        <div class="card text-center mx-auto text-secondary"
+                                            style="width: 100%; border: 0px solid rgb(252, 251, 251);">
+                                            <img src="{{ asset('img/webp/egel.webp') }}" class="card-img-top">
+                                            {{-- <div class="card-body">
+                                                <h5 class="card-title">Guia Oficial Medicina</h5>
+                                                <p class="card-text font-blod">Sapius</p>
+                                                <h2 class="card-text">La guía más
+                                                    actualizada a un solo clic</h2>
+                                                <a href="{{ route('register') }}"
+                                                    class="btn btn-primary">Registrarse</a>
+                                            </div> --}}
                                         </div>
                                     </li>
-                                @endforeach
+                                @endif
                             </ul>
                         </div>
                     </div>

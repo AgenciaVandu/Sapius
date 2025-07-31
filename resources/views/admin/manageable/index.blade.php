@@ -107,6 +107,7 @@
                                         <tr>
                                             <th scope="col"></th>
                                             <th scope="col">Titulo</th>
+                                            <th scope="col">Description</th>
                                             <th scope="col"></th>
                                         </tr>
                                     </thead>
@@ -117,6 +118,7 @@
                                                     <i class="fas fa-arrows-alt"></i>
                                                 </td>
                                                 <td>{{ $manageable_simulator_medicine_item->titulo }}</td>
+                                                <td>{!! $manageable_simulator_medicine_item->descripcion !!}</td>
                                                 <td>
                                                     <!-- Button trigger modal -->
                                                     <button type="button" class="btn btn-sm btn-secondary"

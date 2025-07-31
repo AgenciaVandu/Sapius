@@ -2,10 +2,10 @@
 
 @section('content')
     <div class="auth-wrapper d-flex no-block justify-content-center align-items-center position-relative"
-        style="background: linear-gradient(135deg, #101a26 20%, #ed6a5a 100%); min-height: 100vh;">
+        {{-- style="background: linear-gradient(135deg, #101a26 20%, #ed6a5a 100%); min-height: 100vh;" --}} style="background: linear-gradient(135deg, #101a26 20%, #101a26 100%); min-height: 100vh;">
         <div class="auth-box row shadow-lg rounded" style="overflow: hidden; background: #fff;">
             <div class="col-lg-7 col-md-5 d-none d-md-block p-0"
-                style="background: linear-gradient(135deg, rgba(238, 156, 145, 0.65) 0%, rgba(16, 26, 38, 0.212) 100%), url({{ asset('vendor/adminmart/assets/images/big/login.png') }}) center center/cover no-repeat;">
+                style="background: url({{ asset('vendor/adminmart/assets/images/big/login.png') }}) center center/cover no-repeat;">
             </div>
             <div class="col-lg-5 col-md-7 bg-white p-4" style="border-left: 5px solid #ed6a5a;">
                 <div class="text-center mb-4">
