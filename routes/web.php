@@ -39,10 +39,10 @@ Route::get('/', function () {
 Route::post('/view','Registro\CursoProgramadoController@viewGuia')->name('alumno.view.guias');
 
 
-Route::get('/generate-storage-link', function () {
+/* Route::get('/generate-storage-link', function () {
     Artisan::call('storage:link');
     return 'Symlink creado exitosamente aver si funciona.';
-});
+}); */
 
 Route::get('terms/conditions', function () {
     return view('terms');

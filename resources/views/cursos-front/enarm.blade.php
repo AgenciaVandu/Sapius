@@ -1,6 +1,13 @@
 @extends('layouts.landing')
-@push('title')
-    <title>Cursos online para el ENARM - Sapius®</title>
+@push('meta')
+    <title>{{ $meta_title ?? 'ENARM - Sapius®' }}</title>
+    <meta name="description"
+        content="{{ $meta_description ?? 'Prepárate con Sapius El curso de residentes para futuros residentes.' }}">
+    <meta name="keywords"
+        content="{{ $meta_keywords ?? 'Cursos Egel, Cursos Enarm, Cursos Exani I, Cursos Exani II, Cursos Exani III, cursos para aprobar el EGEL, cómo aprobar el Exani' }}">
+    <meta name="robots" content="{{ $meta_robots ?? 'index, follow' }}">
+    <link rel="canonical" href="{{ $meta_canonical ?? url()->current() }}">
+    <meta name="image" content="{{ $meta_image ?? asset('img/v1/logo-sapius.svg') }}">
 @endpush
 @push('css')
     <link rel="stylesheet" href="{{ asset('css/enarm.css') }}">

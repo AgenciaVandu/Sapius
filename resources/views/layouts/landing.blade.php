@@ -13,12 +13,11 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"
         integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
     <link rel="shortcut icon" type="image/x-icon" href="https://sapius.com.mx/img/icono-sapius.png">
+    @stack('meta')
     <meta name="author" content="agenciavandu.com" />
     <meta name="copyright" content="Sapius.com.mx" />
-    <meta name="robots" content="index,follow" />
+
     <meta http-equiv="expires" content="43200" />
-    <meta name="keywords"
-        content="Cursos Egel, Cursos Enarm, Cursos Exani I, Cursos Exani II, Cursos Exani III, cursos para aprobar el EGEL, cómo aprobar el Exani" />
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
     </style>
@@ -81,8 +80,8 @@
                         </div>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown"
-                            aria-expanded="false">
+                        <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button"
+                            data-toggle="dropdown" aria-expanded="false">
                             GUIAS
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
