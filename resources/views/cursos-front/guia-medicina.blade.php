@@ -7,7 +7,7 @@
         content="{{ $meta_keywords ?? 'Cursos Egel, Cursos Enarm, Cursos Exani I, Cursos Exani II, Cursos Exani III, cursos para aprobar el EGEL, cómo aprobar el Exani' }}">
     <meta name="robots" content="{{ $meta_robots ?? 'index, follow' }}">
     <link rel="canonical" href="{{ $meta_canonical ?? url()->current() }}">
-    <meta name="image" content="{{ $meta_image ?? asset('img/v1/logo-sapius.svg') }}">
+    <meta name="image" content="{{ $meta_image ?? asset('vendor/adminmart/assets/images/big/cursos.png') }}">
 @endpush
 @push('css')
     <link rel="stylesheet" href="{{ asset('css/exani3.css') }}">
