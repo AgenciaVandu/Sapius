@@ -38,20 +38,25 @@
                     <!-- Adminisración de Cursos-->
                     <li class="nav-small-cap"><span class="hide-menu">Configuraciones</span></li>
                     <li class="sidebar-item"> <a class="sidebar-link" href="{{ route('admin.configuracion.index') }}"
-                            aria-expanded="false"><i data-feather="list" class="feather-icon"></i><span
+                            aria-expanded="false"><i data-feather="airplay" class="feather-icon"></i><span
                                 class="hide-menu">Landing
                             </span></a>
                     </li>
                     <li class="sidebar-item"> <a class="sidebar-link" href="{{ route('admin.manageable.index') }}"
-                            aria-expanded="false"><i data-feather="layers" class="feather-icon"></i><span
+                            aria-expanded="false"><i data-feather="layout" class="feather-icon"></i><span
                                 class="hide-menu">Administrables
+                            </span></a>
+                    </li>
+                    <li class="sidebar-item"> <a class="sidebar-link" href="{{ route('admin.reviews.index') }}"
+                            aria-expanded="false"><i data-feather="check-circle" class="feather-icon"></i><span
+                                class="hide-menu">Reviews
                             </span></a>
                     </li>
                     <li class="list-divider"></li>
                     <!-- Adminisración de Cursos-->
                     <li class="nav-small-cap"><span class="hide-menu">Reportes</span></li>
                     <li class="sidebar-item"> <a class="sidebar-link" href="{{ route('admin.reports.index') }}"
-                            aria-expanded="false"><i data-feather="list" class="feather-icon"></i><span
+                            aria-expanded="false"><i data-feather="pie-chart" class="feather-icon"></i><span
                                 class="hide-menu">Reportes
                             </span></a>
                     </li>

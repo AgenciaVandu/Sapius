@@ -20,6 +20,7 @@ use App\Models\Landing\Pride;
 use App\Models\Landing\Slide;
 use App\Models\Landing\Teacher;
 use App\Models\Registro\CursoProgramado;
+use App\Reviews;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
@@ -31,7 +32,8 @@ Route::get('/', function () {
     $images = Slide::where('section','like','slider-index')->orderBy('position', 'asc')->get();
     $prides = Pride::orderBy('position', 'asc')->get();
     $teachers = Teacher::orderBy('position', 'asc')->get();
-    return view('index',compact('images','prides','teachers'));
+    $reviews = Reviews::orderBy('created_at', 'desc')->take(6)->get();
+    return view('index',compact('images','prides','teachers','reviews'));
 })->name('landing.home');
 
 Route::post('/view','Registro\CursoProgramadoController@viewGuia')->name('alumno.view.guias');
@@ -57,29 +59,37 @@ Route::get('cookies', function () {
 })->name('cookies');
 
 Route::get('/exani-1', function () {
-    return view('cursos-front.exani-1');
+    $reviews = Reviews::orderBy('created_at', 'desc')->take(6)->get();
+    return view('cursos-front.exani-1', compact('reviews'));
 });
 Route::get('/exani-2', function () {
-    return view('cursos-front.exani-2');
+    $reviews = Reviews::orderBy('created_at', 'desc')->take(6)->get();
+    return view('cursos-front.exani-2', compact('reviews'));
 });
 Route::get('/exani-3', function () {
-    return view('cursos-front.exani-3');
+    $reviews = Reviews::orderBy('created_at', 'desc')->take(6)->get();
+    return view('cursos-front.exani-3', compact('reviews'));
 });
 Route::get('/egel-plus', function () {
-    return view ('cursos-front.egel-plus');
+    $reviews = Reviews::orderBy('created_at', 'desc')->take(6)->get();
+    return view ('cursos-front.egel-plus', compact('reviews'));
 });
 Route::get ('/egel-plus-nutricion', function () {
-    return view('cursos-front.nutricion');
+    $reviews = Reviews::orderBy('created_at', 'desc')->take(6)->get();
+    return view('cursos-front.nutricion', compact('reviews'));
 });
 
 Route::get ('/egel-plus-medicina', function () {
-    return view('cursos-front.medicina');
+    $reviews = Reviews::orderBy('created_at', 'desc')->take(6)->get();
+    return view('cursos-front.medicina', compact('reviews'));
 });
 Route::get ('/cursos-enarm', function(){
-    return view('cursos-front.enarm');
+    $reviews = Reviews::orderBy('created_at', 'desc')->take(6)->get();
+    return view('cursos-front.enarm', compact('reviews'));
 });
 Route::get ('/cursos-presenciales', function (){
-    return view('cursos-front.presencial');
+    $reviews = Reviews::orderBy('created_at', 'desc')->take(6)->get();
+    return view('cursos-front.presencial', compact('reviews'));
 });
 
 Route::get ('/guias-medicina', function (){
@@ -157,6 +167,14 @@ Route::group(['middleware' => ['admin','restrict.mobile'],'prefix' => 'admin'], 
     Route::get('/manageable/guides/medicine/delete/{id}', 'ManageableController@deleteManageableguiamedicine')->name('admin.manageableguiamedicine.delete');
     Route::get('/manageable/guides/nutrition/delete/{id}', 'ManageableController@deleteManageableguianutrition')->name('admin.manageableguianutrition.delete');
 
+    //Rutas CRUD reviews
+    Route::get('/reviews', 'ReviewsController@index')->name('admin.reviews.index');
+    Route::get('/reviews/create', 'ReviewsController@create')->name('admin.reviews.create');
+    Route::post('/reviews/store', 'ReviewsController@store')->name('admin.reviews.store');
+    Route::get('/reviews/{id}/view', 'ReviewsController@show')->name('admin.reviews.show');//{id}
+    Route::get('/reviews/{id}/edit', 'ReviewsController@edit')->name('admin.reviews.edit');
+    Route::put('/reviews/{id}/update', 'ReviewsController@update')->name('admin.reviews.update');
+    Route::delete('/reviews/{id}/delete', 'ReviewsController@destroy')->name('admin.reviews.destroy');
 
     //Reportes
     Route::get('/reports', 'Reports\ReportsController@index')->name('admin.reports.index');

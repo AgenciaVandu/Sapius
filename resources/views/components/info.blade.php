@@ -147,70 +147,25 @@
                                 nuestros alumnos</strong></h2>
                         <div id="carouselExampleFade" class="carousel slide carousel-fade" data-ride="carousel">
                             <div class="carousel-inner">
-                                <div class="carousel-item active">
-                                    <p class="color-gray reference">
-                                        <strong>Alvar Martín</strong> <br>
-                                        <span>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                        </span> <br>
-                                        <span>
-                                            El EXANI-I es un examen que proporciona información acerca del potencial de
-                                            los
-                                            aspirantes para tener un buen desempeño en estudios de tipo medio superior.
-                                            Es
-                                            utilizado para apoyar los procesos de admisión en las instituciones de la
-                                            educación media superior.
-                                        </span>
-                                    </p>
-                                </div>
-                                <div class="carousel-item">
-                                    <p class="color-gray reference">
-                                        <strong>Gladys Martín</strong> <br>
-                                        <span>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                        </span> <br>
-                                        <span>
-                                            El EXANI-I es un examen que proporciona información acerca del potencial de
-                                            los
-                                            aspirantes para tener un buen desempeño en estudios de tipo medio superior.
-                                            Es
-                                            utilizado para apoyar los procesos de admisión en las instituciones de la
-                                            educación media superior.
-                                        </span>
-                                    </p>
-                                </div>
-                                <div class="carousel-item">
-                                    <p class="color-gray reference">
-                                        <strong>Yair Martín</strong> <br>
-                                        <span>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                        </span> <br>
-                                        <span>
-                                            El EXANI-I es un examen que proporciona información acerca del potencial de
-                                            los
-                                            aspirantes para tener un buen desempeño en estudios de tipo medio superior.
-                                            Es
-                                            utilizado para apoyar los procesos de admisión en las instituciones de la
-                                            educación media superior.
-                                        </span>
-                                    </p>
-                                </div>
+                                @foreach ($reviews as $review)
+                                    <div class="carousel-item @if ($loop->first) active @endif">
+                                        <p class="color-gray reference">
+                                            <strong>{{ $review->name }}</strong> <br>
+                                            <span>
+                                                @for ($i = 1; $i <= 5; $i++)
+                                                    <i class="fas fa-star"
+                                                        style="color: {{ $i <= $review->rating ? '#FFD700' : '#ccc' }};"></i>
+                                                @endfor
+                                            </span>
+                                            <br>
+                                            <span>
+                                                {{ $review->comment }}
+                                            </span>
+                                        </p>
+                                    </div>
+                                @endforeach
                             </div>
-
                         </div>
-
                         <a href="" data-toggle="modal" data-target="#ventas" class="btn btn-primary">Más
                             información</a>
                     </div>

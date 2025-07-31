@@ -135,7 +135,8 @@
                                         el examen.</p>
                                 </div>
                                 <div class="container-button">
-                                    <a href="{{ route('register') }}" class="button-title-tabs btn btn-primary">COMENZAR</a>
+                                    <a href="{{ route('register') }}"
+                                        class="button-title-tabs btn btn-primary">COMENZAR</a>
                                 </div>
                             </div>
                             <div class="col-md-5 text-center objetivo">
@@ -241,7 +242,8 @@
                             </strong>
                         </h1>
                         <p class="color-gray">Selecciona el objetivo que quieras conseguir</p>
-                        <a href="https://api.whatsapp.com/send?phone=529992988744" class="btn btn-primary" {{-- data-toggle="modal" data-target="#ventas" --}}>SOLICITAR
+                        <a href="https://api.whatsapp.com/send?phone=529992988744" class="btn btn-primary"
+                            {{-- data-toggle="modal" data-target="#ventas" --}}>SOLICITAR
                             UNA CLASE MUESTRA</a>
                     </div>
                     <div class="col-md-12 col-lg-6 col-sm-12 centro-card text-center">
@@ -417,91 +419,54 @@
                                     mensaje</button>
                             </div>
                         </li> --}}
-
-
                     </ul>
                 </div>
             </div>
         </div>
     </section>
 
-{{--     <section class="modalidades">
+    <section class="modalidades">
         <div class="container">
             <div class="row ">
-                <div class="col-lg-12 col-sm-12">
-                    <div class="orgullo-txt">
+                <div class="col-lg-6 col-sm-12">
+                    <h2 class="text-center color-gray"><strong>¿Por qué elegir Sapius?</strong></h2>
+                    <p class="text-center color-gray">Contamos con un equipo de profesionales altamente capacitados y
+                        comprometidos con tu éxito académico. Nuestros cursos están diseñados para brindarte
+                        las herramientas necesarias para que puedas aprobar los exámenes de admisión y obtener tu título
+                        profesional.</p>
+                    <img src="{{ asset('./vendor/adminmart/assets/images/big/cursos.png') }}" class="img-fluid p-3"
+                        alt="Foto 1" loading="lazy">
+                </div>
+                <div class="col-lg-6 col-sm-6 d-flex align-items-center">
+                    <div class="orgullo-txt text-center">
                         <h4 class="lead text-center" style="color: gray;">Forma parte de nuestra comunidad</h4>
                         <h2 class="color-gray text-center"><strong>Opiniones de <br>
                                 nuestros alumnos</strong></h2>
                         <div id="carouselExampleFade" class="carousel slide carousel-fade" data-ride="carousel">
                             <div class="carousel-inner">
-                                <div class="carousel-item active">
-                                    <p class="color-gray reference">
-                                        <strong>Alvar Martín</strong> <br>
-                                        <span>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                        </span> <br>
-                                        <span>
-                                            El EXANI-I es un examen que proporciona información acerca del potencial de
-                                            los
-                                            aspirantes para tener un buen desempeño en estudios de tipo medio superior.
-                                            Es
-                                            utilizado para apoyar los procesos de admisión en las instituciones de la
-                                            educación media superior.
-                                        </span>
-                                    </p>
-                                </div>
-                                <div class="carousel-item">
-                                    <p class="color-gray reference">
-                                        <strong>Gladys Martín</strong> <br>
-                                        <span>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                        </span> <br>
-                                        <span>
-                                            El EXANI-I es un examen que proporciona información acerca del potencial de
-                                            los
-                                            aspirantes para tener un buen desempeño en estudios de tipo medio superior.
-                                            Es
-                                            utilizado para apoyar los procesos de admisión en las instituciones de la
-                                            educación media superior.
-                                        </span>
-                                    </p>
-                                </div>
-                                <div class="carousel-item">
-                                    <p class="color-gray reference">
-                                        <strong>Yair Martín</strong> <br>
-                                        <span>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                        </span> <br>
-                                        <span>
-                                            El EXANI-I es un examen que proporciona información acerca del potencial de
-                                            los
-                                            aspirantes para tener un buen desempeño en estudios de tipo medio superior.
-                                            Es
-                                            utilizado para apoyar los procesos de admisión en las instituciones de la
-                                            educación media superior.
-                                        </span>
-                                    </p>
-                                </div>
+                                @foreach ($reviews as $review)
+                                    <div class="carousel-item @if ($loop->first) active @endif">
+                                        <p class="color-gray reference">
+                                            <strong>{{ $review->name }}</strong> <br>
+                                            <span>
+                                                @for ($i = 1; $i <= 5; $i++)
+                                                    <i class="fas fa-star" style="color: {{ $i <= $review->rating ? '#FFD700' : '#ccc' }};"></i>
+                                                @endfor
+                                            </span>
+                                            <br>
+                                            <span>
+                                                {{ $review->comment }}
+                                            </span>
+                                        </p>
+                                    </div>
+                                @endforeach
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </section> --}}
+    </section>
     <section class="modalidades">
         <div class="container ">
             <div class="modalidades__espacio">
@@ -513,7 +478,8 @@
                                         class="d-none d-sm-none d-md-none d-lg-block"><br
                                         class="d-none d-sm-none d-md-none d-lg-block"></p>
                                 <div class="boton__espacio">
-                                    <a href="https://api.whatsapp.com/send?phone=529992988744" class="btn btn-primary boton" {{-- data-toggle="modal" data-target="#ventas" --}}>Enviar mensaje</a>
+                                    <a href="https://api.whatsapp.com/send?phone=529992988744"
+                                        class="btn btn-primary boton" {{-- data-toggle="modal" data-target="#ventas" --}}>Enviar mensaje</a>
                                 </div>
                         </div>
                     </div>
