@@ -3,7 +3,7 @@
 
 <head>
     <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q0PBBHC1SY"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-G0P10R831N"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
 
@@ -12,7 +12,7 @@
         }
         gtag('js', new Date());
 
-        gtag('config', 'G-Q0PBBHC1SY');
+        gtag('config', 'G-G0P10R831N');
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
