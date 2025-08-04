@@ -107,7 +107,7 @@ class UserController extends Controller
         //$user->roles()->updateExistingPivot($user->roles[0]->id,['role_id' => $request->rol_id]);
 
         $user->save();
-        return redirect()->route(Auth::user()->rol[0]->slug);
+        return redirect()->route('alumno.home');
     }
 
     public function fotoUpload(Request $request, $fileName)
