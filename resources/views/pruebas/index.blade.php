@@ -53,24 +53,26 @@
                             <tr>
                             <th>Título</th>
                             <th>Descripción</th>
-                            <th>Preguntas</th>
-                            <th>Duplicar</th>
-                            <th>Importar Preguntas</th>
-                            <th>Editar</th>
-                            <th id="activoHead">Desactivar</th>
-                            <th>Ver</th>
+                            <th class="text-center">Preguntas</th>
+                            <th class="text-center">Duplicar</th>
+                            <th class="text-center">Importar</th>
+                            <th class="text-center">Exportar</th>
+                            <th class="text-center">Editar</th>
+                            <th class="text-center" id="activoHead">Desactivar</th>
+                            <th class="text-center">Ver</th>
                             </tr>
                         </thead>
                         <tfoot class="thead-light">
                             <tr>
                             <th>Título</th>
                             <th>Descripción</th>
-                            <th>Preguntas</th>
-                            <th>Duplicar</th>
-                            <th>Importar Preguntas</th>
-                            <th>Editar</th>
-                            <th id="activoFoot">Desactivar</th>
-                            <th>Ver</th>
+                            <th class="text-center">Preguntas</th>
+                            <th class="text-center">Duplicar</th>
+                            <th class="text-center">Importar</th>
+                            <th class="text-center">Exportar</th>
+                            <th class="text-center">Editar</th>
+                            <th class="text-center" id="activoFoot">Desactivar</th>
+                            <th class="text-center">Ver</th>
                             </tr>
                         </tfoot>
                     </table>
@@ -113,8 +115,8 @@
         $(document).ready( function () {
             var activo = true;
             var endpoint = '{{ URL::route(Auth::user()->rol[0]->slug.".gpru",["leccion_id" => $leccion->id,"active" => "enable"]) }}';
-            var show = '<a class="btn btn-primary btn-detalle" href="javascript:void(0)" id="{{ route(Auth::user()->rol[0]->slug.'.pruebas.show',1) }}"><i class="fas fa-eye"></i></a>';
-            var importPreg = '<a class="btn btn-primary btn-detalle" href="javascript:void(0)" id="{{ route(Auth::user()->rol[0]->slug.'.preguntas.form.importar','__ID__') }}"><i class="fas fa-upload"></i></a>';
+            var show = '<div class="text-center"><a class="btn btn-primary btn-detalle" href="javascript:void(0)" id="{{ route(Auth::user()->rol[0]->slug.'.pruebas.show',1) }}"><i class="fas fa-eye"></i></a></div>';
+            var importPreg = '<div class="text-center"><a class="btn btn-primary btn-detalle" href="javascript:void(0)" id="{{ route(Auth::user()->rol[0]->slug.'.preguntas.form.importar','__ID__') }}"><i class="fas fa-upload"></i></a></div>';
 
             $( "#btnActivo" ).click(function() {
                 if(activo){
@@ -174,35 +176,37 @@
                     { data: 'id',orderable: false,},
                     { data: 'id',orderable: false,},
                     { data: 'id',orderable: false,},
-                    { data: 'id',orderable: false,}
+                    { data: 'id',orderable: false,},
+                    { data: 'id',orderable: false,},
                 ],
                 dom: 'Bfrtip',
                 buttons: [
                 ],
                 "rowCallback": function( row, data ) {
                     // preguntas
-                    $(row).find('td:eq(2)').html( '<form method="POST" action="{{ route(Auth::user()->rol[0]->slug.'.preguntas.index') }}"> @csrf <input name="prueba_id" type="hidden" value="'+data['id']+'"> <button type="submit" class="btn btn-primary"><i class="fas fa-list"></i></button> </form>' );
+                    $(row).find('td:eq(2)').html( '<form method="POST" class="text-center" action="{{ route(Auth::user()->rol[0]->slug.'.preguntas.index') }}"> @csrf <input name="prueba_id" type="hidden" value="'+data['id']+'"> <button type="submit" class="btn btn-primary"><i class="fas fa-list"></i></button> </form>' );
                      // duplicar puebas
-                    $(row).find('td:eq(3)').html( '<form method="POST" action="{{ route(Auth::user()->rol[0]->slug.'.pruebas.duplicate') }}"> @csrf <input name="id" type="hidden" value="'+data['id']+'"> <button type="submit" class="btn btn-primary"><i class="fas fa-copy"></i></button> </form>' );
+                    $(row).find('td:eq(3)').html( '<form method="POST" class="text-center" action="{{ route(Auth::user()->rol[0]->slug.'.pruebas.duplicate') }}"> @csrf <input name="id" type="hidden" value="'+data['id']+'"> <button type="submit" class="btn btn-primary"><i class="fas fa-copy"></i></button> </form>' );
                     // importar preguntas
                     var i = importPreg.replace('__ID__', data['id']);
                     $(row).find('td:eq(4)').html(i);
-
+                    // exportar
+                    $(row).find('td:eq(5)').html( '<form method="POST" class="text-center" action="{{ route(Auth::user()->rol[0]->slug.'.preguntas.exportar') }}"> @csrf <input name="id" type="hidden" value="'+data['id']+'"> <button type="submit" class="btn btn-primary"><i class="fas fa-download"></i></button> </form>' );
                     // editar
-                    $(row).find('td:eq(5)').html( '<form method="POST" action="{{ route(Auth::user()->rol[0]->slug.'.pruebas.edit') }}"> @csrf <input name="id" type="hidden" value="'+data['id']+'"> <button type="submit" class="btn btn-primary"><i class="fas fa-edit"></i></button> </form>' );
+                    $(row).find('td:eq(6)').html( '<form method="POST" class="text-center" action="{{ route(Auth::user()->rol[0]->slug.'.pruebas.edit') }}"> @csrf <input name="id" type="hidden" value="'+data['id']+'"> <button type="submit" class="btn btn-primary"><i class="fas fa-edit"></i></button> </form>' );
                     // activar/desactivar
                     if(data['activo'] == 'si'){
-                        $(row).find('td:eq(6)').html( '<form method="POST" action="{{ route(Auth::user()->rol[0]->slug.'.pruebas.destroy') }}"> @csrf <input name="id" type="hidden" value="'+data['id']+'"> <button type="submit" class="btn btn-primary"><i class="fas fa-trash"></i></button></form>' );
+                        $(row).find('td:eq(7)').html( '<form method="POST" class="text-center" action="{{ route(Auth::user()->rol[0]->slug.'.pruebas.destroy') }}"> @csrf <input name="id" type="hidden" value="'+data['id']+'"> <button type="submit" class="btn btn-primary"><i class="fas fa-trash"></i></button></form>' );
                         $("#activoHead").text("Desactivar");
                         $("#activoFoot").text("Desactivar");
                     }else{
-                        $(row).find('td:eq(6)').html( '<form method="POST" action="{{ route(Auth::user()->rol[0]->slug.'.pruebas.activate') }}"> @csrf <input name="id" type="hidden" value="'+data['id']+'"> <button type="submit" class="btn btn-primary"><i class="fas fa-check"></i></button></form>' );
+                        $(row).find('td:eq(7)').html( '<form method="POST" class="text-center" action="{{ route(Auth::user()->rol[0]->slug.'.pruebas.activate') }}"> @csrf <input name="id" type="hidden" value="'+data['id']+'"> <button type="submit" class="btn btn-primary"><i class="fas fa-check"></i></button></form>' );
                         $("#activoHead").text("Activar");
                         $("#activoFoot").text("Activar");
                     }
                     // ver detalles
                     var s = show.replace('1', data['id']);
-                    $(row).find('td:eq(7)').html(s);
+                    $(row).find('td:eq(8)').html(s);
                 },
             });
         } );

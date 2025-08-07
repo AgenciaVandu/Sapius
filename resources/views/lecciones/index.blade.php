@@ -67,7 +67,7 @@
                     <table class="table table-striped table-sm" id="dataTable">
                         <thead class="thead-light">
                             <tr>
-                                <th>Título {{ $leccion_id }}</th>
+                                <th>Título</th>
                                 <th>Slug</th>
                                 <th>Clases</th>
                                 <th>Pruebas</th>

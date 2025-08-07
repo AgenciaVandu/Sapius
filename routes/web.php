@@ -223,6 +223,7 @@ Route::group(['middleware' => ['admin','restrict.mobile'],'prefix' => 'admin'], 
     Route::get('preguntas/{id}/view', 'Cursos\PreguntaController@show')->name('admin.preguntas.show');//{id}
     Route::get('preguntas/{prueba_id}/form', 'Cursos\PreguntaController@showimportar')->name('admin.preguntas.form.importar');//{prueba_id}
     Route::post('preguntas/importar', 'Cursos\PreguntaController@importar')->name('admin.preguntas.importar');
+    Route::post('preguntas/exportar', 'Cursos\PreguntaController@exportar')->name('admin.preguntas.exportar');
     Route::post('/preguntas/edit', 'Cursos\PreguntaController@edit')->name('admin.preguntas.edit');//{id}
     Route::post('/preguntas/update', 'Cursos\PreguntaController@update')->name('admin.preguntas.update');
     Route::post('/preguntas/destroy', 'Cursos\PreguntaController@destroy')->name('admin.preguntas.destroy');//{id}
