@@ -2,7 +2,7 @@
 <html dir="ltr" lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
-    <!-- Google tag (gtag.js) -->
+    {{-- <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-G0P10R831N"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -13,7 +13,7 @@
         gtag('js', new Date());
 
         gtag('config', 'G-G0P10R831N');
-    </script>
+    </script> --}}
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <!-- Tell the browser to be responsive to screen width -->
