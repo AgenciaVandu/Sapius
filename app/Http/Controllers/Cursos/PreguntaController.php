@@ -311,4 +311,78 @@ class PreguntaController extends Controller
 
         return $preguntas;
     }
+
+
+
+    public function exportar(Request $request)
+    {
+        // Crear funcion para exportar preguntas de pruebas que tiene relacion con preguntas y respuestas y que tienen esta estructura en el excel
+        /* ['nombre' => 'slug','tipo' => 'string','columna' => ''],//0
+           ['nombre' => 'pregunta','tipo' => 'string','columna' => ''],//1
+           ['nombre' => 'retro','tipo' => 'string','columna' => ''],//2
+           ['nombre' => 'r1','tipo' => 'string','columna' => ''],//3
+           ['nombre' => 'r2','tipo' => 'string','columna' => ''],//4
+           ['nombre' => 'r3','tipo' => 'string','columna' => ''],//5
+           ['nombre' => 'r4','tipo' => 'string','columna' => ''],//6
+           ['nombre' => 'correcta','tipo' => 'string','columna' => ''],//7
+           ['nombre' => 'score','tipo' => 'string','columna' => ''] //8
+        */
+        $prueba = Prueba::find($request->id);
+        $preguntas = Pregunta::where('prueba_id', $prueba->id)->get();
+
+        // Definir cabeceras en el orden solicitado
+        $cabecera = [
+            'slug', 'pregunta', 'retro', 'r1', 'r2', 'r3', 'r4', 'correcta', 'score'
+        ];
+        $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        // Establecer cabeceras
+        foreach ($cabecera as $key => $valorcelda) {
+            $colLetter = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($key + 1);
+            $sheet->setCellValue($colLetter . '1', $valorcelda);
+        }
+
+        // Llenar los datos
+        $row = 2; // Comenzar desde la segunda fila
+        foreach ($preguntas as $pregunta) {
+            $sheet->setCellValue('A' . $row, $pregunta->slug);
+            $sheet->setCellValue('B' . $row, $pregunta->pregunta);
+            $sheet->setCellValue('C' . $row, ''); // Retroalimentación no está en el modelo
+
+            // Obtener respuestas relacionadas
+            $respuestas = Respuesta::where('pregunta_id', $pregunta->id)->get();
+
+            // Llenar r1, r2, r3, r4 en D,E,F,G
+            for ($i = 0; $i < 4; $i++) {
+            $valorRespuesta = isset($respuestas[$i]) ? $respuestas[$i]->respuesta : '';
+            $colLetter = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex(4 + $i); // D,E,F,G
+            $sheet->setCellValue($colLetter . $row, $valorRespuesta);
+            }
+
+            // Buscar la respuesta correcta (donde correcto == 1)
+            $columnaCorrecta = '';
+            foreach ($respuestas as $idx => $respuesta) {
+            if ($respuesta->correcto == 1) {
+                $columnaCorrecta = $idx + 1; // 1-based index
+                break;
+            }
+            }
+            $sheet->setCellValue('H' . $row, $columnaCorrecta); // Columna H: correcta
+            $sheet->setCellValue('I' . $row, $pregunta->score); // Columna I: score
+
+            $row++;
+        }
+        // Guardar el archivo
+        $fileName = 'preguntas_prueba_' . $prueba->id . '.xlsx';
+        $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+        $filePath = storage_path('app/public/' . $fileName);
+        $writer->save($filePath);
+
+        // Retornar el archivo para descarga
+        return response()->download($filePath)->deleteFileAfterSend(true);
+        
+
+    }
+
 }
