@@ -378,6 +378,7 @@ Route::group(['middleware' =>['instructor','restrict.mobile'],'prefix' => 'instr
 //Rutas de alumno sin restricciones de mobile
 Route::group(['middleware' =>['alumno'],'prefix' => 'alumno'], function() {
     Route::get('/', 'HomeController@index')->name('alumno.home');
+    Route::get('/cursos/image/{file}', 'Cursos\CursoController@cursoPicture')->name('alumno.cursos.image');
     Route::get('/inscripcion/{curso_id}', 'Registro\InscripcionController@inscripcion')->name('inscripcion.form');// Paso 1
     Route::get('/checkout/{curso_id}','CheckoutController@createCheckout')->name('alumno.checkout');
     Route::post('/payout', 'CheckoutController@processPay')->name('checkout.processPayout');
@@ -391,7 +392,6 @@ Route::group(['middleware' =>['alumno'],'prefix' => 'alumno'], function() {
     Route::get('/cursos', 'HomeController@cursosDisponibles')->name('cursos.disponibles');
     Route::get('/guias', 'HomeController@guiasDisponibles')->name('guias.disponibles');
     Route::get('/simuladores', 'HomeController@simuladoresDisponibles')->name('simuladores.disponibles');
-    Route::get('/cursos/image/{file}', 'Cursos\CursoController@cursoPicture')->name('alumno.cursos.image');
 });
 
 //Rutas de alumno con restricciones de mobile
