@@ -378,7 +378,7 @@ Route::group(['middleware' =>['instructor','restrict.mobile'],'prefix' => 'instr
 //Rutas de alumno sin restricciones de mobile
 Route::group(['middleware' =>['alumno'],'prefix' => 'alumno'], function() {
     Route::get('/', 'HomeController@index')->name('alumno.home');
-    Route::get('/cursos/image/{file}', 'Cursos\CursoController@cursoPicture')->name('cursos.image');
+    Route::get('/cursos/image/{file}', 'Cursos\CursoController@cursoPicture')->name('alumno.cursos.image');
     Route::get('/inscripcion/{curso_id}', 'Registro\InscripcionController@inscripcion')->name('inscripcion.form');// Paso 1
     Route::get('/checkout/{curso_id}','CheckoutController@createCheckout')->name('alumno.checkout');
     Route::post('/payout', 'CheckoutController@processPay')->name('checkout.processPayout');
@@ -409,7 +409,7 @@ Route::group(['middleware' =>['alumno','restrict.mobile'],'prefix' => 'alumno'],
     Route::post('/cursos/payment', 'Cursos\CursoController@payment')->name('cursos.payment');
     Route::post('/cursos/paymentOxxo', 'Cursos\CursoController@paymentOxxo')->name('cursos.paymentOxxo');
     Route::get('/cursos/payment2', 'Cursos\CursoController@payment2')->name('cursos.payment2');
-    Route::get('/cursos/image/{file}', 'Cursos\CursoController@cursoPicture')->name('alumno.cursos.image');
+
 
     //Evaluacion
     Route::get('/evaluacion/prueba/{prueba_id}/{inscripcion_id}', 'Evaluacion\ExamenController@previo')->name('examen.previo');
