@@ -2,8 +2,10 @@
     {{-- Header --}}
     @slot('header')
         @component('mail::header', ['url' => config('app.url')])
-        
-        <img src="{{ asset('vendor/adminmart/assets/images/200x80.png') }}">
+
+        <div style="text-align: center;">
+            <img src="{{ asset('/img/v1/logo-sapius.svg') }}" alt="Sapius Logo" style="max-width: 25%; height: auto; display: block; margin: 0 auto;">
+        </div>
         @endcomponent
     @endslot
 
