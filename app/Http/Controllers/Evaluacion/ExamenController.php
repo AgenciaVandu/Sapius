@@ -123,7 +123,7 @@ class ExamenController extends Controller
                 //solictud de nuevas respuestas para la paginacion
             $preguntasAll = Pregunta::where('activo','si')->where('prueba_id',$request->prueba_id)->inRandomOrder(Auth::user()->id)->get();
             if ($request->ajax()) {
-                $preguntas_html = view('evaluacion.preguntas', compact('preguntas', 'respuestas', 'final', 'examen'))->render();
+                    $preguntas_html = view('evaluacion.preguntas', compact('preguntas', 'respuestas', 'final', 'examen'))->render();
 
                 $respuestas_json = json_decode($examen->respuestas_json, true);
                 // Asegúrate de enviar $preguntasAll también, si no lo tienes, pásalo desde el controlador
