@@ -62,6 +62,13 @@ acceso permanente a la plataforma."
             'final' => $final,
         ])
     </div>
+    <div id="respuestas_status" class="mt-4">
+        @include('evaluacion.respuestas_status', [
+            'preguntasAll' => $preguntasAll,
+            'respuestas_json' => json_decode($examen->respuestas_json, true),
+        ])
+    </div>
+
 
     <!-- Modal -->
     <div class="modal fade" id="myModal" role="dialog">
