@@ -105,11 +105,12 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="fecha_inicio" class="col-md-4 col-form-label text-md-right">Fecha Inicial Venta</label>
+                            <label for="fecha_inicio" class="col-md-4 col-form-label text-md-right">Fecha Inicial
+                                Venta</label>
                             <div class="col-md-6">
                                 <input id="fecha_inicio_venta" type="text"
-                                    class="form-control @error('fecha_inicio_venta') is-invalid @enderror" name="fecha_inicio_venta"
-                                    required autocomplete="fecha_inicio_venta" autofocus
+                                    class="form-control @error('fecha_inicio_venta') is-invalid @enderror"
+                                    name="fecha_inicio_venta" required autocomplete="fecha_inicio_venta" autofocus
                                     value="@if ($curso_programado->id) {{ date('d/m/Y', strtotime($curso_programado->fecha_inicio_venta)) }} @endif">
                                 @error('fecha_inicio_venta')
                                     <span class="invalid-feedback" role="alert">
@@ -123,8 +124,8 @@
                             <label for="fecha_fin" class="col-md-4 col-form-label text-md-right">Fecha Final Venta</label>
                             <div class="col-md-6">
                                 <input id="fecha_fin_venta" type="text"
-                                    class="form-control @error('fecha_fin_venta') is-invalid @enderror" name="fecha_fin_venta" required
-                                    autocomplete="fecha_fin_venta" autofocus
+                                    class="form-control @error('fecha_fin_venta') is-invalid @enderror"
+                                    name="fecha_fin_venta" required autocomplete="fecha_fin_venta" autofocus
                                     value="@if ($curso_programado->id) {{ date('d/m/Y', strtotime($curso_programado->fecha_fin_venta)) }} @endif">
                                 @error('fecha_fin_venta')
                                     <span class="invalid-feedback" role="alert">
@@ -167,12 +168,37 @@
                                 @enderror
                             </div>
                         </div>
+                        <div class="d-none" id="file-upload-group">
 
-                        {{-- Input file oculto inicialmente --}}
-                        <div class="form-group row d-none" id="file-upload-group">
-                            <label class="col-md-4 col-form-label text-md-right">Subir Archivo</label>
-                            <div class="col-md-6">
-                                <input type="file" name="guia_file" class="form-control-file">
+                            {{-- Input file oculto inicialmente --}}
+                            @php
+                                $guiaCargada =
+                                    !empty($curso_programado->file_guia) && !empty($curso_programado->file_guia->url);
+                            @endphp
+
+                            <div class="form-group row">
+                                <label class="col-md-4 col-form-label text-md-right">Guía cargada</label>
+                                <div class="col-md-6 d-flex align-items-center">
+                                    @if ($guiaCargada)
+                                        <i class="fas fa-file-alt text-success"
+                                            style="font-size: 2rem; margin-right: 10px;"></i>
+                                        <span class="text-success">Guía cargada</span>
+                                    @else
+                                        <i class="fas fa-file-alt text-danger"
+                                            style="font-size: 2rem; margin-right: 10px;"></i>
+                                        <span class="text-danger font-weight-bold">Documento requerido</span>
+                                    @endif
+                                </div>
+                            </div>
+
+
+
+
+                            <div class="form-group row">
+                                <label class="col-md-4 col-form-label text-md-right">Subir Archivo</label>
+                                <div class="col-md-6">
+                                    <input type="file" name="guia_file" class="form-control-file">
+                                </div>
                             </div>
                         </div>
 
