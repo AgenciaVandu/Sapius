@@ -1,6 +1,6 @@
 @extends('layouts.landing')
 @push('meta')
-    <title>{{ $meta_title ?? 'Simuladores Medicina - Sapius®' }}</title>
+    <title>{{ $meta_title ?? 'Simuladores EGEL Plus Medicina - Sapius®' }}</title>
     <meta name="description"
         content="{{ $meta_description ?? 'Prepárate para EGEL PLUS - Medicina con los Simuladores Sapius.' }}">
     <meta name="keywords"
