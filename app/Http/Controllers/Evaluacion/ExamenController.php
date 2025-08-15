@@ -290,4 +290,41 @@ class ExamenController extends Controller
             $examenes = Examen::with('Prueba')->where('inscripcion_id',$inscripcion_id)->get();
             return view('admin.registro.resultados')->with('examenes',$examenes);
         }
+
+
+
+        public function cambiarEstadoFinalizado(Request $request)
+        {
+            $examen = Examen::findOrFail($request->id);
+            if ($examen->finalizado == 'si') {
+                $examen->finalizado = 'no';
+            }else{
+            // Si el examen no está finalizado, lo marcamos como finalizado
+                $examen->finalizado = 'si';
+            }
+            $examen->save();
+
+            return response()->json([
+                'message' => 'Estado de finalizado actualizado correctamente.',
+                'nuevo_estado' => $examen->finalizado
+            ]);
+        }
+
+        public function cambiarEstadoRetro(Request $request)
+        {
+            $examen = Examen::findOrFail($request->id);
+            // Cambiamos el estado de retroalimentación
+            if ($examen->retro_visualizado == 'si') {
+                $examen->retro_visualizado = 'no';
+            } else {
+                $examen->retro_visualizado = 'si';
+            }
+
+            $examen->save();
+
+            return response()->json([
+                'message' => 'Estado de retroalimentación actualizado correctamente.',
+                'nuevo_estado' => $examen->retro_visualizado
+            ]);
+        }
 }

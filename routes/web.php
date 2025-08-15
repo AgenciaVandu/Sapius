@@ -301,6 +301,9 @@ Route::group(['middleware' => ['admin','restrict.mobile'],'prefix' => 'admin'], 
     Route::post('/curso/activate', 'Registro\CursoProgramadoController@activateInscritos')->name('curso.activate');//{id}
 
     Route::get('/evaluacion/resultados/{inscripcion_id}', 'Evaluacion\ExamenController@listaResultados')->name('admin.curso.lista-resultados');//{id}
+
+    Route::post('/examen/finalizar', 'Evaluacion\ExamenController@cambiarEstadoFinalizado')->name('examen.cambiarEstadoFinalizado');
+    Route::post('/examen/retro', 'Evaluacion\ExamenController@cambiarEstadoRetro')->name('examen.cambiarEstadoRetro');
 });
 
 Route::group(['middleware' =>['instructor','restrict.mobile'],'prefix' => 'instructor'], function() {
