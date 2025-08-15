@@ -2,9 +2,9 @@
 @push('meta')
     <title>{{ $meta_title ?? 'EGEL Plus Nutrición - Sapius®' }}</title>
     <meta name="description"
-        content="{{ $meta_description ?? 'Prepárate con Sapius Acredita el EGEL PLUS MEDICINA con Sapius.' }}">
+        content="{{ $meta_description ?? 'Prepárate con Sapius acredita el EGEL Plus NUTRICIÓN con Sapius. El 99.1% de nuestros estudiantes acreditan' }}">
     <meta name="keywords"
-        content="{{ $meta_keywords ?? 'Cursos Egel, Cursos Enarm, Cursos Exani I, Cursos Exani II, Cursos Exani III, cursos para aprobar el EGEL, cómo aprobar el Exani' }}">
+        content="{{ $meta_keywords ?? 'Cursos Egel Plus, Cursos Enarm, Cursos Exani I, Cursos Exani II, Cursos Exani III, cursos para aprobar el EGEL, cómo aprobar el Exani' }}">
     <meta name="robots" content="{{ $meta_robots ?? 'index, follow' }}">
     <link rel="canonical" href="{{ $meta_canonical ?? url()->current() }}">
     <meta name="image" content="{{ $meta_image ?? asset('vendor/adminmart/assets/images/big/cursos.png') }}">
@@ -17,7 +17,7 @@
         <div class="container text-center">
             <div class="col-12 exani-titular ">
                 <h1 style="color: #fff;">Prepárate con Sapius <br>
-                    Acredita el <span class=color-lowblue>EGEL PLUS</span> NUTRICIÓN con Sapius. <br
+                    Acredita el <span class="color-lowblue">EGEL PLUS</span> NUTRICIÓN con Sapius. <br
                         class="d-none d-sm-none d-md-block d-lg-block"> <span>El 99.1% de nuestros estudiantes
                         acreditan</span>
                 </h1>

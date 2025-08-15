@@ -2,9 +2,9 @@
 @push('meta')
     <title>{{ $meta_title ?? 'Guía EGEL Plus Nutrición - Sapius®' }}</title>
     <meta name="description"
-        content="{{ $meta_description ?? 'Prepárate para el EGEL Plus – Nutrición con la Guía Oficial Sapius..' }}">
+        content="{{ $meta_description ?? 'Prepárate para el EGEL Plus – Nutrición con la Guía Oficial Sapius la guía más actualizada en un solo clic.' }}">
     <meta name="keywords"
-        content="{{ $meta_keywords ?? 'Cursos Egel, Cursos Enarm, Cursos Exani I, Cursos Exani II, Cursos Exani III, cursos para aprobar el EGEL, cómo aprobar el Exani' }}">
+        content="{{ $meta_keywords ?? 'Cursos Egel Plus, Cursos Enarm, Cursos Exani I, Cursos Exani II, Cursos Exani III, cursos para aprobar el EGEL, cómo aprobar el Exani' }}">
     <meta name="robots" content="{{ $meta_robots ?? 'index, follow' }}">
     <link rel="canonical" href="{{ $meta_canonical ?? url()->current() }}">
     <meta name="image" content="{{ $meta_image ?? asset('vendor/adminmart/assets/images/big/cursos.png') }}">
