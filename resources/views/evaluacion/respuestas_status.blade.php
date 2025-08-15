@@ -15,7 +15,7 @@
             }
         @endphp
         <div class="mb-2"
-            style="display: inline-block; width: 32px; height: 32px; margin-right: 5px; border-radius: 4px; background-color: {{ $found ? '#28a745' : '#dc3545' }}; color: white; text-align: center; line-height: 32px; font-weight: bold;">
+            style="display: inline-block; width: 32px; height: 32px; margin-right: 5px; border-radius: 4px; background-color: {{ $found ? '#002146' : '#e0e0e0' }}; color: {{ $found ? 'white' : '#b0b0b0' }}; text-align: center; line-height: 32px; font-weight: bold;">
             {{ $loop->iteration }}
         </div>
     @endforeach
