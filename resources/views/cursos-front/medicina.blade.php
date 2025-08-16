@@ -18,8 +18,10 @@
             <div class="col-12 exani-titular">
                 <h1 style="color: #fff;">Prepárate para el<br>
                     <span class="color-lowblue">EGEL PLUS</span> MEDICINA con Sapius. <br
-                        class="d-none d-sm-none d-md-block d-lg-block"> <span>El 99.1% de nuestros estudiantes
-                        acreditan</span>
+                        class="d-none d-sm-none d-md-block d-lg-block">
+                    <p>
+                        El 99.1% de nuestros estudiantes acreditan
+                    </p>
                 </h1>
                 <p style="color: #fff;">"Tu formación, nuestra pasión"</p>
                 <a href="{{ route('register') }}" class="btn btn-primary">Comenzar</a>
