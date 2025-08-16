@@ -16,19 +16,29 @@
     <header class="bg-blue">
         <div class="container text-center">
             <div class="col-12 exani-titular">
-                <h1 style="color: #fff;">Prepárate para el<br>
-                    <span class="color-lowblue">EGEL PLUS</span> MEDICINA con Sapius. <br
-                        class="d-none d-sm-none d-md-block d-lg-block">
-                    <p>
-                        El 99.1% de nuestros estudiantes acreditan
-                    </p>
+
+                <!-- Versión escritorio -->
+                <h1 class="text-white font-weight-bold d-none d-md-block">
+                    Prepárate para el<br>
+                    <span class="color-lowblue">EGEL PLUS</span> MEDICINA con Sapius.
+                    <br>
+                    <small>El 99.1% de nuestros estudiantes acreditan</small>
                 </h1>
-                <p style="color: #fff;">"Tu formación, nuestra pasión"</p>
+
+                <!-- Versión móvil -->
+                <h3 class="text-white font-weight-bold d-block d-md-none">
+                    Prepárate para el
+                    <span class="color-lowblue">EGEL PLUS</span> MEDICINA con Sapius.
+                    <small class="d-block mt-2">El 99.1% de nuestros estudiantes acreditan</small>
+                </h3>
+
+                <p class="text-white">"Tu formación, nuestra pasión"</p>
                 <a href="{{ route('register') }}" class="btn btn-primary">Comenzar</a>
             </div>
-
         </div>
     </header>
+
+
     <section id="exani">
         <div class="container pt-5">
             <h2 class="color-gray text-center pt-3">Habilidades que reforzarás en el curso <br>
