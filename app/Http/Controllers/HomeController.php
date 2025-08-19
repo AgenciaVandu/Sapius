@@ -88,7 +88,7 @@ class HomeController extends Controller
 
     public function admin()
     {
-        $cursos = CursoProgramado::with('Curso')->where('fecha_inicio', '<=', date('Y-m-d H:i:s'))
+        $cursos = CursoProgramado::with('Curso')/* ->where('fecha_inicio_venta', '<=', date('Y-m-d H:i:s')) */
             ->where('fecha_fin', '>=', date('Y-m-d H:i:s'))->get();
         return view('admin.home')->with('cursos', $cursos);
     }
