@@ -53,9 +53,15 @@
                                                         Aprobración Pendiente
                                                     </button>
                                                 @elseif($inscripcion->aceptado == 'si')
-                                                    <button type="submit" class="btn btn-success btn-block rounded-10">
-                                                        En Curso
+                                                    @if ($cursop->fecha_inicio > date('Y-m-d H:i:s'))
+                                                        <button type="submit" disabled class="btn btn-success btn-block rounded-10">
+                                                            Disponbible el {{ \Carbon\Carbon::parse($cursop->fecha_inicio)->format('d/m/Y') }}
+                                                        </button>
+                                                    @else
+                                                        <button type="submit" class="btn btn-success btn-block rounded-10">
+                                                        Ver Guía
                                                     </button>
+                                                    @endif
                                                 @endif
                                             </form>
                                         </div>
