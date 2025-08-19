@@ -49,7 +49,7 @@
                                                 <input name="curso_programado_id" type="hidden"
                                                     value="{{ $cursop->id }}">
                                                 @if ($inscripcion->aceptado == 'no')
-                                                    <button type="submit" class="btn btn-warning btn-block rounded-10">
+                                                    <button type="submit" disabled class="btn btn-warning btn-block rounded-10">
                                                         Aprobración Pendiente
                                                     </button>
                                                 @elseif($inscripcion->aceptado == 'si')
