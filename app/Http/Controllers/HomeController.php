@@ -267,6 +267,11 @@ class HomeController extends Controller
     }
 
     public function storeOpinion(Request $request){
+        $request->validate([
+            'name' => 'required',
+            'rating' => 'required|integer|min:1|max:5',
+            'comment' => 'required|string|min:100',
+        ]);
         Reviews::create($request->all());
         return redirect()->route('tu.opinion')->with('success', 'Opinion created successfully.');
     }
