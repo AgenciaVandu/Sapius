@@ -414,6 +414,8 @@ Route::group(['middleware' =>['alumno'],'prefix' => 'alumno'], function() {
     Route::get('/cursos', 'HomeController@cursosDisponibles')->name('cursos.disponibles');
     Route::get('/guias', 'HomeController@guiasDisponibles')->name('guias.disponibles');
     Route::get('/simuladores', 'HomeController@simuladoresDisponibles')->name('simuladores.disponibles');
+    Route::get('/tu-opinion', 'HomeController@tuOpinion')->name('tu.opinion');
+    Route::post('/tu-opinion/store', 'HomeController@storeOpinion')->name('alumno.opinion.store');
 });
 
 //Rutas de alumno con restricciones de mobile

@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Registro\CursoProgramado;
 use App\Models\Registro\Inscripcion;
+use App\Reviews;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
@@ -257,5 +258,16 @@ class HomeController extends Controller
     {
         $teacher->delete();
         return redirect()->back()->with('success', 'Pride Delete successfully.');
+    }
+
+
+    public function tuOpinion(){
+        $reviwews = Reviews::where('user_id', Auth::user()->id)->get();
+        return view('alumno.tu-opinion')->with('reviews', $reviwews);
+    }
+
+    public function storeOpinion(Request $request){
+        Reviews::create($request->all());
+        return redirect()->route('tu.opinion')->with('success', 'Opinion created successfully.');
     }
 }
