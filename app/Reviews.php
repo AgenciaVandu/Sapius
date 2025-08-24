@@ -11,13 +11,14 @@ class Reviews extends Model
         'rating',
         'comment',
         'user_id',
+        'visible',
         'course_id',
     ];
 
 //Relacion uno a uno con el modelo User
     public function user()
     {
-        return $this->belongsTo('App\User');
+        return $this->belongsTo(User::class);
     }
 
 }

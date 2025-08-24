@@ -272,7 +272,18 @@ class HomeController extends Controller
             'rating' => 'required|integer|min:1|max:5',
             'comment' => 'required|string|min:100',
         ]);
-        Reviews::create($request->all());
+        if ($request->rating >= 4) {
+            $visible = true;
+        } else {
+            $visible = false;
+        }
+        Reviews::create([
+            'user_id' => Auth::user()->id,
+            'name' => $request->name,
+            'rating' => $request->rating,
+            'comment' => $request->comment,
+            'visible' => $visible,
+        ]);
         return redirect()->route('tu.opinion')->with('success', 'Opinion created successfully.');
     }
 }

@@ -61,7 +61,7 @@
 
                                 {{-- Contador de caracteres --}}
                                 <small id="char-count" class="form-text text-muted text-left">
-                                    Mínimo 150 caracteres. Restantes: 150
+                                    Mínimo 250 caracteres. Restantes: 250
                                 </small>
                             </div>
 
@@ -85,12 +85,12 @@
         document.addEventListener('DOMContentLoaded', function() {
             var textarea = document.getElementById('comment');
             var counter = document.getElementById('char-count');
-            var minChars = 150;
+            var minChars = 250;
 
             function updateCounter() {
                 var remaining = minChars - textarea.value.length;
                 if (remaining > 0) {
-                    counter.textContent = "Mínimo 150 caracteres. Restantes: " + remaining;
+                    counter.textContent = "Mínimo 250 caracteres. Restantes: " + remaining;
                     counter.classList.remove("text-success");
                     counter.classList.add("text-muted");
                 } else {

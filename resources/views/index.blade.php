@@ -2,7 +2,8 @@
 @push('meta')
     <title>{{ $meta_title ?? 'Cursos online para aprobar el EGEL PLUS - Sapius®' }}</title>
     <meta name="description" content="{{ $meta_description ?? 'Prepárate con Sapius Cursos online' }}">
-    <meta name="keywords" content="{{ $meta_keywords ?? 'Cursos Egel, Cursos Enarm, Cursos Exani I, Cursos Exani II, Cursos Exani III, cursos para aprobar el EGEL, cómo aprobar el Exani' }}">
+    <meta name="keywords"
+        content="{{ $meta_keywords ?? 'Cursos Egel, Cursos Enarm, Cursos Exani I, Cursos Exani II, Cursos Exani III, cursos para aprobar el EGEL, cómo aprobar el Exani' }}">
     <meta name="robots" content="{{ $meta_robots ?? 'index, follow' }}">
     <meta name="image" content="{{ $meta_image ?? asset('vendor/adminmart/assets/images/big/cursos.png') }}">
 
@@ -431,10 +432,10 @@
         </div>
     </section>
 
-    <section class="modalidades">
+    <section class="">
         <div class="container">
-            <div class="row ">
-                <div class="col-lg-6 col-sm-12">
+            <div class="row text-center ">
+                {{-- <div class="col-lg-6 col-sm-12">
                     <h2 class="text-center color-gray"><strong>¿Por qué elegir Sapius?</strong></h2>
                     <p class="text-center color-gray">Contamos con un equipo de profesionales altamente capacitados y
                         comprometidos con tu éxito académico. Nuestros cursos están diseñados para brindarte
@@ -442,33 +443,9 @@
                         profesional.</p>
                     <img src="{{ asset('./vendor/adminmart/assets/images/big/cursos.png') }}" class="img-fluid p-3"
                         alt="Foto 1" loading="lazy">
-                </div>
-                <div class="col-lg-6 col-sm-6 d-flex align-items-center">
-                    <div class="orgullo-txt text-center">
-                        <h4 class="lead text-center" style="color: gray;">Forma parte de nuestra comunidad</h4>
-                        <h2 class="color-gray text-center"><strong>Opiniones de <br>
-                                nuestros alumnos</strong></h2>
-                        <div id="carouselExampleFade" class="carousel slide carousel-fade" data-ride="carousel">
-                            <div class="carousel-inner">
-                                @foreach ($reviews as $review)
-                                    <div class="carousel-item @if ($loop->first) active @endif">
-                                        <p class="color-gray reference">
-                                            <strong>{{ $review->name }}</strong> <br>
-                                            <span>
-                                                @for ($i = 1; $i <= 5; $i++)
-                                                    <i class="fas fa-star" style="color: {{ $i <= $review->rating ? '#FFD700' : '#ccc' }};"></i>
-                                                @endfor
-                                            </span>
-                                            <br>
-                                            <span>
-                                                {{ $review->comment }}
-                                            </span>
-                                        </p>
-                                    </div>
-                                @endforeach
-                            </div>
-                        </div>
-                    </div>
+                </div> --}}
+                <div class="col-lg-8 col-sm-12 d-flex align-items-center mx-auto">
+                    @include('components.opiniones', ['reviews' => $reviews])
                 </div>
             </div>
         </div>
@@ -497,7 +474,6 @@
                                 <div class="boton__espacio">
                                     <a href="/cursos-presenciales" class="btn btn-primary">Más información</a>
                                 </div>
-
                         </div>
                     </div>
                 </div>

@@ -57,7 +57,7 @@ class User extends Authenticatable
 
     //Relacion uno a uno con el modelo Reviews
     public function review(){
-        return $this->hasOne('App\Reviews');
+        return $this->hasOne(Reviews::class);
     }
 
     protected static function boot()
