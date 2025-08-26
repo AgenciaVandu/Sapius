@@ -121,7 +121,16 @@ class ExamenController extends Controller
                 $final = $preguntas->currentPage() == $preguntas->lastPage();
 
                 //solictud de nuevas respuestas para la paginacion
-            $preguntasAll = Pregunta::where('activo','si')->where('prueba_id',$request->prueba_id)->inRandomOrder(Auth::user()->id)->get();
+            $preguntasAll = Pregunta::with(['GrupoPreguntas' => function($q) use($request){
+                    $q->with(['Respuestas' => function($q1){
+                        $q1->where('activo','si');
+                    }])->where('prueba_id',$request->prueba_id);
+                }])->where('activo','si')
+                ->where('prueba_id',$request->prueba_id)
+                ->select('slug')
+                ->inRandomOrder(Auth::user()->id)
+                ->groupBy('slug')
+                ->get();
             if ($request->ajax()) {
                     $preguntas_html = view('evaluacion.preguntas', compact('preguntas', 'respuestas', 'final', 'examen'))->render();
 
