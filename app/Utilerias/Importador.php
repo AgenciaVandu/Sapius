@@ -11,10 +11,6 @@ class Importador
     var $tmpfname = null;
     var $cabeceras = [];
     var $estructura = [];
-    var $planteles = [];
-    var $estados = [];
-    var $bancos = [];
-    var $localidades = [];
     var $excelObj = null;
 
     public function __construct($tmpfname, $cabeceras = null, $estructura = null)
@@ -45,9 +41,9 @@ class Importador
 
     public function map($cabecera_original)
     {
-        $this->cabeceras = $this->cabeceras->map(function ($item, $key) use ($cabecera_original) {
+        $this->cabeceras = $this->cabeceras->map(function ($item) use ($cabecera_original) {
             $val = $cabecera_original->firstWhere('cabecera', trim(strtolower($item['nombre'])));
-            $item['columna'] = $val['columna'];
+            $item['columna'] = $val['columna'] ?? null;
             return $item;
         });
     }
@@ -67,52 +63,48 @@ class Importador
         return collect($cabecera_original);
     }
 
-    public function validaCabeceras()
-    {
-        $hoja_de_calculo = $this->excelObj->getSheet(0);
-        $column = 'A';
-        $pasos = $this->cabeceras->count();
-
-        for ($i = 0; $i < $pasos; $i++) {
-            $valorcelda = trim(strtolower($hoja_de_calculo->getCell($column . '1')->getValue()));
-            $cabecera = $this->cabeceras->where('nombre', $valorcelda);
-            if ($cabecera->isNotEmpty()) {
-                dump("[$i] La cabecera ★★$valorcelda★★ no existe en la configuración");
-            }
-            $column++;
-        }
-
-        return true;
-    }
-
     public function getDatos($fila, $objeto, $buscar_cabecera = true)
     {
         foreach ($objeto as $campo => $celda) {
-            if ((is_numeric($celda) && $celda >= 0) || !$buscar_cabecera) {
-                $col = ($buscar_cabecera) ? $this->cabeceras[$celda]['columna'] : $celda;
-                $valor = $this->excelObj->getActiveSheet()->getCell($col . $fila)->getValue();
 
-                if ($buscar_cabecera && $this->cabeceras[$celda]['tipo'] == 'date') {
-                    if ($valor != '' && $valor != '//' && $valor != null) {
-                        if (is_string($valor)) {
-                            $objeto[$campo] = date('Y-m-d', strtotime(str_replace('/', '-', $valor)));
-                        } elseif (Date::isDateTime($this->excelObj->getActiveSheet()->getCell($col . $fila))) {
-                            $objeto[$campo] = date('Y-m-d', Date::excelToTimestamp($valor));
-                        } else {
-                            $objeto[$campo] = date('Y-m-d', Date::excelToTimestamp($valor));
-                        }
-                    } else {
-                        $objeto[$campo] = NULL;
+            $col = null; // ⚠ Inicializamos col para evitar "undefined variable"
+
+            // Columnas simples
+            if (is_numeric($celda) || is_string($celda)) {
+
+                $tipo = 'string';
+                if ($buscar_cabecera) {
+                    if (is_numeric($celda) && $celda >= 0) {
+                        $col = $this->cabeceras[$celda]['columna'] ?? null;
+                        $tipo = $this->cabeceras[$celda]['tipo'] ?? 'string';
+                    } elseif (is_string($celda)) {
+                        $cab = $this->cabeceras->firstWhere('nombre', strtolower($celda));
+                        $col = $cab['columna'] ?? null;
+                        $tipo = $cab['tipo'] ?? 'string';
                     }
-                } elseif ($buscar_cabecera && (($this->cabeceras[$celda]['tipo'] == 'int' || $this->cabeceras[$celda]['tipo'] == 'float') && $valor == '')) {
-                    $objeto[$campo] = 0;
-                } elseif ($buscar_cabecera && $this->cabeceras[$celda]['tipo'] == 'string') {
-                    $objeto[$campo] = (string)trim($valor);
                 } else {
-                    $objeto[$campo] = trim($valor);
+                    $col = $celda;
+                }
+
+                $valor = ($col) ? $this->excelObj->getActiveSheet()->getCell($col . $fila)->getValue() : null;
+
+                if ($tipo == 'date' && $valor != null && $valor != '') {
+                    if (is_string($valor)) {
+                        $objeto[$campo] = date('Y-m-d', strtotime(str_replace('/', '-', $valor)));
+                    } elseif (Date::isDateTime($this->excelObj->getActiveSheet()->getCell($col . $fila))) {
+                        $objeto[$campo] = date('Y-m-d', Date::excelToTimestamp($valor));
+                    } else {
+                        $objeto[$campo] = date('Y-m-d', Date::excelToTimestamp($valor));
+                    }
+                } elseif (($tipo == 'int' || $tipo == 'float') && ($valor === null || $valor === '')) {
+                    $objeto[$campo] = 0;
+                } else {
+                    // Para columnas opcionales como 'imagen', si está vacía, poner null
+                    $objeto[$campo] = ($valor !== null && $valor !== '') ? trim($valor) : null;
                 }
             }
 
+            // Columnas compuestas / array (respuestas dinámicas)
             if (is_array($celda)) {
                 if (isset($celda['elementos'])) {
                     $objeto[$campo] = [];
@@ -152,20 +144,13 @@ class Importador
         foreach ($arr as $e => $v) {
             switch ($v) {
                 case '>0':
-                    if ($datos[$e] != '' && $datos[$e] > 0) {
-                        $band = true;
-                    }
+                    if ($datos[$e] != '' && $datos[$e] > 0) $band = true;
                     break;
                 case '<0':
-                    if ($datos[$e] != '' && $datos[$e] < 0) {
-                        $band = true;
-                    }
+                    if ($datos[$e] != '' && $datos[$e] < 0) $band = true;
                     break;
             }
-
-            if ($operador == "OR" && $band) {
-                break;
-            }
+            if ($operador == "OR" && $band) break;
         }
 
         return $band;
