@@ -249,6 +249,7 @@
                     ],
                     dom: 'Bfrtip',
                     buttons: [],
+                    order: [[2, 'asc']],
                     rowCallback: function(row, data) {
                         // Aquí tu código para modificar las filas, recuerda que ahora tienes 9 columnas con 'posicion'
                         var i;

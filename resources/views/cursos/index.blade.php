@@ -191,6 +191,7 @@
                     ],
                     dom: 'Bfrtip',
                     buttons: [],
+                    order: [[2, 'asc']],
                     "rowCallback": function(row, data) {
                         $(row).find('td:eq(2)').html(
                             '<form method="POST" action="{{ route('admin.lecciones.index') }}"> @csrf <input name="curso_id" type="hidden" value="' +
