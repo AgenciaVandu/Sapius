@@ -15,6 +15,7 @@ use App\Utilerias\Importador;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Stringable;
+use App\Utilerias\Exportador;
 
 class PreguntaController extends Controller
 {
@@ -318,79 +319,84 @@ class PreguntaController extends Controller
 
 
     public function exportar(Request $request)
-    {
-        // Obtener la prueba y sus preguntas
-        $prueba = Prueba::find($request->id);
-        $preguntas = Pregunta::where('prueba_id', $prueba->id)->get();
+{
+    // Obtener la prueba y sus preguntas
+    $prueba = Prueba::find($request->id);
+    $preguntas = Pregunta::where('prueba_id', $prueba->id)->get();
 
-        // Determinar el número máximo de respuestas entre todas las preguntas
-        $maxRespuestas = 0;
-        foreach ($preguntas as $pregunta) {
-            $count = Respuesta::where('pregunta_id', $pregunta->id)->count();
-            if ($count > $maxRespuestas) {
-                $maxRespuestas = $count;
-            }
+    // Determinar el número máximo de respuestas entre todas las preguntas
+    $maxRespuestas = 0;
+    foreach ($preguntas as $pregunta) {
+        $count = Respuesta::where('pregunta_id', $pregunta->id)->count();
+        if ($count > $maxRespuestas) {
+            $maxRespuestas = $count;
         }
-
-        // Definir cabeceras dinámicas
-        $cabecera = ['slug', 'pregunta', 'retro'];
-        for ($i = 1; $i <= $maxRespuestas; $i++) {
-            $cabecera[] = 'r' . $i;
-        }
-        $cabecera[] = 'correcta';
-        $cabecera[] = 'score';
-
-        $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
-        $sheet = $spreadsheet->getActiveSheet();
-
-        // Establecer cabeceras
-        foreach ($cabecera as $key => $valorcelda) {
-            $colLetter = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($key + 1);
-            $sheet->setCellValue($colLetter . '1', $valorcelda);
-        }
-
-        // Llenar los datos
-        $row = 2;
-        foreach ($preguntas as $pregunta) {
-            $sheet->setCellValue('A' . $row, $pregunta->slug);
-            $sheet->setCellValue('B' . $row, $pregunta->pregunta);
-            $sheet->setCellValue('C' . $row, $pregunta->opciones); // Retroalimentación no está en el modelo
-
-            // Obtener respuestas relacionadas
-            $respuestas = Respuesta::where('pregunta_id', $pregunta->id)->get();
-
-            // Llenar r1, r2, ..., rn
-            $colCorrecta = '';
-            for ($i = 0; $i < $maxRespuestas; $i++) {
-                $valorRespuesta = isset($respuestas[$i]) ? $respuestas[$i]->respuesta : '';
-                $colLetter = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex(4 + $i);
-                $sheet->setCellValue($colLetter . $row, $valorRespuesta);
-
-                // Buscar la respuesta correcta (donde correcto == 1)
-                if (isset($respuestas[$i]) && $respuestas[$i]->correcto == 1) {
-                    $colCorrecta = $i + 1; // 1-based index
-                }
-            }
-
-            // Columna correcta (después de las respuestas)
-            $colLetterCorrecta = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex(4 + $maxRespuestas);
-            $sheet->setCellValue($colLetterCorrecta . $row, $colCorrecta);
-
-            // Columna score (después de correcta)
-            $colLetterScore = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex(5 + $maxRespuestas);
-            $sheet->setCellValue($colLetterScore . $row, $pregunta->score);
-
-            $row++;
-        }
-
-        // Guardar el archivo
-        $fileName = Carbon::now()->format('Y_m_d_His') . '_export_' . Str::slug($prueba->titulo) . '_' . $prueba->id . '.xlsx';
-        $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
-        $filePath = storage_path('app/public/' . $fileName);
-        $writer->save($filePath);
-
-        // Retornar el archivo para descarga
-        return response()->download($filePath)->deleteFileAfterSend(true);
     }
+
+    // Definir cabeceras dinámicas
+    $cabecera = ['slug', 'pregunta', 'retro'];
+    for ($i = 1; $i <= $maxRespuestas; $i++) {
+        $cabecera[] = 'r' . $i;
+    }
+    $cabecera[] = 'correcta';
+    $cabecera[] = 'score';
+    $cabecera[] = 'imagen'; // <-- Agregamos la columna imagen
+
+    $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+    $sheet = $spreadsheet->getActiveSheet();
+
+    // Establecer cabeceras
+    foreach ($cabecera as $key => $valorcelda) {
+        $colLetter = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($key + 1);
+        $sheet->setCellValue($colLetter . '1', $valorcelda);
+    }
+
+    // Llenar los datos
+    $row = 2;
+    foreach ($preguntas as $pregunta) {
+        $sheet->setCellValue('A' . $row, $pregunta->slug);
+        $sheet->setCellValue('B' . $row, $pregunta->pregunta);
+        $sheet->setCellValue('C' . $row, $pregunta->opciones);
+
+        // Obtener respuestas relacionadas
+        $respuestas = Respuesta::where('pregunta_id', $pregunta->id)->get();
+
+        // Llenar r1, r2, ..., rn
+        $colCorrecta = '';
+        for ($i = 0; $i < $maxRespuestas; $i++) {
+            $valorRespuesta = isset($respuestas[$i]) ? $respuestas[$i]->respuesta : '';
+            $colLetter = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex(4 + $i);
+            $sheet->setCellValue($colLetter . $row, $valorRespuesta);
+
+            // Buscar la respuesta correcta
+            if (isset($respuestas[$i]) && $respuestas[$i]->correcto == 1) {
+                $colCorrecta = $i + 1;
+            }
+        }
+
+        // Columna correcta
+        $colLetterCorrecta = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex(4 + $maxRespuestas);
+        $sheet->setCellValue($colLetterCorrecta . $row, $colCorrecta);
+
+        // Columna score
+        $colLetterScore = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex(5 + $maxRespuestas);
+        $sheet->setCellValue($colLetterScore . $row, $pregunta->score);
+
+        // Columna imagen (última)
+        $colLetterImagen = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex(6 + $maxRespuestas);
+        $sheet->setCellValue($colLetterImagen . $row, $pregunta->imagen ?? ''); // <-- Ruta relativa directamente
+
+        $row++;
+    }
+
+    // Guardar el archivo
+    $fileName = Carbon::now()->format('Y_m_d_His') . '_export_' . Str::slug($prueba->titulo) . '_' . $prueba->id . '.xlsx';
+    $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+    $filePath = storage_path('app/public/' . $fileName);
+    $writer->save($filePath);
+
+    // Retornar el archivo para descarga
+    return response()->download($filePath)->deleteFileAfterSend(true);
+}
 
 }
