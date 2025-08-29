@@ -272,18 +272,46 @@ class HomeController extends Controller
             'rating' => 'required|integer|min:1|max:5',
             'comment' => 'required|string|min:100',
         ]);
-        if ($request->rating >= 4) {
-            $visible = true;
-        } else {
-            $visible = false;
+
+        // Lista extendida de palabras prohibidas
+        $badWords = [
+            'puta', 'puto', 'pendejo', 'pendeja', 'mierda', 'chingar', 'chingada', 'chingado',
+            'verga', 'cabrón', 'cabrona', 'culero', 'culera', 'imbécil', 'idiota', 'estúpido', 'estúpida',
+            'zorra', 'perra', 'maricón', 'marica', 'mamón', 'mamona', 'pinche', 'asco',
+            'malo', 'pésimo', 'horrible', 'asqueroso', 'terrible', 'basura', 'fraude', 'falso',
+            'estafa', 'engaño', 'mentira', 'timar', 'robo', 'inútil', 'decepción', 'engañoso',
+            'aburrido', 'mediocre', 'desastre', 'pobre', 'deficiente', 'inservible', 'vergonzoso',
+            'curso malo', 'curso pésimo', 'curso horrible', 'curso basura', 'profesor malo',
+            'profesor pésimo', 'no sirve', 'no aprendes', 'malísimo', 'pérdida de tiempo','culo','pene'
+        ];
+
+        $comment = strtolower($request->comment);
+        $containsBadWord = false;
+
+        foreach ($badWords as $word) {
+            if (strpos($comment, $word) !== false) {
+                $containsBadWord = true;
+                break;
+            }
         }
+
+        if ($containsBadWord) {
+            $visible = false;
+            $rating = 0;
+        } else {
+            $rating = $request->rating;
+            $visible = $request->rating >= 4 ? true : false;
+        }
+
         Reviews::create([
-            'user_id' => Auth::user()->id,
+            'user_id' => Auth::id(),
             'name' => $request->name,
-            'rating' => $request->rating,
+            'rating' => $rating,
             'comment' => $request->comment,
             'visible' => $visible,
         ]);
+
         return redirect()->route('tu.opinion')->with('success', 'Opinion created successfully.');
     }
+
 }

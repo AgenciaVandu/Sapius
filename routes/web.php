@@ -32,7 +32,7 @@ Route::get('/', function () {
     $images = Slide::where('section','like','slider-index')->orderBy('position', 'asc')->get();
     $prides = Pride::orderBy('position', 'asc')->get();
     $teachers = Teacher::orderBy('position', 'asc')->get();
-    $reviews = Reviews::where('visible', 1)->orderBy('created_at', 'desc')->take(6)->get();
+    $reviews = Reviews::where('visible', 1)->where('rating', '>=', 4)->orderBy('created_at', 'desc')->take(6)->get();
     return view('index',compact('images','prides','teachers','reviews'));
 })->name('landing.home');
 
@@ -59,36 +59,36 @@ Route::get('cookies', function () {
 })->name('cookies');
 
 Route::get('/exani-1', function () {
-    $reviews = Reviews::where('visible', 1)->orderBy('created_at', 'desc')->take(6)->get();
+    $reviews = Reviews::where('visible', 1)->where('rating', '>=', 4)->orderBy('created_at', 'desc')->take(6)->get();
     return view('cursos-front.exani-1', compact('reviews'));
 });
 Route::get('/exani-2', function () {
-    $reviews = Reviews::where('visible', 1)->orderBy('created_at', 'desc')->take(6)->get();
+    $reviews = Reviews::where('visible', 1)->where('rating', '>=', 4)->orderBy('created_at', 'desc')->take(6)->get();
     return view('cursos-front.exani-2', compact('reviews'));
 });
 Route::get('/exani-3', function () {
-    $reviews = Reviews::where('visible', 1)->orderBy('created_at', 'desc')->take(6)->get();
+    $reviews = Reviews::where('visible', 1)->where('rating', '>=', 4)->orderBy('created_at', 'desc')->take(6)->get();
     return view('cursos-front.exani-3', compact('reviews'));
 });
 Route::get('/egel-plus', function () {
-    $reviews = Reviews::where('visible', 1)->orderBy('created_at', 'desc')->take(6)->get();
+    $reviews = Reviews::where('visible', 1)->where('rating', '>=', 4)->orderBy('created_at', 'desc')->take(6)->get();
     return view ('cursos-front.egel-plus', compact('reviews'));
 });
 Route::get ('/egel-plus-nutricion', function () {
-    $reviews = Reviews::where('visible', 1)->orderBy('created_at', 'desc')->take(6)->get();
+    $reviews = Reviews::where('visible', 1)->where('rating', '>=', 4)->orderBy('created_at', 'desc')->take(6)->get();
     return view('cursos-front.nutricion', compact('reviews'));
 });
 
 Route::get ('/egel-plus-medicina', function () {
-    $reviews = Reviews::where('visible', 1)->orderBy('created_at', 'desc')->take(6)->get();
+    $reviews = Reviews::where('visible', 1)->where('rating', '>=', 4)->orderBy('created_at', 'desc')->take(6)->get();
     return view('cursos-front.medicina', compact('reviews'));
 });
 Route::get ('/cursos-enarm', function(){
-    $reviews = Reviews::where('visible', 1)->orderBy('created_at', 'desc')->take(6)->get();
+    $reviews = Reviews::where('visible', 1)->where('rating', '>=', 4)->orderBy('created_at', 'desc')->take(6)->get();
     return view('cursos-front.enarm', compact('reviews'));
 });
 Route::get ('/cursos-presenciales', function (){
-    $reviews = Reviews::where('visible', 1)->orderBy('created_at', 'desc')->take(6)->get();
+    $reviews = Reviews::where('visible', 1)->where('rating', '>=', 4)->orderBy('created_at', 'desc')->take(6)->get();
     return view('cursos-front.presencial', compact('reviews'));
 });
 
