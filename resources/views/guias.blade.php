@@ -151,10 +151,10 @@
                         enabled: false
                     },
                     cmdZoomIn: {
-                        enabled: false
+                        enabled: true
                     },
                     cmdZoomOut: {
-                        enabled: false
+                        enabled: true
                     },
                     cmdShare: {
                         enabled: false
