@@ -2,9 +2,9 @@
 
 @section('content')
     <input type="hidden" id="curso" value="">
-    <div class="card">
+    <div class="    ">
         <div class="card-body">
-            <h4 class="card-title">Para terminar</h4>
+            <h4 class="card-title" style="color: #000000;">Para terminar</h4>
             <h6 class="card-subtitle">Acepta que todas las preguntas fueron respondidas
             </h6>
             <form method="POST" action="{{ route('examen.finalizar') }}" class="mt-4" id="form-finalizar">
