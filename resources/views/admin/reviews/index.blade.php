@@ -12,7 +12,7 @@
             <div class="col-5 align-self-center">
                 <div class="customize-input float-right">
                     {{-- Botton para agregar nueva review --}}
-                    <a href="{{ route('admin.reviews.create') }}" class="btn btn-primary">Agregar Nueva Review</a>
+                    {{-- <a href="{{ route('admin.reviews.create') }}" class="btn btn-primary">Agregar Nueva Review</a> --}}
                 </div>
             </div>
         </div>
@@ -47,12 +47,12 @@
                                     <td>
                                         <a href="{{ route('admin.reviews.edit', $review->id) }}"
                                             class="btn btn-sm btn-primary">Editar</a>
-                                        <form action="{{ route('admin.reviews.destroy', $review->id) }}" method="POST"
+                                        {{-- <form action="{{ route('admin.reviews.destroy', $review->id) }}" method="POST"
                                             style="display:inline;">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
-                                        </form>
+                                        </form> --}}
                                     </td>
                                 </tr>
                             @endforeach

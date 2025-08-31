@@ -55,6 +55,11 @@ class User extends Authenticatable
         return $this->roles()->get();
     }
 
+    //Relacion uno a uno con el modelo Reviews
+    public function review(){
+        return $this->hasOne(Reviews::class);
+    }
+
     protected static function boot()
     {
         parent::boot();

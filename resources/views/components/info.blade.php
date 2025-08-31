@@ -141,34 +141,7 @@
                     @endif
                 </div>
                 <div class="col-lg-7 col-sm-12">
-                    <div class="orgullo-txt">
-                        <h4 class="lead" style="color: gray;">Forma parte de nuestra comunidad</h4>
-                        <h2 class="color-gray"><strong>Opiniones de <br>
-                                nuestros alumnos</strong></h2>
-                        <div id="carouselExampleFade" class="carousel slide carousel-fade" data-ride="carousel">
-                            <div class="carousel-inner">
-                                @foreach ($reviews as $review)
-                                    <div class="carousel-item @if ($loop->first) active @endif">
-                                        <p class="color-gray reference">
-                                            <strong>{{ $review->name }}</strong> <br>
-                                            <span>
-                                                @for ($i = 1; $i <= 5; $i++)
-                                                    <i class="fas fa-star"
-                                                        style="color: {{ $i <= $review->rating ? '#FFD700' : '#ccc' }};"></i>
-                                                @endfor
-                                            </span>
-                                            <br>
-                                            <span>
-                                                {{ $review->comment }}
-                                            </span>
-                                        </p>
-                                    </div>
-                                @endforeach
-                            </div>
-                        </div>
-                        <a href="" data-toggle="modal" data-target="#ventas" class="btn btn-primary">Más
-                            información</a>
-                    </div>
+                    @include('components.opiniones', ['reviews' => $reviews])
                 </div>
             </div>
         </div>

@@ -15,6 +15,7 @@ use App\Utilerias\Importador;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Stringable;
+use App\Utilerias\Exportador;
 
 class PreguntaController extends Controller
 {
@@ -53,60 +54,66 @@ class PreguntaController extends Controller
         return view('preguntas.importar')->with('prueba',$prueba);
     }
 
-    public function importar(Request $request)
-    {
-        //dd( $_FILES);
-        $tmpfname = $_FILES['file']['tmp_name'];
-        \Log::info("*********************************************");
-        \Log::info("Iniciar proceso importación nómina :: ".date("Y-m-d H:i:s"));
-        //$tmpfname = $_FILES['excel']['tmp_name'];
+public function importar(Request $request)
+{
+    $tmpfname = $_FILES['file']['tmp_name'];
 
-        $cabecera = $this->cabecera();
-        $estructura = $this->estructura();
-        //\Log::debug(dd($estructura));
-        $importador = new Importador($tmpfname,$cabecera,$estructura);
-        \Log::info("Obtener datos del archivo :: ".date("Y-m-d H:i:s"));
-        $preguntas = $importador->make();
-        \Log::info("Iniciar Insersión a base de datos :: ".date("Y-m-d H:i:s"));
-        //\Log::debug(dd($preguntas));
-        foreach ($preguntas as $pregunta) {
-            //eliminar pregunta vacia
-            if($pregunta['pregunta'] == ""){
-                //\Log::debug(dd($preguntas));
-                continue;
-            }
-            $respuestasArr = Arr::pull($pregunta,'respuestas');
-            //remover las propiedades no necesarias
-            //Arr::pull($pregunta,'agrupador');
-            $correcto = Arr::pull($pregunta,'correcto');
-            $correcto = $correcto - 1;
-            //agregar el identificador de a prueba
-            $pregunta['prueba_id'] = $request->prueba_id;
+    \Log::info("*********************************************");
+    \Log::info("Iniciar proceso importación preguntas :: " . date("Y-m-d H:i:s"));
 
-            $pregunta['imagen'] = null;
-            //$pregunta['score'] = 1;
+    $cabecera = $this->cabecera();
+    $estructura = $this->estructura();
+    $importador = new Importador($tmpfname, $cabecera, $estructura);
 
-            //dd($pregunta);
-            $pregunta = Pregunta::create($pregunta);
+    \Log::info("Obtener datos del archivo :: " . date("Y-m-d H:i:s"));
+    $preguntas = $importador->make();
 
-            $respuestas = [];
-            foreach ($respuestasArr as $key=>$respuesta) {
-                //establece la respuesta correcta
-                if($key == $correcto){
-                    $respuesta['correcto'] = 1;
-                }else{
-                    $respuesta['correcto'] = 0;
+    \Log::info("Iniciar inserción a base de datos :: " . date("Y-m-d H:i:s"));
+
+    foreach ($preguntas as $pregunta) {
+        // Eliminar pregunta vacía
+        if ($pregunta['pregunta'] == "") continue;
+
+        $respuestasArr = Arr::pull($pregunta, 'respuestas');
+        $correcto = Arr::pull($pregunta, 'correcto') - 1; // Ajustar índice correcto
+
+        // Agregar identificador de la prueba
+        $pregunta['prueba_id'] = $request->prueba_id;
+
+        // Convertir imagen a string o null
+        $pregunta['imagen'] = isset($pregunta['imagen'])
+            ? (is_array($pregunta['imagen']) ? json_encode($pregunta['imagen']) : $pregunta['imagen'])
+            : null;
+
+        // Insertar pregunta en la base
+        $preguntaModel = Pregunta::create($pregunta);
+
+        $respuestas = [];
+        foreach ($respuestasArr as $key => $respuesta) {
+            $respuesta['correcto'] = ($key == $correcto) ? 1 : 0;
+            $respuesta['pregunta_id'] = $preguntaModel->id;
+
+            // Convertir cualquier array en la respuesta a JSON
+            foreach ($respuesta as $k => $v) {
+                if (is_array($v)) {
+                    $respuesta[$k] = json_encode($v);
                 }
-
-                $respuesta['pregunta_id'] = $pregunta->id;
-                array_push($respuestas,$respuesta);
-                //dd($respuesta);
             }
-            //dd($respuestas);
-            $respuestas = Respuesta::insert($respuestas);
+
+            $respuestas[] = $respuesta;
         }
-        dd('Ok...');
+
+        // Insertar todas las respuestas de la pregunta
+        if (!empty($respuestas)) {
+            Respuesta::insert($respuestas);
+        }
     }
+
+    dd('Importación completada correctamente');
+}
+
+
+
 
     /**
      * Show the form for creating a new resource.
@@ -278,16 +285,19 @@ class PreguntaController extends Controller
         return response()->file($storagePath);
     }
 
-    public function cabecera(){
-        $cabecera = [
-            ['nombre' => 'slug','tipo' => 'string','columna' => ''],//0
-            ['nombre' => 'pregunta','tipo' => 'string','columna' => ''],//1
-            ['nombre' => 'retro','tipo' => 'string','columna' => ''],//2
-            ['nombre' => 'correcta','tipo' => 'string','columna' => ''],//3
-            ['nombre' => 'score','tipo' => 'string','columna' => ''],//4
-        ];
-        return collect($cabecera);
-    }
+public function cabecera(){
+    $cabecera = [
+        ['nombre' => 'slug','tipo' => 'string','columna' => ''],      //0
+        ['nombre' => 'pregunta','tipo' => 'string','columna' => ''],  //1
+        ['nombre' => 'retro','tipo' => 'string','columna' => ''],     //2
+        ['nombre' => 'correcta','tipo' => 'string','columna' => ''],  //3
+        ['nombre' => 'score','tipo' => 'string','columna' => ''],     //4
+        ['nombre' => 'imagen','tipo' => 'string','columna' => ''],    //5
+    ];
+    return collect($cabecera);
+}
+
+
 
     public function estructura(){
         $preguntas = [
@@ -295,19 +305,15 @@ class PreguntaController extends Controller
             'slug' => 0,
             'pregunta'=> 1,
             'opciones' => 2,
-            'imagen' => -1,
+            'imagen' => 'imagen', // <- ahora es dinámico
             'score' => 4,
             'correcto' => 3,
-            "respuestas" =>[
-                "secuencia_despues" =>2,
-                "secuencia_antes" =>3,
-                "rango" =>1,
+            "respuestas" => [
+                "secuencia_despues" => 2,
+                "secuencia_antes" => 3,
+                "rango" => 1,
                 "elementos"=> [
-                    //"pregunta_id" => -1,
                     "respuesta" => 1
-                    // "imagen" => -1,
-                    // "correcto" => -1,
-                    // "posicion" => -1
                 ]
             ]
         ];
@@ -317,80 +323,87 @@ class PreguntaController extends Controller
 
 
 
+
+
     public function exportar(Request $request)
-    {
-        // Obtener la prueba y sus preguntas
-        $prueba = Prueba::find($request->id);
-        $preguntas = Pregunta::where('prueba_id', $prueba->id)->get();
+{
+    // Obtener la prueba y sus preguntas
+    $prueba = Prueba::find($request->id);
+    $preguntas = Pregunta::where('prueba_id', $prueba->id)->get();
 
-        // Determinar el número máximo de respuestas entre todas las preguntas
-        $maxRespuestas = 0;
-        foreach ($preguntas as $pregunta) {
-            $count = Respuesta::where('pregunta_id', $pregunta->id)->count();
-            if ($count > $maxRespuestas) {
-                $maxRespuestas = $count;
-            }
+    // Determinar el número máximo de respuestas entre todas las preguntas
+    $maxRespuestas = 0;
+    foreach ($preguntas as $pregunta) {
+        $count = Respuesta::where('pregunta_id', $pregunta->id)->count();
+        if ($count > $maxRespuestas) {
+            $maxRespuestas = $count;
         }
-
-        // Definir cabeceras dinámicas
-        $cabecera = ['slug', 'pregunta', 'retro'];
-        for ($i = 1; $i <= $maxRespuestas; $i++) {
-            $cabecera[] = 'r' . $i;
-        }
-        $cabecera[] = 'correcta';
-        $cabecera[] = 'score';
-
-        $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
-        $sheet = $spreadsheet->getActiveSheet();
-
-        // Establecer cabeceras
-        foreach ($cabecera as $key => $valorcelda) {
-            $colLetter = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($key + 1);
-            $sheet->setCellValue($colLetter . '1', $valorcelda);
-        }
-
-        // Llenar los datos
-        $row = 2;
-        foreach ($preguntas as $pregunta) {
-            $sheet->setCellValue('A' . $row, $pregunta->slug);
-            $sheet->setCellValue('B' . $row, $pregunta->pregunta);
-            $sheet->setCellValue('C' . $row, $pregunta->opciones); // Retroalimentación no está en el modelo
-
-            // Obtener respuestas relacionadas
-            $respuestas = Respuesta::where('pregunta_id', $pregunta->id)->get();
-
-            // Llenar r1, r2, ..., rn
-            $colCorrecta = '';
-            for ($i = 0; $i < $maxRespuestas; $i++) {
-                $valorRespuesta = isset($respuestas[$i]) ? $respuestas[$i]->respuesta : '';
-                $colLetter = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex(4 + $i);
-                $sheet->setCellValue($colLetter . $row, $valorRespuesta);
-
-                // Buscar la respuesta correcta (donde correcto == 1)
-                if (isset($respuestas[$i]) && $respuestas[$i]->correcto == 1) {
-                    $colCorrecta = $i + 1; // 1-based index
-                }
-            }
-
-            // Columna correcta (después de las respuestas)
-            $colLetterCorrecta = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex(4 + $maxRespuestas);
-            $sheet->setCellValue($colLetterCorrecta . $row, $colCorrecta);
-
-            // Columna score (después de correcta)
-            $colLetterScore = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex(5 + $maxRespuestas);
-            $sheet->setCellValue($colLetterScore . $row, $pregunta->score);
-
-            $row++;
-        }
-
-        // Guardar el archivo
-        $fileName = Carbon::now()->format('Y_m_d_His') . '_export_' . Str::slug($prueba->titulo) . '_' . $prueba->id . '.xlsx';
-        $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
-        $filePath = storage_path('app/public/' . $fileName);
-        $writer->save($filePath);
-
-        // Retornar el archivo para descarga
-        return response()->download($filePath)->deleteFileAfterSend(true);
     }
+
+    // Definir cabeceras dinámicas
+    $cabecera = ['slug', 'pregunta', 'retro'];
+    for ($i = 1; $i <= $maxRespuestas; $i++) {
+        $cabecera[] = 'r' . $i;
+    }
+    $cabecera[] = 'correcta';
+    $cabecera[] = 'score';
+    $cabecera[] = 'imagen'; // <-- Agregamos la columna imagen
+
+    $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+    $sheet = $spreadsheet->getActiveSheet();
+
+    // Establecer cabeceras
+    foreach ($cabecera as $key => $valorcelda) {
+        $colLetter = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($key + 1);
+        $sheet->setCellValue($colLetter . '1', $valorcelda);
+    }
+
+    // Llenar los datos
+    $row = 2;
+    foreach ($preguntas as $pregunta) {
+        $sheet->setCellValue('A' . $row, $pregunta->slug);
+        $sheet->setCellValue('B' . $row, $pregunta->pregunta);
+        $sheet->setCellValue('C' . $row, $pregunta->opciones);
+
+        // Obtener respuestas relacionadas
+        $respuestas = Respuesta::where('pregunta_id', $pregunta->id)->get();
+
+        // Llenar r1, r2, ..., rn
+        $colCorrecta = '';
+        for ($i = 0; $i < $maxRespuestas; $i++) {
+            $valorRespuesta = isset($respuestas[$i]) ? $respuestas[$i]->respuesta : '';
+            $colLetter = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex(4 + $i);
+            $sheet->setCellValue($colLetter . $row, $valorRespuesta);
+
+            // Buscar la respuesta correcta
+            if (isset($respuestas[$i]) && $respuestas[$i]->correcto == 1) {
+                $colCorrecta = $i + 1;
+            }
+        }
+
+        // Columna correcta
+        $colLetterCorrecta = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex(4 + $maxRespuestas);
+        $sheet->setCellValue($colLetterCorrecta . $row, $colCorrecta);
+
+        // Columna score
+        $colLetterScore = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex(5 + $maxRespuestas);
+        $sheet->setCellValue($colLetterScore . $row, $pregunta->score);
+
+        // Columna imagen (última)
+        $colLetterImagen = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex(6 + $maxRespuestas);
+        $sheet->setCellValue($colLetterImagen . $row, $pregunta->imagen ?? ''); // <-- Ruta relativa directamente
+
+        $row++;
+    }
+
+    // Guardar el archivo
+    $fileName = Carbon::now()->format('Y_m_d_His') . '_export_' . Str::slug($prueba->titulo) . '_' . $prueba->id . '.xlsx';
+    $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+    $filePath = storage_path('app/public/' . $fileName);
+    $writer->save($filePath);
+
+    // Retornar el archivo para descarga
+    return response()->download($filePath)->deleteFileAfterSend(true);
+}
 
 }

@@ -1,23 +1,68 @@
 @php
-    // Asegúrate de que $respuestas_json y $preguntasAll estén disponibles
     $respuestas = is_array($respuestas_json) ? $respuestas_json : [];
+    $contadorGlobal = 1; // contador global para numeración
+    $currentPage = request()->get('page', 1); // página actual
 @endphp
 
-@if (is_array($respuestas) && count($preguntasAll) > 0)
-    @foreach ($preguntasAll as $item)
+@if ($preguntasAll->count() > 0)
+    @foreach ($preguntasAll as $index => $grupo)
         @php
-            $found = false;
-            foreach ($respuestas as $respuesta) {
-                if ($respuesta['name'] == $item->id) {
-                    $found = true;
-                    break;
-                }
+            $preguntasDelGrupo = $grupo->GrupoPreguntas ?? collect();
+            $esAgrupado = $preguntasDelGrupo->count() > 1;
+
+            // Determinar si se pinta el recuadro exterior
+            if ($esAgrupado) {
+                $todasRespondidas = $preguntasDelGrupo->pluck('id')->every(function ($id) use ($respuestas) {
+                    return collect($respuestas)->pluck('name')->contains((string) $id);
+                });
+                $colorExterior = $todasRespondidas ? '#002146' : '#e0e0e0';
+            } else {
+                $tieneRespuesta = collect($respuestas)
+                    ->pluck('name')
+                    ->contains((string) $preguntasDelGrupo->first()->id ?? '');
+                $colorExterior = $tieneRespuesta ? '#002146' : '#e0e0e0';
             }
+
+            $colorTextoExterior =
+                ($esAgrupado && isset($todasRespondidas) && $todasRespondidas) || (!$esAgrupado && $tieneRespuesta)
+                    ? 'white'
+                    : '#b0b0b0';
+            $anchoMin = $esAgrupado ? 40 * $preguntasDelGrupo->count() : 32;
+
+            // Estilo de borde para página actual
+            $bordeActual = $currentPage == $index + 1 ? '2px solid #ed6a5a' : 'none';
         @endphp
-        <div class="mb-2"
-            style="display: inline-block; width: 32px; height: 32px; margin-right: 5px; border-radius: 4px; background-color: {{ $found ? '#002146' : '#e0e0e0' }}; color: {{ $found ? 'white' : '#b0b0b0' }}; text-align: center; line-height: 32px; font-weight: bold;">
-            {{ $loop->iteration }}
+
+        {{-- Recuadro exterior con borde para resaltar página actual --}}
+        <div class="recuadro-paginacion mb-2 d-inline-block p-2" data-page="{{ $index + 1 }}"
+            style="min-width: {{ $anchoMin }}px;
+                   border-radius:6px;
+                   border: {{ $bordeActual }};
+                   background-color: {{ $colorExterior }};
+                   color: {{ $colorTextoExterior }};
+                   text-align:center; font-weight:bold; cursor:pointer;">
+
+            {{-- Mini-cuadritos internos --}}
+            @foreach ($preguntasDelGrupo as $subIndex => $item)
+                @php
+                    $tieneRespuesta = collect($respuestas)->pluck('name')->contains((string) $item->id);
+                    $colorFondo = $tieneRespuesta ? '#002146' : '#e0e0e0';
+                    $colorTexto = $tieneRespuesta ? 'white' : '#b0b0b0';
+
+                    // Numeración: grupos tipo 25.1, 25.2
+                    $numero = $esAgrupado ? $contadorGlobal . '.' . ($subIndex + 1) : $contadorGlobal;
+                @endphp
+
+                <span
+                    style="display:inline-block; width:32px; height:32px; margin:2px;
+                           border-radius:4px; background-color:{{ $colorFondo }};
+                           color:{{ $colorTexto }}; line-height:32px; font-size:12px;">
+                    {{ $numero }}
+                </span>
+            @endforeach
         </div>
+
+        @php $contadorGlobal++; @endphp
     @endforeach
 @else
     <p>No hay respuestas o el JSON es inválido.</p>

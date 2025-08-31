@@ -182,6 +182,7 @@
                 dom: 'Bfrtip',
                 buttons: [
                 ],
+                order: [[2, 'asc']],
                 "rowCallback": function( row, data ) {
                     // preguntas
                     $(row).find('td:eq(2)').html( '<form method="POST" class="text-center" action="{{ route(Auth::user()->rol[0]->slug.'.preguntas.index') }}"> @csrf <input name="prueba_id" type="hidden" value="'+data['id']+'"> <button type="submit" class="btn btn-primary"><i class="fas fa-list"></i></button> </form>' );

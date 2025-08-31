@@ -2,14 +2,31 @@
 
 @section('content')
     <div class="auth-wrapper d-flex no-block justify-content-center align-items-center position-relative"
-        {{-- style="background: linear-gradient(135deg, #101a26 20%, #ed6a5a 100%); min-height: 100vh;" --}} style="background: linear-gradient(135deg, #101a26 20%, #101a26 100%); min-height: 100vh;">
+        style="background: linear-gradient(135deg, #101a26 20%, #101a26 100%); min-height: 100vh;">
         <div class="auth-box row shadow-lg rounded" style="overflow: hidden; background: #fff;">
             <div class="col-lg-7 col-md-5 d-none d-md-block p-0"
                 style="background: url({{ asset('vendor/adminmart/assets/images/big/login.png') }}) center center/cover no-repeat;">
             </div>
             <div class="col-lg-5 col-md-7 bg-white p-4" style="border-left: 5px solid #ed6a5a;">
+
+                {{-- Mensaje de sesión cerrada --}}
+                @if ($errors->has('session_expired'))
+                    <div class="alert alert-warning alert-dismissible fade show d-flex align-items-center mb-3" role="alert"
+                        style="border-radius: 12px; font-size: 14px; background-color: #fff3cd; border: 1.5px solid #ed6a5a; color: #101a26;">
+                        <i class="fas fa-exclamation-triangle mr-2" style="color: #ed6a5a; font-size: 18px;"></i>
+                        <div>
+                            <strong>Sesión cerrada:</strong> {{ $errors->first('session_expired') }}
+                        </div>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"
+                            style="color: #101a26;">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                @endif
+
                 <div class="text-center mb-4">
-                    <img src="{{ asset('vendor/adminmart/assets/images/big/icon.png') }}" alt="wrapkit" style="width: 60px;">
+                    <img src="{{ asset('vendor/adminmart/assets/images/big/icon.png') }}" alt="wrapkit"
+                        style="width: 60px;">
                 </div>
                 <h2 class="mt-2 text-center" style="color: #101a26;">{{ __('Sign In') }}</h2>
                 <p class="text-center" style="color: #ed6a5a;">Desde aquí puedes ingresar.</p>
@@ -18,10 +35,11 @@
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="form-group">
-                                <label for="username" class="text-dark" style="color: #101a26 !important;">{{ __('Username') }}</label>
+                                <label for="username" class="text-dark"
+                                    style="color: #101a26 !important;">{{ __('Username') }}</label>
                                 <input id="username" type="text"
-                                    class="form-control @error('username') is-invalid @enderror rounded-pill" name="username"
-                                    value="{{ old('username') }}" required autocomplete="username" autofocus
+                                    class="form-control @error('username') is-invalid @enderror rounded-pill"
+                                    name="username" value="{{ old('username') }}" required autocomplete="username" autofocus
                                     style="border: 1.5px solid #101a26;">
                                 @error('username')
                                     <span class="invalid-feedback" role="alert">
@@ -32,10 +50,11 @@
                         </div>
                         <div class="col-lg-12">
                             <div class="form-group">
-                                <label for="password" class="text-dark" style="color: #101a26 !important;">{{ __('Password') }}</label>
+                                <label for="password" class="text-dark"
+                                    style="color: #101a26 !important;">{{ __('Password') }}</label>
                                 <input id="password" type="password"
-                                    class="form-control @error('password') is-invalid @enderror rounded-pill" name="password"
-                                    required autocomplete="current-password"
+                                    class="form-control @error('password') is-invalid @enderror rounded-pill"
+                                    name="password" required autocomplete="current-password"
                                     style="border: 1.5px solid #101a26;">
                                 @error('password')
                                     <span class="invalid-feedback" role="alert">
@@ -69,16 +88,6 @@
                                 {{ __('Login') }}
                             </button>
                         </div>
-                       {{--  <div class="col-lg-12 text-center mt-3">
-                            <div>
-                                <hr style="border-top: 1.5px solid #ed6a5a;">
-                            </div>
-                            <a href="{{ url('/redirect') }}" class="btn btn-block"
-                                style="background: #ed6a5a; color: #fff; border-radius: 25px; font-weight: bold;">
-                                <i class="fab fa-facebook-f ml-2"></i>
-                                Entrar con Facebook
-                            </a>
-                        </div> --}}
                         @if (Route::has('password.request'))
                             <div class="col-lg-12 text-center mt-3">
                                 <a class="text-info" href="{{ route('password.request') }}"
@@ -90,7 +99,8 @@
                         @if (Route::has('register'))
                             <div class="col-lg-12 text-center mt-2">
                                 <span style="color: #101a26;">{{ __("Don't have an account?") }}</span>
-                                <a href="{{ route('register') }}" class="text-danger" style="color: #ed6a5a !important; font-weight: bold;">
+                                <a href="{{ route('register') }}" class="text-danger"
+                                    style="color: #ed6a5a !important; font-weight: bold;">
                                     {{ __('Sign Up') }}
                                 </a>
                             </div>

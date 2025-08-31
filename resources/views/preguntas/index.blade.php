@@ -171,6 +171,7 @@
                 dom: 'Bfrtip',
                 buttons: [
                 ],
+                order: [[2, 'asc']],
                 "rowCallback": function( row, data ) {
 
                     parte1 = data.pregunta.split("<table");
