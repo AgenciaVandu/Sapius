@@ -91,6 +91,9 @@
                                 <div class="alert alert-success" role="alert">
                                     <strong>En Curso</strong>
                                 </div>
+
+                                {{-- Boton para ver tus calificaciones --}}
+                                <a href="{{ route('alumno.curso.lista-resultados',['inscripcion_id'=>$inscrito->id]) }}" class="btn btn-block btn-info">Ver Calificaciones</a>
                             @endif
                         </div>
                     </div>

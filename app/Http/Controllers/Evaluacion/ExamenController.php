@@ -11,6 +11,8 @@ use App\Models\Cursos\Pregunta;
 use App\Models\Cursos\Respuesta;
 use App\Http\Controllers\Registro\CursoProgramadoController as Curso;
 use App\Mail\ExamenFinalizado;
+use App\Models\Cursos\Curso as CursosCurso;
+use App\Models\Registro\Inscripcion;
 use Mail;
 
 class ExamenController extends Controller
@@ -335,5 +337,28 @@ class ExamenController extends Controller
                 'message' => 'Estado de retroalimentación actualizado correctamente.',
                 'nuevo_estado' => $examen->retro_visualizado
             ]);
+        }
+
+
+
+        public function listaResultadosAlumno($inscripcion_id)
+        {
+            $inscripcion  =  Inscripcion::find($inscripcion_id);
+            $curso = CursosCurso::find($inscripcion->CursoProgramado->curso_id);
+            $lecciones = $curso->lecciones;
+
+            $conPrueba = Examen::with('Prueba')
+                ->where('inscripcion_id', $inscripcion_id)
+                ->has('Prueba')
+                ->get();
+
+            $sinPrueba = Examen::with('Prueba')
+                ->where('inscripcion_id', $inscripcion_id)
+                ->doesntHave('Prueba')
+                ->get();
+
+            $examenes = $conPrueba->merge($sinPrueba);
+
+            return view('alumno.resultados')->with('examenes', $examenes)->with('lecciones', $lecciones);
         }
 }

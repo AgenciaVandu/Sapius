@@ -471,6 +471,8 @@ Route::group(['middleware' =>['alumno','restrict.mobile'],'prefix' => 'alumno'],
     //Calendario
     Route::get('/calendario', 'UserController@calendario')->name('alumno.calendario');
 
+    Route::get('/evaluaciones/resultados/{inscripcion_id}', 'Evaluacion\ExamenController@listaResultadosAlumno')->name('alumno.curso.lista-resultados');//{id}
+
 
 
 
