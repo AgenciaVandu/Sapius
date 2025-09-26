@@ -16,69 +16,86 @@
         </thead>
 
         <tbody>
-            @foreach ($examenes as $e)
-                <tr>
-                    <td>{{ $e->Prueba->titulo }}</td>
-                    <td>{{ $e->Prueba->tipo }}</td>
-                    <td>{{ $e->total_preguntas }}</td>
-                    <td>{{ $e->total_correctas }}</td>
-                    <td>{{ $e->score_total }}</td>
-                    <td>
-                        {{-- Botón para cambiar estado Finalizado --}}
-                        <button id="finalizar-{{ $e->id }}"
-                            class="btn btn-{{ $e->finalizado == 'si' ? 'success' : 'danger' }}" data-id="{{ $e->id }}">
-                            {{ $e->finalizado == 'si' ? 'Reanudar' : 'Finalizar' }}
-                        </button>
-                    </td>
-                    <td>
-                        {{-- Botón para cambiar estado Retroalimentación --}}
-                        <button id="retro-{{ $e->id }}"
-                            class="btn btn-{{ $e->retro_visualizado == 'si' ? 'success' : 'danger' }}"
-                            data-id="{{ $e->id }}">
-                            {{ $e->retro_visualizado == 'si' ? 'Reanudar' : 'Finalizar' }}
-                        </button>
-                    </td>
-                    <td>
+            @foreach ($lecciones as $leccion)
+                @foreach ($leccion->pruebas as $prueba)
+                    @if ($prueba->activo === 'si')
                         @php
-                            // Agrupar los eventos por observacion y guardar las fechas
-                            $teclasAgrupadas = collect($e->eventos ?? [])
-                                ->groupBy('observacion')
-                                ->map(function ($items) {
-                                    return [
-                                        'count' => $items->count(),
-                                        'fechas' => $items->pluck('fecha_hora')->implode("\n -"),
-                                    ];
-                                });
+                            $examen = $examenes->firstWhere('prueba_id', $prueba->id);
                         @endphp
+                        @if ($examen)
+                            <tr>
+                                <td>{{ $examen->Prueba->titulo }}</td>
+                                <td>{{ $examen->Prueba->tipo }}</td>
+                                <td>{{ $examen->total_preguntas }}</td>
+                                <td>{{ $examen->total_correctas }}</td>
+                                <td>{{ $examen->score_total }}</td>
+                                <td>
+                                    {{-- Botón para cambiar estado Finalizado --}}
+                                    <button id="finalizar-{{ $examen->id }}"
+                                        class="btn btn-{{ $examen->finalizado == 'si' ? 'success' : 'danger' }}"
+                                        data-id="{{ $examen->id }}">
+                                        {{ $examen->finalizado == 'si' ? 'Reanudar' : 'Finalizar' }}
+                                    </button>
+                                </td>
+                                <td>
+                                    {{-- Botón para cambiar estado Retroalimentación --}}
+                                    <button id="retro-{{ $examen->id }}"
+                                        class="btn btn-{{ $examen->retro_visualizado == 'si' ? 'success' : 'danger' }}"
+                                        data-id="{{ $examen->id }}">
+                                        {{ $examen->retro_visualizado == 'si' ? 'Reanudar' : 'Finalizar' }}
+                                    </button>
+                                </td>
+                                <td>
+                                    @php
+                                        // Agrupar los eventos por observacion y guardar las fechas
+                                        $teclasAgrupadas = collect($examen->eventos ?? [])
+                                            ->groupBy('observacion')
+                                            ->map(function ($items) {
+                                                return [
+                                                    'count' => $items->count(),
+                                                    'fechas' => $items->pluck('fecha_hora')->implode("\n -"),
+                                                ];
+                                            });
+                                    @endphp
 
-                        <div class="d-flex flex-wrap align-items-center">
-                            @foreach ($teclasAgrupadas as $tecla => $data)
-                                <span class="badge badge-secondary mr-1" data-toggle="tooltip" data-placement="top"
-                                    title="{{ $data['fechas'] }}">
-                                    {{ $tecla }} ({{ $data['count'] }})
-                                </span>
-                                @if (!$loop->last)
-                                    <span class="mx-1">-</span>
-                                @endif
-                            @endforeach
+                                    <div class="d-flex flex-wrap align-items-center">
+                                        @foreach ($teclasAgrupadas as $tecla => $data)
+                                            <span class="badge badge-secondary mr-1" data-toggle="tooltip"
+                                                data-placement="top" title="{{ $data['fechas'] }}">
+                                                {{ $tecla }} ({{ $data['count'] }})
+                                            </span>
+                                            @if (!$loop->last)
+                                                <span class="mx-1">-</span>
+                                            @endif
+                                        @endforeach
 
-                            @if ($teclasAgrupadas->isEmpty())
-                                <span class="text-muted">—</span>
-                            @endif
-                        </div>
-                    </td>
+                                        @if ($teclasAgrupadas->isEmpty())
+                                            <span class="text-muted">—</span>
+                                        @endif
+                                    </div>
+                                </td>
 
-                    @section('javascript')
-                        <script>
-                            $(function() {
-                                $('[data-toggle="tooltip"]').tooltip({
-                                    html: true, // permite saltos de línea en el tooltip
-                                })
-                            });
-                        </script>
-                    @endsection
+                                @section('javascript')
+                                    <script>
+                                        $(function() {
+                                            $('[data-toggle="tooltip"]').tooltip({
+                                                html: true, // permite saltos de línea en el tooltip
+                                            })
+                                        });
+                                    </script>
+                                @endsection
 
-                </tr>
+                            </tr>
+                        @else
+                            <tr style="background-color: #f8d7da; color: #721c24;">
+                                {{-- <tr class="bg-danger text-white"> --}}
+                                <td>{{ $prueba->titulo }}</td>
+                                <td>{{ $prueba->tipo }}</td>
+                                <td colspan="6">No Presentado</td>
+                            </tr>
+                        @endif
+                    @endif
+                @endforeach
             @endforeach
         </tbody>
 

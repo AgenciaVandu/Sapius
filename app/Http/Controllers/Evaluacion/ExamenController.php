@@ -298,8 +298,11 @@ class ExamenController extends Controller
 
         public function listaResultados($inscripcion_id)
         {
+            $inscripcion  =  Inscripcion::find($inscripcion_id);
+            $curso = CursosCurso::find($inscripcion->CursoProgramado->curso_id);
+            $lecciones = $curso->lecciones;
             $examenes = Examen::with('Prueba')->where('inscripcion_id',$inscripcion_id)->get();
-            return view('admin.registro.resultados')->with('examenes',$examenes);
+            return view('admin.registro.resultados')->with('examenes',$examenes,)->with('lecciones',$lecciones);
         }
 
 

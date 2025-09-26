@@ -20,35 +20,44 @@
 @endsection
 
 @section('content')
-@foreach ($lecciones as $leccion)
-    @foreach ($leccion->pruebas as $pruebas)
-        Examen ID: {{ $pruebas->id }}
-       <br> {{ $pruebas->titulo }}
-    @endforeach
-    <br>------- <br>
-@endforeach
     <div>
-        <table class="table table-striped table-xl text-center" id="dataTable">
+        <table class="table table-striped table-md text-center" id="dataTable" style="table-layout: fixed; width: 100%;">
             <thead class="thead-light">
                 <tr>
-                    <th>Examen</th>
-                    <th>Tipo</th>
-                    <th>Total Preguntas</th>
-                    <th>Correctas</th>
-                    <th>Puntaje final</th>
+                    <th style="width:50%;">Examen</th>
+                    <th style="width:25%;">Tipo</th>
+                    <th style="width:25%;">Total Preguntas</th>
+                    <th style="width:25%;">Correctas</th>
+                    <th style="width:25%;">Puntaje final</th>
                 </tr>
             </thead>
 
             <tbody>
-                @foreach ($examenes as $e)
-                    <tr>
-                        <td>{{ $e->prueba_id }}{{ $e->Prueba->titulo }}</td>
-                        <td>{{ $e->Prueba->tipo }}</td>
-                        <td>{{ $e->total_preguntas }}</td>
-                        <td>{{ $e->total_correctas }}</td>
-                        <td>{{ $e->score_total }}</td>
-                    </tr>
+                @foreach ($lecciones as $leccion)
+                    @foreach ($leccion->pruebas as $prueba)
+                        @if ($prueba->activo === 'si')
+                            @php
+                                $examen = $examenes->firstWhere('prueba_id', $prueba->id);
+                            @endphp
+                            @if ($examen)
+                                <tr>
+                                    <td>{{ $examen->Prueba->titulo }}</td>
+                                    <td>{{ $examen->Prueba->tipo }}</td>
+                                    <td>{{ $examen->total_preguntas }}</td>
+                                    <td>{{ $examen->total_correctas }}</td>
+                                    <td>{{ $examen->score_total }}</td>
+                                </tr>
+                            @else
+                                <tr style="background-color: #f8d7da; color: #721c24;">
+                                    <td>{{ $prueba->titulo }}</td>
+                                    <td>{{ $prueba->tipo }}</td>
+                                    <td colspan="3">No Presentado</td>
+                                </tr>
+                            @endif
+                        @endif
+                    @endforeach
                 @endforeach
+
             </tbody>
 
             <tfoot class="thead-light">
