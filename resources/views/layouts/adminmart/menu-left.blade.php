@@ -34,8 +34,13 @@
                             aria-expanded="false"><i data-feather="plus" class="feather-icon"></i><span
                                 class="hide-menu">Agregar</span></a></li>
 
+
+                    <li class="sidebar-item"> <a class="sidebar-link" href="{{ URL::route('cursos.copy') }}"
+                            aria-expanded="false"><i data-feather="plus" class="feather-icon"></i><span
+                                class="hide-menu">Copiar</span></a></li>
+
                     <li class="list-divider"></li>
-                    <!-- Adminisración de Cursos-->
+                    <!-- Adminisración de Pagina-->
                     <li class="nav-small-cap"><span class="hide-menu">Configuraciones</span></li>
                     <li class="sidebar-item"> <a class="sidebar-link" href="{{ route('admin.configuracion.index') }}"
                             aria-expanded="false"><i data-feather="airplay" class="feather-icon"></i><span

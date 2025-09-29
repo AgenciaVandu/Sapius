@@ -193,4 +193,47 @@ class CursoController extends Controller
         dd($curso->id);
         return view('checkout', compact('curso'));
     }
+
+
+    public function copyIndex()
+    {
+        $cursos = Curso::all();
+        return view('cursos.copy-index',compact('cursos'));
+    }
+
+    public function copyCreate(Request $request)
+    {
+        $cursoOriginal = Curso::find($request->curso_id);
+
+        $curso = new Curso;
+
+        $curso->user_id = auth()->user()->id;
+        $curso->titulo = $cursoOriginal->titulo . ' (Copia)';
+        $curso->slug = $cursoOriginal->slug . '-copia-' . time();
+        $curso->descripcion = $cursoOriginal->descripcion;
+        $curso->imagen = $cursoOriginal->imagen;
+        $curso->activo = "si";
+        $curso->save();
+
+        /* dd($cursoOriginal->Lecciones); */
+        // Copiar las lecciones
+        if (!empty($cursoOriginal->Lecciones) && is_iterable($cursoOriginal->Lecciones)) {
+            foreach ($cursoOriginal->Lecciones as $leccionOriginal) {
+            $leccion = $leccionOriginal->replicate();
+            $leccion->curso_id = $curso->id;
+            $leccion->save();
+
+            // Validar y copiar lecciones hijas
+            $leccionesHijas = $cursoOriginal->Lecciones->where('leccion_id', $leccionOriginal->id);
+            foreach ($leccionesHijas as $leccionHijaOriginal) {
+                $leccionHija = $leccionHijaOriginal->replicate();
+                $leccionHija->curso_id = $curso->id;
+                $leccionHija->leccion_id = $leccion->id; // Asignar el nuevo id de la lección padre
+                $leccionHija->save();
+            }
+            }
+        }
+
+        return redirect()->route(Auth::user()->rol[0]->slug.'.cursos.index')->with('success', 'El curso ha sido copiado correctamente');
+    }
 }

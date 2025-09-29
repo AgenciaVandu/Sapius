@@ -16,6 +16,7 @@ use App\ManageableGuiaNutrition;
 use App\ManageableSimulatorMedicine;
 use App\ManageableSimulatorNutrition;
 use App\Models\Cursos\Category;
+use App\Models\Cursos\Curso;
 use App\Models\Landing\Pride;
 use App\Models\Landing\Slide;
 use App\Models\Landing\Teacher;
@@ -198,6 +199,12 @@ Route::group(['middleware' => ['admin','restrict.mobile'],'prefix' => 'admin'], 
     Route::get('/users/pase/{file}', 'UserController@pase')->name('admin.pase');
     Route::get('/users/documento/{file}', 'UserController@documento')->name('admin.documento');
 
+
+    Route::get('/pruebastest',function(){
+        $curso = Curso::find(5);
+        dd($curso->Lecciones);
+    });
+
     // Cursos
     Route::get('/cursos', 'Cursos\CursoController@index')->name('admin.cursos.index');
     Route::get('/cursos/create', 'Cursos\CursoController@create')->name('cursos.create');
@@ -209,6 +216,8 @@ Route::group(['middleware' => ['admin','restrict.mobile'],'prefix' => 'admin'], 
     Route::post('/cursos/activate', 'Cursos\CursoController@activate')->name('cursos.activate');//{id}
     Route::get('/cursos/getall/{active}', 'Cursos\CursoController@getAll')->name('admin.gcu');
     Route::get('/cursos/image/{file}', 'Cursos\CursoController@cursoPicture')->name('admin.cursos.image');
+    Route::get('/cursos/copy', 'Cursos\CursoController@copyIndex')->name('cursos.copy');
+    Route::post('/cursos/copy/create', 'Cursos\CursoController@copyCreate')->name('cursos.copy.create');
 
 
     // Lecciones
