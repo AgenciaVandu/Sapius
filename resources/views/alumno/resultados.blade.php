@@ -40,7 +40,12 @@
                                 $examen = $examenes->firstWhere('prueba_id', $prueba->id);
                             @endphp
                             @if ($examen)
-                                <tr>
+                                <tr
+                                    style="
+                                @if ($examen->score_total < 1200) background-color: #FFCCCC; color: #a94442;
+                                @elseif($examen->score_total >= 1200)
+                                    background-color: #D4EDDA; color: #155724; @endif
+                            ">
                                     <td>{{ $examen->Prueba->titulo }}</td>
                                     <td>{{ $examen->Prueba->tipo }}</td>
                                     <td>{{ $examen->total_preguntas }}</td>
@@ -48,7 +53,7 @@
                                     <td>{{ $examen->score_total }}</td>
                                 </tr>
                             @else
-                                <tr style="background-color: #f8d7da; color: #721c24;">
+                                <tr style="background-color: #FFFF8A; color: #948503;">
                                     <td>{{ $prueba->titulo }}</td>
                                     <td>{{ $prueba->tipo }}</td>
                                     <td colspan="3">No Presentado</td>

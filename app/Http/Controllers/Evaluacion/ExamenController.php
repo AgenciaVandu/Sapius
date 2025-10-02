@@ -302,7 +302,7 @@ class ExamenController extends Controller
             $curso = CursosCurso::find($inscripcion->CursoProgramado->curso_id);
             $lecciones = $curso->lecciones;
             $examenes = Examen::with('Prueba')->where('inscripcion_id',$inscripcion_id)->get();
-            return view('admin.registro.resultados')->with('examenes',$examenes,)->with('lecciones',$lecciones);
+            return view('admin.registro.resultados')->with('examenes',$examenes,)->with('lecciones',$lecciones)->with('inscripcion',$inscripcion);
         }
 
 

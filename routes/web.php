@@ -200,10 +200,10 @@ Route::group(['middleware' => ['admin','restrict.mobile'],'prefix' => 'admin'], 
     Route::get('/users/documento/{file}', 'UserController@documento')->name('admin.documento');
 
 
-    Route::get('/pruebastest',function(){
+   /*  Route::get('/pruebastest',function(){
         $curso = Curso::find(5);
         dd($curso->Lecciones);
-    });
+    }); */
 
     // Cursos
     Route::get('/cursos', 'Cursos\CursoController@index')->name('admin.cursos.index');
