@@ -10,11 +10,14 @@ use App\Models\Cursos\Prueba;
 use App\Models\Cursos\Pregunta;
 use App\Models\Cursos\Respuesta;
 use App\Http\Controllers\Registro\CursoProgramadoController as Curso;
+use App\Http\Controllers\Registro\CursoProgramadoController;
 use App\Mail\ExamenFinalizado;
 use App\Models\Cursos\Curso as CursosCurso;
+use App\Models\Registro\CursoProgramado;
 use App\Models\Registro\Inscripcion;
 use Barryvdh\DomPDF\PDF;
 use Mail;
+use ZipArchive;
 
 class ExamenController extends Controller
 {
@@ -392,4 +395,76 @@ class ExamenController extends Controller
 
             return $pdf->download($inscripcion->User->getNombreCompletoAttribute().' - '.date('Y-m-d H:i:s').'.pdf');
         }
+
+        public function getInscritos($curso_id,$active='si')
+        {
+            //$curso = Inscripcion::with('Inscritos')->where('curso_programado_id',$curso_id)->first();
+            $curso = CursoProgramado::with(['Inscritos' => function($query)use($active){ $query->where('inscripciones.aceptado',$active); } ])->find($curso_id);
+            //$curso = CursoProgramado::with('Inscritos')->find($curso_id);
+            //dd($curso);
+            return $curso->Inscritos->toJson();
+        }
+
+       public function exportAllStudentResults($curso_id)
+{
+    $inscritos = $this->getInscritos($curso_id,'si');
+    $inscritos = json_decode($inscritos);
+    $array_inscritos_id = [];
+
+    foreach($inscritos as $inscrito){
+        $inscripcion = Inscripcion::where('user_id',$inscrito->id)
+            ->where('curso_programado_id',$curso_id)
+            ->first();
+
+        if($inscripcion){
+            $array_inscritos_id[] = $inscripcion->id;
+        }
+    }
+
+    // Carpeta temporal para los PDFs
+    $tempPath = storage_path('app/temp_reports');
+    if (!file_exists($tempPath)) {
+        mkdir($tempPath, 0777, true);
+    }
+
+    // Generar PDFs individuales
+    $pdfFiles = [];
+    foreach($array_inscritos_id as $inscripcion_id){
+        $inscripcion = Inscripcion::find($inscripcion_id);
+        $curso = CursosCurso::with('lecciones')->find($inscripcion->CursoProgramado->curso_id);
+        $examenes = Examen::with('Prueba')->where('inscripcion_id', $inscripcion_id)->get();
+
+        $pdf = \PDF::loadView('alumno.exportresultados', [
+            'examenes' => $examenes,
+            'lecciones' => $curso->lecciones,
+            'inscripcion' => $inscripcion
+        ]);
+
+        $fileName = $inscripcion->User->getNombreCompletoAttribute().' - '.date('Y-m-d').'.pdf';
+        $filePath = $tempPath . '/' . $fileName;
+
+        $pdf->save($filePath); // Guardamos en carpeta temporal
+        $pdfFiles[] = $filePath;
+    }
+
+    // Crear el ZIP
+    $zipFileName = 'ResultadosCurso-'.$curso_id.'-'.date('Y-m-d').'.zip';
+    $zipPath = storage_path('app/'.$zipFileName);
+
+    $zip = new ZipArchive;
+    if ($zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE) === TRUE) {
+        foreach($pdfFiles as $file){
+            $zip->addFile($file, basename($file));
+        }
+        $zip->close();
+    }
+
+    // Eliminar PDFs temporales
+    foreach($pdfFiles as $file){
+        unlink($file);
+    }
+
+    // Retornar descarga del ZIP
+    return response()->download($zipPath)->deleteFileAfterSend(true);
+}
 }

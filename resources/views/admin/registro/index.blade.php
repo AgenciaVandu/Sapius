@@ -32,6 +32,9 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-body">
+                    <div class="d-flex justify-content-end mb-3">
+                        <a href="{{ route('admin.exportAllResults', ['curso_id' => $curso_programado->id]) }}" class="btn btn-primary">Exportar Calificaciones del Grupo</a>
+                    </div>
                     <table class="table table-striped table-sm" id="dataTable">
                         <thead class="thead-light">
                             <tr>

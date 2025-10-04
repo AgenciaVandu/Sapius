@@ -316,6 +316,7 @@ Route::group(['middleware' => ['admin','restrict.mobile'],'prefix' => 'admin'], 
     Route::post('/examen/finalizar', 'Evaluacion\ExamenController@cambiarEstadoFinalizado')->name('examen.cambiarEstadoFinalizado');
     Route::post('/examen/retro', 'Evaluacion\ExamenController@cambiarEstadoRetro')->name('examen.cambiarEstadoRetro');
     Route::get('/exportCalificaciones/{inscripcion_id}', 'Evaluacion\ExamenController@exportReport')->name('admin.exportCalificaciones');
+    Route::get('/exportAllResults/{curso_id}', 'Evaluacion\ExamenController@exportAllStudentResults')->name('admin.exportAllResults');
 });
 
 Route::group(['middleware' =>['instructor','restrict.mobile'],'prefix' => 'instructor'], function() {

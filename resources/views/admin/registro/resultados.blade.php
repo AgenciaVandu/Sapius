@@ -4,7 +4,7 @@
     {{-- {{ $inscripcion->User }} --}}
 
     {{-- boton para exportar a pdf --}}
-    <div class="mb-3">
+    <div class="d-flex justify-content-end mb-3">
         <a href="{{ route('admin.exportCalificaciones', $inscripcion->id) }}" class="btn btn-primary">
             Exportar a PDF
         </a>
