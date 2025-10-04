@@ -1,7 +1,14 @@
 @extends('layouts.adminmart.detalle')
 
 @section('content')
-    {{ $inscripcion->User }}
+    {{-- {{ $inscripcion->User }} --}}
+
+    {{-- boton para exportar a pdf --}}
+    <div class="mb-3">
+        <a href="{{ route('admin.exportCalificaciones', $inscripcion->id) }}" class="btn btn-primary">
+            Exportar a PDF
+        </a>
+    </div>
     <table class="table table-striped table-xl text-center" id="dataTable">
         <thead class="thead-light">
             <tr>

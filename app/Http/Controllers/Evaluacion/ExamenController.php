@@ -13,6 +13,7 @@ use App\Http\Controllers\Registro\CursoProgramadoController as Curso;
 use App\Mail\ExamenFinalizado;
 use App\Models\Cursos\Curso as CursosCurso;
 use App\Models\Registro\Inscripcion;
+use Barryvdh\DomPDF\PDF;
 use Mail;
 
 class ExamenController extends Controller
@@ -363,5 +364,32 @@ class ExamenController extends Controller
             $examenes = $conPrueba->merge($sinPrueba);
 
             return view('alumno.resultados')->with('examenes', $examenes)->with('lecciones', $lecciones);
+        }
+
+        public function exportReport($inscripcion_id)
+        {
+            $inscripcion = Inscripcion::find($inscripcion_id);
+
+            // Eager load lecciones and pruebas to reduce queries
+            $curso = CursosCurso::with('lecciones')->find($inscripcion->CursoProgramado->curso_id);
+
+            // Eager load Prueba for all examenes in a single query
+            $examenes = Examen::with('Prueba')
+                ->where('inscripcion_id', $inscripcion_id)
+                ->get();
+
+            // If you need to separate conPrueba/sinPrueba, you can filter in-memory
+            // $conPrueba = $examenes->filter(fn($e) => $e->Prueba !== null);
+            // $sinPrueba = $examenes->filter(fn($e) => $e->Prueba === null);
+
+            // Render PDF view with eager loaded data
+            /* return view('alumno.exportresultados')->with('examenes', $examenes)->with('lecciones', $curso->lecciones)->with('inscripcion', $inscripcion); */
+            $pdf = \PDF::loadView('alumno.exportresultados', [
+                'examenes' => $examenes,
+                'lecciones' => $curso->lecciones,
+                'inscripcion' => $inscripcion
+            ]);
+
+            return $pdf->download('reporte_resultados.pdf');
         }
 }

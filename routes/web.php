@@ -198,6 +198,7 @@ Route::group(['middleware' => ['admin','restrict.mobile'],'prefix' => 'admin'], 
     Route::get('/users/image/{file}', 'UserController@userPicture')->name('admin.image');
     Route::get('/users/pase/{file}', 'UserController@pase')->name('admin.pase');
     Route::get('/users/documento/{file}', 'UserController@documento')->name('admin.documento');
+    
 
 
    /*  Route::get('/pruebastest',function(){
@@ -314,6 +315,7 @@ Route::group(['middleware' => ['admin','restrict.mobile'],'prefix' => 'admin'], 
 
     Route::post('/examen/finalizar', 'Evaluacion\ExamenController@cambiarEstadoFinalizado')->name('examen.cambiarEstadoFinalizado');
     Route::post('/examen/retro', 'Evaluacion\ExamenController@cambiarEstadoRetro')->name('examen.cambiarEstadoRetro');
+    Route::get('/exportCalificaciones/{inscripcion_id}', 'Evaluacion\ExamenController@exportReport')->name('admin.exportCalificaciones');
 });
 
 Route::group(['middleware' =>['instructor','restrict.mobile'],'prefix' => 'instructor'], function() {
