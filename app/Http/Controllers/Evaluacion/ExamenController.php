@@ -390,6 +390,6 @@ class ExamenController extends Controller
                 'inscripcion' => $inscripcion
             ]);
 
-            return $pdf->download('reporte_resultados.pdf');
+            return $pdf->download($inscripcion->User->getNombreCompletoAttribute().' - '.date('Y-m-d H:i:s').'.pdf');
         }
 }

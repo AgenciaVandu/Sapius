@@ -12,6 +12,21 @@
             margin: 0;
         }
 
+        /* Marca de agua */
+        .watermark {
+            position: fixed;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-20deg);
+            opacity: 0.10;
+            font-size: 8em;
+            color: #002146;
+            pointer-events: none;
+            z-index: 9999;
+            white-space: nowrap;
+            user-select: none;
+        }
+
         header,
         footer {
             width: 100%;
@@ -124,6 +139,7 @@
 </head>
 
 <body>
+    <div class="watermark">SAPIUS</div>
     <header>
         <img src="https://sapius.com.mx/img/logo-sapius.png" alt="Logo">
         <br>
@@ -136,9 +152,14 @@
             <strong>Folio: </strong> {{ $inscripcion->User->folio ?? $inscripcion->User->id }}
             </div>
             <div>
-            <strong>Curso: </strong> {{ $inscripcion->CursoProgramado->Curso->titulo }} 
+            <strong>Universidad de Procedencia: </strong> {{ $inscripcion->User->universidad_procedencia ?? 'N/A' }}
+            </div>
+            <div>
+            <strong>Curso: </strong> {{ $inscripcion->CursoProgramado->Curso->titulo }}
             <br>
-            <span style="color: #b0c4de;">({{ $inscripcion->CursoProgramado->identificador }})</span>
+            <span style="color: #b0c4de;">{{ $inscripcion->CursoProgramado->identificador }}</span>
+            <br>
+            <strong>Reporte generado el: </strong> {{ \Carbon\Carbon::now()->format('d/m/Y H:i:s') }}
             </div>
         </div>
     </header>
