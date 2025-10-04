@@ -24,7 +24,7 @@
 @endsection
 
 @section('content')
-    <div>
+    <div class="d-flex justify-content-center">
         <div class="legend-container" style="display: flex; gap: 10px; margin-bottom: 20px;">
             <div class="legend-box legend-nopresentado" style="background-color: #FFFF8A; color: #948503; padding: 10px; border-radius: 5px;">
                 No presentado: El examen no ha sido contestado.
