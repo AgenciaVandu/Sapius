@@ -363,7 +363,7 @@ class ExamenController extends Controller
 
             $examenes = $conPrueba->merge($sinPrueba);
 
-            return view('alumno.resultados')->with('examenes', $examenes)->with('lecciones', $lecciones);
+            return view('alumno.resultados')->with('examenes', $examenes)->with('lecciones', $lecciones)->with('inscripcion', $inscripcion);
         }
 
         public function exportReport($inscripcion_id)

@@ -198,7 +198,7 @@ Route::group(['middleware' => ['admin','restrict.mobile'],'prefix' => 'admin'], 
     Route::get('/users/image/{file}', 'UserController@userPicture')->name('admin.image');
     Route::get('/users/pase/{file}', 'UserController@pase')->name('admin.pase');
     Route::get('/users/documento/{file}', 'UserController@documento')->name('admin.documento');
-    
+
 
 
    /*  Route::get('/pruebastest',function(){
@@ -483,6 +483,7 @@ Route::group(['middleware' =>['alumno','restrict.mobile'],'prefix' => 'alumno'],
     Route::get('/calendario', 'UserController@calendario')->name('alumno.calendario');
 
     Route::get('/evaluaciones/resultados/{inscripcion_id}', 'Evaluacion\ExamenController@listaResultadosAlumno')->name('alumno.curso.lista-resultados');//{id}
+    Route::get('/exportCalificaciones/{inscripcion_id}', 'Evaluacion\ExamenController@exportReport')->name('alumno.exportCalificaciones');
 
 
 

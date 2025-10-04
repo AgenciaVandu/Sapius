@@ -7,7 +7,11 @@
                 <h3 class="page-title text-truncate text-dark font-weight-medium mb-1">{{-- {{ $curso_programado->Curso->titulo }} --}}
                 </h3>
                 <div class="d-flex align-items-center">
-
+                    <div class="mb-3">
+                        <a href="{{ route('alumno.exportCalificaciones', $inscripcion->id) }}" class="btn btn-primary">
+                            Exportar a PDF
+                        </a>
+                    </div>
                 </div>
             </div>
             <div class="col-5 align-self-center">
@@ -20,6 +24,19 @@
 @endsection
 
 @section('content')
+    <div>
+        <div class="legend-container" style="display: flex; gap: 10px; margin-bottom: 20px;">
+            <div class="legend-box legend-nopresentado" style="background-color: #FFFF8A; color: #948503; padding: 10px; border-radius: 5px;">
+                No presentado: El examen no ha sido contestado.
+            </div>
+            <div class="legend-box legend-bajo" style="background-color: #FFCCCC; color: #a94442; padding: 10px; border-radius: 5px;">
+                Deficiencia en puntaje, tema o contenido.
+            </div>
+            <div class="legend-box legend-alto" style="background-color: #D4EDDA; color: #155724; padding: 10px; border-radius: 5px;">
+                Puntaje satisfactorio, demuestra buen dominio del contenido.
+            </div>
+        </div>
+    </div>
     <div>
         <table class="table table-striped table-md text-center" id="dataTable" style="table-layout: fixed; width: 100%;">
             <thead class="thead-light">
