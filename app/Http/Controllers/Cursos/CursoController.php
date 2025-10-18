@@ -218,10 +218,44 @@ class CursoController extends Controller
         /* dd($cursoOriginal->Lecciones); */
         // Copiar las lecciones
         if (!empty($cursoOriginal->Lecciones) && is_iterable($cursoOriginal->Lecciones)) {
+
+            // Closure para copiar pruebas -> preguntas -> respuestas de una lección origen a una lección destino
+            $copyPruebas = function ($leccionOrigen, $leccionDestino) use ($curso) {
+            if (!empty($leccionOrigen->Pruebas) && is_iterable($leccionOrigen->Pruebas)) {
+                foreach ($leccionOrigen->Pruebas as $pruebaOriginal) {
+                $prueba = $pruebaOriginal->replicate();
+                $prueba->curso_id = $curso->id;
+                $prueba->leccion_id = $leccionDestino->id;
+                $prueba->save();
+
+                // Copiar preguntas de la prueba
+                if (!empty($pruebaOriginal->Preguntas) && is_iterable($pruebaOriginal->Preguntas)) {
+                    foreach ($pruebaOriginal->Preguntas as $preguntaOriginal) {
+                    $pregunta = $preguntaOriginal->replicate();
+                    $pregunta->prueba_id = $prueba->id;
+                    $pregunta->save();
+
+                    // Copiar respuestas de la pregunta
+                    if (!empty($preguntaOriginal->Respuestas) && is_iterable($preguntaOriginal->Respuestas)) {
+                        foreach ($preguntaOriginal->Respuestas as $respuestaOriginal) {
+                        $respuesta = $respuestaOriginal->replicate();
+                        $respuesta->pregunta_id = $pregunta->id;
+                        $respuesta->save();
+                        }
+                    }
+                    }
+                }
+                }
+            }
+            };
+
             foreach ($cursoOriginal->Lecciones as $leccionOriginal) {
             $leccion = $leccionOriginal->replicate();
             $leccion->curso_id = $curso->id;
             $leccion->save();
+
+            // Copiar pruebas/preguntas/respuestas de la lección padre
+            $copyPruebas($leccionOriginal, $leccion);
 
             // Validar y copiar lecciones hijas
             $leccionesHijas = $cursoOriginal->Lecciones->where('leccion_id', $leccionOriginal->id);
@@ -230,6 +264,9 @@ class CursoController extends Controller
                 $leccionHija->curso_id = $curso->id;
                 $leccionHija->leccion_id = $leccion->id; // Asignar el nuevo id de la lección padre
                 $leccionHija->save();
+
+                // Copiar pruebas/preguntas/respuestas de la lección hija
+                $copyPruebas($leccionHijaOriginal, $leccionHija);
             }
             }
         }
