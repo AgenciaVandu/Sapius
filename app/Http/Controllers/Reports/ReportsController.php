@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Reports;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Registro\Descuento;
 use App\Models\Registro\Inscripcion;
 use Openpay\Data\Openpay;
+use PhpOffice\PhpSpreadsheet\Calculation\Financial\Coupons;
 
 class ReportsController extends Controller
 {
@@ -22,6 +24,7 @@ class ReportsController extends Controller
 
     public function showInscription($id){
         $inscripcion = Inscripcion::findOrFail($id);
+        $descuento = Descuento::where('clave',$inscripcion->clave)->first();
         if($inscripcion->referencia == "Cupon de descuento"){
             $charge = Inscripcion::where('referencia','Cupon de descuento')->first();
         }else{
@@ -36,6 +39,6 @@ class ReportsController extends Controller
             $charge = $openpay->charges->get($inscripcion->referencia);
         }
         /* dd($charge); */
-        return view('admin.reports.showInscription', ['charge' => $charge,'inscripcion' => $inscripcion]);
+        return view('admin.reports.showInscription', ['charge' => $charge,'inscripcion' => $inscripcion, 'descuento' => $descuento]);
     }
 }

@@ -24,9 +24,74 @@
             <div class="card shadow-sm">
                 <div class="container py-4">
                     @if ($inscripcion->referencia == 'Cupon de descuento')
-                        <div class="alert alert-info" role="alert">
-                            Esta inscripción fue realizada mediante un cupón de descuento. No hay detalles de cargo
-                            disponibles.
+                        <div class="card shadow-sm border-0">
+                            <div class="card-header bg-primary text-white">
+                                <h5 class="mb-0">Detalles del Cargo (Cupon de descuento)</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <strong>ID Transacción:</strong>
+                                        <div class="text-muted">{{ $inscripcion->id ?? '-' }}</div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <strong>Monto:</strong>
+                                        <div class="text-success">
+                                            ${{ number_format($inscripcion->CursoProgramado->precio - $descuento->descuento, 2) }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <strong>Estado:</strong>
+                                        <span
+                                            class="badge {{ $inscripcion->aceptado == 'si' ? 'badge-success' : 'badge-warning' }}">
+                                            {{ $inscripcion->aceptado == 'si' ? 'Aceptado' : 'Pendiente' }}
+                                        </span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <strong>Método de pago:</strong>
+                                        <div class="text-muted">{{ $inscripcion->referencia ?? '-' }} <strong><br>Clave:
+                                            ({{ $inscripcion->clave }}) </strong></div>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <strong>Fecha de creación:</strong>
+                                        <div class="text-muted">
+                                            {{ \Carbon\Carbon::parse($inscripcion->created_at)->format('d/m/Y H:i') }}</div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <strong>Descripción:</strong>
+                                        <div class="text-muted">{{ $inscripcion->CursoProgramado->identificador ?? '-' }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <strong>Cliente:</strong>
+                                        <div class="text-muted">
+                                            {{ $inscripcion->User->getNombreCompletoAttribute() ?? '-' }}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <strong>Email del cliente:</strong>
+                                        <div class="text-muted">{{ $inscripcion->User->email ?? '-' }}</div>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <strong>Telefono:</strong>
+                                        <div class="text-muted">{{ $inscripcion->User->telefono ?? '-' }}</div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <strong>Referencia:</strong>
+                                        <div class="text-muted">{{ $inscripcion->referencia ?? '-' }}</div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     @else
                         <div class="card shadow-sm border-0">
