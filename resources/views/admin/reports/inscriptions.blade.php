@@ -46,7 +46,7 @@
                                         {{-- <td>${{ number_format($inscription->CursoProgramado->precio, 2) ?? '-' }}</td> --}}
                                         <td>{{ $inscription->created_at ? $inscription->created_at->format('d/m/Y H:i') : '-' }}</td>
                                         <td>
-                                            <a href="{{ route('admin.reports.inscriptions.show', $inscription->referencia) }}" class="btn btn-sm btn-primary">Ver</a>
+                                            <a href="{{ route('admin.reports.inscriptions.show', $inscription->id) }}" class="btn btn-sm btn-primary">Ver</a>
                                         </td>
                                         <!-- Agrega más datos si es necesario -->
                                     </tr>

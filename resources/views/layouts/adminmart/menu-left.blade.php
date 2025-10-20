@@ -36,7 +36,7 @@
 
 
                     <li class="sidebar-item"> <a class="sidebar-link" href="{{ URL::route('cursos.copy') }}"
-                            aria-expanded="false"><i data-feather="plus" class="feather-icon"></i><span
+                            aria-expanded="false"><i data-feather="copy" class="feather-icon"></i><span
                                 class="hide-menu">Copiar</span></a></li>
 
                     <li class="list-divider"></li>

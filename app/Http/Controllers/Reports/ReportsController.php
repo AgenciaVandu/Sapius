@@ -21,7 +21,10 @@ class ReportsController extends Controller
     }
 
     public function showInscription($id){
-
+        $inscripcion = Inscripcion::findOrFail($id);
+        if($inscripcion->referencia == "Cupon de descuento"){
+            $charge = Inscripcion::where('referencia','Cupon de descuento')->first();
+        }else{
         /* dd(config('openpay.sandbox')); */
         if (config('openpay.sandbox') == false) {
             Openpay::setProductionMode(true);
@@ -29,8 +32,10 @@ class ReportsController extends Controller
 
         $openpay = Openpay::getInstance(config('openpay.merchant_id'), config('openpay.private_key'), config('openpay.currency'), config('openpay.ip'));
 
-        $charge = $openpay->charges->get($id);
+
+            $charge = $openpay->charges->get($inscripcion->referencia);
+        }
         /* dd($charge); */
-        return view('admin.reports.showInscription', ['charge' => $charge]);
+        return view('admin.reports.showInscription', ['charge' => $charge,'inscripcion' => $inscripcion]);
     }
 }
