@@ -200,12 +200,6 @@ Route::group(['middleware' => ['admin','restrict.mobile'],'prefix' => 'admin'], 
     Route::get('/users/documento/{file}', 'UserController@documento')->name('admin.documento');
 
 
-
-   /*  Route::get('/pruebastest',function(){
-        $curso = Curso::find(5);
-        dd($curso->Lecciones);
-    }); */
-
     // Cursos
     Route::get('/cursos', 'Cursos\CursoController@index')->name('admin.cursos.index');
     Route::get('/cursos/create', 'Cursos\CursoController@create')->name('cursos.create');
@@ -310,6 +304,11 @@ Route::group(['middleware' => ['admin','restrict.mobile'],'prefix' => 'admin'], 
     Route::get('/curso/{curso_id}/{active?}', 'Registro\CursoProgramadoController@getInscritos')->name('admin.cursos.get-inscritos');
     Route::post('/curso/destroy', 'Registro\CursoProgramadoController@destroyInscritos')->name('curso.destroy');//{id}
     Route::post('/curso/activate', 'Registro\CursoProgramadoController@activateInscritos')->name('curso.activate');//{id}
+    Route::get('/curso/copy/users/{curso_id}', 'Registro\CursoProgramadoController@copyUsersForm')->name('admin.copy.users.form');//{id}
+    Route::get('/admin/cursos/{id}/inscritos', 'Registro\CursoProgramadoController@getAlumnosByCurso')->name('cursos.inscritos');
+    Route::post('/curso-programado/{id}/agregar-alumnos', 'Registro\CursoProgramadoController@agregarAlumnos')->name('curso_programado.agregarAlumnos');
+
+
 
     Route::get('/evaluacion/resultados/{inscripcion_id}', 'Evaluacion\ExamenController@listaResultados')->name('admin.curso.lista-resultados');//{id}
 
@@ -317,6 +316,8 @@ Route::group(['middleware' => ['admin','restrict.mobile'],'prefix' => 'admin'], 
     Route::post('/examen/retro', 'Evaluacion\ExamenController@cambiarEstadoRetro')->name('examen.cambiarEstadoRetro');
     Route::get('/exportCalificaciones/{inscripcion_id}', 'Evaluacion\ExamenController@exportReport')->name('admin.exportCalificaciones');
     Route::get('/exportAllResults/{curso_id}', 'Evaluacion\ExamenController@exportAllStudentResults')->name('admin.exportAllResults');
+
+
 });
 
 Route::group(['middleware' =>['instructor','restrict.mobile'],'prefix' => 'instructor'], function() {

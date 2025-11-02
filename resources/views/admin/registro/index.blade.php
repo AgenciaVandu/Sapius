@@ -33,7 +33,12 @@
             <div class="card">
                 <div class="card-body">
                     <div class="d-flex justify-content-end mb-3">
-                        <a href="{{ route('admin.exportAllResults', ['curso_id' => $curso_programado->id]) }}" class="btn btn-primary">Exportar Calificaciones del Grupo</a>
+                        <div class="mr-2">
+                            <a href="{{ route('admin.copy.users.form', ['curso_id' => $curso_programado->id]) }}" class="btn btn-primary">Incribir alumnos de curso existente</a>
+                        </div>
+                        <div>
+                            <a href="{{ route('admin.exportAllResults', ['curso_id' => $curso_programado->id]) }}" class="btn btn-primary">Exportar Calificaciones del Grupo</a>
+                        </div>
                     </div>
                     <table class="table table-striped table-sm" id="dataTable">
                         <thead class="thead-light">

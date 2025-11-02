@@ -8,6 +8,7 @@ class Inscripcion extends Model
 {
     protected $table = "inscripciones";
 
+
     public function Inscritos(){
         return $this->hasMany('App\User','id','user_id');
     }

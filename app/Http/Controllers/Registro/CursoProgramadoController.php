@@ -346,4 +346,54 @@ class CursoProgramadoController extends Controller
     }
 
 
+    public function copyUsersForm($id_curso)
+    {
+        $curso_programado = CursoProgramado::find($id_curso);
+
+        //todos los cursos programados activos menos el actual
+        $otros_cursos = CursoProgramado::where('activo','si')
+            ->where('id','<>',$id_curso)
+            ->with('Curso')
+            ->get();
+
+        /* dd($otros_cursos); */
+        return view('admin.registro.copy-users-form')->with('curso_programado',$curso_programado)->with('otros_cursos',$otros_cursos);
+    }
+
+
+    public function getAlumnosByCurso($id_curso)
+    {
+        $curso = CursoProgramado::with('Inscritos')->find($id_curso);
+
+        if (!$curso) {
+            return response()->json(['error' => 'Curso no encontrado'], 404);
+        }
+
+        return response()->json($curso->Inscritos); // aquí usamos tu relación
+    }
+
+
+    public function agregarAlumnos(Request $request, $id)
+    {
+
+
+        $cursoProgramado = CursoProgramado::findOrFail($id);
+
+
+        // Agregar los alumnos seleccionados al curso programado
+        foreach ($request->alumnos as $alumnoId) {
+            $inscripcion = New Inscripcion();
+            $inscripcion->user_id = $alumnoId;
+            $inscripcion->curso_programado_id = $cursoProgramado->id;
+            $inscripcion->referencia = 'Inscripción agregada por administrador';
+            $inscripcion->tipo_pago = 'Administrativo';
+            $inscripcion->clave = null;
+            $inscripcion->aceptado = 'si';
+            $inscripcion->save();
+        }
+
+        return redirect()->back()->with('success', 'Alumnos agregados correctamente al curso.');
+    }
+
+
 }
