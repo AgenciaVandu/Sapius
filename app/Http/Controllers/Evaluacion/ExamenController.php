@@ -153,7 +153,7 @@ class ExamenController extends Controller
             //dd($preguntas);
             //presentacion de las primeras preguntas
             if($examen->finalizado == "si"){
-                return  redirect()->route('home');
+                return  redirect()->route('alumno.home');
             }else{
             return view('evaluacion.prueba')
                     ->with('prueba',$prueba)

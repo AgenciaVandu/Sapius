@@ -35,6 +35,7 @@
                                 <input id="curso_programado_id" type="hidden" name="curso_programado_id"
                                     value="{{ $cp->id }}">
 
+
                                 @foreach ($cp['Curso']['Lecciones'] as $leccion)
                                     @php
                                         $fecha_inicial = $fecha_final = null;
@@ -73,7 +74,7 @@
 
                                     <tr style="border-block-start: medium solid blue;">
                                         <td>
-                                            {{ $leccion->titulo }} -{{ $leccion->id }}
+                                            {{ $leccion->titulo }}
                                             <input id="leccion_id_{{ $leccion->id }}" type="hidden"
                                                 name="leccion_id_{{ $leccion->id }}" value="{{ $leccion->id }}">
                                         </td>
@@ -100,67 +101,70 @@
                                                 value="{{ $hora_final ? substr($hora_final, 0, 5) : '' }}">
                                         </td>
                                     </tr>
+                                    {{-- {{ dd($leccion['Clases']) }} --}}
                                     @foreach ($leccion['Clases'] as $clase)
-                                        @php
-                                            $fecha_inicial = $fecha_final = null;
-                                            if ($contenido_programado) {
-                                                $contenido = collect($contenido_programado->contenido)
-                                                    ->where('id', $clase->id)
-                                                    ->first();
-                                                if (isset($contenido['fecha_inicial'])) {
-                                                    $fecha_inicial = $contenido['fecha_inicial'];
-                                                } else {
-                                                    $fecha_inicial = null;
-                                                }
+                                        @if ($clase->curso_id == $curso_original->id)
+                                            @php
+                                                $fecha_inicial = $fecha_final = null;
+                                                if ($contenido_programado) {
+                                                    $contenido = collect($contenido_programado->contenido)
+                                                        ->where('id', $clase->id)
+                                                        ->first();
+                                                    if (isset($contenido['fecha_inicial'])) {
+                                                        $fecha_inicial = $contenido['fecha_inicial'];
+                                                    } else {
+                                                        $fecha_inicial = null;
+                                                    }
 
-                                                if (isset($contenido['hora_inicial'])) {
-                                                    $hora_inicial = $contenido['hora_inicial'];
-                                                } else {
-                                                    $hora_inicial = '00:00';
-                                                }
+                                                    if (isset($contenido['hora_inicial'])) {
+                                                        $hora_inicial = $contenido['hora_inicial'];
+                                                    } else {
+                                                        $hora_inicial = '00:00';
+                                                    }
 
-                                                if (isset($contenido['fecha_final'])) {
-                                                    $fecha_final = $contenido['fecha_final'];
-                                                } else {
-                                                    $fecha_final = null;
-                                                }
+                                                    if (isset($contenido['fecha_final'])) {
+                                                        $fecha_final = $contenido['fecha_final'];
+                                                    } else {
+                                                        $fecha_final = null;
+                                                    }
 
-                                                if (isset($contenido['hora_final'])) {
-                                                    $hora_final = $contenido['hora_final'];
-                                                } else {
-                                                    $hora_final = '23:59';
+                                                    if (isset($contenido['hora_final'])) {
+                                                        $hora_final = $contenido['hora_final'];
+                                                    } else {
+                                                        $hora_final = '23:59';
+                                                    }
                                                 }
-                                            }
-                                        @endphp
-                                        <tr>
-                                            <td>
-                                                {{ $clase->titulo }}
-                                                <input id="leccion_id_{{ $clase->id }}" type="hidden"
-                                                    name="leccion_id_{{ $clase->id }}" value="{{ $clase->id }}">
-                                            </td>
-                                            <td>
-                                                <input id="fecha_inicial_{{ $clase->id }}" type="text"
-                                                    class="calendar" name="fecha_inicial_{{ $clase->id }}" required
-                                                    autocomplete="fecha_inicial_{{ $clase->id }}" autofocus
-                                                    value="@if ($fecha_inicial) {{ $fecha_inicial }} @endif">
-                                            </td>
-                                            <td>
-                                                <input id="fecha_final_{{ $clase->id }}" type="text" class="calendar"
-                                                    name="fecha_final_{{ $clase->id }}" required
-                                                    autocomplete="fecha_final_{{ $clase->id }}" autofocus
-                                                    value="@if ($fecha_final) {{ $fecha_final }} @endif">
-                                            </td>
-                                            <td>
-                                                <input type="time" name="hora_inicial_{{ $clase->id }}" required
-                                                    autocomplete="hora_inicial_{{ $clase->id }}" autofocus
-                                                    value="{{ $hora_inicial ? substr($hora_inicial, 0, 5) : '' }}">
-                                            </td>
-                                            <td>
-                                                <input type="time" name="hora_final_{{ $clase->id }}" required
-                                                    autocomplete="hora_final_{{ $clase->id }}" autofocus
-                                                    value="{{ $hora_final ? substr($hora_final, 0, 5) : '' }}">
-                                            </td>
-                                        </tr>
+                                            @endphp
+                                            <tr>
+                                                <td>
+                                                    {{ $clase->titulo }}
+                                                    <input id="leccion_id_{{ $clase->id }}" type="hidden"
+                                                        name="leccion_id_{{ $clase->id }}" value="{{ $clase->id }}">
+                                                </td>
+                                                <td>
+                                                    <input id="fecha_inicial_{{ $clase->id }}" type="text"
+                                                        class="calendar" name="fecha_inicial_{{ $clase->id }}" required
+                                                        autocomplete="fecha_inicial_{{ $clase->id }}" autofocus
+                                                        value="@if ($fecha_inicial) {{ $fecha_inicial }} @endif">
+                                                </td>
+                                                <td>
+                                                    <input id="fecha_final_{{ $clase->id }}" type="text"
+                                                        class="calendar" name="fecha_final_{{ $clase->id }}" required
+                                                        autocomplete="fecha_final_{{ $clase->id }}" autofocus
+                                                        value="@if ($fecha_final) {{ $fecha_final }} @endif">
+                                                </td>
+                                                <td>
+                                                    <input type="time" name="hora_inicial_{{ $clase->id }}" required
+                                                        autocomplete="hora_inicial_{{ $clase->id }}" autofocus
+                                                        value="{{ $hora_inicial ? substr($hora_inicial, 0, 5) : '' }}">
+                                                </td>
+                                                <td>
+                                                    <input type="time" name="hora_final_{{ $clase->id }}" required
+                                                        autocomplete="hora_final_{{ $clase->id }}" autofocus
+                                                        value="{{ $hora_final ? substr($hora_final, 0, 5) : '' }}">
+                                                </td>
+                                            </tr>
+                                        @endif
                                     @endforeach
                                 @endforeach
                                 <tr>

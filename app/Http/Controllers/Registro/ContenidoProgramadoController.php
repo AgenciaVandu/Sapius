@@ -21,7 +21,7 @@ class ContenidoProgramadoController extends Controller
             $q->with('Clases')->where('leccion_id',0);
         }])->find($request->cp_id);
 
-        //dd($curso);
+        /* dd($curso); */
         $contenido_programado = ContenidoProgramado::where('curso_programado_id',$request->cp_id)->first();
         $curso_original = Curso::find($curso->curso_id);
         return view('registro.index-contenido')
@@ -75,10 +75,10 @@ class ContenidoProgramadoController extends Controller
         $curso_original = Curso::find($curso->curso_id);
         //dd($curso);
         return view('registro.index-contenido')->with('cp',$curso)
-                                               ->with('contenido_programado',$contenido_programado)
-                                               ->with('curso_original',$curso_original)
-                                               ->with('curso',$curso)
-                                               ->with('curso_programado',$curso);
+                                            ->with('contenido_programado',$contenido_programado)
+                                            ->with('curso_original',$curso_original)
+                                            ->with('curso',$curso)
+                                            ->with('curso_programado',$curso);
     }
 
     /**

@@ -45,8 +45,8 @@
                     <!--
 @elseif (isset($videoext))
     <div style="text-align: center">
-                                    <iframe width="100%" height="360" src="{{ $videoext->ruta }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                                   </div>
+                                            <iframe width="100%" height="360" src="{{ $videoext->ruta }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                           </div>
     @endif-->
                 @else
                     @if ($leccion->imagen !== null && $leccion->imagen !== '')
@@ -66,63 +66,67 @@
                         <h4 class="card-title">Clases</h4>
                         <div class="list-group">
                             @foreach ($leccion->Clases as $item)
-                                @php
-                                    $hoy = strtotime(date('m/d/Y'));
-                                    $hora = date('H:m');
-                                    $fecha_inicial = $fecha_final = null;
-                                    if ($contenido_programado) {
-                                        $contenido = collect($contenido_programado->contenido)
-                                            ->where('id', $item->id)
-                                            ->first();
-                                        $fecha_inicial = $contenido['fecha_inicial'];
-                                        $array_fecha_inicial = explode('/', $fecha_inicial);
-                                        $fecha_inicial = $contenido['fecha_inicial']
-                                            ? $array_fecha_inicial[1] .
-                                                '/' .
-                                                $array_fecha_inicial[0] .
-                                                '/' .
-                                                $array_fecha_inicial[2]
-                                            : null;
-                                        $hora_inicial = $contenido['hora_inicial'] ? $contenido['hora_inicial'] : null;
-                                        $date_start = new DateTime($fecha_inicial . ' ' . $hora_inicial);
-                                        /* $fecha_inicial = ($contenido['fecha_inicial'])? strtotime(str_replace('/','-',$contenido['fecha_inicial'])) : null; */
-                                        /* $fecha_final = ($contenido['fecha_final'])? strtotime(str_replace('/','-',$contenido['fecha_final'])) :null; */
-                                        $fecha_final = $contenido['fecha_final'];
-                                        $array_fecha_final = explode('/', $fecha_final);
-                                        $fecha_final = $contenido['fecha_final']
-                                            ? $array_fecha_final[1] .
-                                                '/' .
-                                                $array_fecha_final[0] .
-                                                '/' .
-                                                $array_fecha_final[2]
-                                            : null;
-                                        $hora_final = $contenido['hora_final'] ? $contenido['hora_final'] : null;
-                                        $date_end = new DateTime($fecha_final . ' ' . $hora_final);
-                                    }
-                                    $verifica_fecha = $hoy >= $fecha_inicial && $hoy <= $fecha_final;
+                                @if ($item->curso_id == $leccion->curso_id)
+                                    @php
+                                        $hoy = strtotime(date('m/d/Y'));
+                                        $hora = date('H:m');
+                                        $fecha_inicial = $fecha_final = null;
+                                        if ($contenido_programado) {
+                                            $contenido = collect($contenido_programado->contenido)
+                                                ->where('id', $item->id)
+                                                ->first();
+                                            $fecha_inicial = $contenido['fecha_inicial'];
+                                            $array_fecha_inicial = explode('/', $fecha_inicial);
+                                            $fecha_inicial = $contenido['fecha_inicial']
+                                                ? $array_fecha_inicial[1] .
+                                                    '/' .
+                                                    $array_fecha_inicial[0] .
+                                                    '/' .
+                                                    $array_fecha_inicial[2]
+                                                : null;
+                                            $hora_inicial = $contenido['hora_inicial']
+                                                ? $contenido['hora_inicial']
+                                                : null;
+                                            $date_start = new DateTime($fecha_inicial . ' ' . $hora_inicial);
+                                            /* $fecha_inicial = ($contenido['fecha_inicial'])? strtotime(str_replace('/','-',$contenido['fecha_inicial'])) : null; */
+                                            /* $fecha_final = ($contenido['fecha_final'])? strtotime(str_replace('/','-',$contenido['fecha_final'])) :null; */
+                                            $fecha_final = $contenido['fecha_final'];
+                                            $array_fecha_final = explode('/', $fecha_final);
+                                            $fecha_final = $contenido['fecha_final']
+                                                ? $array_fecha_final[1] .
+                                                    '/' .
+                                                    $array_fecha_final[0] .
+                                                    '/' .
+                                                    $array_fecha_final[2]
+                                                : null;
+                                            $hora_final = $contenido['hora_final'] ? $contenido['hora_final'] : null;
+                                            $date_end = new DateTime($fecha_final . ' ' . $hora_final);
+                                        }
+                                        $verifica_fecha = $hoy >= $fecha_inicial && $hoy <= $fecha_final;
 
-                                    $date_diff_start = $date_start->diff(date_create('now'));
-                                    $date_diff_end = $date_end->diff(date_create('now'));
-                                @endphp
-                                {{-- {{ dd($date_diff_start) }} --}}
-                                @if ($date_diff_end->invert == 1 && $date_diff_start->invert == 0)
-                                    <a href="javascript:void(0)" class="list-group-item"
-                                        onclick="event.preventDefault();
+                                        $date_diff_start = $date_start->diff(date_create('now'));
+                                        $date_diff_end = $date_end->diff(date_create('now'));
+                                    @endphp
+                                    {{-- {{ dd($date_diff_start) }} --}}
+                                    @if ($date_diff_end->invert == 1 && $date_diff_start->invert == 0)
+                                        <a href="javascript:void(0)" class="list-group-item"
+                                            onclick="event.preventDefault();
                                                     document.getElementById('form{{ $item->id }}').submit();">
-                                        {{ $item->titulo }}
-                                    </a>
-                                    <form method="POST" action="{{ route('leccion.detallada') }}"
-                                        id="form{{ $item->id }}">
-                                        @csrf
-                                        <input name="leccion_id" type="hidden" value="{{ $item->id }}">
-                                        <input name="curso_programado_id" type="hidden"
-                                            value="{{ $curso_programado->id }}">
-                                        <input name="inscripcion_id" type="hidden" value="{{ $inscrito->id }}">
-                                    </form>
-                                @else
-                                    <a href="javascript:void(0)" class="list-group-item disabled">
-                                        {{ $item->titulo }}
-                                    </a>
+                                            {{ $item->titulo }}
+                                        </a>
+                                        <form method="POST" action="{{ route('leccion.detallada') }}"
+                                            id="form{{ $item->id }}">
+                                            @csrf
+                                            <input name="leccion_id" type="hidden" value="{{ $item->id }}">
+                                            <input name="curso_programado_id" type="hidden"
+                                                value="{{ $curso_programado->id }}">
+                                            <input name="inscripcion_id" type="hidden" value="{{ $inscrito->id }}">
+                                        </form>
+                                    @else
+                                        <a href="javascript:void(0)" class="list-group-item disabled">
+                                            {{ $item->titulo }}
+                                        </a>
+                                    @endif
                                 @endif
                             @endforeach
                         </div>
@@ -157,7 +161,8 @@
                                     @if (!$m->downloadable)
                                         <form action="{{ route('alumno.view.guias') }}" method="post">
                                             @csrf
-                                            <input type="hidden" name="file" value="{{ URL::route(Auth::user()->rol[0]->slug . '.medias.archivo', ['file' => $m->ruta]) }}">
+                                            <input type="hidden" name="file"
+                                                value="{{ URL::route(Auth::user()->rol[0]->slug . '.medias.archivo', ['file' => $m->ruta]) }}">
                                             <input type="hidden" name="titulo" value="{{ $leccion->Curso->titulo }}">
                                             <button type="submit" class="list-group-item btn-block text-left"
                                                 href="{{ route('alumno.view.guias') }}">
@@ -179,7 +184,6 @@
                 </div>
             @endif
             @if ($curso_programado->category->name == 'Guias')
-
             @else
                 <div class="card">
                     <div class="card-body">
@@ -321,7 +325,7 @@
                 @if (auth()->user()->hasRole('alumno') == false)
                     xhr.open('GET',
                         '{{ route(Auth::user()->rol[0]->slug . '.medias.stream2', ['filename' => $video->ruta]) }}'
-                        );
+                    );
                 @else
                     xhr.open('GET',
                         '{{ route(Auth::user()->rol[0]->slug . '.medias.stream', ['filename' => $video->ruta]) }}');
