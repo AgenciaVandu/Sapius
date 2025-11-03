@@ -8,6 +8,8 @@ class ContenidoProgramado extends Model
 {
     protected $table = "contenidos_programados";
 
+    protected $guarded = ['id'];
+
     protected $casts = [
         'contenido' => 'array'
     ];
