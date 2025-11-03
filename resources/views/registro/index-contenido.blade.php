@@ -172,11 +172,65 @@
 @section('javascript')
     <script src="{{ asset('vendor/DatePicker/js/bootstrap-datepicker.min.js') }}"></script>
     <script src="{{ asset('vendor/DatePicker/js/bootstrap-datepicker.es.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+
     <script>
         $('.calendar').datepicker({
             language: "es",
             clearBtn: true,
             todayHighlight: true
         });
+
+        // --- Ordenar MÓDULOS ---
+        new Sortable(document.getElementById('accordionLecciones'), {
+            handle: '.card-header',
+            animation: 150,
+            onEnd: function(evt) {
+                updateModuleOrder();
+            }
+        });
+
+        function updateModuleOrder() {
+            document.querySelectorAll('#accordionLecciones .module').forEach(function(moduleEl, index) {
+                const id = moduleEl.dataset.id;
+                let input = document.querySelector('input[name="orden_' + id + '"]');
+                if (!input) {
+                    input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = 'orden_' + id;
+                    moduleEl.appendChild(input);
+                }
+                input.value = index + 1;
+            });
+        }
+
+        // --- Ordenar CLASES DENTRO DE CADA MÓDULO ---
+        document.querySelectorAll('tbody').forEach(function(tbody) {
+            new Sortable(tbody, {
+                animation: 150,
+                handle: 'td:first-child', // puedes mover desde la primera celda (nombre de clase)
+                onEnd: function(evt) {
+                    updateClassOrder(tbody);
+                }
+            });
+        });
+
+        function updateClassOrder(tbody) {
+            tbody.querySelectorAll('tr.class').forEach(function(tr, index) {
+                const id = tr.dataset.id;
+                let input = document.querySelector('input[name="orden_' + id + '"]');
+                if (!input) {
+                    input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = 'orden_' + id;
+                    tr.appendChild(input);
+                }
+                input.value = index + 1;
+            });
+        }
+
+        // Inicializa orden por si hay elementos ya cargados
+        updateModuleOrder();
+        document.querySelectorAll('tbody').forEach(updateClassOrder);
     </script>
 @endsection
