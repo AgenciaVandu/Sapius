@@ -63,7 +63,7 @@
                                 @elseif($examen->score_total >= 1200)
                                     background-color: #D4EDDA; color: #155724; @endif
                             ">
-                                    <td>{{ $examen->Prueba->titulo }}</td>
+                                    <td>{{ $examen->Prueba->titulo }} {{ $examen->id }} hola</td>
                                     <td>{{ $examen->Prueba->tipo }}</td>
                                     <td>{{ $examen->total_preguntas }}</td>
                                     <td>{{ $examen->total_correctas }}</td>
@@ -71,7 +71,7 @@
                                 </tr>
                             @else
                                 <tr style="background-color: #FFFF8A; color: #948503;">
-                                    <td>{{ $prueba->titulo }}</td>
+                                    <td>{{ $prueba->id }} - {{ $prueba->titulo }}</td>
                                     <td>{{ $prueba->tipo }}</td>
                                     <td colspan="3">No Presentado</td>
                                 </tr>

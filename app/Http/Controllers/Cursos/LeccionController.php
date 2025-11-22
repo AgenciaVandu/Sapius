@@ -253,8 +253,8 @@ public function delete(Request $request){
                                         ->with('leccion_id',$leccion->leccion_id)
                                         ->with('modulo',$leccion);
         }else{
-            foreach ($leccion->pruebas as $prueba) {
-                $prueba->preguntas()->delete();
+            /* dd($leccion->Pruebas); */
+            foreach ($leccion->Pruebas as $prueba) {
                 $prueba->delete();
             }
             $leccion->delete();
