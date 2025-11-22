@@ -149,6 +149,13 @@ class CursoController extends Controller
         return redirect()->route(Auth::user()->rol[0]->slug.'.cursos.index');
     }
 
+    public function delete(Request $request)
+    {
+        $curso = Curso::find($request->id);
+        $curso->delete();
+        return redirect()->route(Auth::user()->rol[0]->slug.'.cursos.index');
+    }
+
     public function imageUploadPost(Request $request)
     {
         $file = $request->file('image');

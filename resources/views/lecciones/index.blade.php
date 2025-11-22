@@ -61,6 +61,14 @@
                     <strong>¡Correcto! - </strong> {{ $success }}
                 </div>
             @endif
+            @if (isset($error))
+                <div class="alert alert-danger alert-dismissible bg-danger text-white border-0 fade show" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <strong>¡Error! - </strong> {{ $error }}
+                </div>
+            @endif
             <div class="card">
                 <div class="card-body">
 
@@ -74,6 +82,7 @@
                                 <th>Multimedia</th>
                                 <th>Editar</th>
                                 <th id="activoHead">Desactivar</th>
+                                <th>Eliminar</th>
                                 <th>Ver</th>
                             </tr>
                         </thead>
@@ -86,6 +95,7 @@
                                 <th>Multimedia</th>
                                 <th>Editar</th>
                                 <th id="activoFoot">Desactivar</th>
+                                <th>Eliminar</th>
                                 <th>Ver</th>
                             </tr>
                         </tfoot>
@@ -243,6 +253,10 @@
                             orderable: false
                         },
                         {
+                            data: 'id',
+                            orderable: false
+                        },
+                        {
                             data: 'posicion',
                             visible: false
                         } // campo oculto para rowReorder
@@ -299,6 +313,11 @@
                             $("#activoFoot").text("Activar");
                         }
                         var s = show.replace('1', data['id']);
+                        $(row).find('td:eq(' + (i++) + ')').html(
+                            '<form method="POST" action="{{ route(Auth::user()->rol[0]->slug . '.lecciones.delete') }}" onsubmit="return confirm(\'⚠️ Esta acción eliminará la información y NO podrá recuperarse. ¿Deseas continuar?\')"> @csrf <input name="id" type="hidden" value="' +
+                            data['id'] +
+                            '"> <button type="submit" class="btn btn-primary"><i class="fas fa-eraser"></i></button> </form>'
+                        );
                         $(row).find('td:eq(' + (i++) + ')').html(s);
                     },
                 });

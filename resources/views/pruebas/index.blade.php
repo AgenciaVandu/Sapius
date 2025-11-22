@@ -6,21 +6,23 @@
             <div class="col-7 align-self-center">
                 <h3 class="page-title text-truncate text-dark font-weight-medium mb-1">Pruebas</h3>
                 <div class="d-flex align-items-center">
-                    @include('genericos.breadcrum',['route' => 'pruebas.index'])
+                    @include('genericos.breadcrum', ['route' => 'pruebas.index'])
                 </div>
             </div>
             <div class="col-5 align-self-center">
                 <div class="customize-input float-right">
                     <div class="dropdown float-right">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Opciones
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <form method="POST" id="create-form"  action="{{ route(Auth::user()->rol[0]->slug.'.pruebas.create') }}">
+                            <form method="POST" id="create-form"
+                                action="{{ route(Auth::user()->rol[0]->slug . '.pruebas.create') }}">
                                 @csrf
                                 <input name="leccion_id" type="hidden" value="{{ $leccion->id }}">
-                                <a class="dropdown-item" href="{{ route(Auth::user()->rol[0]->slug.'.pruebas.create') }}"
-                                onclick="event.preventDefault();
+                                <a class="dropdown-item" href="{{ route(Auth::user()->rol[0]->slug . '.pruebas.create') }}"
+                                    onclick="event.preventDefault();
                                                 document.getElementById('create-form').submit();">
                                     Agregar
                                 </a>
@@ -37,13 +39,20 @@
 @section('content')
     <div class="row">
         <div class="col-md-12">
-            @if(isset($success))
-                <div class="alert alert-success alert-dismissible bg-success text-white border-0 fade show"
-                role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-                <strong>¡Correcto! - </strong> {{ $success }}
+            @if (isset($success))
+                <div class="alert alert-success alert-dismissible bg-success text-white border-0 fade show" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <strong>¡Correcto! - </strong> {{ $success }}
+                </div>
+            @endif
+            @if (isset($error))
+                <div class="alert alert-danger alert-dismissible bg-danger text-white border-0 fade show" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <strong>¡Error! - </strong> {{ $error }}
                 </div>
             @endif
             <div class="card">
@@ -51,28 +60,30 @@
                     <table class="table table-striped table-sm" id="dataTable">
                         <thead class="thead-light">
                             <tr>
-                            <th>Título</th>
-                            <th>Descripción</th>
-                            <th class="text-center">Preguntas</th>
-                            <th class="text-center">Duplicar</th>
-                            <th class="text-center">Importar</th>
-                            <th class="text-center">Exportar</th>
-                            <th class="text-center">Editar</th>
-                            <th class="text-center" id="activoHead">Desactivar</th>
-                            <th class="text-center">Ver</th>
+                                <th>Título</th>
+                                <th>Descripción</th>
+                                <th class="text-center">Preguntas</th>
+                                <th class="text-center">Duplicar</th>
+                                <th class="text-center">Importar</th>
+                                <th class="text-center">Exportar</th>
+                                <th class="text-center">Editar</th>
+                                <th class="text-center" id="activoHead">Desactivar</th>
+                                <th class="text-center">Eliminar</th>
+                                <th class="text-center">Ver</th>
                             </tr>
                         </thead>
                         <tfoot class="thead-light">
                             <tr>
-                            <th>Título</th>
-                            <th>Descripción</th>
-                            <th class="text-center">Preguntas</th>
-                            <th class="text-center">Duplicar</th>
-                            <th class="text-center">Importar</th>
-                            <th class="text-center">Exportar</th>
-                            <th class="text-center">Editar</th>
-                            <th class="text-center" id="activoFoot">Desactivar</th>
-                            <th class="text-center">Ver</th>
+                                <th>Título</th>
+                                <th>Descripción</th>
+                                <th class="text-center">Preguntas</th>
+                                <th class="text-center">Duplicar</th>
+                                <th class="text-center">Importar</th>
+                                <th class="text-center">Exportar</th>
+                                <th class="text-center">Editar</th>
+                                <th class="text-center" id="activoFoot">Desactivar</th>
+                                <th class="text-center">Eliminar</th>
+                                <th class="text-center">Ver</th>
                             </tr>
                         </tfoot>
                     </table>
@@ -81,135 +92,200 @@
         </div>
     </div>
 
-<!-- Modal -->
-<div class="modal fade" id="myModal" role="dialog">
-    <div class="modal-dialog modal-lg">
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Detalle de la prueba</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-            <div class="modal-body">
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Detalle de la prueba</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
 
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
-
 @endsection
 
 @section('css')
-    <link href="{{ asset('vendor/adminmart/assets/extra-libs/datatables.net-bs4/css/dataTables.bootstrap4.css') }}" rel="stylesheet">
+    <link href="{{ asset('vendor/adminmart/assets/extra-libs/datatables.net-bs4/css/dataTables.bootstrap4.css') }}"
+        rel="stylesheet">
 @endsection
 
 @section('javascript')
     <script src="{{ asset('vendor/adminmart/assets/extra-libs/datatables.net/js/jquery.dataTables.min.js') }}"></script>
 
     <script>
-        $(document).ready( function () {
+        $(document).ready(function() {
             var activo = true;
-            var endpoint = '{{ URL::route(Auth::user()->rol[0]->slug.".gpru",["leccion_id" => $leccion->id,"active" => "enable"]) }}';
-            var show = '<div class="text-center"><a class="btn btn-primary btn-detalle" href="javascript:void(0)" id="{{ route(Auth::user()->rol[0]->slug.'.pruebas.show',1) }}"><i class="fas fa-eye"></i></a></div>';
-            var importPreg = '<div class="text-center"><a class="btn btn-primary btn-detalle" href="javascript:void(0)" id="{{ route(Auth::user()->rol[0]->slug.'.preguntas.form.importar','__ID__') }}"><i class="fas fa-upload"></i></a></div>';
+            var endpoint =
+                '{{ URL::route(Auth::user()->rol[0]->slug . '.gpru', ['leccion_id' => $leccion->id, 'active' => 'enable']) }}';
+            var show =
+                '<div class="text-center"><a class="btn btn-primary btn-detalle" href="javascript:void(0)" id="{{ route(Auth::user()->rol[0]->slug . '.pruebas.show', 1) }}"><i class="fas fa-eye"></i></a></div>';
+            var importPreg =
+                '<div class="text-center"><a class="btn btn-primary btn-detalle" href="javascript:void(0)" id="{{ route(Auth::user()->rol[0]->slug . '.preguntas.form.importar', '__ID__') }}"><i class="fas fa-upload"></i></a></div>';
 
-            $( "#btnActivo" ).click(function() {
-                if(activo){
+            $("#btnActivo").click(function() {
+                if (activo) {
                     activo = false;
                     $("#btnActivo").text("Pruebas Activas");
                     endpoint = endpoint.replace("enable", "disable");
-                }else{
+                } else {
                     activo = true;
                     $("#btnActivo").text("Pruebas Inactivas");
                     endpoint = endpoint.replace("disable", "enable");
                 }
-                table.ajax.url( endpoint ).load();
+                table.ajax.url(endpoint).load();
             });
-            var table =$('#dataTable')
-            .on('draw.dt', function ( e, settings, json, xhr ) {
-                $('a[class ~= "btn-detalle"]').click(function(){
-                    btn = $(this);
-                    liga = '' + btn.attr( "id");
-                    $('.modal-body').load(liga,function(){
-                        $('#' + 'myModal').modal({show:true});
+            var table = $('#dataTable')
+                .on('draw.dt', function(e, settings, json, xhr) {
+                    $('a[class ~= "btn-detalle"]').click(function() {
+                        btn = $(this);
+                        liga = '' + btn.attr("id");
+                        $('.modal-body').load(liga, function() {
+                            $('#' + 'myModal').modal({
+                                show: true
+                            });
+                        });
                     });
-                });
-            } )
-            .on('xhr.dt', function ( e, settings, json, xhr ) {
-                $('#btn-cargar').attr( "disabled", false );
-                $('#btn-cargar').html('Exportar Excel');
-            } )
-            .DataTable({
-                language: {
-                    processing:    "Cargando...",
-                    search:        "Buscar:",
-                    lengthMenu:    "Mostrar _MENU_ registros",
-                    info:           "Mostrando _START_ hasta _END_ de _TOTAL_ registros",
-                    infoEmpty:      "",
-                    infoFiltered:   "(filtrado de un total de _MAX_ entradas)",
-                    infoPostFix:    "",
-                    loadingRecords: "",
-                    emptyTable:     "No existen registros para mostrar",
-                    paginate: {
-                        first:      "Primer",
-                        previous:   "Anterior",
-                        next:       "Siguiente",
-                        last:       "Último"
+                })
+                .on('xhr.dt', function(e, settings, json, xhr) {
+                    $('#btn-cargar').attr("disabled", false);
+                    $('#btn-cargar').html('Exportar Excel');
+                })
+                .DataTable({
+                    language: {
+                        processing: "Cargando...",
+                        search: "Buscar:",
+                        lengthMenu: "Mostrar _MENU_ registros",
+                        info: "Mostrando _START_ hasta _END_ de _TOTAL_ registros",
+                        infoEmpty: "",
+                        infoFiltered: "(filtrado de un total de _MAX_ entradas)",
+                        infoPostFix: "",
+                        loadingRecords: "",
+                        emptyTable: "No existen registros para mostrar",
+                        paginate: {
+                            first: "Primer",
+                            previous: "Anterior",
+                            next: "Siguiente",
+                            last: "Último"
+                        },
                     },
-                },
-                processing: true,
-                paging: true,
-                ajax: {
-                    url: endpoint,
-                    dataSrc: ''
-                },
-                columns: [
-                    { data: 'titulo',orderable: true,},
-                    { data: 'descripcion',orderable: true,},
-                    { data: 'id',orderable: false,},
-                    { data: 'id',orderable: false,},
-                    { data: 'id',orderable: false,},
-                    { data: 'id',orderable: false,},
-                    { data: 'id',orderable: false,},
-                    { data: 'id',orderable: false,},
-                    { data: 'id',orderable: false,},
-                ],
-                dom: 'Bfrtip',
-                buttons: [
-                ],
-                order: [[2, 'asc']],
-                "rowCallback": function( row, data ) {
-                    // preguntas
-                    $(row).find('td:eq(2)').html( '<form method="POST" class="text-center" action="{{ route(Auth::user()->rol[0]->slug.'.preguntas.index') }}"> @csrf <input name="prueba_id" type="hidden" value="'+data['id']+'"> <button type="submit" class="btn btn-primary"><i class="fas fa-list"></i></button> </form>' );
-                     // duplicar puebas
-                    $(row).find('td:eq(3)').html( '<form method="POST" class="text-center" action="{{ route(Auth::user()->rol[0]->slug.'.pruebas.duplicate') }}"> @csrf <input name="id" type="hidden" value="'+data['id']+'"> <button type="submit" class="btn btn-primary"><i class="fas fa-copy"></i></button> </form>' );
-                    // importar preguntas
-                    var i = importPreg.replace('__ID__', data['id']);
-                    $(row).find('td:eq(4)').html(i);
-                    // exportar
-                    $(row).find('td:eq(5)').html( '<form method="POST" class="text-center" action="{{ route(Auth::user()->rol[0]->slug.'.preguntas.exportar') }}"> @csrf <input name="id" type="hidden" value="'+data['id']+'"> <button type="submit" class="btn btn-primary"><i class="fas fa-download"></i></button> </form>' );
-                    // editar
-                    $(row).find('td:eq(6)').html( '<form method="POST" class="text-center" action="{{ route(Auth::user()->rol[0]->slug.'.pruebas.edit') }}"> @csrf <input name="id" type="hidden" value="'+data['id']+'"> <button type="submit" class="btn btn-primary"><i class="fas fa-edit"></i></button> </form>' );
-                    // activar/desactivar
-                    if(data['activo'] == 'si'){
-                        $(row).find('td:eq(7)').html( '<form method="POST" class="text-center" action="{{ route(Auth::user()->rol[0]->slug.'.pruebas.destroy') }}"> @csrf <input name="id" type="hidden" value="'+data['id']+'"> <button type="submit" class="btn btn-primary"><i class="fas fa-trash"></i></button></form>' );
-                        $("#activoHead").text("Desactivar");
-                        $("#activoFoot").text("Desactivar");
-                    }else{
-                        $(row).find('td:eq(7)').html( '<form method="POST" class="text-center" action="{{ route(Auth::user()->rol[0]->slug.'.pruebas.activate') }}"> @csrf <input name="id" type="hidden" value="'+data['id']+'"> <button type="submit" class="btn btn-primary"><i class="fas fa-check"></i></button></form>' );
-                        $("#activoHead").text("Activar");
-                        $("#activoFoot").text("Activar");
-                    }
-                    // ver detalles
-                    var s = show.replace('1', data['id']);
-                    $(row).find('td:eq(8)').html(s);
-                },
-            });
-        } );
+                    processing: true,
+                    paging: true,
+                    ajax: {
+                        url: endpoint,
+                        dataSrc: ''
+                    },
+                    columns: [{
+                            data: 'titulo',
+                            orderable: true,
+                        },
+                        {
+                            data: 'descripcion',
+                            orderable: true,
+                        },
+                        {
+                            data: 'id',
+                            orderable: false,
+                        },
+                        {
+                            data: 'id',
+                            orderable: false,
+                        },
+                        {
+                            data: 'id',
+                            orderable: false,
+                        },
+                        {
+                            data: 'id',
+                            orderable: false,
+                        },
+                        {
+                            data: 'id',
+                            orderable: false,
+                        },
+                        {
+                            data: 'id',
+                            orderable: false,
+                        },
+                        {
+                            data: 'id',
+                            orderable: false,
+                        },
+                        {
+                            data: 'id',
+                            orderable: false,
+                        },
+                    ],
+                    dom: 'Bfrtip',
+                    buttons: [],
+                    order: [
+                        [2, 'asc']
+                    ],
+                    "rowCallback": function(row, data) {
+                        // preguntas
+                        $(row).find('td:eq(2)').html(
+                            '<form method="POST" class="text-center" action="{{ route(Auth::user()->rol[0]->slug . '.preguntas.index') }}"> @csrf <input name="prueba_id" type="hidden" value="' +
+                            data['id'] +
+                            '"> <button type="submit" class="btn btn-primary"><i class="fas fa-list"></i></button> </form>'
+                            );
+                        // duplicar puebas
+                        $(row).find('td:eq(3)').html(
+                            '<form method="POST" class="text-center" action="{{ route(Auth::user()->rol[0]->slug . '.pruebas.duplicate') }}"> @csrf <input name="id" type="hidden" value="' +
+                            data['id'] +
+                            '"> <button type="submit" class="btn btn-primary"><i class="fas fa-copy"></i></button> </form>'
+                            );
+                        // importar preguntas
+                        var i = importPreg.replace('__ID__', data['id']);
+                        $(row).find('td:eq(4)').html(i);
+                        // exportar
+                        $(row).find('td:eq(5)').html(
+                            '<form method="POST" class="text-center" action="{{ route(Auth::user()->rol[0]->slug . '.preguntas.exportar') }}"> @csrf <input name="id" type="hidden" value="' +
+                            data['id'] +
+                            '"> <button type="submit" class="btn btn-primary"><i class="fas fa-download"></i></button> </form>'
+                            );
+                        // editar
+                        $(row).find('td:eq(6)').html(
+                            '<form method="POST" class="text-center" action="{{ route(Auth::user()->rol[0]->slug . '.pruebas.edit') }}"> @csrf <input name="id" type="hidden" value="' +
+                            data['id'] +
+                            '"> <button type="submit" class="btn btn-primary"><i class="fas fa-edit"></i></button> </form>'
+                            );
+                        // activar/desactivar
+                        if (data['activo'] == 'si') {
+                            $(row).find('td:eq(7)').html(
+                                '<form method="POST" class="text-center" action="{{ route(Auth::user()->rol[0]->slug . '.pruebas.destroy') }}"> @csrf <input name="id" type="hidden" value="' +
+                                data['id'] +
+                                '"> <button type="submit" class="btn btn-primary"><i class="fas fa-trash"></i></button></form>'
+                                );
+                            $("#activoHead").text("Desactivar");
+                            $("#activoFoot").text("Desactivar");
+                        } else {
+                            $(row).find('td:eq(7)').html(
+                                '<form method="POST" class="text-center" action="{{ route(Auth::user()->rol[0]->slug . '.pruebas.activate') }}"> @csrf <input name="id" type="hidden" value="' +
+                                data['id'] +
+                                '"> <button type="submit" class="btn btn-primary"><i class="fas fa-check"></i></button></form>'
+                                );
+                            $("#activoHead").text("Activar");
+                            $("#activoFoot").text("Activar");
+                        }
+                        // ver detalles
+                        var s = show.replace('1', data['id']);
+                        $(row).find('td:eq(8)').html(
+                            '<form method="POST" action="{{ route(Auth::user()->rol[0]->slug . '.pruebas.delete') }}" onsubmit="return confirm(\'⚠️ Esta acción eliminará la información y NO podrá recuperarse. ¿Deseas continuar?\')"> @csrf <input name="id" type="hidden" value="' +
+                            data['id'] +
+                            '"> <button type="submit" class="btn btn-primary"><i class="fas fa-eraser"></i></button> </form>'
+                        );
+                        $(row).find('td:eq(9)').html(s);
+                    },
+                });
+        });
     </script>
 @endsection

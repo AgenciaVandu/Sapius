@@ -213,6 +213,7 @@ Route::group(['middleware' => ['admin','restrict.mobile'],'prefix' => 'admin'], 
     Route::get('/cursos/image/{file}', 'Cursos\CursoController@cursoPicture')->name('admin.cursos.image');
     Route::get('/cursos/copy', 'Cursos\CursoController@copyIndex')->name('cursos.copy');
     Route::post('/cursos/copy/create', 'Cursos\CursoController@copyCreate')->name('cursos.copy.create');
+    Route::post('/cursos/delete', 'Cursos\CursoController@delete')->name('cursos.delete');//{id}
 
 
     // Lecciones
@@ -227,6 +228,7 @@ Route::group(['middleware' => ['admin','restrict.mobile'],'prefix' => 'admin'], 
     Route::get('/modulos/getall/{curso_id}/{leccion_id}/{active}', 'Cursos\LeccionController@getAll')->name('admin.gle');
     Route::get('/modulos/image/{file}', 'Cursos\LeccionController@cursoPicture')->name('admin.lecciones.image');
     Route::post('/lecciones/reordenar', 'Cursos\LeccionController@reordenar')->name('admin.lecciones.reordenar');
+    Route::post('/lecciones/delete', 'Cursos\LeccionController@delete')->name('admin.lecciones.delete');
 
     // Pruebas
     Route::post('/cursos/modulos/pruebas', 'Cursos\PruebaController@index')->name('admin.pruebas.index');//{leccion_id}
@@ -239,6 +241,7 @@ Route::group(['middleware' => ['admin','restrict.mobile'],'prefix' => 'admin'], 
     Route::post('/pruebas/destroy', 'Cursos\PruebaController@destroy')->name('admin.pruebas.destroy');//{id}
     Route::post('/pruebas/activate', 'Cursos\PruebaController@activate')->name('admin.pruebas.activate');//{id}
     Route::get('/pruebas/getall/{leccion_id}/{active}', 'Cursos\PruebaController@getAll')->name('admin.gpru');
+    Route::post('/pruebas/delete', 'Cursos\PruebaController@delete')->name('admin.pruebas.delete');//{id}
 
     // Preguntas
     Route::post('/cursos/modulos/pruebas/preguntas', 'Cursos\PreguntaController@index')->name('admin.preguntas.index');//{prueba_id}

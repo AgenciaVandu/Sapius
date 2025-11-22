@@ -210,4 +210,39 @@ class PruebaController extends Controller
                                     ->with('modulo',$modulo)
                                     ->with('clase',$leccion);
     }
+
+
+    public function delete(Request $request)
+    {
+        $prueba = Prueba::find($request->id);
+        $curso = Curso::find($prueba->curso_id);
+        //Recorrer todos los Cursos Programados asociados al curso
+        $count_inscritos_total = 0;
+        foreach ($curso->CursoProgramado as $curso_programado) {
+            $count_inscritos = $curso_programado->Inscritos->count();
+            $count_inscritos_total += $count_inscritos;
+        }
+
+
+        if ($count_inscritos_total > 0) {
+            $leccion = Leccion::find($prueba->leccion_id);
+            $curso = Curso::find($leccion->curso_id);
+            $modulo = Leccion::find($leccion->leccion_id);
+            return view('pruebas.index')->with('error', 'La prueba no puede ser eliminada porque hay alumnos inscritos en alguno de los cursos programados asociados al curso troncal.')
+                                                    ->with('leccion',$leccion)
+                                                    ->with('curso',$curso)
+                                                    ->with('modulo',$modulo)
+                                                    ->with('clase',$leccion);
+        } else {
+            $prueba->delete();
+            $leccion = Leccion::find($prueba->leccion_id);
+            $curso = Curso::find($leccion->curso_id);
+            $modulo = Leccion::find($leccion->leccion_id);
+            return view('pruebas.index')->with('success', 'La prueba ha sido eliminada correctamente.')
+                                                        ->with('leccion',$leccion)
+                                                        ->with('curso',$curso)
+                                                        ->with('modulo',$modulo)
+                                                        ->with('clase',$leccion);
+        }
+    }
 }

@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Mail;
 use App\Mail\TareaEmail;
+use App\Models\Cursos\Prueba;
 use App\Models\Registro\CursoProgramado;
 use App\User;
 
@@ -226,18 +227,43 @@ class LeccionController extends Controller
     }
 
 
+public function reordenar(Request $request){
+        $posiciones = $request->input('posiciones', []);
 
+        foreach ($posiciones as $item) {
+            Leccion::where('id', $item['id'])->update(['posicion' => $item['posicion']]);
+        }
 
-
-    public function reordenar(Request $request)
-{
-    $posiciones = $request->input('posiciones', []);
-
-    foreach ($posiciones as $item) {
-        Leccion::where('id', $item['id'])->update(['posicion' => $item['posicion']]);
+        return response()->json(['success' => true]);
     }
 
-    return response()->json(['success' => true]);
-}
+public function delete(Request $request){
+        $leccion = Leccion::find($request->id);
+        $curso = Curso::find($leccion->curso_id);
+        //Recorrer todos los Cursos Programados asociados al curso
+        $count_inscritos_total = 0;
+        foreach ($curso->CursoProgramado as $curso_programado) {
+            $count_inscritos = $curso_programado->Inscritos->count();
+            $count_inscritos_total += $count_inscritos;
+        }
+
+        if($count_inscritos_total > 0){
+            return view('lecciones.index')->with('error', 'No se puede eliminar la clase y/o lección porque hay usuarios inscritos en alguno de los cursos programado asociado a este curso troncal.')
+                                        ->with('curso',$curso)
+                                        ->with('leccion_id',$leccion->leccion_id)
+                                        ->with('modulo',$leccion);
+        }else{
+            foreach ($leccion->pruebas as $prueba) {
+                $prueba->preguntas()->delete();
+                $prueba->delete();
+            }
+            $leccion->delete();
+            $curso = Curso::find($leccion->curso_id);
+            return view('lecciones.index')->with('success', 'La lección ha sido eliminada correctamente.')
+                                            ->with('curso',$curso)
+                                            ->with('leccion_id',$leccion->leccion_id)
+                                            ->with('modulo',$leccion);
+        }
+    }
 
 }
