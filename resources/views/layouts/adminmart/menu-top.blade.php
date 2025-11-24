@@ -9,7 +9,7 @@
             <!-- ============================================================== -->
             <div class="navbar-brand">
                 <!-- Logo icon -->
-                <a href="{{ url('/'.Auth::user()->rol[0]->slug) }}">
+                <a href="{{ url('/' . Auth::user()->rol[0]->slug) }}">
                     {{-- <b class="logo-icon">
                         <!-- Dark Logo icon -->
                         <img src="{{ asset('vendor/adminmart/assets/images/logo-icon.png') }}" alt="homepage" class="dark-logo" />
@@ -20,9 +20,11 @@
                     <!-- Logo text -->
                     <span class="logo-text">
                         <!-- dark Logo text -->
-                        <img src="{{ asset('vendor/adminmart/assets/images/200x80.png') }}" alt="homepage" class="dark-logo" />
+                        <img src="{{ asset('vendor/adminmart/assets/images/200x80.png') }}" alt="homepage"
+                            class="dark-logo" />
                         <!-- Light Logo text -->
-                        <img src="{{ asset('vendor/adminmart/assets/images/logo-light-text.png') }}" class="light-logo" alt="homepage" />
+                        <img src="{{ asset('vendor/adminmart/assets/images/logo-light-text.png') }}" class="light-logo"
+                            alt="homepage" />
                     </span>
                 </a>
             </div>
@@ -33,9 +35,8 @@
             <!-- Toggle which is visible on mobile only -->
             <!-- ============================================================== -->
             <a class="topbartoggler d-block d-md-none waves-effect waves-light" href="javascript:void(0)"
-                data-toggle="collapse" data-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><i
-                    class="ti-more"></i></a>
+                data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                aria-expanded="false" aria-label="Toggle navigation"><i class="ti-more"></i></a>
         </div>
         <!-- ============================================================== -->
         <!-- End Logo -->
@@ -44,10 +45,10 @@
             <!-- ============================================================== -->
             <!-- toggle and nav items -->
             <!-- ============================================================== -->
-             <ul class="navbar-nav float-left mr-auto ml-3 pl-1">
+            <ul class="navbar-nav float-left mr-auto ml-3 pl-1">
                 @yield('timer')
                 <!-- Notification -->
-              {{--  <li class="nav-item dropdown">
+                {{--  <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle pl-md-3 position-relative" href="javascript:void(0)"
                         id="bell" role="button" data-toggle="dropdown" aria-haspopup="true"
                         aria-expanded="false">
@@ -149,7 +150,7 @@
                             </select>
                         </div>
                     </a>
-                </li>--}}
+                </li> --}}
             </ul>
             <!-- ============================================================== -->
             <!-- Right side toggle and nav items -->
@@ -158,52 +159,59 @@
                 <!-- ============================================================== -->
                 <!-- Search -->
                 <!-- ============================================================== -->
-                {{-- <li class="nav-item d-none d-md-block">
-                    <a class="nav-link" href="javascript:void(0)">
-                        <form>
-                            <div class="customize-input">
-                                <input class="form-control custom-shadow custom-radius border-0 bg-white"
-                                    type="search" placeholder="Search" aria-label="Search">
-                                <i class="form-control-icon" data-feather="search"></i>
-                            </div>
-                        </form>
-                    </a>
-                </li> --}}
+                <li class="nav-item d-none d-md-block">
+                    {{-- Icono de un triangulo color amarillo parpadeante con un signo de admiracion dentro  --}}
+                    @if (Auth::user()->rol[0]->slug == 'alumno')
+                        @if (Auth::user()->documento_identificacion =! ' ' || Auth::user()->pase_ingreso =! ' ' || Auth::user()->validado != 'no' )
+                            {{-- No icono redonde de un check  verde que diga que la cuenta ya esta aprobada --}}
+                            <a class="nav-link" href="javascript:void(0)" data-toggle="tooltip" data-placement="bottom"
+                                title="Tu cuenta está completa">
+                                <i data-feather="check-circle" class="svg-icon" style="color: #28a745;"></i>
+                            </a>
+                        @else
+                            <a class="nav-link" href="javascript:void(0)" data-toggle="tooltip" data-placement="bottom"
+                                title="Documentos en revision o incompletos">
+                                <i data-feather="alert-triangle" class="svg-icon"
+                                    style="color: #f06340; animation: blinker 1.5s linear infinite;"></i>
+                            </a>
+                        @endif
+                    @endif
+                </li>
                 <!-- ============================================================== -->
                 <!-- User profile and search -->
                 <!-- ============================================================== -->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="javascript:void(0)" data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false">
-                        @if(Auth::user()->foto !== null && Auth::user()->foto !== "")
-                        <img src="{{ route(Auth::user()->rol[0]->slug.'.image',['file' => Auth::user()->foto]) }}" alt="user" class="rounded-circle"
-                            width="40" height="40">
+                        @if (Auth::user()->foto !== null && Auth::user()->foto !== '')
+                            <img src="{{ route(Auth::user()->rol[0]->slug . '.image', ['file' => Auth::user()->foto]) }}"
+                                alt="user" class="rounded-circle" width="40" height="40">
                         @else
-                        <img src="{{ asset('vendor/adminmart/assets/images/big/icon.png') }}" alt="user" class="img-fluid rounded-circle"
-                            >
+                            <img src="{{ asset('vendor/adminmart/assets/images/big/icon.png') }}" alt="user"
+                                class="img-fluid rounded-circle">
                         @endif
                         <span class="ml-2 d-none d-lg-inline-block"><span>Bienvenido,</span> <span
-                                class="text-dark">{{ Auth::user()->nombre_completo }}</span> <i data-feather="chevron-down"
-                                class="svg-icon"></i></span>
+                                class="text-dark">{{ Auth::user()->nombre_completo }}</span> <i
+                                data-feather="chevron-down" class="svg-icon"></i></span>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right user-dd animated flipInY">
 
-                        <form method="POST" id="profile-form"  action="{{ route(Auth::user()->rol[0]->slug.'.profile') }}">
+                        <form method="POST" id="profile-form"
+                            action="{{ route(Auth::user()->rol[0]->slug . '.profile') }}">
                             @csrf
                             <input name="id" type="hidden" value="{{ Auth::user()->id }}">
-                            <a class="dropdown-item" href="{{ route(Auth::user()->rol[0]->slug.'.profile') }}"
-                            onclick="event.preventDefault();
+                            <a class="dropdown-item" href="{{ route(Auth::user()->rol[0]->slug . '.profile') }}"
+                                onclick="event.preventDefault();
                             document.getElementById('profile-form').submit();">
-                            <i data-feather="user"
-                            class="svg-icon mr-2 ml-1"></i>
-                            {{ __('My Profile') }}
+                                <i data-feather="user" class="svg-icon mr-2 ml-1"></i>
+                                {{ __('My Profile') }}
                             </a>
                         </form>
 
-                        <a class="dropdown-item" href="{{ route(Auth::user()->rol[0]->slug.'.complete',[ 'role' => Auth::user()->id]) }}">
-                        <i data-feather="clipboard"
-                        class="svg-icon mr-2 ml-1"></i>
-                        Completar datos
+                        <a class="dropdown-item"
+                            href="{{ route(Auth::user()->rol[0]->slug . '.complete', ['role' => Auth::user()->id]) }}">
+                            <i data-feather="clipboard" class="svg-icon mr-2 ml-1"></i>
+                            Completar datos
                         </a>
 
                         {{-- <a class="dropdown-item" href="{{ route('users.profile
@@ -221,7 +229,8 @@
                                 class="svg-icon mr-2 ml-1"></i>
                             {{ __('Account Setting') }}</a> --}}
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="javascript:void(0)" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                        <a class="dropdown-item" href="javascript:void(0)"
+                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                             <i data-feather="power" class="svg-icon mr-2 ml-1"></i>
                             {{ __('Logout') }}
                         </a>
