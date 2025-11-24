@@ -399,7 +399,7 @@ class CursoProgramadoController extends Controller
             $inscripcion->save();
         }
 
-        return redirect()->back()->with('success', 'Alumnos agregados correctamente al curso.');
+        return view('admin.registro.index')->with('success', 'Alumnos inscritos correctamente')->with('curso_programado',$cursoProgramado);
     }
 
 

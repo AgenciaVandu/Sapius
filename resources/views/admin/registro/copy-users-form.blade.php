@@ -28,6 +28,12 @@
             </select>
         </div>
 
+        <!-- Checkbox Seleccionar todos -->
+        <div class="form-group form-check">
+            <input type="checkbox" class="form-check-input" id="selectAll">
+            <label class="form-check-label" for="selectAll">Seleccionar todos</label>
+        </div>
+
         <!-- Lista de alumnos inscritos con checkboxes -->
         <form id="formAgregarAlumnos" method="POST" action="{{ route('curso_programado.agregarAlumnos', $curso_programado->id) }}">
             @csrf
@@ -36,7 +42,7 @@
                     @forelse($curso_programado->Inscritos as $alumno)
                         <li>
                             <input type="checkbox" name="alumnos[]" value="{{ $alumno->id }}"
-                                id="alumno{{ $alumno->id }}" class="mx-2">
+                                id="alumno{{ $alumno->id }}" class="mx-2 alumno-checkbox">
                             <div>
                                 <label for="alumno{{ $alumno->id }}" class="ml-2">
                                     {{ $alumno->name }} - {{ $alumno->email }}
@@ -71,6 +77,33 @@
     </script>
     <script>
         $(document).ready(function() {
+            // Función para actualizar el estado del checkbox "Seleccionar todos"
+            function updateSelectAll() {
+                var $all = $('.alumno-checkbox');
+                if ($all.length === 0) {
+                    $('#selectAll').prop('checked', false).prop('indeterminate', false);
+                    return;
+                }
+                var total = $all.length;
+                var checked = $all.filter(':checked').length;
+                $('#selectAll').prop('checked', checked === total);
+                $('#selectAll').prop('indeterminate', checked > 0 && checked < total);
+            }
+
+            // Cambio en el checkbox maestro
+            $(document).on('change', '#selectAll', function() {
+                var checked = $(this).is(':checked');
+                $('.alumno-checkbox').prop('checked', checked);
+            });
+
+            // Cuando cambie cualquier checkbox hijo, actualizar el maestro
+            $(document).on('change', '.alumno-checkbox', function() {
+                updateSelectAll();
+            });
+
+            // Inicializa el estado del checkbox maestro al cargar la página
+            updateSelectAll();
+
             $('#selectCurso').change(function() {
                 var cursoId = $(this).val();
                 var url = '{{ route('cursos.inscritos', ['id' => ':id']) }}'.replace(':id', cursoId);
@@ -82,15 +115,14 @@
                         var lista = '<ul>';
                         if (inscritos.length > 0) {
                             inscritos.forEach(function(alumno) {
-                                lista += '<li>';
+                                lista += '<li style="list-style: none;">';
                                 lista +=
                                     '<input type="checkbox" name="alumnos[]" value="' +
-                                    alumno.id + '" id="alumno' + alumno.id + '">';
+                                    alumno.id + '" id="alumno' + alumno.id + '" class="alumno-checkbox">';
                                 lista += '<label for="alumno' + alumno.id + '"> ' +
                                     alumno.nombre_completo + ' - ' + alumno.email;
-                                if (alumno.pivot.aceptado) {
-                                    lista +=
-                                        ' <span class="text-success">(Aceptado)</span>';
+                                if (alumno.pivot && alumno.pivot.aceptado) {
+                                    lista += ' <span class="text-success">(Aceptado)</span>';
                                 }
                                 lista += '</label></li>';
                             });
@@ -99,6 +131,10 @@
                         }
                         lista += '</ul>';
                         $('#listaAlumnos').html(lista);
+
+                        // Después de reemplazar la lista, resetear/actualizar el checkbox maestro
+                        $('#selectAll').prop('checked', false).prop('indeterminate', false);
+                        updateSelectAll();
                     },
                     error: function() {
                         alert('Error al obtener los alumnos');

@@ -30,14 +30,27 @@
 @section('content')
     <div class="row">
         <div class="col-md-12">
+            @if (session()->get('success'))
+                {{-- <div class="alert alert-success">
+                {{ session()->get('success') }}
+                </div><br /> --}}
+                <div class="alert alert-success alert-dismissible bg-success text-white border-0 fade show" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <strong>Actualizado ! - </strong> {{ session()->get('success') }}
+                </div>
+            @endif
             <div class="card">
                 <div class="card-body">
                     <div class="d-flex justify-content-end mb-3">
                         <div class="mr-2">
-                            <a href="{{ route('admin.copy.users.form', ['curso_id' => $curso_programado->id]) }}" class="btn btn-primary">Incribir alumnos de curso existente</a>
+                            <a href="{{ route('admin.copy.users.form', ['curso_id' => $curso_programado->id]) }}"
+                                class="btn btn-primary">Incribir alumnos de curso existente</a>
                         </div>
                         <div>
-                            <a href="{{ route('admin.exportAllResults', ['curso_id' => $curso_programado->id]) }}" class="btn btn-primary">Exportar Calificaciones del Grupo</a>
+                            <a href="{{ route('admin.exportAllResults', ['curso_id' => $curso_programado->id]) }}"
+                                class="btn btn-primary">Exportar Calificaciones del Grupo</a>
                         </div>
                     </div>
                     <table class="table table-striped table-sm" id="dataTable">
