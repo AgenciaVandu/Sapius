@@ -214,6 +214,8 @@ Route::group(['middleware' => ['admin','restrict.mobile'],'prefix' => 'admin'], 
     Route::get('/cursos/copy', 'Cursos\CursoController@copyIndex')->name('cursos.copy');
     Route::post('/cursos/copy/create', 'Cursos\CursoController@copyCreate')->name('cursos.copy.create');
     Route::post('/cursos/delete', 'Cursos\CursoController@delete')->name('cursos.delete');//{id}
+    Route::get('/curso/copy-details/{curso}','Cursos\CursoController@getAllContentOfCurso')->name('admin.cursos.details.copy');
+    Route::post('/curso/copy-details/coping','Cursos\CursoController@copySelectContentOfCourse')->name('admin.cursos.content.copy');
 
 
     // Lecciones

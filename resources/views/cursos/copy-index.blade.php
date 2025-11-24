@@ -25,16 +25,23 @@
                 <div class="card-body">
                     <form action="{{ route('cursos.copy.create') }}" method="post">
                         @csrf
+                        @method('POST')
                         <div class="form-group">
                             <label for="curso_id">Seleccione el curso a copiar</label>
                             <select class="form-control" id="curso_id" name="curso_id" required>
-                                <option value="">-- Seleccione --</option>
+                                <option value="" disabled selected>-- Seleccione un curso --</option>
                                 @foreach ($cursos as $curso)
                                     <option value="{{ $curso->id }}">{{ $curso->titulo }}</option>
                                 @endforeach
                             </select>
                         </div>
-                        <button type="submit" class="btn btn-primary">Copiar Curso</button>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" name="copyAll" value="true">
+                            <label class="form-check-label" for="inlineCheckbox1">Copiar curso con todo su contenido</label>
+                        </div>
+                        <div class="d-flex justify-content-end">
+                            <button type="submit" class="btn btn-primary">Copiar Curso</button>
+                        </div>
                     </form>
                 </div>
             </div>

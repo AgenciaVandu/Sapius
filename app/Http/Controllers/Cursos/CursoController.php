@@ -210,6 +210,9 @@ class CursoController extends Controller
 
     public function copyCreate(Request $request)
     {
+
+        if ($request->copyAll) {
+
         $cursoOriginal = Curso::find($request->curso_id);
 
         $curso = new Curso;
@@ -279,5 +282,123 @@ class CursoController extends Controller
         }
 
         return redirect()->route(Auth::user()->rol[0]->slug.'.cursos.index')->with('success', 'El curso ha sido copiado correctamente');
+        } else {
+            $cursoOriginal = Curso::find($request->curso_id);
+            return redirect()->route('admin.cursos.details.copy',$cursoOriginal);
+        }
     }
+
+    //Funcion para poder obtener todos los contenidos de un curso y listarlos en una vista la cual dara paso a que se copie toda la informacion seleccionada
+    public function getAllContentOfCurso(Curso $curso){
+        /* dd($curso); */
+        return view('cursos.copy-details',compact('curso'));
+    }
+
+
+    public function copySelectContentOfCourse(Request $request){
+        $itemsSeleccionados = $request->items; // IDs de módulos y clases que seleccionó el usuario
+
+        $cursoOriginal = Curso::find($request->curso_id);
+
+        $curso = new Curso;
+        $curso->user_id = auth()->user()->id;
+        $curso->titulo = $cursoOriginal->titulo . ' (Copia)';
+        $curso->slug = $cursoOriginal->slug . '-copia-' . time();
+        $curso->descripcion = $cursoOriginal->descripcion;
+        $curso->imagen = $cursoOriginal->imagen;
+        $curso->activo = "si";
+        $curso->save();
+
+        // --------------------------------------------------
+        // CARGAR SOLO LAS LECCIONES SELECCIONADAS
+        // --------------------------------------------------
+        $leccionesSeleccionadas = $cursoOriginal->Lecciones->whereIn('id', $itemsSeleccionados);
+
+        // Módulos = leccion_id = 0
+        $modulos = $leccionesSeleccionadas->where('leccion_id', 0);
+
+        // Clases = leccion_id != 0
+        $clases = $leccionesSeleccionadas->where('leccion_id', '!=', 0);
+
+        // Aquí guardaremos el id nuevo de cada módulo copiado
+        $nuevosModulos = [];
+
+        // --------------------------------------------------
+        // FUNCIÓN PARA COPIAR PRUEBAS, PREGUNTAS, RESPUESTAS
+        // --------------------------------------------------
+        $copyPruebas = function ($leccionOrigen, $leccionDestino) use ($curso) {
+            if (!empty($leccionOrigen->Pruebas) && is_iterable($leccionOrigen->Pruebas)) {
+                foreach ($leccionOrigen->Pruebas as $pruebaOriginal) {
+
+                    $prueba = $pruebaOriginal->replicate();
+                    $prueba->curso_id = $curso->id;
+                    $prueba->leccion_id = $leccionDestino->id;
+                    $prueba->save();
+
+                    // Copiar preguntas
+                    if (!empty($pruebaOriginal->Preguntas)) {
+                        foreach ($pruebaOriginal->Preguntas as $preguntaOriginal) {
+
+                            $pregunta = $preguntaOriginal->replicate();
+                            $pregunta->prueba_id = $prueba->id;
+                            $pregunta->save();
+
+                            // Copiar respuestas
+                            if (!empty($preguntaOriginal->Respuestas)) {
+                                foreach ($preguntaOriginal->Respuestas as $respuestaOriginal) {
+
+                                    $respuesta = $respuestaOriginal->replicate();
+                                    $respuesta->pregunta_id = $pregunta->id;
+                                    $respuesta->save();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        };
+
+        // --------------------------------------------------
+        // 1) COPIAR SOLO LOS MÓDULOS QUE EL USUARIO SELECCIONÓ
+        // --------------------------------------------------
+        foreach ($modulos as $moduloOriginal) {
+
+            $nuevoModulo = $moduloOriginal->replicate();
+            $nuevoModulo->curso_id = $curso->id;
+            $nuevoModulo->leccion_id = 0; // sigue siendo módulo
+            $nuevoModulo->save();
+
+            // Guardamos relación viejo_id → nuevo_id
+            $nuevosModulos[$moduloOriginal->id] = $nuevoModulo->id;
+
+            // Copiar pruebas del módulo
+            $copyPruebas($moduloOriginal, $nuevoModulo);
+        }
+
+        // --------------------------------------------------
+        // 2) COPIAR SOLO LAS CLASES QUE FUERON SELECCIONADAS
+        // --------------------------------------------------
+        foreach ($clases as $claseOriginal) {
+
+            // Importante: si el módulo de esta clase NO fue seleccionado → no se copia
+            if (!isset($nuevosModulos[$claseOriginal->leccion_id])) {
+                continue;
+            }
+
+            $nuevaClase = $claseOriginal->replicate();
+            $nuevaClase->curso_id = $curso->id;
+            $nuevaClase->leccion_id = $nuevosModulos[$claseOriginal->leccion_id]; // asignar el módulo nuevo
+            $nuevaClase->save();
+
+            // Copiar pruebas de la clase
+            $copyPruebas($claseOriginal, $nuevaClase);
+        }
+
+        return redirect()
+            ->route(Auth::user()->rol[0]->slug . '.cursos.index')
+            ->with('success', 'El curso ha sido copiado correctamente con la selección indicada.');
+
+    }
+
+
 }
