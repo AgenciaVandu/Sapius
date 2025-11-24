@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Registro;
 
 use App\FileGuia;
+use App\Homework;
 use App\Http\Controllers\Controller;
 use App\Models\Cursos\Category;
 use App\Models\Registro\Inscripcion;
@@ -238,6 +239,7 @@ class CursoProgramadoController extends Controller
     }
 
     public function leccionDetallada(Request $request){
+
         $leccion = Leccion::with(['Pruebas' =>function($q){
                         $q->where('activo','si');
                         $q->with('Preguntas');
@@ -279,6 +281,10 @@ class CursoProgramadoController extends Controller
             return $m->tipo <> "video";
         });
 
+        $homework = Homework::where('leccion_id', $leccion->id)
+                            ->where('user_id', Auth::user()->id)
+                            ->first();
+
         return view('registro.leccion')->with('leccion',$leccion)
             ->with('curso_programado_id',$request->curso_programado_id)
             ->with('curso_programado',$curso)
@@ -286,6 +292,7 @@ class CursoProgramadoController extends Controller
             ->with('contenido_programado',$contenido_programado)
             ->with('inscrito',$inscripcion)
             ->with('videoext',$videoext)
+            ->with('homework',$homework)
             ->with('video',$video);
     }
 

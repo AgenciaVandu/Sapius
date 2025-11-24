@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Cursos;
 
+use App\Homework;
 use App\Models\Cursos\Leccion;
 use App\Models\Cursos\Curso;
 use Illuminate\Http\Request;
@@ -196,8 +197,12 @@ class LeccionController extends Controller
     {
         $leccion = Leccion::find($request->leccion_id);
         $curso_programado = CursoProgramado::find($request->curso_programado_id);
+        $homework = Homework::where('leccion_id', $leccion->id)
+                            ->where('user_id', Auth::user()->id)
+                            ->first();
         return view('lecciones.tarea')->with('leccion',$leccion)
-                                      ->with('curso_programado',$curso_programado);
+                                      ->with('curso_programado',$curso_programado)
+                                      ->with('homework', $homework);
     }
 
     public function sendTarea(Request $request)
@@ -220,9 +225,14 @@ class LeccionController extends Controller
         $m = new TareaEmail($datos);
         $m->attachFromStorage($ruta);
         $mail->send($m);
+        $homework = new Homework();
+        $homework->leccion_id = $leccion->id;
+        $homework->user_id = Auth::user()->id;
+        $homework->save();
 
         return view('lecciones.tarea')->with('success', 'Tarea enviada')
                                       ->with('leccion',$leccion)
+                                      ->with('homework', $homework)
                                       ->with('curso_programado',$curso_programado);
     }
 
