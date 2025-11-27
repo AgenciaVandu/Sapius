@@ -1,6 +1,7 @@
 <div class="row">
     <div class="col-md-12">
         {!! $preguntas->links() !!}
+        {{-- {!! $preguntas->links('vendor.pagination.all') !!} --}}
     </div>
 </div>
 <div class="row">
