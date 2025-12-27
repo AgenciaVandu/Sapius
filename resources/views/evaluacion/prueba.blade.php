@@ -230,6 +230,45 @@ acceso permanente a la plataforma."
                 }, 1000);
             }
         });
+        // Navegación personalizada por recuadros
+        $(document).on('click', '.recuadro-paginacion', function() {
+            var page = $(this).data('page');
+            var prueba_id = $('#prueba_id').val();
+            var inscripcion_id = $('#inscripcion_id').val();
+            var url = $('#liga').val();
+
+            // Collect current answers to save
+            var respuestas = [];
+            $('#preguntas input[type=radio]:checked').each(function() {
+                respuestas.push({
+                    name: $(this).attr('name'),
+                    value: $(this).val()
+                });
+            });
+
+            if (page) {
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        page: page,
+                        prueba_id: prueba_id,
+                        inscripcion_id: inscripcion_id,
+                        respuestas: JSON.stringify(respuestas)
+                    },
+                    success: function(response) {
+                        $('#preguntas').html(response.preguntas);
+                        $('#respuestas_status').html(response.respuestas_status);
+                        $('html, body').animate({ scrollTop: 0 }, 'fast');
+                    },
+                    error: function(xhr) {
+                        console.log('Error navigating:', xhr);
+                    }
+                });
+            }
+        });
+
         // Tutorial Logic
         const driver = window.driver.js.driver;
         const driverObj = driver({
