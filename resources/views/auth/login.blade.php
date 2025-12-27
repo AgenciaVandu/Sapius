@@ -111,3 +111,81 @@
         </div>
     </div>
 @endsection
+
+@section('javascript')
+    <script>
+        const driver = window.driver.js.driver;
+        const driverObj = driver({
+            showProgress: true,
+            animate: true,
+            doneBtnText: 'Entendido',
+            nextBtnText: 'Siguiente',
+            prevBtnText: 'Anterior',
+            steps: [
+                { 
+                    element: '.auth-box', 
+                    popover: { 
+                        title: 'Bienvenido', 
+                        description: 'Ingresa tus credenciales para acceder a la plataforma.',
+                        side: "bottom", 
+                        align: 'center' 
+                    } 
+                },
+                { 
+                    element: '#username', 
+                    popover: { 
+                        title: 'Usuario', 
+                        description: 'Escribe aquí tu nombre de usuario asignado.',
+                        side: "right", 
+                        align: 'center' 
+                    } 
+                },
+                { 
+                    element: '#password', 
+                    popover: { 
+                        title: 'Contraseña', 
+                        description: 'Ingresa tu contraseña personal.',
+                        side: "right", 
+                        align: 'center' 
+                    } 
+                },
+                { 
+                    element: '.form-check', 
+                    popover: { 
+                        title: 'Recordarme', 
+                        description: 'Marca esta casilla para mantener tu sesión activa.',
+                        side: "right", 
+                        align: 'center' 
+                    } 
+                },
+                { 
+                    element: 'button[type="submit"]', 
+                    popover: { 
+                        title: 'Iniciar Sesión', 
+                        description: 'Haz clic aquí para entrar.',
+                        side: "top", 
+                        align: 'center' 
+                    } 
+                },
+                { 
+                    element: '.text-info', 
+                    popover: { 
+                        title: '¿Olvidaste tu contraseña?', 
+                        description: 'Si tienes problemas para entrar, usa esta opción para recuperar tu acceso.',
+                        side: "top", 
+                        align: 'center' 
+                    } 
+                }
+            ]
+        });
+
+        $(window).on('load', function() {
+            if (!localStorage.getItem('login_tutorial_seen')) {
+                setTimeout(() => {
+                    driverObj.drive();
+                    localStorage.setItem('login_tutorial_seen', 'true');
+                }, 1000); // Wait for preloader fadeOut
+            }
+        });
+    </script>
+@endsection

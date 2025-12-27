@@ -1,5 +1,29 @@
 @extends('layouts.adminmart.default')
 
+@section('breadcrumb')
+    <div class="page-breadcrumb">
+        <div class="row">
+            <div class="col-7 align-self-center">
+                <div class="d-flex align-items-center">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb m-0 p-0">
+                            <li class="breadcrumb-item"><a href="{{ route('alumno.home') }}">Dashboard</a>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">Completar Datos</li>
+                        </ol>
+                    </nav>
+                </div>
+                <div class="d-flex align-items-center mt-2">
+                    <h3 class="page-title text-truncate text-dark font-weight-medium mb-1 mr-3">Actualización de Datos</h3>
+                    <button class="btn btn-sm btn-outline-info rounded-pill" onclick="startTutorial()">
+                        <i class="far fa-question-circle"></i> Ver Tutorial
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
+
 @section('content')
     <div class="row">
         <div class="col-md-12">
@@ -233,5 +257,118 @@
             });
             setSelect();
         } );
+
+        // Tutorial Logic
+        const driver = window.driver.js.driver;
+        const driverObj = driver({
+            showProgress: true,
+            animate: true,
+            doneBtnText: 'Entendido',
+            nextBtnText: 'Siguiente',
+            prevBtnText: 'Anterior',
+            steps: [
+                { 
+                    element: '.page-breadcrumb', 
+                    popover: { 
+                        title: 'Completar Información', 
+                        description: 'Es crucial mantener tus datos actualizados para la generación correcta de constancias y certificados.',
+                        side: "bottom", 
+                        align: 'start' 
+                    } 
+                },
+                { 
+                    element: 'input[name="nombre"]', 
+                    popover: { 
+                        title: 'Nombre(s)', 
+                        description: 'Verifica que tu nombre esté escrito correctamente.',
+                        side: "right", 
+                        align: 'start' 
+                    } 
+                },
+                { 
+                    element: 'input[name="apellido"]', 
+                    popover: { 
+                        title: 'Apellidos', 
+                        description: 'Verifica tus apellidos. Así aparecerán en tus documentos oficiales.',
+                        side: "right", 
+                        align: 'start' 
+                    } 
+                },
+                { 
+                    element: 'input[name="telefono"]', 
+                    popover: { 
+                        title: 'Teléfono', 
+                        description: 'Un número de contacto para avisos importantes.',
+                        side: "right", 
+                        align: 'start' 
+                    } 
+                },
+                { 
+                    element: 'input[name="folio"]', 
+                    popover: { 
+                        title: 'Folio', 
+                        description: 'Ingresa tu folio de identificación si cuentas con uno.',
+                        side: "right", 
+                        align: 'start' 
+                    } 
+                },
+                { 
+                    element: 'input[name="universidad_procedencia"]', 
+                    popover: { 
+                        title: 'Universidad', 
+                        description: 'Indica la universidad de donde provienes.',
+                        side: "right", 
+                        align: 'start' 
+                    } 
+                },
+                { 
+                    element: 'input[name="foto"]', 
+                    popover: { 
+                        title: 'Foto de Perfil', 
+                        description: 'Sube una foto reciente para tu credencial y perfil.',
+                        side: "top", 
+                        align: 'start' 
+                    } 
+                },
+                { 
+                    element: 'input[name="documento_identificacion"]', 
+                    popover: { 
+                        title: 'Identificación Oficial', 
+                        description: 'Carga tu INE o identificación en formato PDF o imagen.',
+                        side: "top", 
+                        align: 'start' 
+                    } 
+                },
+                { 
+                    element: 'input[name="pase_ingreso"]', 
+                    popover: { 
+                        title: 'Pase de Ingreso', 
+                        description: 'Si se requiere, sube tu pase de ingreso escaneado.',
+                        side: "top", 
+                        align: 'start' 
+                    } 
+                },
+                { 
+                    element: 'input[type="submit"]', 
+                    popover: { 
+                        title: 'Guardar Cambios', 
+                        description: 'Una vez completado todo, haz clic aquí para actualizar tu información.',
+                        side: "top", 
+                        align: 'start' 
+                    } 
+                }
+            ]
+        });
+
+        function startTutorial() {
+            driverObj.drive();
+        }
+
+        if (!localStorage.getItem('complete_data_tutorial_seen')) {
+            setTimeout(() => {
+                startTutorial();
+                localStorage.setItem('complete_data_tutorial_seen', 'true');
+            }, 1000);
+        }
     </script>
 @endsection

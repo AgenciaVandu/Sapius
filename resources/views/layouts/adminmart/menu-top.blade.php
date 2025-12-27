@@ -159,7 +159,7 @@
                 <!-- ============================================================== -->
                 <!-- Search -->
                 <!-- ============================================================== -->
-                <li class="nav-item d-none d-md-block">
+                <li class="nav-item d-none d-md-block" id="statusIconWrapper">
                     {{-- Icono de un triangulo color amarillo parpadeante con un signo de admiracion dentro  --}}
                     @if (Auth::user()->rol[0]->slug == 'alumno')
                         @if (Auth::user()->documento_identificacion =! ' ' || Auth::user()->pase_ingreso =! ' ' || Auth::user()->validado != 'no' )
@@ -180,9 +180,9 @@
                 <!-- ============================================================== -->
                 <!-- User profile and search -->
                 <!-- ============================================================== -->
-                <li class="nav-item dropdown">
+                <li class="nav-item dropdown" id="userDropdownWrapper">
                     <a class="nav-link dropdown-toggle" href="javascript:void(0)" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false">
+                        aria-haspopup="true" aria-expanded="false" id="userDropdownTrigger">
                         @if (Auth::user()->foto !== null && Auth::user()->foto !== '')
                             <img src="{{ route(Auth::user()->rol[0]->slug . '.image', ['file' => Auth::user()->foto]) }}"
                                 alt="user" class="rounded-circle" width="40" height="40">
@@ -201,6 +201,7 @@
                             @csrf
                             <input name="id" type="hidden" value="{{ Auth::user()->id }}">
                             <a class="dropdown-item" href="{{ route(Auth::user()->rol[0]->slug . '.profile') }}"
+                                id="userProfileBtn"
                                 onclick="event.preventDefault();
                             document.getElementById('profile-form').submit();">
                                 <i data-feather="user" class="svg-icon mr-2 ml-1"></i>
@@ -209,7 +210,8 @@
                         </form>
 
                         <a class="dropdown-item"
-                            href="{{ route(Auth::user()->rol[0]->slug . '.complete', ['role' => Auth::user()->id]) }}">
+                            href="{{ route(Auth::user()->rol[0]->slug . '.complete', ['role' => Auth::user()->id]) }}"
+                            id="userCompleteDataBtn">
                             <i data-feather="clipboard" class="svg-icon mr-2 ml-1"></i>
                             Completar datos
                         </a>
@@ -230,7 +232,8 @@
                             {{ __('Account Setting') }}</a> --}}
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="javascript:void(0)"
-                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+                            id="userLogoutBtn">
                             <i data-feather="power" class="svg-icon mr-2 ml-1"></i>
                             {{ __('Logout') }}
                         </a>

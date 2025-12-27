@@ -34,7 +34,9 @@ acceso permanente a la plataforma." id="myInput" style="display: none">
             </div>
             <div class="col-5 align-self-center">
                 <div class="customize-input float-right">
-
+                    <button class="btn btn-sm btn-outline-info rounded-pill" onclick="startTutorial()">
+                        <i class="far fa-question-circle"></i> Ver Tutorial
+                    </button>
                 </div>
             </div>
         </div>
@@ -179,6 +181,84 @@ $(document).ready(function () {
     if (window.sidebar){
     document.onmousedown=disableselect
     document.onclick=reEnable
+    }
+</script>
+
+<script>
+    const driver = window.driver.js.driver;
+    const driverObj = driver({
+        showProgress: true,
+        animate: true,
+        doneBtnText: 'Entendido',
+        nextBtnText: 'Siguiente',
+        prevBtnText: 'Anterior',
+        steps: [
+            { 
+                element: '.page-breadcrumb', 
+                popover: { 
+                    title: 'Retroalimentación de Evaluación', 
+                    description: 'En esta sección podrás revisar tus respuestas y entender tus errores.',
+                    side: "bottom", 
+                    align: 'start' 
+                } 
+            },
+            { 
+                element: '.page-breadcrumb', 
+                popover: { 
+                    title: '⚠️ IMPORTANTE: NO RECARGAR', 
+                    description: 'NO actualices ni recargues esta página. Si lo haces, el sistema cerrará la retroalimentación por seguridad y NO podrás volver a verla.',
+                    side: "bottom", 
+                    align: 'center' 
+                } 
+            },
+            { 
+                element: '.card:not(.border-dark)', 
+                popover: { 
+                    title: 'Tarjeta de Pregunta', 
+                    description: 'Cada tarjeta muestra el planteamiento de la pregunta.',
+                    side: "top", 
+                    align: 'start' 
+                } 
+            },
+            { 
+                element: '.alert-success', 
+                popover: { 
+                    title: 'Respuesta Correcta', 
+                    description: 'La opción resaltada en VERDE es la respuesta correcta.',
+                    side: "left", 
+                    align: 'center' 
+                } 
+            },
+            { 
+                element: '.alert-danger', 
+                popover: { 
+                    title: 'Tu Respuesta Incorrecta', 
+                    description: 'Si ves una opción en ROJO, es la que seleccionaste y fue incorrecta.',
+                    side: "left", 
+                    align: 'center' 
+                } 
+            },
+            { 
+                element: '.card-footer', 
+                popover: { 
+                    title: 'Justificación Didáctica', 
+                    description: 'Lee esta sección para comprender el porqué de la respuesta correcta.',
+                    side: "top", 
+                    align: 'start' 
+                } 
+            }
+        ]
+    });
+
+    function startTutorial() {
+        driverObj.drive();
+    }
+
+    if (!localStorage.getItem('exam_feedback_tutorial_seen')) {
+        setTimeout(() => {
+            startTutorial();
+            localStorage.setItem('exam_feedback_tutorial_seen', 'true');
+        }, 1000);
     }
 </script>
 

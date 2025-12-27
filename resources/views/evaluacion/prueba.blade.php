@@ -40,7 +40,10 @@ acceso permanente a la plataforma."
                 </div>
             </div>
             <div class="col-5 align-self-center">
-                <div class="customize-input float-right">
+                <div class="customize-input float-right text-right">
+                    <button class="btn btn-sm btn-outline-info rounded-pill mb-2" onclick="startTutorial()">
+                        <i class="far fa-question-circle"></i> Ver Tutorial
+                    </button>
                     <h3>Resueltas: <strong id="total_resueltas">0</strong>/<strong id="total_preguntas">0</strong></h3>
                 </div>
             </div>
@@ -227,5 +230,81 @@ acceso permanente a la plataforma."
                 }, 1000);
             }
         });
+        // Tutorial Logic
+        const driver = window.driver.js.driver;
+        const driverObj = driver({
+            showProgress: true,
+            animate: true,
+            doneBtnText: 'Entendido',
+            nextBtnText: 'Siguiente',
+            prevBtnText: 'Anterior',
+            steps: [
+                { 
+                    element: '.page-breadcrumb', 
+                    popover: { 
+                        title: 'Modo Examen', 
+                        description: 'Estás a punto de comenzar tu evaluación. Lee atentamente las siguientes instrucciones.',
+                        side: "bottom", 
+                        align: 'start' 
+                    } 
+                },
+                { 
+                    element: '#timer', 
+                    popover: { 
+                        title: 'Tiempo Restante', 
+                        description: 'Aquí verás el tiempo disponible. Si llega a cero, el examen se enviará automáticamente.',
+                        side: "bottom", 
+                        align: 'center' 
+                    } 
+                },
+                { 
+                    element: '#preguntas', 
+                    popover: { 
+                        title: 'Área de Preguntas', 
+                        description: 'Aquí aparecerá la pregunta y sus opciones de respuesta. Selecciona la que consideres correcta.',
+                        side: "top", 
+                        align: 'start' 
+                    } 
+                },
+                { 
+                    element: '#respuestas_status', 
+                    popover: { 
+                        title: 'Navegación', 
+                        description: 'Usa este panel para ver qué preguntas has contestado y saltar entre ellas.',
+                        side: "top", 
+                        align: 'start' 
+                    } 
+                },
+                { 
+                    element: '#myInput', 
+                    popover: { 
+                        title: '⚠️ REGLAS IMPORTANTES', 
+                        description: 'No intentes copiar texto, usar capturas de pantalla o cambiar de pestaña. El sistema detectará estas acciones.',
+                        side: "top", 
+                        align: 'center' 
+                    } 
+                },
+                { 
+                    element: '.page-breadcrumb', 
+                    popover: { 
+                        title: 'Advertencias', 
+                        description: 'Tendrás 3 oportunidades si cometes una falta (como presionar teclas prohibidas). A la tercera, el examen se cerrará.',
+                        side: "bottom", 
+                        align: 'center' 
+                    } 
+                }
+            ]
+        });
+
+        function startTutorial() {
+            driverObj.drive();
+        }
+
+        if (!localStorage.getItem('exam_taking_tutorial_seen')) {
+            setTimeout(() => {
+                startTutorial();
+                localStorage.setItem('exam_taking_tutorial_seen', 'true');
+            }, 1000);
+        }
     </script>
 @endsection

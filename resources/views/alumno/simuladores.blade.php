@@ -3,9 +3,16 @@
 @section('breadcrumb')
     <div class="page-breadcrumb mb-4">
         <div class="row">
-            <div class="col-12">
+            <div class="col-7">
                 <h2 class="page-title font-weight-bold text-dark mb-0">{{ Auth::user()->nombre_completo }}</h2>
                 <p class="text-muted h5">Simuladores disponibles</p>
+            </div>
+            <div class="col-5 align-self-center">
+                <div class="customize-input float-right">
+                    <button class="btn btn-sm btn-outline-info rounded-pill" onclick="startTutorial()">
+                        <i class="far fa-question-circle"></i> Ver Tutorial
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -88,5 +95,63 @@
             var id = button.data('cursoid')
             document.querySelector(".modal-footer form input").setAttribute("value", id)
         })
+
+        const driver = window.driver.js.driver;
+        const driverObj = driver({
+            showProgress: true,
+            animate: true,
+            doneBtnText: 'Entendido',
+            nextBtnText: 'Siguiente',
+            prevBtnText: 'Anterior',
+            steps: [
+                { 
+                    element: '.page-breadcrumb', 
+                    popover: { 
+                        title: 'Simuladores de Examen', 
+                        description: 'Practica con exámenes similares a los reales en esta sección.',
+                        side: "bottom", 
+                        align: 'start' 
+                    } 
+                },
+                { 
+                    element: '.card:first-child', 
+                    popover: { 
+                        title: 'Tarjeta de Simulador', 
+                        description: 'Aquí verás los detalles del simulador, incluyendo su vigencia y costo.',
+                        side: "right", 
+                        align: 'start' 
+                    } 
+                },
+                { 
+                    element: '.card:first-child a[href*="inscripcion"]', 
+                    popover: { 
+                        title: 'Inscribir Simulador', 
+                        description: 'Usa este botón para adquirir acceso al simulador.',
+                        side: "top", 
+                        align: 'center' 
+                    } 
+                },
+                { 
+                    element: '.card:first-child a[onclick*="submit"]', 
+                    popover: { 
+                        title: 'Más Detalles', 
+                        description: 'Revisa la información completa del simulador antes de inscribirte.',
+                        side: "top", 
+                        align: 'center' 
+                    } 
+                }
+            ]
+        });
+
+        function startTutorial() {
+            driverObj.drive();
+        }
+
+        if (!localStorage.getItem('simulators_tutorial_seen')) {
+            setTimeout(() => {
+                startTutorial();
+                localStorage.setItem('simulators_tutorial_seen', 'true');
+            }, 1000);
+        }
     </script>
 @endsection

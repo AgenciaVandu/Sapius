@@ -5,7 +5,12 @@
         <div class="row">
             <div class="col-7 align-self-center">
                 <h3 class="page-title text-truncate text-dark font-weight-medium mb-1">{{ $leccion->Curso->titulo }}</h3>
-                <div class="d-flex align-items-center">{{ $leccion->titulo }}</div>
+                <div class="d-flex align-items-center">
+                    <div class="mr-3">{{ $leccion->titulo }}</div>
+                    <button class="btn btn-sm btn-outline-info rounded-pill" onclick="startTutorial()">
+                        <i class="far fa-question-circle"></i> Ver Tutorial
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -249,4 +254,76 @@
             });
         </script>
     @endif
+
+    <script>
+        const driver = window.driver.js.driver;
+
+        const driverObj = driver({
+            showProgress: true,
+            animate: true,
+            doneBtnText: 'Entendido',
+            nextBtnText: 'Siguiente',
+            prevBtnText: 'Anterior',
+            steps: [
+                { 
+                    element: '.page-breadcrumb', 
+                    popover: { 
+                        title: 'Aula Virtual', 
+                        description: 'Estás en la vista de lección. Aquí consumirás el contenido de tu curso.',
+                        side: "bottom", 
+                        align: 'start' 
+                    } 
+                },
+                { 
+                    element: '.col-md-8 .card', 
+                    popover: { 
+                        title: 'Contenido Principal', 
+                        description: 'Aquí aparecerá el video de la clase o la imagen representativa.',
+                        side: "bottom", 
+                        align: 'start' 
+                    } 
+                },
+                { 
+                    element: '#clases .list-group', 
+                    popover: { 
+                        title: 'Navegación de Clases', 
+                        description: 'Usa esta lista para moverte entre las diferentes clases de este módulo.',
+                        side: "top", 
+                        align: 'start' 
+                    } 
+                },
+                { 
+                    element: '.col-md-4', 
+                    popover: { 
+                        title: 'Recursos Adicionales', 
+                        description: 'En esta columna encontrarás material complementario y tareas.',
+                        side: "left", 
+                        align: 'start' 
+                    } 
+                },
+                { 
+                    element: '.card.examen', 
+                    popover: { 
+                        title: 'Exámenes y Resultados', 
+                        description: 'Aquí aparecerán tus exámenes. Al finalizar uno, podrás ver tu puntaje y retroalimentación aquí mismo o en la sección de Resultados.',
+                        side: "left", 
+                        align: 'start' 
+                    } 
+                }
+            ]
+        });
+
+        function startTutorial() {
+            driverObj.drive();
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            if (!localStorage.getItem('lesson_tutorial_seen')) {
+                setTimeout(() => {
+                    startTutorial();
+                    localStorage.setItem('lesson_tutorial_seen', 'true');
+                }, 1000);
+            }
+        });
+    </script>
 @endsection

@@ -69,26 +69,26 @@
                     @if (Auth::user()->hasRole('alumno'))
                         <li class="nav-small-cap"><span class="hide-menu">Opciones</span></li>
 
-                        <li class="sidebar-item">
+                        <li class="sidebar-item" id="menu-calendario">
                             <a class="sidebar-link" href="{{ route('alumno.calendario') }}" aria-expanded="false">
                                 <i data-feather="calendar" class="feather-icon"></i>
                                 <span class="hide-menu">Mi Calendario</span>
                             </a>
                         </li>
 
-                        <li class="sidebar-item">
+                        <li class="sidebar-item" id="menu-cursos-disponibles">
                             <a class="sidebar-link" href="{{ route('cursos.disponibles') }}" aria-expanded="false">
                                 <i data-feather="flag" class="feather-icon"></i>
                                 <span class="hide-menu">Cursos disponibles</span>
                             </a>
                         </li>
-                        <li class="sidebar-item">
+                        <li class="sidebar-item" id="menu-guias-disponibles">
                             <a class="sidebar-link" href="{{ route('guias.disponibles') }}" aria-expanded="false">
                                 <i data-feather="flag" class="feather-icon"></i>
                                 <span class="hide-menu">Guias disponibles</span>
                             </a>
                         </li>
-                        <li class="sidebar-item">
+                        <li class="sidebar-item" id="menu-simuladores-disponibles">
                             <a class="sidebar-link" href="{{ route('simuladores.disponibles') }}"
                                 aria-expanded="false">
                                 <i data-feather="flag" class="feather-icon"></i>
@@ -110,7 +110,7 @@
                         </a>
                     </li> --}}
 
-                        <li class="sidebar-item">
+                        <li class="sidebar-item" id="menu-soporte">
                             <a class="sidebar-link" href="{{ route('alumno.soporte') }}" aria-expanded="false">
                                 <i data-feather="info" class="feather-icon"></i>
                                 <span class="hide-menu">Soporte Técnico</span>

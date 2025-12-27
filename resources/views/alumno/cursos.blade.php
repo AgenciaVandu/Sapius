@@ -6,7 +6,12 @@
             <div class="col-12 align-self-center">
                 <h2 class="page-title text-truncate text-dark font-weight-medium mb-1">
                     {{ Auth::user()->nombre_completo }}</h2>
-                <h3 class="page-title text-truncate text-dark font-weight-medium mb-1">Cursos disponibles</h3>
+                <div class="d-flex align-items-center">
+                    <h3 class="page-title text-truncate text-dark font-weight-medium mb-1 mr-3">Cursos disponibles</h3>
+                    <button class="btn btn-sm btn-outline-info rounded-pill" onclick="startTutorial()">
+                        <i class="far fa-question-circle"></i> Ver Tutorial
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -85,5 +90,67 @@
             //var buttonid = console.log(modal.find('.modal-footer form button'))
             b.setAttribute("value", id)
         })
+    </script>
+    <script>
+        const driver = window.driver.js.driver;
+
+        const driverObj = driver({
+            showProgress: true,
+            animate: true,
+            doneBtnText: 'Entendido',
+            nextBtnText: 'Siguiente',
+            prevBtnText: 'Anterior',
+            steps: [
+                { 
+                    element: '.page-breadcrumb', 
+                    popover: { 
+                        title: 'Catálogo de Cursos', 
+                        description: 'Aquí puedes explorar todos los cursos disponibles para ti.',
+                        side: "bottom", 
+                        align: 'start' 
+                    } 
+                },
+                { 
+                    element: '.card.shadow:first-child', 
+                    popover: { 
+                        title: 'Ficha del Curso', 
+                        description: 'Encuentra información clave: título, precio y fechas.',
+                        side: "bottom", 
+                        align: 'start' 
+                    } 
+                },
+                { 
+                    element: '.card.shadow:first-child .btn-detalle', 
+                    popover: { 
+                        title: 'Inscribirse', 
+                        description: 'Haz clic aquí para iniciar el proceso de inscripción.',
+                        side: "top", 
+                        align: 'start' 
+                    } 
+                },
+                { 
+                    element: '.card.shadow:first-child .btn-primary', 
+                    popover: { 
+                        title: 'Ver Detalles', 
+                        description: 'Consulta el temario completo y más información antes de inscribirte.',
+                        side: "top", 
+                        align: 'start' 
+                    } 
+                }
+            ]
+        });
+
+        function startTutorial() {
+            driverObj.drive();
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            if (!localStorage.getItem('available_courses_tutorial_seen')) {
+                setTimeout(() => {
+                    startTutorial();
+                    localStorage.setItem('available_courses_tutorial_seen', 'true');
+                }, 1000);
+            }
+        });
     </script>
 @endsection

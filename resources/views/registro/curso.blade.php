@@ -7,6 +7,13 @@
                 <h3 class="page-title text-truncate text-dark font-weight-medium mb-1">{{ $curso_programado->Curso->titulo }}
                 </h3>
             </div>
+            <div class="col-5 align-self-center">
+                 <div class="customize-input float-right">
+                    <button class="btn btn-sm btn-outline-info rounded-pill" onclick="startTutorial()">
+                        <i class="far fa-question-circle"></i> Ver Tutorial
+                    </button>
+                 </div>
+            </div>
         </div>
     </div>
 @endsection
@@ -104,4 +111,78 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('javascript')
+    <script>
+        const driver = window.driver.js.driver;
+
+        const driverObj = driver({
+            showProgress: true,
+            animate: true,
+            doneBtnText: 'Entendido',
+            nextBtnText: 'Siguiente',
+            prevBtnText: 'Anterior',
+            steps: [
+                { 
+                    element: '.page-breadcrumb', 
+                    popover: { 
+                        title: 'Detalles del Curso', 
+                        description: 'Aquí encontrarás toda la información detallada del curso seleccionado.',
+                        side: "bottom", 
+                        align: 'start' 
+                    } 
+                },
+                { 
+                    element: '.card-title', 
+                    popover: { 
+                        title: 'Estructura del Curso', 
+                        description: 'Esta lista muestra los módulos o lecciones que componen este curso.',
+                        side: "bottom", 
+                        align: 'start' 
+                    } 
+                },
+                { 
+                    element: '.list-group:first-of-type', 
+                    popover: { 
+                        title: 'Temario', 
+                        description: 'Aquí verás el contenido desglosado. Si ya estás inscrito, podrás acceder desde aquí.',
+                        side: "right", 
+                        align: 'start' 
+                    } 
+                },
+                { 
+                    element: '.col-md-4 .card', 
+                    popover: { 
+                        title: 'Panel de Acción', 
+                        description: 'Desde aquí puedes inscribirte, ver tu estado o acceder a tus calificaciones.',
+                        side: "left", 
+                        align: 'start' 
+                    } 
+                },
+                { 
+                    element: '.btn-detalle', 
+                    popover: { 
+                        title: 'Inscripción', 
+                        description: 'Si aún no estás inscrito, usa este botón para comenzar.',
+                        side: "left", 
+                        align: 'start' 
+                    } 
+                }
+            ]
+        });
+
+        function startTutorial() {
+            driverObj.drive();
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            if (!localStorage.getItem('course_details_tutorial_seen')) {
+                setTimeout(() => {
+                    startTutorial();
+                    localStorage.setItem('course_details_tutorial_seen', 'true');
+                }, 1000);
+            }
+        });
+    </script>
 @endsection

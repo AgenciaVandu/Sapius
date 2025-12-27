@@ -3,10 +3,17 @@
 @section('breadcrumb')
     <div class="page-breadcrumb">
         <div class="row">
-            <div class="col-12 align-self-center">
+            <div class="col-7 align-self-center">
                 <h2 class="page-title text-truncate text-dark font-weight-medium mb-1">
                     {{ Auth::user()->nombre_completo }}</h2>
                 <h3 class="page-title text-truncate text-dark font-weight-medium mb-1">Guias disponibles</h3>
+            </div>
+            <div class="col-5 align-self-center">
+                <div class="customize-input float-right">
+                    <button class="btn btn-sm btn-outline-info rounded-pill" onclick="startTutorial()">
+                        <i class="far fa-question-circle"></i> Ver Tutorial
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -85,5 +92,63 @@
             //var buttonid = console.log(modal.find('.modal-footer form button'))
             b.setAttribute("value", id)
         })
+
+        const driver = window.driver.js.driver;
+        const driverObj = driver({
+            showProgress: true,
+            animate: true,
+            doneBtnText: 'Entendido',
+            nextBtnText: 'Siguiente',
+            prevBtnText: 'Anterior',
+            steps: [
+                { 
+                    element: '.page-breadcrumb', 
+                    popover: { 
+                        title: 'Guías de Estudio', 
+                        description: 'Aquí encontrarás todas las guías disponibles para tu preparación.',
+                        side: "bottom", 
+                        align: 'start' 
+                    } 
+                },
+                { 
+                    element: '.card.shadow:first-child', 
+                    popover: { 
+                        title: 'Tarjeta de Guía', 
+                        description: 'Cada tarjeta representa una guía. Contiene información clave como título, fechas y precio.',
+                        side: "right", 
+                        align: 'start' 
+                    } 
+                },
+                { 
+                    element: '.card.shadow:first-child .btn-detalle', 
+                    popover: { 
+                        title: 'Inscribir Guía', 
+                        description: 'Haz clic aquí para iniciar el proceso de compra e inscripción.',
+                        side: "top", 
+                        align: 'center' 
+                    } 
+                },
+                { 
+                    element: '.card.shadow:first-child .btn-primary', 
+                    popover: { 
+                        title: 'Más Detalles', 
+                        description: 'Consulta el temario completo y la descripción detallada de la guía antes de inscribirte.',
+                        side: "top", 
+                        align: 'center' 
+                    } 
+                }
+            ]
+        });
+
+        function startTutorial() {
+            driverObj.drive();
+        }
+
+        if (!localStorage.getItem('guides_tutorial_seen')) {
+            setTimeout(() => {
+                startTutorial();
+                localStorage.setItem('guides_tutorial_seen', 'true');
+            }, 1000);
+        }
     </script>
 @endsection

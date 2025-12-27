@@ -1,5 +1,29 @@
 @extends('layouts.adminmart.default')
 
+@section('breadcrumb')
+    <div class="page-breadcrumb">
+        <div class="row">
+            <div class="col-7 align-self-center">
+                <div class="d-flex align-items-center">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb m-0 p-0">
+                            <li class="breadcrumb-item"><a href="{{ route('alumno.home') }}">Dashboard</a>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">Mi Perfil</li>
+                        </ol>
+                    </nav>
+                </div>
+                <div class="d-flex align-items-center mt-2">
+                    <h3 class="page-title text-truncate text-dark font-weight-medium mb-1 mr-3">Mi Perfil</h3>
+                    <button class="btn btn-sm btn-outline-info rounded-pill" onclick="startTutorial()">
+                        <i class="far fa-question-circle"></i> Ver Tutorial
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
+
 @section('content')
     <div class="card">
         <div class="card-body text-center">

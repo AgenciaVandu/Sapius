@@ -1,12 +1,20 @@
 @extends('layouts.adminmart.default')
 
+@section('css')
+@endsection
+
 @section('breadcrumb')
     <div class="page-breadcrumb">
         <div class="row">
             <div class="col-12 align-self-center">
                 <h2 class="page-title text-truncate text-dark font-weight-medium mb-1">
                     {{ Auth::user()->nombre_completo }}</h2>
-                <h3 class="page-title text-truncate text-dark font-weight-medium mb-1">Tus cursos</h3>
+                <div class="d-flex align-items-center">
+                    <h3 class="page-title text-truncate text-dark font-weight-medium mb-1 mr-3">Tus cursos</h3>
+                    <button class="btn btn-sm btn-outline-info rounded-pill" onclick="startTutorial()">
+                        <i class="far fa-question-circle"></i> Ver Tutorial
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -108,4 +116,171 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('javascript')
+
+    <script>
+        const driver = window.driver.js.driver;
+
+        const driverObj = driver({
+            showProgress: true,
+            animate: true,
+            doneBtnText: 'Entendido',
+            nextBtnText: 'Siguiente',
+            prevBtnText: 'Anterior',
+            steps: [
+                { 
+                    element: '.page-breadcrumb', 
+                    popover: { 
+                        title: 'Bienvenido a tu Panel', 
+                        description: 'Aquí encontrarás todos tus cursos inscritos y podrás acceder a su contenido.',
+                        side: "bottom", 
+                        align: 'start' 
+                    } 
+                },
+                { 
+                    element: '.left-sidebar', 
+                    popover: { 
+                        title: 'Menú Principal', 
+                        description: 'Desde aquí podrás navegar a las diferentes secciones de la plataforma.',
+                        side: "right", 
+                        align: 'start' 
+                    } 
+                },
+                { 
+                    element: '#menu-calendario', 
+                    popover: { 
+                        title: 'Mi Calendario', 
+                        description: 'Consulta tus fechas importantes y cronograma de actividades.',
+                        side: "right", 
+                        align: 'start' 
+                    } 
+                },
+                { 
+                    element: '#menu-cursos-disponibles', 
+                    popover: { 
+                        title: 'Cursos Disponibles', 
+                        description: 'Explora el catálogo de cursos en los que te puedes inscribir.',
+                        side: "right", 
+                        align: 'start' 
+                    } 
+                },
+                { 
+                    element: '#menu-guias-disponibles', 
+                    popover: { 
+                        title: 'Guías', 
+                        description: 'Accede a guías y material de apoyo adicional.',
+                        side: "right", 
+                        align: 'start' 
+                    } 
+                },
+                { 
+                    element: '#menu-simuladores-disponibles', 
+                    popover: { 
+                        title: 'Simuladores', 
+                        description: 'Practica tus conocimientos con nuestros simuladores interactivos.',
+                        side: "right", 
+                        align: 'start' 
+                    } 
+                },
+                { 
+                    element: '#menu-soporte', 
+                    popover: { 
+                        title: 'Soporte Técnico', 
+                        description: '¿Tienes algún problema? Contacta con nuestro equipo de soporte aquí.',
+                        side: "right", 
+                        align: 'start' 
+                    } 
+                },
+                { 
+                    element: '#statusIconWrapper', 
+                    popover: { 
+                        title: 'Estado de Cuenta', 
+                        description: 'Este ícono te indica si tu documentación y estado de cuenta están completos y validados.',
+                        side: "bottom", 
+                        align: 'end' 
+                    }
+                },
+                { 
+                    element: '#userDropdownWrapper', 
+                    popover: { 
+                        title: 'Menú de Usuario', 
+                        description: 'Aquí puedes gestionar tu cuenta. Haz clic para ver más opciones.',
+                        side: "bottom", 
+                        align: 'end' 
+                    }
+                },
+                { 
+                    element: '#userProfileBtn', 
+                    popover: { 
+                        title: 'Mi Perfil', 
+                        description: 'Actualiza tu foto, contraseña y datos personales.',
+                        side: "left", 
+                        align: 'center' 
+                    },
+                    onHighlightStarted: (element) => {
+                        if (!document.getElementById('userDropdownWrapper').classList.contains('show')) {
+                             document.getElementById('userDropdownTrigger').click();
+                        }
+                    }
+                },
+                { 
+                    element: '#userCompleteDataBtn', 
+                    popover: { 
+                        title: 'Completar Datos', 
+                        description: 'Es importante tener tu información al día para certificados y validaciones.',
+                        side: "left", 
+                        align: 'center' 
+                    }
+                },
+                { 
+                    element: '#userLogoutBtn', 
+                    popover: { 
+                        title: 'Cerrar Sesión', 
+                        description: 'Haz clic aquí para salir de la plataforma de forma segura.',
+                        side: "left", 
+                        align: 'center' 
+                    },
+                    onDeselected: (element) => {
+                        if (document.getElementById('userDropdownWrapper').classList.contains('show')) {
+                             document.getElementById('userDropdownTrigger').click();
+                        }
+                    }
+                },
+                { 
+                    element: '.card.shadow:first-child', 
+                    popover: { 
+                        title: 'Tus Cursos', 
+                        description: 'Cada tarjeta representa un curso. Aquí verás la imagen, título y estado del mismo.',
+                        side: "bottom", 
+                        align: 'start' 
+                    } 
+                },
+                { 
+                    element: '.card.shadow:first-child button[type="submit"]', 
+                    popover: { 
+                        title: 'Acceder al Curso', 
+                        description: 'Haz clic en este botón para entrar al contenido del curso, ver guías o examenes.',
+                        side: "top", 
+                        align: 'start' 
+                    } 
+                }
+            ]
+        });
+
+        function startTutorial() {
+            driverObj.drive();
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            if (!localStorage.getItem('student_panel_tutorial_seen')) {
+                // Pequeño delay para asegurar que los elementos estén renderizados y visibles
+                setTimeout(() => {
+                    startTutorial();
+                    localStorage.setItem('student_panel_tutorial_seen', 'true');
+                }, 1000);
+            }
+        });
+    </script>
 @endsection

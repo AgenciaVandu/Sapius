@@ -25,6 +25,7 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
     <!-- Custom CSS -->
     <link href="{{ asset('vendor/adminmart/dist/css/style.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/driver.js@1.0.1/dist/driver.css"/>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -77,11 +78,14 @@
     <!-- Bootstrap tether Core JavaScript -->
     <script src="{{ asset('vendor/adminmart/assets/libs/popper.js/dist/umd/popper.min.js') }}"></script>
     <script src="{{ asset('vendor/adminmart/assets/libs/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/driver.js@1.0.1/dist/driver.js.iife.js"></script>
     <!-- ============================================================== -->
     <!-- This page plugin js -->
     <!-- ============================================================== -->
     <script>
-        $(".preloader ").fadeOut();
+        $(window).on('load', function() {
+            $(".preloader ").fadeOut();
+        });
     </script>
 </body>
 

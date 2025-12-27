@@ -83,5 +83,82 @@
             </div>
         </div>
     </div>
+@endsection
 
+@section('javascript')
+    <script>
+        const driver = window.driver.js.driver;
+        const driverObj = driver({
+            showProgress: true,
+            animate: true,
+            doneBtnText: 'Entendido',
+            nextBtnText: 'Siguiente',
+            prevBtnText: 'Anterior',
+            steps: [
+                { 
+                    element: '.auth-box', 
+                    popover: { 
+                        title: 'Registro de Usuario', 
+                        description: 'Completa este formulario para crear tu cuenta.',
+                        side: "bottom", 
+                        align: 'center' 
+                    } 
+                },
+                { 
+                    element: '#nombre', 
+                    popover: { 
+                        title: 'Datos Personales', 
+                        description: 'Ingresa tu nombre y apellido real.',
+                        side: "right", 
+                        align: 'center' 
+                    } 
+                },
+                { 
+                    element: '#email', 
+                    popover: { 
+                        title: 'Correo Electrónico', 
+                        description: 'Usa un correo válido donde podamos contactarte.',
+                        side: "right", 
+                        align: 'center' 
+                    } 
+                },
+                { 
+                    element: '#username', 
+                    popover: { 
+                        title: 'Nombre de Usuario', 
+                        description: 'Elige un nombre único para identificarte en la plataforma.',
+                        side: "right", 
+                        align: 'center' 
+                    } 
+                },
+                { 
+                    element: '#password', 
+                    popover: { 
+                        title: 'Seguridad', 
+                        description: 'Crea una contraseña segura y confírmala.',
+                        side: "right", 
+                        align: 'center' 
+                    } 
+                },
+                { 
+                    element: '.form-check', 
+                    popover: { 
+                        title: 'Términos y Condiciones', 
+                        description: 'Debes aceptar los términos de uso para poder registrarte.',
+                        side: "top", 
+                        align: 'center' 
+                    } 
+                }
+            ]
+        });
+
+        $(window).on('load', function() {
+            if (!localStorage.getItem('register_tutorial_seen')) {
+                setTimeout(() => {
+                    driverObj.drive();
+                    localStorage.setItem('register_tutorial_seen', 'true');
+                }, 1000); // Wait for preloader fadeOut
+            }
+        });
+    </script>
 @endsection

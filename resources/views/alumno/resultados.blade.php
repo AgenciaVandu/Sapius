@@ -16,7 +16,9 @@
             </div>
             <div class="col-5 align-self-center">
                 <div class="customize-input float-right">
-
+                    <button class="btn btn-sm btn-outline-info rounded-pill" onclick="startTutorial()">
+                        <i class="far fa-question-circle"></i> Ver Tutorial
+                    </button>
                 </div>
             </div>
         </div>
@@ -97,4 +99,65 @@
 
 @section('javascript')
     <script src="{{ asset('js/funciones.js') }}"></script>
+    <script>
+        const driver = window.driver.js.driver;
+        const driverObj = driver({
+            showProgress: true,
+            animate: true,
+            doneBtnText: 'Entendido',
+            nextBtnText: 'Siguiente',
+            prevBtnText: 'Anterior',
+            steps: [
+                { 
+                    element: '.page-breadcrumb', 
+                    popover: { 
+                        title: 'Resultados de Evaluación', 
+                        description: 'En esta sección podrás visualizar el historial y calificaciones de tus exámenes.',
+                        side: "bottom", 
+                        align: 'start' 
+                    } 
+                },
+                { 
+                    element: '.legend-container', 
+                    popover: { 
+                        title: 'Código de Colores', 
+                        description: 'Entiende tu desempeño: Verde (Satisfactorio), Rojo (Deficiente), Amarillo (No presentado).',
+                        side: "bottom", 
+                        align: 'center' 
+                    } 
+                },
+                { 
+                    element: '#dataTable', 
+                    popover: { 
+                        title: 'Desglose de Exámenes', 
+                        description: 'Aquí verás cada prueba con su puntaje final y número de aciertos.',
+                        side: "top", 
+                        align: 'start' 
+                    } 
+                },
+                { 
+                    element: 'a.btn.btn-primary', 
+                    popover: { 
+                        title: 'Descargar Reporte', 
+                        description: 'Haz clic aquí para descargar un PDF oficial con tus calificaciones.',
+                        side: "left", 
+                        align: 'start' 
+                    } 
+                }
+            ]
+        });
+
+        function startTutorial() {
+            driverObj.drive();
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            if (!localStorage.getItem('exam_results_tutorial_seen')) {
+                setTimeout(() => {
+                    startTutorial();
+                    localStorage.setItem('exam_results_tutorial_seen', 'true');
+                }, 1000);
+            }
+        });
+    </script>
 @endsection
