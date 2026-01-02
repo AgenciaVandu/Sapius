@@ -10,7 +10,7 @@
             </div>
             <div class="col-5 align-self-center">
                 <div class="customize-input float-right">
-                    <button class="btn btn-sm btn-outline-info rounded-pill" onclick="startTutorial()">
+                    <button class="btn btn-sm btn-outline-info rounded-pill btn-tutorial-animate" onclick="startTutorial()">
                         <i class="far fa-question-circle"></i> Ver Tutorial
                     </button>
                 </div>
@@ -100,42 +100,41 @@
             doneBtnText: 'Entendido',
             nextBtnText: 'Siguiente',
             prevBtnText: 'Anterior',
-            steps: [
-                { 
-                    element: '.page-breadcrumb', 
-                    popover: { 
-                        title: 'Guías de Estudio', 
+            steps: [{
+                    element: '.page-breadcrumb',
+                    popover: {
+                        title: 'Guías de Estudio',
                         description: 'Aquí encontrarás todas las guías disponibles para tu preparación.',
-                        side: "bottom", 
-                        align: 'start' 
-                    } 
+                        side: "bottom",
+                        align: 'start'
+                    }
                 },
-                { 
-                    element: '.card.shadow:first-child', 
-                    popover: { 
-                        title: 'Tarjeta de Guía', 
+                {
+                    element: '.card.shadow:first-child',
+                    popover: {
+                        title: 'Tarjeta de Guía',
                         description: 'Cada tarjeta representa una guía. Contiene información clave como título, fechas y precio.',
-                        side: "right", 
-                        align: 'start' 
-                    } 
+                        side: "right",
+                        align: 'start'
+                    }
                 },
-                { 
-                    element: '.card.shadow:first-child .btn-detalle', 
-                    popover: { 
-                        title: 'Inscribir Guía', 
+                {
+                    element: '.card.shadow:first-child .btn-detalle',
+                    popover: {
+                        title: 'Inscribir Guía',
                         description: 'Haz clic aquí para iniciar el proceso de compra e inscripción.',
-                        side: "top", 
-                        align: 'center' 
-                    } 
+                        side: "top",
+                        align: 'center'
+                    }
                 },
-                { 
-                    element: '.card.shadow:first-child .btn-primary', 
-                    popover: { 
-                        title: 'Más Detalles', 
+                {
+                    element: '.card.shadow:first-child .btn-primary',
+                    popover: {
+                        title: 'Más Detalles',
                         description: 'Consulta el temario completo y la descripción detallada de la guía antes de inscribirte.',
-                        side: "top", 
-                        align: 'center' 
-                    } 
+                        side: "top",
+                        align: 'center'
+                    }
                 }
             ]
         });

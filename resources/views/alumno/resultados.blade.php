@@ -16,7 +16,7 @@
             </div>
             <div class="col-5 align-self-center">
                 <div class="customize-input float-right">
-                    <button class="btn btn-sm btn-outline-info rounded-pill" onclick="startTutorial()">
+                    <button class="btn btn-sm btn-outline-info rounded-pill btn-tutorial-animate" onclick="startTutorial()">
                         <i class="far fa-question-circle"></i> Ver Tutorial
                     </button>
                 </div>
@@ -28,13 +28,16 @@
 @section('content')
     <div class="d-flex justify-content-center">
         <div class="legend-container" style="display: flex; gap: 10px; margin-bottom: 20px;">
-            <div class="legend-box legend-nopresentado" style="background-color: #FFFF8A; color: #948503; padding: 10px; border-radius: 5px;">
+            <div class="legend-box legend-nopresentado"
+                style="background-color: #FFFF8A; color: #948503; padding: 10px; border-radius: 5px;">
                 No presentado: El examen no ha sido contestado.
             </div>
-            <div class="legend-box legend-bajo" style="background-color: #FFCCCC; color: #a94442; padding: 10px; border-radius: 5px;">
+            <div class="legend-box legend-bajo"
+                style="background-color: #FFCCCC; color: #a94442; padding: 10px; border-radius: 5px;">
                 Deficiencia en puntaje, tema o contenido.
             </div>
-            <div class="legend-box legend-alto" style="background-color: #D4EDDA; color: #155724; padding: 10px; border-radius: 5px;">
+            <div class="legend-box legend-alto"
+                style="background-color: #D4EDDA; color: #155724; padding: 10px; border-radius: 5px;">
                 Puntaje satisfactorio, demuestra buen dominio del contenido.
             </div>
         </div>
@@ -107,42 +110,41 @@
             doneBtnText: 'Entendido',
             nextBtnText: 'Siguiente',
             prevBtnText: 'Anterior',
-            steps: [
-                { 
-                    element: '.page-breadcrumb', 
-                    popover: { 
-                        title: 'Resultados de Evaluación', 
+            steps: [{
+                    element: '.page-breadcrumb',
+                    popover: {
+                        title: 'Resultados de Evaluación',
                         description: 'En esta sección podrás visualizar el historial y calificaciones de tus exámenes.',
-                        side: "bottom", 
-                        align: 'start' 
-                    } 
+                        side: "bottom",
+                        align: 'start'
+                    }
                 },
-                { 
-                    element: '.legend-container', 
-                    popover: { 
-                        title: 'Código de Colores', 
+                {
+                    element: '.legend-container',
+                    popover: {
+                        title: 'Código de Colores',
                         description: 'Entiende tu desempeño: Verde (Satisfactorio), Rojo (Deficiente), Amarillo (No presentado).',
-                        side: "bottom", 
-                        align: 'center' 
-                    } 
+                        side: "bottom",
+                        align: 'center'
+                    }
                 },
-                { 
-                    element: '#dataTable', 
-                    popover: { 
-                        title: 'Desglose de Exámenes', 
+                {
+                    element: '#dataTable',
+                    popover: {
+                        title: 'Desglose de Exámenes',
                         description: 'Aquí verás cada prueba con su puntaje final y número de aciertos.',
-                        side: "top", 
-                        align: 'start' 
-                    } 
+                        side: "top",
+                        align: 'start'
+                    }
                 },
-                { 
-                    element: 'a.btn.btn-primary', 
-                    popover: { 
-                        title: 'Descargar Reporte', 
+                {
+                    element: 'a.btn.btn-primary',
+                    popover: {
+                        title: 'Descargar Reporte',
                         description: 'Haz clic aquí para descargar un PDF oficial con tus calificaciones.',
-                        side: "left", 
-                        align: 'start' 
-                    } 
+                        side: "left",
+                        align: 'start'
+                    }
                 }
             ]
         });

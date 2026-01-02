@@ -8,11 +8,11 @@
                 </h3>
             </div>
             <div class="col-5 align-self-center">
-                 <div class="customize-input float-right">
-                    <button class="btn btn-sm btn-outline-info rounded-pill" onclick="startTutorial()">
+                <div class="customize-input float-right">
+                    <button class="btn btn-sm btn-outline-info rounded-pill btn-tutorial-animate" onclick="startTutorial()">
                         <i class="far fa-question-circle"></i> Ver Tutorial
                     </button>
-                 </div>
+                </div>
             </div>
         </div>
     </div>
@@ -123,51 +123,50 @@
             doneBtnText: 'Entendido',
             nextBtnText: 'Siguiente',
             prevBtnText: 'Anterior',
-            steps: [
-                { 
-                    element: '.page-breadcrumb', 
-                    popover: { 
-                        title: 'Detalles del Curso', 
+            steps: [{
+                    element: '.page-breadcrumb',
+                    popover: {
+                        title: 'Detalles del Curso',
                         description: 'Aquí encontrarás toda la información detallada del curso seleccionado.',
-                        side: "bottom", 
-                        align: 'start' 
-                    } 
+                        side: "bottom",
+                        align: 'start'
+                    }
                 },
-                { 
-                    element: '.card-title', 
-                    popover: { 
-                        title: 'Estructura del Curso', 
+                {
+                    element: '.card-title',
+                    popover: {
+                        title: 'Estructura del Curso',
                         description: 'Esta lista muestra los módulos o lecciones que componen este curso.',
-                        side: "bottom", 
-                        align: 'start' 
-                    } 
+                        side: "bottom",
+                        align: 'start'
+                    }
                 },
-                { 
-                    element: '.list-group:first-of-type', 
-                    popover: { 
-                        title: 'Temario', 
+                {
+                    element: '.list-group:first-of-type',
+                    popover: {
+                        title: 'Temario',
                         description: 'Aquí verás el contenido desglosado. Si ya estás inscrito, podrás acceder desde aquí.',
-                        side: "right", 
-                        align: 'start' 
-                    } 
+                        side: "right",
+                        align: 'start'
+                    }
                 },
-                { 
-                    element: '.col-md-4 .card', 
-                    popover: { 
-                        title: 'Panel de Acción', 
+                {
+                    element: '.col-md-4 .card',
+                    popover: {
+                        title: 'Panel de Acción',
                         description: 'Desde aquí puedes inscribirte, ver tu estado o acceder a tus calificaciones.',
-                        side: "left", 
-                        align: 'start' 
-                    } 
+                        side: "left",
+                        align: 'start'
+                    }
                 },
-                { 
-                    element: '.btn-detalle', 
-                    popover: { 
-                        title: 'Inscripción', 
+                {
+                    element: '.btn-detalle',
+                    popover: {
+                        title: 'Inscripción',
                         description: 'Si aún no estás inscrito, usa este botón para comenzar.',
-                        side: "left", 
-                        align: 'start' 
-                    } 
+                        side: "left",
+                        align: 'start'
+                    }
                 }
             ]
         });

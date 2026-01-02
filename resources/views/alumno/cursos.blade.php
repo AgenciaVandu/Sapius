@@ -8,7 +8,7 @@
                     {{ Auth::user()->nombre_completo }}</h2>
                 <div class="d-flex align-items-center">
                     <h3 class="page-title text-truncate text-dark font-weight-medium mb-1 mr-3">Cursos disponibles</h3>
-                    <button class="btn btn-sm btn-outline-info rounded-pill" onclick="startTutorial()">
+                    <button class="btn btn-sm btn-outline-info rounded-pill btn-tutorial-animate" onclick="startTutorial()">
                         <i class="far fa-question-circle"></i> Ver Tutorial
                     </button>
                 </div>
@@ -100,42 +100,41 @@
             doneBtnText: 'Entendido',
             nextBtnText: 'Siguiente',
             prevBtnText: 'Anterior',
-            steps: [
-                { 
-                    element: '.page-breadcrumb', 
-                    popover: { 
-                        title: 'Catálogo de Cursos', 
+            steps: [{
+                    element: '.page-breadcrumb',
+                    popover: {
+                        title: 'Catálogo de Cursos',
                         description: 'Aquí puedes explorar todos los cursos disponibles para ti.',
-                        side: "bottom", 
-                        align: 'start' 
-                    } 
+                        side: "bottom",
+                        align: 'start'
+                    }
                 },
-                { 
-                    element: '.card.shadow:first-child', 
-                    popover: { 
-                        title: 'Ficha del Curso', 
+                {
+                    element: '.card.shadow:first-child',
+                    popover: {
+                        title: 'Ficha del Curso',
                         description: 'Encuentra información clave: título, precio y fechas.',
-                        side: "bottom", 
-                        align: 'start' 
-                    } 
+                        side: "bottom",
+                        align: 'start'
+                    }
                 },
-                { 
-                    element: '.card.shadow:first-child .btn-detalle', 
-                    popover: { 
-                        title: 'Inscribirse', 
+                {
+                    element: '.card.shadow:first-child .btn-detalle',
+                    popover: {
+                        title: 'Inscribirse',
                         description: 'Haz clic aquí para iniciar el proceso de inscripción.',
-                        side: "top", 
-                        align: 'start' 
-                    } 
+                        side: "top",
+                        align: 'start'
+                    }
                 },
-                { 
-                    element: '.card.shadow:first-child .btn-primary', 
-                    popover: { 
-                        title: 'Ver Detalles', 
+                {
+                    element: '.card.shadow:first-child .btn-primary',
+                    popover: {
+                        title: 'Ver Detalles',
                         description: 'Consulta el temario completo y más información antes de inscribirte.',
-                        side: "top", 
-                        align: 'start' 
-                    } 
+                        side: "top",
+                        align: 'start'
+                    }
                 }
             ]
         });

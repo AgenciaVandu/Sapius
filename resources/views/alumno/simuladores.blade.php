@@ -9,7 +9,7 @@
             </div>
             <div class="col-5 align-self-center">
                 <div class="customize-input float-right">
-                    <button class="btn btn-sm btn-outline-info rounded-pill" onclick="startTutorial()">
+                    <button class="btn btn-sm btn-outline-info rounded-pill btn-tutorial-animate" onclick="startTutorial()">
                         <i class="far fa-question-circle"></i> Ver Tutorial
                     </button>
                 </div>
@@ -49,7 +49,8 @@
 
                             <p class="mb-2 text-success small">
                                 <i class="fas fa-clock mr-1"></i>
-                                Quedan {{ \Carbon\Carbon::now()->diffForHumans(\Carbon\Carbon::parse($curso->fecha_fin_venta), ['syntax' => \Carbon\CarbonInterface::DIFF_ABSOLUTE]) }}
+                                Quedan
+                                {{ \Carbon\Carbon::now()->diffForHumans(\Carbon\Carbon::parse($curso->fecha_fin_venta), ['syntax' => \Carbon\CarbonInterface::DIFF_ABSOLUTE]) }}
                                 para cerrar inscripciones
                             </p>
 
@@ -103,42 +104,41 @@
             doneBtnText: 'Entendido',
             nextBtnText: 'Siguiente',
             prevBtnText: 'Anterior',
-            steps: [
-                { 
-                    element: '.page-breadcrumb', 
-                    popover: { 
-                        title: 'Simuladores de Examen', 
+            steps: [{
+                    element: '.page-breadcrumb',
+                    popover: {
+                        title: 'Simuladores de Examen',
                         description: 'Practica con exámenes similares a los reales en esta sección.',
-                        side: "bottom", 
-                        align: 'start' 
-                    } 
+                        side: "bottom",
+                        align: 'start'
+                    }
                 },
-                { 
-                    element: '.card:first-child', 
-                    popover: { 
-                        title: 'Tarjeta de Simulador', 
+                {
+                    element: '.card:first-child',
+                    popover: {
+                        title: 'Tarjeta de Simulador',
                         description: 'Aquí verás los detalles del simulador, incluyendo su vigencia y costo.',
-                        side: "right", 
-                        align: 'start' 
-                    } 
+                        side: "right",
+                        align: 'start'
+                    }
                 },
-                { 
-                    element: '.card:first-child a[href*="inscripcion"]', 
-                    popover: { 
-                        title: 'Inscribir Simulador', 
+                {
+                    element: '.card:first-child a[href*="inscripcion"]',
+                    popover: {
+                        title: 'Inscribir Simulador',
                         description: 'Usa este botón para adquirir acceso al simulador.',
-                        side: "top", 
-                        align: 'center' 
-                    } 
+                        side: "top",
+                        align: 'center'
+                    }
                 },
-                { 
-                    element: '.card:first-child a[onclick*="submit"]', 
-                    popover: { 
-                        title: 'Más Detalles', 
+                {
+                    element: '.card:first-child a[onclick*="submit"]',
+                    popover: {
+                        title: 'Más Detalles',
                         description: 'Revisa la información completa del simulador antes de inscribirte.',
-                        side: "top", 
-                        align: 'center' 
-                    } 
+                        side: "top",
+                        align: 'center'
+                    }
                 }
             ]
         });

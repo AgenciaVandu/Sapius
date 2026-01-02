@@ -21,6 +21,7 @@
 
     <!-- Custom CSS -->
     <link href="{{ asset('vendor/adminmart/dist/css/style.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/tutorial-animation.css') }}" rel="stylesheet">
     @yield('css')
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -132,6 +133,11 @@
     <script src="../assets/extra-libs/jvector/jquery-jvectormap-world-mill-en.js"></script>
     <script src="../dist/js/pages/dashboards/dashboard1.min.js"></script> --}}
     @yield('javascript')
+
+    @if (Auth::check() && Auth::user()->hasRole('alumno'))
+        @include('partials.security-alert')
+        <script src="{{ asset('js/student-security.js') }}"></script>
+    @endif
 </body>
 
 </html>

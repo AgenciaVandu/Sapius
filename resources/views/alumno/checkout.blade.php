@@ -9,10 +9,10 @@
         @import url("https://fonts.googleapis.com/css?family=Lato:300,400,700");
 
         /*    * {
-                font-family: 'Lato', sans-serif;
-                font-weight: 300;
-                color: #444;
-            } */
+                    font-family: 'Lato', sans-serif;
+                    font-weight: 300;
+                    color: #444;
+                } */
 
         ::-webkit-input-placeholder,
         :-moz-placeholder,
@@ -34,7 +34,7 @@
             <div class="col-12 align-self-center">
                 <div class="d-flex align-items-center">
                     <h2 class="page-title text-dark font-weight-medium mb-1 mr-3">Pasarela de pagos</h2>
-                    <button class="btn btn-sm btn-outline-info rounded-pill" onclick="startTutorial()">
+                    <button class="btn btn-sm btn-outline-info rounded-pill btn-tutorial-animate" onclick="startTutorial()">
                         <i class="far fa-question-circle"></i> Ver Tutorial
                     </button>
                 </div>
@@ -126,7 +126,8 @@
                             <div class="form-group">
                                 <label for="cvv2">Código de seguridad</label>
                                 <input id="cvv2" name="cvv2" type="text" class="form-control"
-                                    placeholder="3 dígitos" autocomplete="off" data-openpay-card="cvv2" maxlength="3" minlength="3">
+                                    placeholder="3 dígitos" autocomplete="off" data-openpay-card="cvv2" maxlength="3"
+                                    minlength="3">
                             </div>
 
                             <!-- Campos ocultos -->
@@ -211,69 +212,68 @@
                 doneBtnText: 'Entendido',
                 nextBtnText: 'Siguiente',
                 prevBtnText: 'Anterior',
-                steps: [
-                    { 
-                        element: '.page-breadcrumb', 
-                        popover: { 
-                            title: 'Pago Seguro', 
+                steps: [{
+                        element: '.page-breadcrumb',
+                        popover: {
+                            title: 'Pago Seguro',
                             description: 'Estás en la pasarela de pagos. Aquí podrás finalizar tu inscripción de forma segura.',
-                            side: "bottom", 
-                            align: 'start' 
-                        } 
+                            side: "bottom",
+                            align: 'start'
+                        }
                     },
-                    { 
-                        element: '.card.shadow', 
-                        popover: { 
-                            title: 'Resumen del Pedido', 
+                    {
+                        element: '.card.shadow',
+                        popover: {
+                            title: 'Resumen del Pedido',
                             description: 'Verifica los detalles del curso, el descuento (si aplica) y el monto total a pagar.',
-                            side: "right", 
-                            align: 'start' 
-                        } 
+                            side: "right",
+                            align: 'start'
+                        }
                     },
-                    { 
-                        element: '#holder_name', 
-                        popover: { 
-                            title: 'Nombre del Titular', 
+                    {
+                        element: '#holder_name',
+                        popover: {
+                            title: 'Nombre del Titular',
                             description: 'Ingresa el nombre exactamente como aparece en tu tarjeta.',
-                            side: "top", 
-                            align: 'start' 
-                        } 
+                            side: "top",
+                            align: 'start'
+                        }
                     },
-                    { 
-                        element: '#card_number', 
-                        popover: { 
-                            title: 'Número de Tarjeta', 
+                    {
+                        element: '#card_number',
+                        popover: {
+                            title: 'Número de Tarjeta',
                             description: 'Escribe los 16 dígitos de tu tarjeta de crédito o débito.',
-                            side: "top", 
-                            align: 'start' 
-                        } 
+                            side: "top",
+                            align: 'start'
+                        }
                     },
-                    { 
-                        element: '.form-row', 
-                        popover: { 
-                            title: 'Fecha de Expiración', 
+                    {
+                        element: '.form-row',
+                        popover: {
+                            title: 'Fecha de Expiración',
                             description: 'Introduce el mes (MM) y los últimos dos dígitos del año (YY) de vencimiento.',
-                            side: "top", 
-                            align: 'start' 
-                        } 
+                            side: "top",
+                            align: 'start'
+                        }
                     },
-                    { 
-                        element: '#cvv2', 
-                        popover: { 
-                            title: 'Código de Seguridad', 
+                    {
+                        element: '#cvv2',
+                        popover: {
+                            title: 'Código de Seguridad',
                             description: 'Ingresa los 3 dígitos que se encuentran al reverso de tu tarjeta (CVV).',
-                            side: "top", 
-                            align: 'start' 
-                        } 
+                            side: "top",
+                            align: 'start'
+                        }
                     },
-                    { 
-                        element: '#pay-button', 
-                        popover: { 
-                            title: 'Finalizar Compra', 
+                    {
+                        element: '#pay-button',
+                        popover: {
+                            title: 'Finalizar Compra',
                             description: 'Una vez completados los datos, haz clic aquí para procesar el pago de forma segura.',
-                            side: "top", 
-                            align: 'start' 
-                        } 
+                            side: "top",
+                            align: 'start'
+                        }
                     }
                 ]
             });

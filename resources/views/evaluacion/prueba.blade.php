@@ -41,7 +41,8 @@ acceso permanente a la plataforma."
             </div>
             <div class="col-5 align-self-center">
                 <div class="customize-input float-right text-right">
-                    <button class="btn btn-sm btn-outline-info rounded-pill mb-2" onclick="startTutorial()">
+                    <button class="btn btn-sm btn-outline-info rounded-pill mb-2 btn-tutorial-animate"
+                        onclick="startTutorial()">
                         <i class="far fa-question-circle"></i> Ver Tutorial
                     </button>
                     <h3>Resueltas: <strong id="total_resueltas">0</strong>/<strong id="total_preguntas">0</strong></h3>
@@ -260,7 +261,9 @@ acceso permanente a la plataforma."
                     success: function(response) {
                         $('#preguntas').html(response.preguntas);
                         $('#respuestas_status').html(response.respuestas_status);
-                        $('html, body').animate({ scrollTop: 0 }, 'fast');
+                        $('html, body').animate({
+                            scrollTop: 0
+                        }, 'fast');
                     },
                     error: function(xhr) {
                         console.log('Error navigating:', xhr);
@@ -277,60 +280,59 @@ acceso permanente a la plataforma."
             doneBtnText: 'Entendido',
             nextBtnText: 'Siguiente',
             prevBtnText: 'Anterior',
-            steps: [
-                { 
-                    element: '.page-breadcrumb', 
-                    popover: { 
-                        title: 'Modo Examen', 
+            steps: [{
+                    element: '.page-breadcrumb',
+                    popover: {
+                        title: 'Modo Examen',
                         description: 'Estás a punto de comenzar tu evaluación. Lee atentamente las siguientes instrucciones.',
-                        side: "bottom", 
-                        align: 'start' 
-                    } 
+                        side: "bottom",
+                        align: 'start'
+                    }
                 },
-                { 
-                    element: '#timer', 
-                    popover: { 
-                        title: 'Tiempo Restante', 
+                {
+                    element: '#timer',
+                    popover: {
+                        title: 'Tiempo Restante',
                         description: 'Aquí verás el tiempo disponible. Si llega a cero, el examen se enviará automáticamente.',
-                        side: "bottom", 
-                        align: 'center' 
-                    } 
+                        side: "bottom",
+                        align: 'center'
+                    }
                 },
-                { 
-                    element: '#preguntas', 
-                    popover: { 
-                        title: 'Área de Preguntas', 
+                {
+                    element: '#preguntas',
+                    popover: {
+                        title: 'Área de Preguntas',
                         description: 'Aquí aparecerá la pregunta y sus opciones de respuesta. Selecciona la que consideres correcta.',
-                        side: "top", 
-                        align: 'start' 
-                    } 
+                        side: "top",
+                        align: 'start'
+                    }
                 },
-                { 
-                    element: '#respuestas_status', 
-                    popover: { 
-                        title: 'Navegación', 
+                {
+                    element: '#respuestas_status',
+                    popover: {
+                        title: 'Navegación',
                         description: 'Usa este panel para ver qué preguntas has contestado y saltar entre ellas.',
-                        side: "top", 
-                        align: 'start' 
-                    } 
+                        side: "top",
+                        align: 'start'
+                    }
                 },
-                { 
-                    element: '#myInput', 
-                    popover: { 
-                        title: '⚠️ REGLAS IMPORTANTES', 
+                {
+                    element: '#myInput',
+                    popover: {
+                        title: '⚠️ REGLAS IMPORTANTES',
                         description: 'No intentes copiar texto, usar capturas de pantalla o cambiar de pestaña. El sistema detectará estas acciones.',
-                        side: "top", 
-                        align: 'center' 
-                    } 
+                        side: "top",
+                        align: 'center'
+                    }
                 },
-                { 
-                    element: '.page-breadcrumb', 
-                    popover: { 
-                        title: 'Advertencias', 
+                {
+                    element: '.page-breadcrumb',
+                    popover: {
+                        title: 'Advertencias',
                         description: 'Tendrás 3 oportunidades si cometes una falta (como presionar teclas prohibidas). A la tercera, el examen se cerrará.',
-                        side: "bottom", 
-                        align: 'center' 
-                    } 
+                        side: "bottom",
+                        align: 'center'
+                    }
                 }
             ]
         });

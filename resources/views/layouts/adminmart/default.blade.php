@@ -33,7 +33,8 @@
 
     <!-- Custom CSS -->
     <link href="{{ asset('vendor/adminmart/dist/css/style.css') }}" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/driver.js@1.0.1/dist/driver.css"/>
+    <link href="{{ asset('css/tutorial-animation.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/driver.js@1.0.1/dist/driver.css" />
     @yield('css')
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -145,6 +146,12 @@
     <script src="../assets/extra-libs/jvector/jquery-jvectormap-world-mill-en.js"></script>
     <script src="../dist/js/pages/dashboards/dashboard1.min.js"></script> --}}
     <script src="https://cdn.jsdelivr.net/npm/driver.js@1.0.1/dist/driver.js.iife.js"></script>
+
+    @if (Auth::check() && Auth::user()->hasRole('alumno'))
+        @include('partials.security-alert')
+        <script src="{{ asset('js/student-security.js') }}"></script>
+    @endif
+
     @yield('javascript')
 </body>
 

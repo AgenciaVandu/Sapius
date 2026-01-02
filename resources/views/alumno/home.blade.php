@@ -11,7 +11,7 @@
                     {{ Auth::user()->nombre_completo }}</h2>
                 <div class="d-flex align-items-center">
                     <h3 class="page-title text-truncate text-dark font-weight-medium mb-1 mr-3">Tus cursos</h3>
-                    <button class="btn btn-sm btn-outline-info rounded-pill" onclick="startTutorial()">
+                    <button class="btn btn-sm btn-outline-info rounded-pill btn-tutorial-animate" onclick="startTutorial()">
                         <i class="far fa-question-circle"></i> Ver Tutorial
                     </button>
                 </div>

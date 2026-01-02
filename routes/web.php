@@ -435,6 +435,9 @@ Route::group(['middleware' =>['alumno'],'prefix' => 'alumno'], function() {
     Route::get('/simuladores', 'HomeController@simuladoresDisponibles')->name('simuladores.disponibles');
     Route::get('/tu-opinion', 'HomeController@tuOpinion')->name('tu.opinion');
     Route::post('/tu-opinion/store', 'HomeController@storeOpinion')->name('alumno.opinion.store');
+    Route::get('/cuenta-bloqueada', function () {
+        return view('errors.locked');
+    })->name('alumno.locked');
 });
 
 //Rutas de alumno con restricciones de mobile
