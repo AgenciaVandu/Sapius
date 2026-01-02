@@ -228,6 +228,8 @@ class ExamenController extends Controller
             // $correo_examen_finalizado = new ExamenFinalizado($examen);
             // $mail->send($correo_examen_finalizado);
 
+            session()->flash('examen_finalizado', true);
+
             $send = new Curso;
             return $send->leccionDetallada($request);
         }

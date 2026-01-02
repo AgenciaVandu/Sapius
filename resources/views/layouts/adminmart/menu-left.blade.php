@@ -5,9 +5,9 @@
         <nav class="sidebar-nav">
             <ul id="sidebarnav">
 
-                <li class="sidebar-item"> <a class="sidebar-link sidebar-link"
+                <li class="sidebar-item" id="menu-tus-cursos"> <a class="sidebar-link sidebar-link"
                         href="{{ url('/' . Auth::user()->rol[0]->slug) }}" aria-expanded="false"><i data-feather="home"
-                            class="feather-icon"></i><span class="hide-menu">Bienvenido</span></a></li>
+                            class="feather-icon"></i><span class="hide-menu">Tus cursos</span></a></li>
 
                 <li class="list-divider"></li>
 

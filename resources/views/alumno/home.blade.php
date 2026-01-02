@@ -57,18 +57,21 @@
                                                 <input name="curso_programado_id" type="hidden"
                                                     value="{{ $cursop->id }}">
                                                 @if ($inscripcion->aceptado == 'no')
-                                                    <button type="submit" disabled class="btn btn-warning btn-block rounded-10">
+                                                    <button type="submit" disabled
+                                                        class="btn btn-warning btn-block rounded-10">
                                                         Aprobración Pendiente
                                                     </button>
                                                 @elseif($inscripcion->aceptado == 'si')
                                                     @if ($cursop->fecha_inicio > date('Y-m-d H:i:s'))
-                                                        <button type="submit" disabled class="btn btn-success btn-block rounded-10">
-                                                            Disponbible el {{ \Carbon\Carbon::parse($cursop->fecha_inicio)->format('d/m/Y') }}
+                                                        <button type="submit" disabled
+                                                            class="btn btn-success btn-block rounded-10">
+                                                            Disponbible el
+                                                            {{ \Carbon\Carbon::parse($cursop->fecha_inicio)->format('d/m/Y') }}
                                                         </button>
                                                     @else
                                                         <button type="submit" class="btn btn-success btn-block rounded-10">
-                                                        Ver Guía
-                                                    </button>
+                                                            Ver Guía
+                                                        </button>
                                                     @endif
                                                 @endif
                                             </form>
@@ -119,7 +122,6 @@
 @endsection
 
 @section('javascript')
-
     <script>
         const driver = window.driver.js.driver;
 
@@ -129,142 +131,141 @@
             doneBtnText: 'Entendido',
             nextBtnText: 'Siguiente',
             prevBtnText: 'Anterior',
-            steps: [
-                { 
-                    element: '.page-breadcrumb', 
-                    popover: { 
-                        title: 'Bienvenido a tu Panel', 
+            steps: [{
+                    element: '.page-breadcrumb',
+                    popover: {
+                        title: 'Bienvenido a tu Panel',
                         description: 'Aquí encontrarás todos tus cursos inscritos y podrás acceder a su contenido.',
-                        side: "bottom", 
-                        align: 'start' 
-                    } 
+                        side: "bottom",
+                        align: 'start'
+                    }
                 },
-                { 
-                    element: '.left-sidebar', 
-                    popover: { 
-                        title: 'Menú Principal', 
-                        description: 'Desde aquí podrás navegar a las diferentes secciones de la plataforma.',
-                        side: "right", 
-                        align: 'start' 
-                    } 
+                {
+                    element: '#menu-tus-cursos',
+                    popover: {
+                        title: 'Tus Cursos',
+                        description: 'En esta sección (Inicio) encontrarás todos los cursos en los que estás inscrito actualmente.',
+                        side: "right",
+                        align: 'start'
+                    }
                 },
-                { 
-                    element: '#menu-calendario', 
-                    popover: { 
-                        title: 'Mi Calendario', 
+                {
+                    element: '#menu-calendario',
+                    popover: {
+                        title: 'Mi Calendario',
                         description: 'Consulta tus fechas importantes y cronograma de actividades.',
-                        side: "right", 
-                        align: 'start' 
-                    } 
+                        side: "right",
+                        align: 'start'
+                    }
                 },
-                { 
-                    element: '#menu-cursos-disponibles', 
-                    popover: { 
-                        title: 'Cursos Disponibles', 
+                {
+                    element: '#menu-cursos-disponibles',
+                    popover: {
+                        title: 'Cursos Disponibles',
                         description: 'Explora el catálogo de cursos en los que te puedes inscribir.',
-                        side: "right", 
-                        align: 'start' 
-                    } 
+                        side: "right",
+                        align: 'start'
+                    }
                 },
-                { 
-                    element: '#menu-guias-disponibles', 
-                    popover: { 
-                        title: 'Guías', 
+                {
+                    element: '#menu-guias-disponibles',
+                    popover: {
+                        title: 'Guías',
                         description: 'Accede a guías y material de apoyo adicional.',
-                        side: "right", 
-                        align: 'start' 
-                    } 
+                        side: "right",
+                        align: 'start'
+                    }
                 },
-                { 
-                    element: '#menu-simuladores-disponibles', 
-                    popover: { 
-                        title: 'Simuladores', 
+                {
+                    element: '#menu-simuladores-disponibles',
+                    popover: {
+                        title: 'Simuladores',
                         description: 'Practica tus conocimientos con nuestros simuladores interactivos.',
-                        side: "right", 
-                        align: 'start' 
-                    } 
+                        side: "right",
+                        align: 'start'
+                    }
                 },
-                { 
-                    element: '#menu-soporte', 
-                    popover: { 
-                        title: 'Soporte Técnico', 
+                {
+                    element: '#menu-soporte',
+                    popover: {
+                        title: 'Soporte Técnico',
                         description: '¿Tienes algún problema? Contacta con nuestro equipo de soporte aquí.',
-                        side: "right", 
-                        align: 'start' 
-                    } 
+                        side: "right",
+                        align: 'start'
+                    }
                 },
-                { 
-                    element: '#statusIconWrapper', 
-                    popover: { 
-                        title: 'Estado de Cuenta', 
+                {
+                    element: '#statusIconWrapper',
+                    popover: {
+                        title: 'Estado de Cuenta',
                         description: 'Este ícono te indica si tu documentación y estado de cuenta están completos y validados.',
-                        side: "bottom", 
-                        align: 'end' 
+                        side: "bottom",
+                        align: 'end'
                     }
                 },
-                { 
-                    element: '#userDropdownWrapper', 
-                    popover: { 
-                        title: 'Menú de Usuario', 
+                {
+                    element: '#userDropdownWrapper',
+                    popover: {
+                        title: 'Menú de Usuario',
                         description: 'Aquí puedes gestionar tu cuenta. Haz clic para ver más opciones.',
-                        side: "bottom", 
-                        align: 'end' 
+                        side: "bottom",
+                        align: 'end'
                     }
                 },
-                { 
-                    element: '#userProfileBtn', 
-                    popover: { 
-                        title: 'Mi Perfil', 
+                {
+                    element: '#userProfileBtn',
+                    popover: {
+                        title: 'Mi Perfil',
                         description: 'Actualiza tu foto, contraseña y datos personales.',
-                        side: "left", 
-                        align: 'center' 
+                        side: "left",
+                        align: 'center'
                     },
                     onHighlightStarted: (element) => {
                         if (!document.getElementById('userDropdownWrapper').classList.contains('show')) {
-                             document.getElementById('userDropdownTrigger').click();
+                            document.getElementById('userDropdownTrigger').click();
                         }
                     }
                 },
-                { 
-                    element: '#userCompleteDataBtn', 
-                    popover: { 
-                        title: 'Completar Datos', 
+                {
+                    element: '#userCompleteDataBtn',
+                    popover: {
+                        title: 'Completar Datos',
                         description: 'Es importante tener tu información al día para certificados y validaciones.',
-                        side: "left", 
-                        align: 'center' 
+                        side: "left",
+                        align: 'center'
                     }
                 },
-                { 
-                    element: '#userLogoutBtn', 
-                    popover: { 
-                        title: 'Cerrar Sesión', 
+                {
+                    element: '#userLogoutBtn',
+                    popover: {
+                        title: 'Cerrar Sesión',
                         description: 'Haz clic aquí para salir de la plataforma de forma segura.',
-                        side: "left", 
-                        align: 'center' 
+                        side: "left",
+                        align: 'center'
                     },
                     onDeselected: (element) => {
                         if (document.getElementById('userDropdownWrapper').classList.contains('show')) {
-                             document.getElementById('userDropdownTrigger').click();
+                            document.getElementById('userDropdownTrigger').click();
                         }
                     }
                 },
-                { 
-                    element: '.card.shadow:first-child', 
-                    popover: { 
-                        title: 'Tus Cursos', 
+                {
+                    element: '.card.shadow:first-child',
+                    popover: {
+                        title: 'Tus Cursos',
                         description: 'Cada tarjeta representa un curso. Aquí verás la imagen, título y estado del mismo.',
-                        side: "bottom", 
-                        align: 'start' 
-                    } 
+                        side: "bottom",
+                        align: 'start'
+                    }
                 },
-                { 
-                    element: '.card.shadow:first-child button[type="submit"]', 
-                    popover: { 
-                        title: 'Acceder al Curso', 
+                {
+                    element: '.card.shadow:first-child button[type="submit"]',
+                    popover: {
+                        title: 'Acceder al Curso',
                         description: 'Haz clic en este botón para entrar al contenido del curso, ver guías o examenes.',
-                        side: "top", 
-                        align: 'start' 
-                    } 
+                        side: "top",
+                        align: 'start'
+                    }
                 }
             ]
         });

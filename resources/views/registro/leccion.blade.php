@@ -95,7 +95,7 @@
         {{-- Columna derecha: multimedia, tareas y pruebas --}}
         <div class="col-md-4">
             @if ($leccion->Medias->count())
-                <div class="card">
+                <div class="card" id="card-multimedia">
                     <div class="card-body">
                         <h4 class="card-title">Multimedia</h4>
                         <div class="list-group">
@@ -128,7 +128,7 @@
             @endif
 
             @if ($curso_programado->category->name != 'Guias')
-                <div class="card">
+                <div class="card" id="card-tareas">
                     <div class="card-body">
                         <h4 class="card-title">Tareas</h4>
                         <div class="list-group">
@@ -146,7 +146,8 @@
                                     {{-- icono de pendiente con reloj --}}
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="orange"
                                         class="bi bi-clock-fill" viewBox="0 0 16 16">
-                                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 3.5a.5.5 0 0 0-1 0v5.25c0.3.243.2.432.5.432h3.25a.5.5 0 0 0 0-1H8V3.5z" />
+                                        <path
+                                            d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 3.5a.5.5 0 0 0-1 0v5.25c0.3.243.2.432.5.432h3.25a.5.5 0 0 0 0-1H8V3.5z" />
                                     </svg>
                                 @endif
                             </a>
@@ -264,51 +265,86 @@
             doneBtnText: 'Entendido',
             nextBtnText: 'Siguiente',
             prevBtnText: 'Anterior',
-            steps: [
-                { 
-                    element: '.page-breadcrumb', 
-                    popover: { 
-                        title: 'Aula Virtual', 
+            steps: [{
+                    element: '.page-breadcrumb',
+                    popover: {
+                        title: 'Aula Virtual',
                         description: 'Estás en la vista de lección. Aquí consumirás el contenido de tu curso.',
-                        side: "bottom", 
-                        align: 'start' 
-                    } 
+                        side: "bottom",
+                        align: 'start'
+                    }
                 },
-                { 
-                    element: '.col-md-8 .card', 
-                    popover: { 
-                        title: 'Contenido Principal', 
+                {
+                    element: '.col-md-8 .card',
+                    popover: {
+                        title: 'Contenido Principal',
                         description: 'Aquí aparecerá el video de la clase o la imagen representativa.',
-                        side: "bottom", 
-                        align: 'start' 
-                    } 
+                        side: "bottom",
+                        align: 'start'
+                    }
                 },
-                { 
-                    element: '#clases .list-group', 
-                    popover: { 
-                        title: 'Navegación de Clases', 
+                {
+                    element: '#clases .list-group',
+                    popover: {
+                        title: 'Navegación de Clases',
                         description: 'Usa esta lista para moverte entre las diferentes clases de este módulo.',
-                        side: "top", 
-                        align: 'start' 
-                    } 
+                        side: "top",
+                        align: 'start'
+                    }
                 },
-                { 
-                    element: '.col-md-4', 
-                    popover: { 
-                        title: 'Recursos Adicionales', 
-                        description: 'En esta columna encontrarás material complementario y tareas.',
-                        side: "left", 
-                        align: 'start' 
-                    } 
+                {
+                    element: '#card-multimedia',
+                    popover: {
+                        title: 'Multimedia y Recursos',
+                        description: 'Aquí encontrarás archivos descargables, enlaces y materiales extra para apoyar tu aprendizaje.',
+                        side: "left",
+                        align: 'start'
+                    }
                 },
-                { 
-                    element: '.card.examen', 
-                    popover: { 
-                        title: 'Exámenes y Resultados', 
-                        description: 'Aquí aparecerán tus exámenes. Al finalizar uno, podrás ver tu puntaje y retroalimentación aquí mismo o en la sección de Resultados.',
-                        side: "left", 
-                        align: 'start' 
-                    } 
+                {
+                    element: '#card-tareas',
+                    popover: {
+                        title: 'Sección de Tareas',
+                        description: 'En este apartado podrás adjuntar tus archivos y enviar tus tareas para calificación.',
+                        side: "left",
+                        align: 'start'
+                    }
+                },
+                {
+                    element: '.card.examen',
+                    popover: {
+                        title: 'Exámenes y Resultados',
+                        description: 'Aquí aparecerán tus exámenes disponibles.',
+                        side: "left",
+                        align: 'start'
+                    }
+                },
+                {
+                    element: '.card.examen .btn-detalle',
+                    popover: {
+                        title: 'Seleccionar Prueba',
+                        description: 'Haz clic en el nombre de la prueba para ver las instrucciones previas.',
+                        side: "left",
+                        align: 'center'
+                    }
+                },
+                {
+                    element: '#myModal .modal-content',
+                    popover: {
+                        title: 'Instrucciones Previas',
+                        description: 'Se abrirá esta ventana con información vital: tiempo límite, intentos disponibles y reglas de conducta (no copiar/pegar, no cambiar de pestaña).',
+                        side: "top",
+                        align: 'center'
+                    },
+                    onHighlightStarted: (element) => {
+                        const btn = document.querySelector('.card.examen .btn-detalle');
+                        if (btn && !document.querySelector('#myModal').classList.contains('show')) {
+                            btn.click();
+                        }
+                    },
+                    onDeselected: (element) => {
+                        $('#myModal').modal('hide');
+                    }
                 }
             ]
         });
@@ -318,12 +354,55 @@
         }
 
         document.addEventListener("DOMContentLoaded", function() {
-            if (!localStorage.getItem('lesson_tutorial_seen')) {
+            @if (session('examen_finalizado'))
+                const feedbackDriver = driver({
+                    showProgress: true,
+                    animate: true,
+                    doneBtnText: 'Entendido',
+                    nextBtnText: 'Siguiente',
+                    prevBtnText: 'Anterior',
+                    steps: [{
+                            element: '.card.examen .btn-detalle',
+                            popover: {
+                                title: 'Resultados Disponibles',
+                                description: 'Has finalizado tu examen. Haz clic aquí nuevamente para ver tus resultados.',
+                                side: "left",
+                                align: 'center'
+                            }
+                        },
+                        {
+                            element: '#myModal .modal-content',
+                            popover: {
+                                title: 'Retroalimentación',
+                                description: 'Aquí verás tu puntaje obtenido y las opciones para revisar tus respuestas si están habilitadas.',
+                                side: "top",
+                                align: 'center'
+                            },
+                            onHighlightStarted: (element) => {
+                                const btn = document.querySelector('.card.examen .btn-detalle');
+                                if (btn && !document.querySelector('#myModal').classList.contains(
+                                        'show')) {
+                                    btn.click();
+                                }
+                            },
+                            onDeselected: (element) => {
+                                $('#myModal').modal('hide');
+                            }
+                        }
+                    ]
+                });
+
                 setTimeout(() => {
-                    startTutorial();
-                    localStorage.setItem('lesson_tutorial_seen', 'true');
+                    feedbackDriver.drive();
                 }, 1000);
-            }
+            @else
+                if (!localStorage.getItem('lesson_tutorial_seen')) {
+                    setTimeout(() => {
+                        startTutorial();
+                        localStorage.setItem('lesson_tutorial_seen', 'true');
+                    }, 1000);
+                }
+            @endif
         });
     </script>
 @endsection
