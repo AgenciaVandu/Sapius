@@ -11,6 +11,9 @@ use App\Rules\ValidRecaptcha;
 use Mail;
 use App\Mail\RegistroEmail;
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
+
 class RegisterController extends Controller
 {
     /*
@@ -92,5 +95,18 @@ class RegisterController extends Controller
         // $mail->send($m);
 
         return $user;
+    }
+
+    /**
+     * The user has been registered.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  mixed  $user
+     * @return mixed
+     */
+    protected function registered(Request $request, $user)
+    {
+        $user->session_id = Session::getId();
+        $user->save();
     }
 }
