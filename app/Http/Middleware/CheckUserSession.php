@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Log;
 
 class CheckUserSession
 {
@@ -16,6 +17,7 @@ class CheckUserSession
 
             // Si la sesión actual no coincide con la guardada en BD
             if ($user->session_id !== Session::getId()) {
+                Log::warning('CheckUserSession: Session mismatch. User ID: ' . $user->id . '. DB Session: ' . $user->session_id . '. Current Session: ' . Session::getId());
                 Auth::logout();
 
                 return redirect()->route('login')->withErrors([

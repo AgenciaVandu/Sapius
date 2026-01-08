@@ -13,6 +13,7 @@ use App\Mail\RegistroEmail;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Log;
 
 class RegisterController extends Controller
 {
@@ -106,7 +107,10 @@ class RegisterController extends Controller
      */
     protected function registered(Request $request, $user)
     {
+        // Force regeneration to be sure
+        $request->session()->regenerate();
         $user->session_id = Session::getId();
         $user->save();
+        Log::info('RegisterController: User registered. ID: ' . $user->id . ', Session ID set to: ' . $user->session_id);
     }
 }
