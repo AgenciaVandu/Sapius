@@ -73,21 +73,54 @@
             });
     }
 
+    // Helper to check if target is an allowed input
+    function isAllowedInput(target) {
+        if (!target) return false;
+        const tagName = target.tagName.toUpperCase();
+        return (tagName === 'INPUT' || tagName === 'TEXTAREA'); // || (tagName === 'DIV' && target.isContentEditable)
+    }
+
     // 1. Disable Right Click
     document.addEventListener('contextmenu', function (e) {
+        if (isAllowedInput(e.target)) return true; // Allow context menu on inputs
         e.preventDefault();
         registerGlobalPanelStrike('Right Click');
         return false;
     });
 
     // 2. Disable Cut, Copy, Paste
-    document.addEventListener('copy', function (e) { e.preventDefault(); registerGlobalPanelStrike('Copy'); });
-    document.addEventListener('cut', function (e) { e.preventDefault(); registerGlobalPanelStrike('Cut'); });
-    document.addEventListener('paste', function (e) { e.preventDefault(); registerGlobalPanelStrike('Paste'); });
+    document.addEventListener('copy', function (e) {
+        if (isAllowedInput(e.target)) return true;
+        e.preventDefault();
+        registerGlobalPanelStrike('Copy');
+    });
+
+    document.addEventListener('cut', function (e) {
+        if (isAllowedInput(e.target)) return true;
+        e.preventDefault();
+        registerGlobalPanelStrike('Cut');
+    });
+
+    document.addEventListener('paste', function (e) {
+        // Always allow paste in inputs
+        if (isAllowedInput(e.target)) return true;
+        e.preventDefault();
+        registerGlobalPanelStrike('Paste');
+    });
 
     // 3. Disable Text Selection
-    function disableSelect(e) { return false; }
-    document.onselectstart = function () { return false; };
+    function disableSelect(e) {
+        if (isAllowedInput(e.target)) return true;
+        return false;
+    }
+
+    // Modern browsers use selectstart
+    document.addEventListener('selectstart', function (e) {
+        if (isAllowedInput(e.target)) return true;
+        e.preventDefault();
+        return false;
+    });
+
     document.onmousedown = disableSelect;
 
     // 4. Restricted Keys

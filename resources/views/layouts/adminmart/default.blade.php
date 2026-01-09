@@ -54,7 +54,7 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 </head>
 
-<body @if (config('app.env') == 'production') oncontextmenu="return false;" onselectstart="return false;" @endif>
+<body @if (config('app.env') == 'production') class="security-enabled" @endif>
     <!-- ============================================================== -->
     <!-- Preloader - style you can find in spinners.css -->
     <!-- ============================================================== -->
