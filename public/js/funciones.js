@@ -59,7 +59,11 @@ function ShowTime(timer) {
     // Set the date we're counting down to
     var countDownDate = new Date();
 
-    countDownDate.setMinutes(countDownDate.getMinutes() + parseInt(timer.minutes));
+    if (timer.seconds) {
+        countDownDate.setSeconds(countDownDate.getSeconds() + parseInt(timer.seconds));
+    } else {
+        countDownDate.setMinutes(countDownDate.getMinutes() + parseInt(timer.minutes));
+    }
 
     countDownDate = countDownDate.getTime()
 

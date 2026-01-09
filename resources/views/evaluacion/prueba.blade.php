@@ -7,9 +7,20 @@
         @php
             $str_time = $prueba->tiempo;
             sscanf($str_time, '%d:%d:%d', $hours, $minutes, $seconds);
+            $duration_seconds = isset($hours) ? $hours * 3600 + $minutes * 60 + $seconds : $minutes * 60 + $seconds;
+
+            $start_time = \Carbon\Carbon::parse($examen->created_at);
+            $now = \Carbon\Carbon::now();
+            $elapsed_seconds = $now->diffInSeconds($start_time);
+            $remaining_seconds = $duration_seconds - $elapsed_seconds;
+
+            // Ensure we don't pass negative time if it's already over
+            $remaining_seconds = $remaining_seconds > 0 ? $remaining_seconds : 0;
+
             $time_minutes = isset($hours) ? $hours * 60 + $minutes : $minutes;
         @endphp
         <input type="hidden" id="tiempo" value="{{ $time_minutes }}">
+        <input type="hidden" id="tiempo_segundos" value="{{ $remaining_seconds }}">
         <input type="hidden" id="tiempo-inicio" value="{{ $examen->created_at }}">
     </div>
 
@@ -143,6 +154,7 @@ acceso permanente a la plataforma."
         // Timer del examen
         var timer = Object();
         timer.minutes = $('#tiempo').val();
+        timer.seconds = $('#tiempo_segundos').val();
         timer.div_show = $('#timer');
         timer.form_redirect = $('#form-redirect');
         timer.start_at = $('#tiempo-inicio').val();
