@@ -17,6 +17,24 @@
       0 => 'BeyondCode\\DumpServer\\DumpServerServiceProvider',
     ),
   ),
+  'botman/botman' => 
+  array (
+    'aliases' => 
+    array (
+      'BotMan' => 'BotMan\\BotMan\\Facades\\BotMan',
+    ),
+    'providers' => 
+    array (
+      0 => 'BotMan\\BotMan\\BotManServiceProvider',
+    ),
+  ),
+  'botman/driver-twilio' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'BotMan\\Drivers\\Twilio\\Providers\\TwilioServiceProvider',
+    ),
+  ),
   'caffeinated/shinobi' => 
   array (
     'providers' => 
