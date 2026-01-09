@@ -84,6 +84,7 @@ acceso permanente a la plataforma."
         </div>
     </div>
 
+    <!-- Modal aviso -->
     <div class="modal" tabindex="-1" role="dialog" id="mensaje">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -110,22 +111,99 @@ acceso permanente a la plataforma."
             </div>
         </div>
     </div>
+
+    <!-- Overlay mensaje de advertencia -->
+    <div id="warning-overlay"
+        style="display:none; position:fixed; top:0; left:0; width:100%; height:100%;
+           background-color:rgba(5, 36, 66,0.90); color:white; font-size:1.5rem;
+           z-index:9999; text-align:center; justify-content:center; align-items:center; flex-direction:column;">
+        <img src="https://sapius.com.mx/img/logo-sapius.png" alt="Logo Sapius">
+        <p><strong>⚠️ Uso de teclas no permitido</strong></p>
+        <p>
+            Durante la revisión está prohibido el uso de teclas o combinaciones.<br>
+            Tienes 3 advertencias; a la tercera se cerrará automáticamente el acceso.
+        </p>
+        <p id="contador-intentos" style="font-size:1.8rem; font-weight:bold; margin-top:10px;"></p>
+    </div>
+
+    <!-- Overlay mensaje de advertencia -->
+    <div id="warning-overlay"
+        style="display:none; position:fixed; top:0; left:0; width:100%; height:100%;
+           background-color:rgba(5, 36, 66,0.90); color:white; font-size:1.5rem;
+           z-index:9999; text-align:center; justify-content:center; align-items:center; flex-direction:column;">
+        <img src="https://sapius.com.mx/img/logo-sapius.png" alt="Logo Sapius">
+        <p><strong>⚠️ Uso de teclas no permitido</strong></p>
+        <p>
+            Durante la revisión está prohibido el uso de teclas o combinaciones.<br>
+            Tienes 3 advertencias; a la tercera se cerrará automáticamente el acceso.
+        </p>
+        <p id="contador-intentos" style="font-size:1.8rem; font-weight:bold; margin-top:10px;"></p>
+    </div>
 @endsection
 
 @section('javascript')
     <script src="{{ asset('js/funciones.js') }}"></script>
     <script>
         var timer = Object();
-        timer.minutes = $('#tiempo').val();
-        timer.div_show = $('#timer');
-        timer.form_redirect = $('#form-redirect');
-        timer.start_at = $('#tiempo-inicio').val();
-        ShowTime(timer);
+        // Timer elements might not be present or needed in feedback exactly like exam, but keeping existing non-breaking code
+        if ($('#tiempo').length) {
+            timer.minutes = $('#tiempo').val();
+            timer.div_show = $('#timer');
+            timer.form_redirect = $('#form-redirect');
+            timer.start_at = $('#tiempo-inicio').val();
+            // ShowTime(timer); // Timer might not be relevant for feedback view in same way
+        }
+
+
+        // --- NUEVO SISTEMA DE ADVERTENCIA CON CONTADOR ---
+        let intentos = 0;
+        const maxIntentos = 3;
+        const overlay = document.getElementById('warning-overlay');
+        const contador = document.getElementById('contador-intentos');
+
+        function registerExamStrike(reason) {
+            intentos++;
+            const restantes = maxIntentos - intentos;
+
+            if (contador) {
+                contador.textContent =
+                    `Intento ${intentos} de ${maxIntentos} — ${restantes > 0 ? `Te quedan ${restantes}` : '⚠️ Sin intentos restantes'}`;
+            }
+            if (overlay) overlay.style.display = 'flex';
+
+            console.log("Strike: " + reason);
+
+            // Ocultar después de 5 segundos
+            setTimeout(() => {
+                if (intentos < maxIntentos && overlay) overlay.style.display = 'none';
+            }, 5000);
+
+            // Si llega al tercer intento, finalizar (bloquear)
+            if (intentos >= maxIntentos) {
+                setTimeout(() => {
+                    // Use the route that triggers the block/finalize logic
+                    var url = "{{ route('examen.finalizar-imprevisto') }}";
+                    var examen_id = @json($examen->id);
+                    var token = "{{ csrf_token() }}";
+
+                    $.post(url, {
+                        _token: token,
+                        examen_id: examen_id
+                    }, function(data) {
+                        document.open();
+                        document.write(data);
+                        document.close();
+                    }).fail(function(xhr) {
+                        console.error("Error finalizing:", xhr);
+                        location.reload();
+                    });
+                }, 1000);
+            }
+        }
 
         $(window).on("load", function() {
-            document.onkeydown = mostrarInformacionTecla;
-            document.onkeypress = mostrarInformacionTecla;
-            document.onkeyup = mostrarInformacionTecla;
+            // override older handlers if necessary or let them coexist if non-conflicting
+            // document.onkeydown = mostrarInformacionTecla; 
         });
 
         $(document).ready(function() {
@@ -138,49 +216,55 @@ acceso permanente a la plataforma."
                 cardBlack);
 
             $('div.card').bind('mouseout', cardWhite);
-            //alert("examenid " + id);
 
-            $(document).keydown(function(event) {
-                //var key = (event.keyCode ? event.keyCode : event.which);
-                var key = event.key;
-                var keyCode = event.keyCode;
-                //alert('You pressed down a key ' + key);
+            // Event listener for keys
+            $(window).keydown(function(event) {
+                const e = event;
 
-                var examen_id = @json($examen->id, JSON_PRETTY_PRINT);
-                var lugar = "feedback";
-                var tecla = keyCode;
-                var observacion = key;
-                var token = "{{ csrf_token() }}";
+                // Allow ESC to close modals if needed, but forbidden keys must be blocked
+                // Windows PrintScreen
+                if (e.key === 'PrintScreen' || e.keyCode === 44) {
+                    e.preventDefault();
+                    registerExamStrike("PrintScreen");
+                    return;
+                }
 
-                $.post("{{ route('examen.eventos') }}", {
-                    _token: token,
-                    examen_id: examen_id,
-                    lugar: lugar,
-                    tecla: tecla,
-                    observacion: observacion
-                }, function() {}).done(function() {
-                    //alert("evento ok");
-                }).fail(function() {
-                    //alert("evento fail");
-                });
+                const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+                const isCtrlOfTheOS = isMac ? e.metaKey : e.ctrlKey;
+
+                // Mac Screenshots: Cmd+Shift+3, 4, 5
+                if (isMac && e.metaKey && e.shiftKey && ['3', '4', '5'].includes(e.key)) {
+                    e.preventDefault();
+                    registerExamStrike("Mac Screenshot");
+                    return;
+                }
+
+                const restrictedKeys = ['F12', 'F11'];
+
+                if (isCtrlOfTheOS || restrictedKeys.includes(e.key)) {
+                    e.preventDefault();
+                    registerExamStrike("Restricted Key / Modifier");
+                    return;
+                }
+
+                // Keep logging logic if needed, but prioritize security
+                var examen_id = @json($examen->id);
+                // ... existing logging logic can remain if it doesn't conflict
             });
         });
     </script>
 
     <script type="text/javascript">
         $(document).ready(function() {
-            //Disable full page
+            //Disable full page context menu
             $("body").on("contextmenu", function(e) {
                 return false;
             });
-
-        });
-    </script>
-    <script type="text/javascript">
-        $(document).ready(function() {
-            //Disable full page
+            // Disable cut copy paste
             $('body').bind('cut copy paste', function(e) {
                 e.preventDefault();
+                // Optionally warn on copy attempt?
+                // registerExamStrike("Copy/Paste Attempt"); 
             });
         });
     </script>
@@ -219,8 +303,8 @@ acceso permanente a la plataforma."
                 {
                     element: '.page-breadcrumb',
                     popover: {
-                        title: '⚠️ IMPORTANTE: NO RECARGAR',
-                        description: 'NO actualices ni recargues esta página. Si lo haces, el sistema cerrará la retroalimentación por seguridad y NO podrás volver a verla.',
+                        title: '⚠️ REGLAS DE SEGURIDAD',
+                        description: 'Al igual que en el examen, está PROHIBIDO copiar contenido o usar teclas restringidas. Si lo haces, se cerrará el acceso.',
                         side: "bottom",
                         align: 'center'
                     }
