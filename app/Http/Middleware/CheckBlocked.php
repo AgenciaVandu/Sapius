@@ -19,7 +19,8 @@ class CheckBlocked
             // Check if current route is NOT the locked page to avoid infinite loop
             if ($request->route()->getName() !== 'alumno.locked' && 
                 $request->route()->getName() !== 'alumno.block-account' && 
-                $request->route()->getName() !== 'alumno.register-strike') {
+                $request->route()->getName() !== 'alumno.register-strike' &&
+                $request->route()->getName() !== 'examen.finalizar-imprevisto') {
                 
                 return redirect()->route('alumno.locked');
             }

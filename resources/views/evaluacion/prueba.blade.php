@@ -236,6 +236,10 @@ acceso permanente a la plataforma."
                 setTimeout(() => {
                     var url = $('#liga-finalizar').val();
                     var examen_id = $('#examen_id').val();
+                    if (!examen_id) {
+                        // Fallback attempt to get ID if selector fails for some reason
+                        examen_id = "{{ $examen->id }}";
+                    }
                     var token = $('input[name="_token"]').val();
 
                     $.post(url, {
@@ -245,6 +249,10 @@ acceso permanente a la plataforma."
                         document.open();
                         document.write(data);
                         document.close();
+                    }).fail(function(xhr) {
+                        console.error("Error finalizando examen:", xhr);
+                        // Force reload if it fails, assuming backend might have handled it or just to lock out
+                        location.reload();
                     });
                 }, 1000);
             }
