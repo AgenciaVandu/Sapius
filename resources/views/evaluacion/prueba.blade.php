@@ -200,35 +200,68 @@ acceso permanente a la plataforma."
 
         // --- NUEVO SISTEMA DE ADVERTENCIA CON CONTADOR ---
         let intentos = 0;
+        const maxIntentos = 3;
         const overlay = document.getElementById('warning-overlay');
         const contador = document.getElementById('contador-intentos');
 
-        window.addEventListener('keydown', function(event) {
-            const restrictedKeys = ['PrintScreen', 'F12', 'F11'];
-            const isRestricted = event.ctrlKey || restrictedKeys.includes(event.key);
-
-            if (!isRestricted) return; // Solo si presiona algo prohibido
-
-            event.preventDefault();
+        function registerExamStrike(reason) {
             intentos++;
+            const restantes = maxIntentos - intentos;
 
-            const restantes = 3 - intentos;
-
-            // Mostrar mensaje actualizado con recuento
             contador.textContent =
-                `Intento ${intentos} de 3 — ${restantes > 0 ? `Te quedan ${restantes}` : '⚠️ Sin intentos restantes'}`;
+                `Intento ${intentos} de ${maxIntentos} — ${restantes > 0 ? `Te quedan ${restantes}` : '⚠️ Sin intentos restantes'}`;
             overlay.style.display = 'flex';
+
+            console.log("Exam Strike: " + reason);
 
             // Ocultar después de 5 segundos
             setTimeout(() => {
-                overlay.style.display = 'none';
+                if (intentos < maxIntentos) overlay.style.display = 'none';
             }, 5000);
 
             // Si llega al tercer intento, finalizar examen
-            if (intentos >= 3) {
+            if (intentos >= maxIntentos) {
                 setTimeout(() => {
                     document.getElementById('form-redirect').submit();
                 }, 1000);
+            }
+        }
+
+        window.addEventListener('keydown', function(event) {
+            const e = event; // Alias
+
+            // Windows PrintScreen
+            if (e.key === 'PrintScreen' || e.keyCode === 44) {
+                e.preventDefault();
+                registerExamStrike("PrintScreen");
+                return;
+            }
+
+            const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+            const isCtrlOfTheOS = isMac ? e.metaKey : e.ctrlKey;
+
+            // Mac Screenshots: Cmd+Shift+3, 4, 5
+            if (isMac && e.metaKey && e.shiftKey && ['3', '4', '5'].includes(e.key)) {
+                e.preventDefault();
+                registerExamStrike("Mac Screenshot");
+                return;
+            }
+
+            // Block Ctrl/Cmd + P (Print), S (Save), C (Copy)
+            // In exam, we might want to be strict about ANY Ctrl/Cmd combo except maybe specialized ones?
+            // Existing code just said: event.ctrlKey || restrictedKeys.includes(event.key);
+            // Which blocks ALL Ctrl combos. We can keep that strictness or use the specific list.
+            // The user asked for "validar que las combinaciones ... se incluyan igual ... windows y mac".
+            // So I will apply the same strictness to Mac (Cmd key).
+
+            const restrictedKeys = ['F12', 'F11'];
+
+            if (isCtrlOfTheOS || restrictedKeys.includes(e.key)) {
+                // Allow some helpful shortcuts? usually no in exams.
+                // Maybe allow Ctrl+R (Refresh)? No, usually blocked.
+                // So blocking all Cmd/Ctrl is fine for exams.
+                e.preventDefault();
+                registerExamStrike("Restricted Key / Modifier");
             }
         });
         // Navegación personalizada por recuadros

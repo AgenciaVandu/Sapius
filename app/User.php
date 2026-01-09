@@ -19,7 +19,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'nombre','apellido','username', 'email', 'password',
+        'nombre','apellido','username', 'email', 'password', 'strikes', 'is_blocked',
     ];
 
     /**
@@ -38,6 +38,8 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'strikes' => 'integer',
+        'is_blocked' => 'boolean',
     ];
 
     protected $appends =['nombre_completo'];

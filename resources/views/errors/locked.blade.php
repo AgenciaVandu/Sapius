@@ -31,5 +31,25 @@
         window.onpopstate = function() {
             history.go(1);
         };
+
+        // Poll to check if unblocked
+        setInterval(() => {
+            fetch(window.location.href, {
+                    method: 'HEAD'
+                })
+                .then(response => {
+                    // If the server redirects to home (status 200 after redirect, or matches home URL), reload
+                    // Actually, fetch follows redirects by default. 
+                    // If we get redirected to alumno home, the URL will change or we can just reload.
+                    // Easiest is to just reload if we detect we are unblocked, but we can't easily check auth via HEAD without endpoint.
+                    // But wait, the route /cuenta-bloqueada now redirects 302 to /alumno if unblocked.
+                    if (response.redirected && response.url.includes('alumno')) {
+                        window.location.href = "{{ route('alumno.home') }}";
+                    }
+                    // Or simply reload page every 5 seconds, strict but effective
+                    window.location.reload();
+                })
+                .catch(() => {});
+        }, 5000); // Check every 5 seconds
     </script>
 @endsection

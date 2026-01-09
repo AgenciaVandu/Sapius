@@ -246,4 +246,26 @@ class UserController extends Controller
         $m = new InformacionEmail($datos);
         $mail->send($m);
     }
+
+    public function registerStrike(Request $request) {
+        $user = Auth::user();
+        if ($user) {
+            $user->strikes += 1;
+            
+            $status = 'warning';
+            if ($user->strikes >= 3) {
+                $user->is_blocked = true;
+                $status = 'blocked';
+            }
+            
+            $user->save();
+
+            // if ($status === 'blocked') {
+            //     Auth::logout();
+            // }
+            
+            return response()->json(['status' => $status, 'strikes' => $user->strikes]);
+        }
+        return response()->json(['status' => 'error'], 400);
+    }
 }

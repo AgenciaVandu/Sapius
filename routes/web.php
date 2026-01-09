@@ -417,7 +417,8 @@ Route::group(['middleware' =>['instructor','restrict.mobile'],'prefix' => 'instr
 });
 
 //Rutas de alumno sin restricciones de mobile
-Route::group(['middleware' =>['alumno'],'prefix' => 'alumno'], function() {
+Route::group(['middleware' =>['alumno', 'check.blocked'],'prefix' => 'alumno'], function() {
+    Route::post('/register-strike', 'UserController@registerStrike')->name('alumno.register-strike');
     Route::get('/', 'HomeController@index')->name('alumno.home');
     Route::get('/cursos/image/{file}', 'Cursos\CursoController@cursoPicture')->name('alumno.cursos.image');
     Route::get('/inscripcion/{curso_id}', 'Registro\InscripcionController@inscripcion')->name('inscripcion.form');// Paso 1
@@ -436,12 +437,15 @@ Route::group(['middleware' =>['alumno'],'prefix' => 'alumno'], function() {
     Route::get('/tu-opinion', 'HomeController@tuOpinion')->name('tu.opinion');
     Route::post('/tu-opinion/store', 'HomeController@storeOpinion')->name('alumno.opinion.store');
     Route::get('/cuenta-bloqueada', function () {
+        if (Auth::check() && !Auth::user()->is_blocked) {
+            return redirect()->route('alumno.home');
+        }
         return view('errors.locked');
     })->name('alumno.locked');
 });
 
 //Rutas de alumno con restricciones de mobile
-Route::group(['middleware' =>['alumno','restrict.mobile'],'prefix' => 'alumno'], function() {
+Route::group(['middleware' =>['alumno','restrict.mobile', 'check.blocked'],'prefix' => 'alumno'], function() {
     Route::post('/users/profile', 'UserController@profile')->name('alumno.profile');//{id}
     Route::get('/users/pase/{file}', 'UserController@pase')->name('alumno.pase');
     Route::get('/users/documento/{file}', 'UserController@documento')->name('alumno.documento');

@@ -1,74 +1,130 @@
 // Student Global Security Script
 
+// Student Global Security Script
+
 (function () {
+    const registerStrikeEndpoint = '/alumno/register-strike';
+    const lockedUrl = '/alumno/cuenta-bloqueada';
+    let isWarningActive = false;
+    const maxStrikes = 3;
+
+    function getCsrfToken() {
+        return document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+    }
+
+    function registerGlobalPanelStrike(reason) {
+        if (isWarningActive) return;
+        isWarningActive = true;
+
+        const overlay = document.getElementById('warning-overlay');
+        const contador = document.getElementById('contador-intentos');
+        const msg = document.getElementById('strike-msg') || (contador ? contador : null); // Fallback to contador if generic msg missing
+
+        fetch(registerStrikeEndpoint, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': getCsrfToken()
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(`Global Strike registered: ${reason}`, data);
+            
+            if (msg && overlay) {
+                // If the element is specifically the counter (contador-intentos)
+                if (msg.id === 'contador-intentos') {
+                     const restantes = maxStrikes - (data.strikes || 0);
+                     msg.textContent = `Intento ${data.strikes} de ${maxStrikes} — ${restantes > 0 ? `Te quedan ${restantes}` : '⚠️ Cuenta Bloqueada'}`;
+                } else {
+                     // Generic message element
+                     msg.textContent = `Advertencia ${data.strikes} de ${maxStrikes}`;
+                }
+                
+                overlay.style.display = 'flex';
+            }
+
+            if (data.status === 'blocked') {
+                setTimeout(() => {
+                    window.location.href = lockedUrl;
+                }, 2000);
+            } else {
+                setTimeout(() => {
+                    if (overlay) overlay.style.display = 'none';
+                    isWarningActive = false;
+                }, 4000);
+            }
+        })
+        .catch(err => {
+            console.error('Error registering strike', err);
+            isWarningActive = false;
+        });
+    }
+
     // 1. Disable Right Click
     document.addEventListener('contextmenu', function (e) {
         e.preventDefault();
+        registerGlobalPanelStrike('Right Click');
         return false;
     });
 
     // 2. Disable Cut, Copy, Paste
-    document.addEventListener('copy', function (e) { e.preventDefault(); });
-    document.addEventListener('cut', function (e) { e.preventDefault(); });
-    document.addEventListener('paste', function (e) { e.preventDefault(); });
+    document.addEventListener('copy', function (e) { e.preventDefault(); registerGlobalPanelStrike('Copy'); });
+    document.addEventListener('cut', function (e) { e.preventDefault(); registerGlobalPanelStrike('Cut'); });
+    document.addEventListener('paste', function (e) { e.preventDefault(); registerGlobalPanelStrike('Paste'); });
 
     // 3. Disable Text Selection
     function disableSelect(e) { return false; }
-
     document.onselectstart = function () { return false; };
     document.onmousedown = disableSelect;
 
-    // 4. Warning Overlay & Restricted Keys
-    let intentos = parseInt(localStorage.getItem('security_strikes')) || 0;
-    const maxIntentos = 3;
-    const overlay = document.getElementById('warning-overlay');
-    const contador = document.getElementById('contador-intentos');
-    let isWarningActive = false; // Debounce flag
-
-    // Check if already blocked on load
-    if (intentos >= maxIntentos) {
-        if (!window.location.href.includes('cuenta-bloqueada')) {
-            window.location.href = '/alumno/cuenta-bloqueada';
+    // 4. Restricted Keys
+    function handleGlobalKey(e) {
+        // Windows PrintScreen
+        if (e.key === 'PrintScreen' || e.keyCode === 44) {
+            e.preventDefault();
+            registerGlobalPanelStrike('PrintScreen');
+            return;
         }
-        return;
+
+        const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+        const isCtrlOfTheOS = isMac ? e.metaKey : e.ctrlKey;
+        const isShift = e.shiftKey;
+        
+        // Mac Screenshots: Cmd+Shift+3, 4, 5
+        if (isMac && e.metaKey && e.shiftKey && ['3','4','5'].includes(e.key)) {
+            e.preventDefault();
+            registerGlobalPanelStrike("Mac Screenshot");
+            return;
+        }
+
+        // Block Ctrl/Cmd + P (Print), S (Save), C (Copy), U (View Source)
+        if (isCtrlOfTheOS && ['p', 's', 'c', 'u'].includes(e.key.toLowerCase())) {
+            e.preventDefault();
+            registerGlobalPanelStrike(`Shortcut ${e.key}`);
+            return;
+        }
+        
+        // DevTools F12
+        if (e.key === 'F12') {
+             e.preventDefault();
+             registerGlobalPanelStrike("F12");
+             return;
+        }
+
+         // DevTools Ctrl+Shift+I/J/C
+         if (isCtrlOfTheOS && isShift && ['i', 'j', 'c'].includes(e.key.toLowerCase())) {
+            e.preventDefault();
+            registerGlobalPanelStrike("DevTools");
+            return;
+        }
     }
 
-    window.addEventListener('keydown', function (event) {
-        const restrictedKeys = ['PrintScreen', 'F12', 'F11'];
-        const isRestricted = event.ctrlKey || restrictedKeys.includes(event.key);
-
-        if (!isRestricted) return;
-
-        event.preventDefault();
-        event.stopPropagation();
-
-        if (isWarningActive) return; // Prevent multiple counts for same event duration
-
-        isWarningActive = true;
-        intentos++;
-        localStorage.setItem('security_strikes', intentos); // Persist strikes
-
-        const restantes = maxIntentos - intentos;
-
-        if (overlay && contador) {
-            contador.textContent = `Intento ${intentos} de ${maxIntentos} — ${restantes > 0 ? `Te quedan ${restantes}` : '⚠️ Cuenta Bloqueada'}`;
-            overlay.style.display = 'flex';
-
-            // Hide after 5 seconds and reset debounce
-            if (intentos < maxIntentos) {
-                setTimeout(() => {
-                    overlay.style.display = 'none';
-                    isWarningActive = false;
-                }, 5000);
-            } else {
-                // 3rd Strike - Immediate Block
-                setTimeout(() => {
-                    if (!window.location.href.includes('cuenta-bloqueada')) {
-                        window.location.href = '/alumno/cuenta-bloqueada';
-                    }
-                }, 1500);
-            }
-        }
+    document.addEventListener('keydown', handleGlobalKey);
+    document.addEventListener('keyup', (e) => {
+         if (e.key === 'PrintScreen' || e.keyCode === 44) {
+             e.preventDefault();
+         }
     });
 
     // CSS for unselectable text as backup

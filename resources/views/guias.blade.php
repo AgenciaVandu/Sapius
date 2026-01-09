@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="utf-8">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Visualizador de archivos Sapius</title>
     <style>
         body {
@@ -123,6 +124,7 @@
     <div id="warning-overlay">
         <img src="https://sapius.com.mx/img/logo-sapius.png" alt="Logo Sapius">
         <p>Está prohibido tomar capturas de pantalla o imprimir este contenido.<br>No se permite plagiar esta obra.</p>
+        <p id="strike-msg" style="font-weight: bold; font-size: 1.2em; color: #ffeb3b;"></p>
     </div>
 
     <script src="{{ asset('js/jquery.min.js') }}"></script>
@@ -218,56 +220,106 @@
     <!-- Script que detecta teclas y llama a la función de advertencia -->
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            const advertencia = window.parent?.mostrarAdvertenciaCaptura || window.mostrarAdvertenciaCaptura;
+            let strikes = 0;
+            const maxStrikes = 3;
 
-            const forbiddenKeyCodes = [16, 17, 18, 44, 91, 93]; // Shift, Ctrl, Alt, PrintScreen, Cmd
+            function registerStrike(reason) {
+                const msg = document.getElementById('strike-msg');
+                const warning = document.getElementById('warning-overlay');
 
-            function handleKeyEvent(e, tipo) {
-                console.log(`[${tipo}] Tecla: ${e.key} | Código: ${e.keyCode || e.which}`);
+                // Call backend first to register and get accurate count
+                fetch('{{ route('alumno.register-strike') }}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
+                                'content')
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(`Strike registered: ${reason}`, data);
 
-                if (forbiddenKeyCodes.includes(e.keyCode || e.which)) {
-                    if (typeof advertencia === 'function') advertencia();
-                }
+                        if (data.status === 'blocked') {
+                            msg.textContent =
+                                "Has excedido el límite de advertencias. Tu cuenta será bloqueada.";
+                            warning.style.display = 'flex';
+                            setTimeout(() => {
+                                window.location.href = "{{ route('alumno.locked') }}";
+                            }, 2000);
+                        } else if (data.status === 'warning') {
+                            strikes = data.strikes; // Sync local strikes with DB
+                            msg.textContent = `Advertencia ${strikes} de ${maxStrikes}`;
+                            warning.style.display = 'flex';
 
-                // Ctrl+P o Cmd+P
-                if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'p') {
-                    e.preventDefault();
-                    if (typeof advertencia === 'function') advertencia();
-                }
+                            setTimeout(() => {
+                                if (strikes < maxStrikes) warning.style.display = 'none';
+                            }, 4000);
+                        }
+                    })
+                    .catch(err => console.error(err));
+            }
 
-                // PrintScreen
+            // Expose for external calls if needed
+            window.mostrarAdvertenciaCaptura = () => registerStrike("External call");
+
+            function handleKeyEvent(e) {
+                // Windows PrintScreen
                 if (e.key === 'PrintScreen' || e.keyCode === 44) {
                     e.preventDefault();
-                    try {
-                        navigator.clipboard.writeText('');
-                    } catch (err) {}
-                    if (typeof advertencia === 'function') advertencia();
+                    if (document.getElementById('warning-overlay').style.display !== 'flex') registerStrike(
+                        "PrintScreen");
+                    return;
                 }
 
-                // Cmd+Shift+3 o 4 (MacOS screenshots)
-                if (e.metaKey && e.shiftKey && (e.key === '3' || e.key === '4')) {
-                    if (typeof advertencia === 'function') advertencia();
-                }
+                const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+                const isCtrlOfTheOS = isMac ? e.metaKey : e.ctrlKey;
+                const isShift = e.shiftKey;
 
-                // F12 o Ctrl+Shift+I/J/C
-                if (
-                    e.key === 'F12' ||
-                    (e.ctrlKey && e.shiftKey && ['I', 'J', 'C'].includes(e.key.toUpperCase()))
-                ) {
+                // Mac Screenshots: Cmd+Shift+3, 4, 5
+                if (isMac && e.metaKey && e.shiftKey && ['3', '4', '5'].includes(e.key)) {
                     e.preventDefault();
-                    if (typeof advertencia === 'function') advertencia();
+                    registerStrike("Mac Screenshot");
+                    return;
+                }
+
+                // Windows Snipping Tool: Win+Shift+S (Hard to intercept Win key in some browsers, but Shift+S with Win might trigger)
+                // Note: Win key (Meta) often not interceptable.
+
+                // Block Ctrl/Cmd + P (Print), S (Save), C (Copy)
+                if (isCtrlOfTheOS && ['p', 's', 'c', 'u'].includes(e.key.toLowerCase())) {
+                    e.preventDefault();
+                    registerStrike(`Shortcut ${e.key}`);
+                    return;
+                }
+
+                // DevTools F12
+                if (e.key === 'F12') {
+                    e.preventDefault();
+                    registerStrike("F12");
+                    return;
+                }
+
+                // DevTools Ctrl+Shift+I/J/C
+                if (isCtrlOfTheOS && isShift && ['i', 'j', 'c'].includes(e.key.toLowerCase())) {
+                    e.preventDefault();
+                    registerStrike("DevTools");
+                    return;
                 }
             }
 
-            document.addEventListener('keydown', (e) => handleKeyEvent(e, 'keydown'));
-            document.addEventListener('keyup', (e) => handleKeyEvent(e, 'keyup'));
-            document.addEventListener('keypress', (e) => handleKeyEvent(e, 'keypress'));
+            document.addEventListener('keydown', handleKeyEvent);
+            document.addEventListener('keyup', (e) => {
+                if (e.key === 'PrintScreen' || e.keyCode === 44) {
+                    e.preventDefault();
+                    // Avoid double counting if keydown caught it
+                }
+            });
 
-            // Bloqueo del clic derecho (menú contextual)
+            // Block Right Click
             document.addEventListener('contextmenu', function(e) {
                 e.preventDefault();
-                if (typeof advertencia === 'function') advertencia();
-                console.log('[contextmenu] Clic derecho bloqueado');
+                registerStrike("Right Click");
             });
         });
     </script>
