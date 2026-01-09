@@ -259,13 +259,27 @@ class CursoController extends Controller
             }
             };
 
-            foreach ($cursoOriginal->Lecciones as $leccionOriginal) {
+            // Closure para copiar media
+            $copyMedia = function ($leccionOrigen, $leccionDestino) use ($curso) {
+                if (!empty($leccionOrigen->Medias) && is_iterable($leccionOrigen->Medias)) {
+                    foreach ($leccionOrigen->Medias as $mediaOriginal) {
+                        $media = $mediaOriginal->replicate();
+                        // $media->curso_id = $curso->id; // Removed as column doesn't exist
+                        $media->leccion_id = $leccionDestino->id;
+                        $media->save();
+                    }
+                }
+            };
+
+            foreach ($cursoOriginal->Lecciones->where('leccion_id', 0) as $leccionOriginal) {
             $leccion = $leccionOriginal->replicate();
             $leccion->curso_id = $curso->id;
             $leccion->save();
 
             // Copiar pruebas/preguntas/respuestas de la lección padre
             $copyPruebas($leccionOriginal, $leccion);
+            // Copiar media de la lección padre
+            $copyMedia($leccionOriginal, $leccion);
 
             // Validar y copiar lecciones hijas
             $leccionesHijas = $cursoOriginal->Lecciones->where('leccion_id', $leccionOriginal->id);
@@ -277,6 +291,8 @@ class CursoController extends Controller
 
                 // Copiar pruebas/preguntas/respuestas de la lección hija
                 $copyPruebas($leccionHijaOriginal, $leccionHija);
+                // Copiar media de la lección hija
+                $copyMedia($leccionHijaOriginal, $leccionHija);
             }
             }
         }
@@ -358,6 +374,18 @@ class CursoController extends Controller
             }
         };
 
+        // Closure para copiar media
+        $copyMedia = function ($leccionOrigen, $leccionDestino) use ($curso) {
+            if (!empty($leccionOrigen->Medias) && is_iterable($leccionOrigen->Medias)) {
+                foreach ($leccionOrigen->Medias as $mediaOriginal) {
+                    $media = $mediaOriginal->replicate();
+                    // $media->curso_id = $curso->id; // Removed as column doesn't exist
+                    $media->leccion_id = $leccionDestino->id;
+                    $media->save();
+                }
+            }
+        };
+
         // --------------------------------------------------
         // 1) COPIAR SOLO LOS MÓDULOS QUE EL USUARIO SELECCIONÓ
         // --------------------------------------------------
@@ -373,6 +401,8 @@ class CursoController extends Controller
 
             // Copiar pruebas del módulo
             $copyPruebas($moduloOriginal, $nuevoModulo);
+            // Copiar media del módulo
+            $copyMedia($moduloOriginal, $nuevoModulo);
         }
 
         // --------------------------------------------------
@@ -392,6 +422,8 @@ class CursoController extends Controller
 
             // Copiar pruebas de la clase
             $copyPruebas($claseOriginal, $nuevaClase);
+            // Copiar media de la clase
+            $copyMedia($claseOriginal, $nuevaClase);
         }
 
         return redirect()
