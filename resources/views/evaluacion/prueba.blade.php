@@ -234,7 +234,18 @@ acceso permanente a la plataforma."
             // Si llega al tercer intento, finalizar examen
             if (intentos >= maxIntentos) {
                 setTimeout(() => {
-                    document.getElementById('form-redirect').submit();
+                    var url = $('#liga-finalizar').val();
+                    var examen_id = $('#examen_id').val();
+                    var token = $('input[name="_token"]').val();
+
+                    $.post(url, {
+                        _token: token,
+                        examen_id: examen_id
+                    }, function(data) {
+                        document.open();
+                        document.write(data);
+                        document.close();
+                    });
                 }, 1000);
             }
         }
