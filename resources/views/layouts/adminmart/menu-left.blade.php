@@ -7,7 +7,7 @@
 
                 <li class="sidebar-item" id="menu-tus-cursos"> <a class="sidebar-link sidebar-link"
                         href="{{ url('/' . Auth::user()->rol[0]->slug) }}" aria-expanded="false"><i data-feather="home"
-                            class="feather-icon"></i><span class="hide-menu">Tus cursos</span></a></li>
+                            class="feather-icon"></i><span class="hide-menu">Cursos Activos</span></a></li>
 
                 <li class="list-divider"></li>
 
