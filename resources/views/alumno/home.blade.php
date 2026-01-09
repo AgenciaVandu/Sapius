@@ -44,11 +44,12 @@
                                             @if ($curso->imagen)
                                                 <img src="{{ route(Auth::user()->rol[0]->slug . '.cursos.image', ['file' => $curso->imagen]) }}"
                                                     id="img" alt="..." class="card-img-top img-fluid"
-                                                    style="height: 200px; object-fit: cover;">
+                                                    style="height: 200px; object-fit: contain; width: 100%; background-color: #f8f9fa;">
                                             @else
                                                 <img class="card-img-top img-fluid"
                                                     src="{{ asset('vendor/adminmart/assets/images/big/cursos.png') }}"
-                                                    alt="Card image cap" style="height: 200px; object-fit: cover;">
+                                                    alt="Card image cap"
+                                                    style="height: 200px; object-fit: contain; width: 100%; background-color: #f8f9fa;">
                                             @endif
                                             <div class="card-body d-flex flex-column">
                                                 <h4 class="card-title">
@@ -92,11 +93,12 @@
                                             @if ($curso->imagen)
                                                 <img src="{{ route(Auth::user()->rol[0]->slug . '.cursos.image', ['file' => $curso->imagen]) }}"
                                                     id="img" alt="..." class="card-img-top img-fluid"
-                                                    style="height: 200px; object-fit: cover;">
+                                                    style="height: 200px; object-fit: contain; width: 100%; background-color: #f8f9fa;">
                                             @else
                                                 <img class="card-img-top img-fluid"
                                                     src="{{ asset('vendor/adminmart/assets/images/big/cursos.png') }}"
-                                                    alt="Card image cap" style="height: 200px; object-fit: cover;">
+                                                    alt="Card image cap"
+                                                    style="height: 200px; object-fit: contain; width: 100%; background-color: #f8f9fa;">
                                             @endif
                                             <div class="card-body d-flex flex-column">
                                                 <h4 class="card-title">

@@ -28,11 +28,11 @@
       0 => 'BotMan\\BotMan\\BotManServiceProvider',
     ),
   ),
-  'botman/driver-twilio' => 
+  'botman/driver-web' => 
   array (
     'providers' => 
     array (
-      0 => 'BotMan\\Drivers\\Twilio\\Providers\\TwilioServiceProvider',
+      0 => 'BotMan\\Drivers\\Web\\Providers\\WebServiceProvider',
     ),
   ),
   'caffeinated/shinobi' => 

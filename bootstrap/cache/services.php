@@ -26,7 +26,7 @@
     22 => 'Barryvdh\\DomPDF\\ServiceProvider',
     23 => 'BeyondCode\\DumpServer\\DumpServerServiceProvider',
     24 => 'BotMan\\BotMan\\BotManServiceProvider',
-    25 => 'BotMan\\Drivers\\Twilio\\Providers\\TwilioServiceProvider',
+    25 => 'BotMan\\Drivers\\Web\\Providers\\WebServiceProvider',
     26 => 'Caffeinated\\Shinobi\\ShinobiServiceProvider',
     27 => 'Fideloper\\Proxy\\TrustedProxyServiceProvider',
     28 => 'Jenssegers\\Agent\\AgentServiceProvider',
@@ -42,6 +42,7 @@
     38 => 'App\\Providers\\EventServiceProvider',
     39 => 'App\\Providers\\RouteServiceProvider',
     40 => 'Collective\\Html\\HtmlServiceProvider',
+    41 => 'BotMan\\BotMan\\BotManServiceProvider',
   ),
   'eager' => 
   array (
@@ -58,7 +59,7 @@
     10 => 'Barryvdh\\DomPDF\\ServiceProvider',
     11 => 'BeyondCode\\DumpServer\\DumpServerServiceProvider',
     12 => 'BotMan\\BotMan\\BotManServiceProvider',
-    13 => 'BotMan\\Drivers\\Twilio\\Providers\\TwilioServiceProvider',
+    13 => 'BotMan\\Drivers\\Web\\Providers\\WebServiceProvider',
     14 => 'Caffeinated\\Shinobi\\ShinobiServiceProvider',
     15 => 'Fideloper\\Proxy\\TrustedProxyServiceProvider',
     16 => 'Carbon\\Laravel\\ServiceProvider',
@@ -68,6 +69,7 @@
     20 => 'App\\Providers\\AuthServiceProvider',
     21 => 'App\\Providers\\EventServiceProvider',
     22 => 'App\\Providers\\RouteServiceProvider',
+    23 => 'BotMan\\BotMan\\BotManServiceProvider',
   ),
   'deferred' => 
   array (

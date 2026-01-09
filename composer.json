@@ -16,6 +16,8 @@
     "require": {
         "php": "^7.1.3",
         "barryvdh/laravel-dompdf": "^0.9.0",
+        "botman/botman": "^2.8",
+        "botman/driver-web": "^1.5",
         "caffeinated/shinobi": "4.1.0",
         "codeplex/phpexcel": "^1.7",
         "conekta/conekta-php": "^7.0",
