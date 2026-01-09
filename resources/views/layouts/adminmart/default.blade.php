@@ -149,6 +149,12 @@
 
     @if (Auth::check() && Auth::user()->hasRole('alumno'))
         @include('partials.security-alert')
+        <script>
+            window.sapiusRoutes = {
+                registerStrike: "{{ route('alumno.register-strike') }}",
+                locked: "{{ route('alumno.locked') }}"
+            };
+        </script>
         <script src="{{ asset('js/student-security.js') }}"></script>
     @endif
 
