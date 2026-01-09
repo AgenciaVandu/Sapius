@@ -1,4 +1,4 @@
-@extends('layouts.adminmart.default')
+@extends('layouts.adminmart.login')
 
 @section('content')
     <div class="row justify-content-center align-items-center" style="height: 80vh;">
