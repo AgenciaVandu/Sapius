@@ -162,8 +162,9 @@
                 <li class="nav-item d-none d-md-block" id="statusIconWrapper">
                     {{-- Icono de un triangulo color amarillo parpadeante con un signo de admiracion dentro  --}}
                     @if (Auth::user()->rol[0]->slug == 'alumno')
-                        @if (Auth::user()->documento_identificacion =! ' ' || Auth::user()->pase_ingreso =! ' ' || Auth::user()->validado != 'no' )
-                            {{-- No icono redonde de un check  verde que diga que la cuenta ya esta aprobada --}}
+                        @if (Auth::user()->documento_identificacion != null &&
+                                Auth::user()->pase_ingreso != null &&
+                                Auth::user()->validado != 'no')
                             <a class="nav-link" href="javascript:void(0)" data-toggle="tooltip" data-placement="bottom"
                                 title="Tu cuenta está completa">
                                 <i data-feather="check-circle" class="svg-icon" style="color: #28a745;"></i>
