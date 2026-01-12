@@ -60,6 +60,7 @@
                                 <th>Fecha de Registro</th>
                                 <th>Aceptado</th>
                                 <th>Resultados</th>
+                                <th>Bloqueo</th>
                                 @if (Auth::user()->rol[0]->slug == 'admin')
                                     <th id="activoHead">Desactivar</th>
                                 @endif
@@ -71,6 +72,7 @@
                                 <th>Fecha de Registro</th>
                                 <th>Aceptado</th>
                                 <th>Resultados</th>
+                                <th>Bloqueo</th>
                                 @if (Auth::user()->rol[0]->slug == 'admin')
                                     <th id="activoFoot">Desactivar</th>
                                 @endif
@@ -187,6 +189,10 @@
                             data: 'pivot.id',
                             orderable: true,
                         },
+                        {
+                            data: 'is_blocked',
+                            orderable: true,
+                        },
                         @if (Auth::user()->rol[0]->slug == 'admin')
                             {
                                 data: 'pivot.id',
@@ -200,9 +206,27 @@
 
                         $(row).find('td:eq(3)').html(show.replace('__ID__', data['pivot']['id']));
 
+                        // Columna Bloqueo (Index 4)
+                        if (data['is_blocked'] == 1 || data['is_blocked'] == true) {
+                            var unlockUrl = "{{ route('users.unlock', ':id') }}";
+                            unlockUrl = unlockUrl.replace(':id', data['id']);
+
+                            $(row).find('td:eq(4)').html(
+                                '<form action="' + unlockUrl + '" method="POST">' +
+                                '@csrf' +
+                                '<button type="submit" class="btn btn-sm btn-danger" title="Desbloquear usuario">' +
+                                '<i class="fas fa-lock"></i> Desbloquear' +
+                                '</button>' +
+                                '</form>'
+                            );
+                        } else {
+                            $(row).find('td:eq(4)').html('<span class="badge badge-success">Activo</span>');
+                        }
+
+
                         @if (Auth::user()->rol[0]->slug == 'admin')
                             if (data['pivot']['aceptado'] == 'si') {
-                                $(row).find('td:eq(4)').html(
+                                $(row).find('td:eq(5)').html(
                                     '<form method="POST" action="{{ route('curso.destroy') }}"> @csrf <input name="id" type="hidden" value="' +
                                     data['pivot']['id'] +
                                     '"> <button type="submit" class="btn btn-primary"><i class="fas fa-trash"></i></button></form>'
@@ -210,7 +234,7 @@
                                 $("#activoHead").text("Desactivar");
                                 $("#activoFoot").text("Desactivar");
                             } else {
-                                $(row).find('td:eq(4)').html(
+                                $(row).find('td:eq(5)').html(
                                     '<form method="POST" action="{{ route('curso.activate') }}"> @csrf <input name="id" type="hidden" value="' +
                                     data['pivot']['id'] +
                                     '"> <button type="submit" class="btn btn-primary"><i class="fas fa-check"></i></button></form>'

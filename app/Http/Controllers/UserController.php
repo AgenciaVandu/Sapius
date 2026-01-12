@@ -23,6 +23,8 @@ class UserController extends Controller
             $users = User::with('roles')->get();
         elseif($active == "disable")
             $users = User::withoutGlobalScope('Activos')->with('roles')->where('activo','no')->get();
+        elseif($active == "blocked")
+             $users = User::withoutGlobalScope('Activos')->with('roles')->where('is_blocked', 1)->get();
         //dd($users);
         return view('admin.users.index',compact('users','active'));
     }
@@ -267,5 +269,21 @@ class UserController extends Controller
             return response()->json(['status' => $status, 'strikes' => $user->strikes]);
         }
         return response()->json(['status' => 'error'], 400);
+    }
+
+    public function unlock($id){
+        $user = User::withoutGlobalScope('Activos')->find($id);
+        
+        if(!$user){
+             return redirect()->back()->with('error', 'Usuario no encontrado.');
+        }
+
+        $user->is_blocked = 0;
+        $user->strikes = 0;
+        $user->save();
+
+        Mail::to($user->email)->send(new \App\Mail\AccountUnlocked($user));
+
+        return redirect()->back()->with('success', 'El usuario ha sido desbloqueado y notificado exitosamente.');
     }
 }

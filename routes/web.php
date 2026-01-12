@@ -142,11 +142,10 @@ Route::get('/redirect', 'SocialAuthFacebookController@redirect');
 Route::get('/callback', 'SocialAuthFacebookController@callback');
 //Home
 Route::post('/informacion', 'UserController@informacion')->name('informacion');
-
 Auth::routes();
 
-
 Route::group(['middleware' => ['admin','restrict.mobile'],'prefix' => 'admin'], function() {
+    Route::post('users/{id}/unlock', 'UserController@unlock')->name('users.unlock');
     Route::get('/', 'HomeController@admin')->name('admin');
     Route::get('/configuraciones', 'HomeController@configuracion')->name('admin.configuracion.index');
     Route::post('/configuraciones/upload', 'HomeController@uploadslide')->name('admin.configuracion.slide');
@@ -510,6 +509,12 @@ Route::get('email-registro', function () {
     //esto es una prueba
     $user = User::find(1);
         return new App\Mail\RegistroEmail($user);
+});
+
+Route::get('/email-preview', function () {
+    $user = new App\User();
+    $user->nombre = 'Estudiante de Prueba';
+    return view('emails.users.unlocked', compact('user'));
 });
 
 
