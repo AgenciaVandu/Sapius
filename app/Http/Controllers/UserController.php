@@ -282,8 +282,8 @@ class UserController extends Controller
         $user->strikes = 0;
         $user->save();
 
-        Mail::to($user->email)->send(new \App\Mail\AccountUnlocked($user));
+        /* Mail::to($user->email)->send(new \App\Mail\AccountUnlocked($user)); */
 
-        return redirect()->back()->with('success', 'El usuario ha sido desbloqueado y notificado exitosamente.');
+        return redirect()->back()->with('success', 'El usuario ha sido desbloqueado exitosamente.');
     }
 }
