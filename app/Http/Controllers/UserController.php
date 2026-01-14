@@ -226,17 +226,19 @@ class UserController extends Controller
             if ($contenido_programado) {
                 foreach ($curso_programado['Curso']['Lecciones'] as $leccion) {
                     $contenido = collect($contenido_programado->contenido)->where('id', $leccion->id)->first();
-                    $fecha_inicial = $contenido['fecha_inicial'] ? $contenido['fecha_inicial'] : null;
-                    /* $hora_inicial = $contenido['hora_inicial'] ? $contenido['hora_inicial'] : null; */
-                    $fecha_final = $contenido['fecha_final'] ? $contenido['fecha_final'] : null;
-                    /* $hora_final = $contenido['hora_final'] ? $contenido['hora_final'] : null; */
-                    $arr[] = [
-                        'title' => $curso_programado->curso->titulo,
-                        'description' => $leccion->titulo,
-                        'start' => date('D M d Y H:i:s', strtotime(str_replace('/', '-', $fecha_inicial))),
-                        'end' => date('D M d Y H:i:s', strtotime(str_replace('/', '-', $fecha_final))),
-                        'className' => 'bg-purple',
-                    ];
+                    if ($contenido) {
+                        $fecha_inicial = $contenido['fecha_inicial'] ? $contenido['fecha_inicial'] : null;
+                        /* $hora_inicial = $contenido['hora_inicial'] ? $contenido['hora_inicial'] : null; */
+                        $fecha_final = $contenido['fecha_final'] ? $contenido['fecha_final'] : null;
+                        /* $hora_final = $contenido['hora_final'] ? $contenido['hora_final'] : null; */
+                        $arr[] = [
+                            'title' => $curso_programado->curso->titulo,
+                            'description' => $leccion->titulo,
+                            'start' => date('D M d Y H:i:s', strtotime(str_replace('/', '-', $fecha_inicial))),
+                            'end' => date('D M d Y H:i:s', strtotime(str_replace('/', '-', $fecha_final))),
+                            'className' => 'bg-purple',
+                        ];
+                    }
                 }
             }
         }
