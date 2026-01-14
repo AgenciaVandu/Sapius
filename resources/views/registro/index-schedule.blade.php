@@ -26,6 +26,10 @@
                                     Agregar
                                 </a>
                             </form>
+                            <a class="dropdown-item"
+                                href="{{ route('admin.programming.calendar.index', ['curso_id' => $curso->id]) }}">
+                                Calendarios Semanales
+                            </a>
                             <a class="dropdown-item" id="btnActivo" href="#">Cursos Programados Inactivos</a>
                         </div>
                     </div>

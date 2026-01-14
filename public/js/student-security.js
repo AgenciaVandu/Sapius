@@ -26,8 +26,9 @@
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRF-TOKEN': getCsrfToken(),
-                'Accept': 'application/json' // Explicitly request JSON
-            }
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({ action: reason })
         })
             .then(response => {
                 // Check if response is actually JSON

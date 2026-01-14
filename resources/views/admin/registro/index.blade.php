@@ -104,6 +104,52 @@
             </div>
         </div>
     </div>
+
+    <!-- Unlock Confirmation Modal -->
+    <div class="modal fade" id="unlockConfirmModal" tabindex="-1" role="dialog" aria-labelledby="unlockConfirmModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="unlockConfirmModalLabel">Confirmar Desbloqueo</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    ¿Estás seguro de que deseas desbloquear a este usuario?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger" id="btnConfirmUnlock">Desbloquear</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Unlock Success Modal -->
+    <div class="modal fade" id="unlockSuccessModal" tabindex="-1" role="dialog" aria-labelledby="unlockSuccessModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title" id="unlockSuccessModalLabel">¡Éxito!</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center">
+                        <i class="fas fa-check-circle fa-4x text-success mb-3"></i>
+                        <p id="unlockSuccessMessage" class="lead">El usuario ha sido desbloqueado exitosamente.</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" data-dismiss="modal">Aceptar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('css')
@@ -115,6 +161,7 @@
     <script src="{{ asset('vendor/adminmart/assets/extra-libs/datatables.net/js/jquery.dataTables.min.js') }}"></script>
 
     <script>
+        var table;
         $(document).ready(function() {
             var activo = true;
             var endpoint =
@@ -134,7 +181,7 @@
                 table.ajax.url(endpoint).load();
             });
 
-            var table = $('#dataTable')
+            table = $('#dataTable')
                 .on('draw.dt', function(e, settings, json, xhr) {
                     $('a[class ~= "btn-detalle"]').click(function() {
                         btn = $(this);
@@ -212,12 +259,10 @@
                             unlockUrl = unlockUrl.replace(':id', data['id']);
 
                             $(row).find('td:eq(4)').html(
-                                '<form action="' + unlockUrl + '" method="POST">' +
-                                '@csrf' +
-                                '<button type="submit" class="btn btn-sm btn-danger" title="Desbloquear usuario">' +
+                                '<button type="button" class="btn btn-sm btn-danger btn-unlock" data-id="' +
+                                data['id'] + '" title="Desbloquear usuario">' +
                                 '<i class="fas fa-lock"></i> Desbloquear' +
-                                '</button>' +
-                                '</form>'
+                                '</button>'
                             );
                         } else {
                             $(row).find('td:eq(4)').html('<span class="badge badge-success">Activo</span>');
@@ -307,6 +352,58 @@
                         console.error(xhr.responseText);
                     }
                 });
+            });
+
+            // ===============================
+            // ===============================
+            // Script para botones "Desbloquear"
+            // ===============================
+            var userIdToUnlock;
+
+            $(document).on("click", ".btn-unlock", function() {
+                userIdToUnlock = $(this).data("id");
+                $('#unlockConfirmModal').modal('show');
+            });
+
+            $('#btnConfirmUnlock').click(function() {
+                if (!userIdToUnlock) return;
+
+                let unlockUrl = "{{ route('users.unlock', ':id') }}";
+                unlockUrl = unlockUrl.replace(':id', userIdToUnlock);
+
+                // Disable button to prevent double submit
+                $(this).prop('disabled', true);
+
+                $.ajax({
+                    url: unlockUrl,
+                    type: "POST",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                    },
+                    success: function(response) {
+                        $('#unlockConfirmModal').modal('hide');
+                        $('#btnConfirmUnlock').prop('disabled', false);
+
+                        if (response.success) {
+                            $('#unlockSuccessMessage').text(response.message);
+                            $('#unlockSuccessModal').modal('show');
+                            // Table reload is now handled by the modal hidden event
+                        } else {
+                            alert("Error: " + response.message);
+                        }
+                    },
+                    error: function(xhr) {
+                        $('#unlockConfirmModal').modal('hide');
+                        $('#btnConfirmUnlock').prop('disabled', false);
+                        console.error(xhr.responseText);
+                        alert("Ocurrió un error al intentar desbloquear al usuario.");
+                    }
+                });
+            });
+
+            // Reload table when success modal is closed
+            $('#unlockSuccessModal').on('hidden.bs.modal', function() {
+                table.ajax.reload(null, false); // Reload data, keep paging
             });
 
         });
