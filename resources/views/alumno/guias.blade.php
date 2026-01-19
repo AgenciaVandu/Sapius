@@ -1,12 +1,11 @@
 @extends('layouts.adminmart.default')
 
 @section('breadcrumb')
-    <div class="page-breadcrumb">
+    <div class="page-breadcrumb mb-4">
         <div class="row">
-            <div class="col-7 align-self-center">
-                <h2 class="page-title text-truncate text-dark font-weight-medium mb-1">
-                    {{ Auth::user()->nombre_completo }}</h2>
-                <h3 class="page-title text-truncate text-dark font-weight-medium mb-1">Guias disponibles</h3>
+            <div class="col-7">
+                <h2 class="page-title font-weight-bold text-dark mb-0">{{ Auth::user()->nombre_completo }}</h2>
+                <p class="text-muted h5">Guias disponibles</p>
             </div>
             <div class="col-5 align-self-center">
                 <div class="customize-input float-right">
@@ -21,56 +20,69 @@
 
 @section('content')
     <div class="row">
-        <div class="col-md-12">
-            <div class="card-columns">
-                @foreach ($cursos as $curso)
-                    @if ($curso->curso->activo == 'si' && $curso->category_id == $category->id)
-                        <div class="card shadow">
-                            <a href="javscript:void(0)"
-                                onclick="event.preventDefault(); document.getElementById('curso-{{ $curso->id }}').submit();">
-                                @if ($curso->Curso->imagen)
-                                    <img src="{{ route(Auth::user()->rol[0]->slug . '.cursos.image', ['file' => $curso->Curso->imagen]) }}"
-                                        id="img" alt="..." class="img-thumbnail">
-                                @else
-                                    <img class="card-img-top img-fluid"
-                                        src="{{ asset('vendor/adminmart/assets/images/big/cursos.png') }}"
-                                        alt="Card image cap">
-                                @endif
-                            </a>
-                            <form method="POST" action="{{ route('cursos.detallado') }}" id="curso-{{ $curso->id }}">
-                                @csrf
-                                <input name="curso_programado_id" type="hidden" value="{{ $curso->id }}">
-                            </form>
-                            <div class="card-body">
-                                <h3 class="card-title">{{ $curso->Curso->titulo }} <span
-                                        class="badge badge-primary">{{ $curso->identificador }}</span></h3>
-                                <h3 class="card-text"><span
-                                        class="badge badge-success shadow-sm">{{ \Carbon\Carbon::now()->diffForHumans(\Carbon\Carbon::parse($curso->fecha_fin_venta), ['syntax' => \Carbon\CarbonInterface::DIFF_ABSOLUTE]) }}
-                                        para cerrar inscripciones</span></h3>
-                                <p class="card-text">{!! $curso->Curso->descripcion !!}</p>
-                                <p class="card-text"><strong>Inicia:</strong>
-                                    {{ \Carbon\Carbon::parse($curso->fecha_inicio)->format('d/m/Y') }} -
-                                    <strong>Fin:</strong> {{ \Carbon\Carbon::parse($curso->fecha_fin)->format('d/m/Y') }}
-                                </p>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <h3> ${{ $curso->precio_en_moneda }} MxN</h3>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <a href="{{ route('inscripcion.form', ['curso_programado_id' => $curso->id]) }}"
-                                            class="btn btn-block btn-dark btn-detalle">Inscribir</a>
-                                        <a href="javscript:void(0)" class="btn btn-primary btn btn-block mt-2"
-                                            onclick="event.preventDefault(); document.getElementById('curso-{{ $curso->id }}').submit();">
-                                            Mas detalles
-                                        </a>
-                                    </div>
-                                </div>
+        @foreach ($cursos as $curso)
+            @if ($curso->curso->activo == 'si' && $curso->category_id == $category->id)
+                <div class="col-md-4 mb-4 d-flex align-items-stretch">
+                    <div class="card shadow-sm border-0 rounded-lg w-100 d-flex flex-column">
+                        <a href="javascript:void(0)"
+                            onclick="event.preventDefault(); document.getElementById('curso-{{ $curso->id }}').submit();">
+                            @if ($curso->Curso->imagen)
+                                <img src="{{ route(Auth::user()->rol[0]->slug . '.cursos.image', ['file' => $curso->Curso->imagen]) }}"
+                                    alt="Imagen del curso" class="card-img-top rounded-top img-fluid"
+                                    style="height: auto; object-fit: cover;">
+                            @else
+                                <img src="{{ asset('vendor/adminmart/assets/images/big/cursos.png') }}"
+                                    class="card-img-top rounded-top img-fluid" style="height: 200px; object-fit: cover;"
+                                    alt="Curso">
+                            @endif
+                        </a>
+                        <form method="POST" action="{{ route('cursos.detallado') }}" id="curso-{{ $curso->id }}">
+                            @csrf
+                            <input name="curso_programado_id" type="hidden" value="{{ $curso->id }}">
+                        </form>
+                        <div class="card-body d-flex flex-column">
+                            <h3 class="card-title font-weight-bold text-dark mb-2">
+                                {{ $curso->Curso->titulo }}
+                                <span class="badge badge-primary ml-1">{{ $curso->identificador }}</span>
+                            </h3>
+
+                            <p class="mb-2 text-success small">
+                                <i class="fas fa-clock mr-1"></i>
+                                Quedan
+                                {{ \Carbon\Carbon::now()->diffForHumans(\Carbon\Carbon::parse($curso->fecha_fin_venta), ['syntax' => \Carbon\CarbonInterface::DIFF_ABSOLUTE]) }}
+                                para cerrar inscripciones
+                            </p>
+
+                            <div class="mb-2 text-muted small" style="min-height: 100px;">
+                                {!! $curso->Curso->descripcion !!}
+                            </div>
+
+                            <p class="text-dark mb-2">
+                                <strong>Inicio:</strong>
+                                {{ \Carbon\Carbon::parse($curso->fecha_inicio)->format('d/m/Y') }} -
+                                <strong>Fin:</strong> {{ \Carbon\Carbon::parse($curso->fecha_fin)->format('d/m/Y') }}
+                            </p>
+
+                            <h5 class="mt-2 font-weight-bold text-primary">
+                                ${{ $curso->precio_en_moneda }} MXN
+                            </h5>
+
+                            <div class="mt-auto">
+                                <a href="{{ route('inscripcion.form', ['curso_programado_id' => $curso->id]) }}"
+                                    class="btn btn-block btn-sm mt-3 text-white" style="background-color: #1c2d41;">
+                                    <i class="fas fa-check-circle mr-1"></i> Inscribirme
+                                </a>
+                                <a href="javascript:void(0)" class="btn btn-block btn-sm mt-2 text-white"
+                                    style="background-color: #ed6a5a;"
+                                    onclick="event.preventDefault(); document.getElementById('curso-{{ $curso->id }}').submit();">
+                                    <i class="fas fa-info-circle mr-1"></i> Más detalles
+                                </a>
                             </div>
                         </div>
-                    @endif
-                @endforeach
-            </div>
-        </div>
+                    </div>
+                </div>
+            @endif
+        @endforeach
     </div>
 @endsection
 
@@ -78,18 +90,9 @@
     <script src="{{ asset('js/funciones.js') }}"></script>
     <script>
         $('#exampleModal').on('show.bs.modal', function(event) {
-            var button = $(event.relatedTarget) // Button that triggered the modal
-            var id = button.data('cursoid') // Extract info from data-* attributes
-            console.log(id)
-            //var id = button.getAttribute('data-cursoid');
-            // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-            // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-            //var modal = $(this)
-            //console.log(id)
+            var button = $(event.relatedTarget)
+            var id = button.data('cursoid')
             var b = document.querySelector(".modal-footer form input")
-            console.log(b)
-            //modal.find('.modal-footer form button').setAttribute('value',''+recipient);
-            //var buttonid = console.log(modal.find('.modal-footer form button'))
             b.setAttribute("value", id)
         })
 
@@ -110,7 +113,7 @@
                     }
                 },
                 {
-                    element: '.card.shadow:first-child',
+                    element: '.card:first-child',
                     popover: {
                         title: 'Tarjeta de Guía',
                         description: 'Cada tarjeta representa una guía. Contiene información clave como título, fechas y precio.',
@@ -119,7 +122,7 @@
                     }
                 },
                 {
-                    element: '.card.shadow:first-child .btn-detalle',
+                    element: '.card:first-child a[href*="inscripcion"]',
                     popover: {
                         title: 'Inscribir Guía',
                         description: 'Haz clic aquí para iniciar el proceso de compra e inscripción.',
@@ -128,7 +131,7 @@
                     }
                 },
                 {
-                    element: '.card.shadow:first-child .btn-primary',
+                    element: '.card:first-child a[onclick*="submit"]',
                     popover: {
                         title: 'Más Detalles',
                         description: 'Consulta el temario completo y la descripción detallada de la guía antes de inscribirte.',
