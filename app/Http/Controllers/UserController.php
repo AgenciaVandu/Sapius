@@ -218,10 +218,17 @@ class UserController extends Controller
 
     public function calendario()
     {
-        $inscripciones = Inscripcion::with('CursoProgramado.Curso.Lecciones')->where('user_id', Auth::user()->id)->get();
+        $inscripciones = Inscripcion::with(['CursoProgramado' => function ($q) {
+            $q->withoutGlobalScope('Activos')->with('Curso.Lecciones');
+        }])->where('user_id', Auth::user()->id)->get();
         $arr = [];
         foreach ($inscripciones as $inscripcion) {
             $curso_programado = $inscripcion['CursoProgramado'];
+
+            if (!$curso_programado) {
+                continue;
+            }
+
             $contenido_programado = ContenidoProgramado::where('curso_programado_id', $curso_programado['id'])->first();
             if ($contenido_programado) {
                 foreach ($curso_programado['Curso']['Lecciones'] as $leccion) {
