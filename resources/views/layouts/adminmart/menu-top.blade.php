@@ -46,7 +46,82 @@
             <!-- toggle and nav items -->
             <!-- ============================================================== -->
             <ul class="navbar-nav float-left mr-auto ml-3 pl-1">
-                @yield('timer')
+                @hasSection('timer')
+                    @yield('timer')
+                @else
+                    @if (isset($globalActiveExam) && $globalActiveExam)
+                        @php
+                            $str_time = $globalActiveExam->Prueba->tiempo;
+                            sscanf($str_time, '%d:%d:%d', $hours, $minutes, $seconds);
+                            $duration_seconds = isset($hours)
+                                ? $hours * 3600 + $minutes * 60 + $seconds
+                                : $minutes * 60 + $seconds;
+                            // Ensure created_at is parsed correctly (sometimes it's a string)
+                            $start_time = \Carbon\Carbon::parse($globalActiveExam->created_at);
+                            $now = \Carbon\Carbon::now();
+                            // Use abs to avoid negative iff clock skew, but typically diffInSeconds is absolute.
+                            // method diffInSeconds(date, absolute=true) default is true.
+                            // We want direction. if now > start, fine.
+                            $elapsed_seconds = $start_time->diffInSeconds($now);
+
+                            $remaining_seconds = $duration_seconds - $elapsed_seconds;
+                        @endphp
+
+                        @if ($remaining_seconds > 0)
+                            <li class="nav-item d-none d-md-block" id="global-exam-timer-li">
+                                <form id="global-exam-form" action="{{ route('examen.presentar') }}" method="POST"
+                                    style="display: none;">
+                                    @csrf
+                                    <input type="hidden" name="prueba_id" value="{{ $globalActiveExam->prueba_id }}">
+                                    <input type="hidden" name="inscripcion_id"
+                                        value="{{ $globalActiveExam->inscripcion_id }}">
+                                </form>
+                                <a class="nav-link" href="javascript:void(0)"
+                                    onclick="document.getElementById('global-exam-form').submit();"
+                                    style="background-color: #ffefef; border: 1px solid #ffcccc; border-radius: 50px; padding: 8px 20px; margin-top: 12px; line-height: 1.2;">
+                                    <span class="text-danger font-weight-bold" style="font-size: 0.9rem;">
+                                        <i data-feather="clock" class="svg-icon mr-1"
+                                            style="height: 16px; width: 16px;"></i>
+                                        <span
+                                            class="d-none d-lg-inline">{{ \Illuminate\Support\Str::limit($globalActiveExam->Prueba->titulo, 15) }}:</span>
+                                        <span id="global-timer-countdown"
+                                            style="font-family: monospace; font-size: 1rem;"></span>
+                                    </span>
+                                </a>
+                                <input type="hidden" id="global_remaining_seconds" value="{{ $remaining_seconds }}">
+                                <script>
+                                    document.addEventListener('DOMContentLoaded', function() {
+                                        let seconds = parseInt(document.getElementById('global_remaining_seconds').value);
+                                        const timerElement = document.getElementById('global-timer-countdown');
+                                        const liElement = document.getElementById('global-exam-timer-li');
+
+                                        function updateTimer() {
+                                            if (seconds <= 0) {
+                                                liElement.style.display = 'none';
+                                                return;
+                                            }
+
+                                            let hrs = Math.floor(seconds / 3600);
+                                            let mins = Math.floor((seconds % 3600) / 60);
+                                            let secs = seconds % 60;
+
+                                            let display = "";
+                                            if (hrs > 0) display += (hrs < 10 ? "0" : "") + hrs + ":";
+                                            display += (mins < 10 ? "0" : "") + mins + ":";
+                                            display += (secs < 10 ? "0" : "") + secs;
+
+                                            timerElement.innerText = display;
+                                            seconds--;
+                                        }
+
+                                        setInterval(updateTimer, 1000);
+                                        updateTimer();
+                                    });
+                                </script>
+                            </li>
+                        @endif
+                    @endif
+                @endif
                 <!-- Notification -->
                 {{--  <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle pl-md-3 position-relative" href="javascript:void(0)"
@@ -238,7 +313,8 @@
                             <i data-feather="power" class="svg-icon mr-2 ml-1"></i>
                             {{ __('Logout') }}
                         </a>
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                            style="display: none;">
                             @csrf
                         </form>
                         {{-- <div class="dropdown-divider"></div>

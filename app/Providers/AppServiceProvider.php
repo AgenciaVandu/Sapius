@@ -25,5 +25,18 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Schema::defaultStringLength(191);
+
+        view()->composer('layouts.adminmart.menu-top', function ($view) {
+            if (\Auth::check() && \Auth::user()->rol[0]->slug == 'alumno') {
+                $activeExam = \App\Models\Evaluacion\Examen::with(['Prueba.Leccion.Curso', 'Inscripcion.CursoProgramado'])
+                    ->whereHas('Inscripcion', function ($q) {
+                        $q->where('user_id', \Auth::id());
+                    })
+                    ->where('finalizado', 'no')
+                    ->latest()
+                    ->first();
+                $view->with('globalActiveExam', $activeExam);
+            }
+        });
     }
 }
