@@ -9,7 +9,7 @@
             sscanf($str_time, '%d:%d:%d', $hours, $minutes, $seconds);
             $time_minutes = isset($hours) ? $hours * 60 + $minutes : $minutes;
         @endphp
-        <input type="hidden" id="tiempo" value="{{ $time_minutes }}}">
+        <input type="hidden" id="tiempo" value="{{ $time_minutes }}">
         <input type="hidden" id="tiempo-inicio" value="{{ date('Y-m-d H:i:s') }}">
     </div>
     <input type="text"
