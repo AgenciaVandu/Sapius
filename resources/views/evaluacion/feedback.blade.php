@@ -241,7 +241,7 @@ acceso permanente a la plataforma."
 
                 const restrictedKeys = ['F12', 'F11'];
 
-                if (isCtrlOfTheOS || restrictedKeys.includes(e.key)) {
+                if (isCtrlOfTheOS || e.key === 'Shift' || e.shiftKey || restrictedKeys.includes(e.key)) {
                     e.preventDefault();
                     registerExamStrike("Restricted Key / Modifier");
                     return;
