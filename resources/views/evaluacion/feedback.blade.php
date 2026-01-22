@@ -162,6 +162,7 @@ acceso permanente a la plataforma."
         const contador = document.getElementById('contador-intentos');
 
         function registerExamStrike(reason) {
+            if (intentos >= maxIntentos) return;
             intentos++;
             const restantes = maxIntentos - intentos;
 

@@ -13,8 +13,10 @@
         return document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
     }
 
+    let isBlocked = false;
+
     function registerGlobalPanelStrike(reason) {
-        if (isWarningActive) return;
+        if (isWarningActive || isBlocked) return;
         isWarningActive = true;
 
         const overlay = document.getElementById('warning-overlay');
@@ -57,7 +59,8 @@
                     overlay.style.display = 'flex';
                 }
 
-                if (data.status === 'blocked') {
+                if (data.status === 'blocked' || (data.strikes && data.strikes >= maxStrikes)) {
+                    isBlocked = true; // Stop further local processing
                     setTimeout(() => {
                         window.location.href = lockedUrl;
                     }, 2000);
