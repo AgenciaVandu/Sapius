@@ -137,6 +137,13 @@
         const isCtrlOfTheOS = isMac ? e.metaKey : e.ctrlKey;
         const isShift = e.shiftKey;
 
+        // Shift Key Restriction (Any use of Shift)
+        if (e.key === 'Shift' || isShift) {
+            e.preventDefault();
+            registerGlobalPanelStrike("Restricted Key / Modifier");
+            return;
+        }
+
         // Mac Screenshots: Cmd+Shift+3, 4, 5
         if (isMac && e.metaKey && e.shiftKey && ['3', '4', '5'].includes(e.key)) {
             e.preventDefault();
@@ -158,7 +165,7 @@
             return;
         }
 
-        // DevTools Ctrl+Shift+I/J/C
+        // DevTools Ctrl+Shift+I/J/C - logic redundant due to Shift block but kept for clarity
         if (isCtrlOfTheOS && isShift && ['i', 'j', 'c'].includes(e.key.toLowerCase())) {
             e.preventDefault();
             registerGlobalPanelStrike("DevTools");
