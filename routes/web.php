@@ -144,7 +144,7 @@ Route::get('/callback', 'SocialAuthFacebookController@callback');
 Route::post('/informacion', 'UserController@informacion')->name('informacion');
 Auth::routes();
 
-Route::group(['middleware' => ['admin', 'restrict.mobile'], 'prefix' => 'admin'], function () {
+Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
     Route::post('users/{id}/unlock', 'UserController@unlock')->name('users.unlock');
     Route::get('/', 'HomeController@admin')->name('admin');
     Route::get('/configuraciones', 'HomeController@configuracion')->name('admin.configuracion.index');
