@@ -131,20 +131,6 @@ acceso permanente a la plataforma."
             </div>
         </div>
     </div>
-
-    <!-- Overlay mensaje de advertencia -->
-    <div id="warning-overlay"
-        style="display:none; position:fixed; top:0; left:0; width:100%; height:100%;
-           background-color:rgba(5, 36, 66,0.90); color:white; font-size:1.5rem;
-           z-index:9999; text-align:center; justify-content:center; align-items:center; flex-direction:column;">
-        <img src="https://sapius.com.mx/img/logo-sapius.png" alt="Logo Sapius">
-        <p><strong>⚠️ Uso de teclas no permitido</strong></p>
-        <p>
-            Durante el examen está prohibido el uso de teclas o combinaciones.<br>
-            Tienes 3 advertencias; a la tercera se finalizará automáticamente el examen.
-        </p>
-        <p id="contador-intentos" style="font-size:1.8rem; font-weight:bold; margin-top:10px;"></p>
-    </div>
 @endsection
 
 @section('javascript')
@@ -210,56 +196,93 @@ acceso permanente a la plataforma."
             document.onclick = reEnable;
         }
 
-        // --- NUEVO SISTEMA DE ADVERTENCIA CON CONTADOR ---
-        let intentos = 0;
-        const maxIntentos = 3;
+        // --- NUEVO SISTEMA DE ADVERTENCIA CON CONTADOR (Conectado al Backend) ---
         const overlay = document.getElementById('warning-overlay');
         const contador = document.getElementById('contador-intentos');
+        const registerStrikeEndpoint = "{{ route('alumno.register-strike') }}"; // Use global route
+        let isFinalizing = false;
 
         function registerExamStrike(reason) {
-            intentos++;
-            const restantes = maxIntentos - intentos;
+            if (isFinalizing) return;
 
-            contador.textContent =
-                `Intento ${intentos} de ${maxIntentos} — ${restantes > 0 ? `Te quedan ${restantes}` : '⚠️ Sin intentos restantes'}`;
-            overlay.style.display = 'flex';
+            // Call backend to register strike and get weighted score
+            fetch(registerStrikeEndpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': "{{ csrf_token() }}",
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        action: reason,
+                        details: 'Exam Mode'
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    const currentScore = Math.min(data.strikes || 0, 100);
+                    const maxStrikes = 100;
 
-            console.log("Exam Strike: " + reason);
-
-            // Ocultar después de 5 segundos
-            setTimeout(() => {
-                if (intentos < maxIntentos) overlay.style.display = 'none';
-            }, 5000);
-
-            // Si llega al tercer intento, finalizar examen
-            if (intentos >= maxIntentos) {
-                setTimeout(() => {
-                    var url = $('#liga-finalizar').val();
-                    var examen_id = $('#examen_id').val();
-                    if (!examen_id) {
-                        // Fallback attempt to get ID if selector fails for some reason
-                        examen_id = "{{ $examen->id }}";
+                    // Update UI
+                    if (contador) {
+                        contador.textContent =
+                            `Nivel de Riesgo: ${currentScore}% — ${currentScore < 100 ? 'Evite acciones indebidas' : '⚠️ Cuenta Bloqueada'}`;
                     }
-                    var token = $('input[name="_token"]').val();
+                    if (overlay) overlay.style.display = 'flex';
 
-                    $.post(url, {
-                        _token: token,
-                        examen_id: examen_id
-                    }, function(data) {
-                        document.open();
-                        document.write(data);
-                        document.close();
-                    }).fail(function(xhr) {
-                        console.error("Error finalizando examen:", xhr);
-                        // Force reload if it fails, assuming backend might have handled it or just to lock out
-                        location.reload();
-                    });
-                }, 1000);
-            }
+                    console.log(`Exam Strike: ${reason} (Risk: ${currentScore}%)`);
+
+                    // If blocked or limit reached
+                    if (data.status === 'blocked' || currentScore >= maxStrikes) {
+                        isFinalizing = true;
+                        setTimeout(() => {
+                            finalizeExamDueToStrike();
+                        }, 2000);
+                    } else {
+                        // Hide overlay after delay if not blocked
+                        setTimeout(() => {
+                            if (!isFinalizing && overlay) overlay.style.display = 'none';
+                        }, 4000);
+                    }
+                })
+                .catch(err => {
+                    console.error("Error registering strike:", err);
+                    // Fallback purely local if network fails? 
+                    // For now, simpler to do nothing or warn.
+                });
+        }
+
+        function finalizeExamDueToStrike() {
+            var url = $('#liga-finalizar').val();
+            var examen_id = $('#examen_id').val() || "{{ $examen->id }}";
+            var token = $('input[name="_token"]').val();
+
+            $.post(url, {
+                _token: token,
+                examen_id: examen_id
+            }, function(data) {
+                document.open();
+                document.write(data);
+                document.close();
+                // Optionally redirect to locked page explicitly if the response doesn't do it
+                setTimeout(() => {
+                    window.location.reload();
+                }, 3000);
+            }).fail(function(xhr) {
+                console.error("Error finalizando examen:", xhr);
+                location.reload();
+            });
         }
 
         window.addEventListener('keydown', function(event) {
             const e = event; // Alias
+
+            // Volume Keys - Handled as Low Severity
+            if (['AudioVolumeUp', 'AudioVolumeDown', 'AudioVolumeMute'].includes(e.key)) {
+                e.preventDefault();
+                registerExamStrike('Volume Key');
+                return;
+            }
 
             // Windows PrintScreen
             if (e.key === 'PrintScreen' || e.keyCode === 44) {
@@ -275,6 +298,13 @@ acceso permanente a la plataforma."
             if (isMac && e.metaKey && e.shiftKey && ['3', '4', '5'].includes(e.key)) {
                 e.preventDefault();
                 registerExamStrike("Mac Screenshot");
+                return;
+            }
+
+            // Windows Snipping Tool (Win + Shift + S)
+            if (!isMac && e.metaKey && e.shiftKey && (e.key === 's' || e.key === 'S')) {
+                e.preventDefault();
+                registerExamStrike("Snipping Tool");
                 return;
             }
 

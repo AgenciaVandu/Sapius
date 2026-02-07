@@ -1,7 +1,7 @@
 @extends('layouts.adminmart.default')
 
 @section('content')
-    <div class="row justify-content-center align-items-center" style="height: 80vh;">
+    <div class="row justify-content-center align-items-center" style="min-height: 80vh;">
         <div class="col-md-8 text-center">
             <div class="card shadow-lg p-5">
                 <div class="card-body">
@@ -25,6 +25,88 @@
                             Para poder desbloquear tu cuenta, <strong>debes tomar una foto de esta pantalla</strong> donde
                             se vean las acciones registradas abajo y enviarla a soporte técnico.
                         </p>
+                    </div>
+
+                    @php
+                        $recentHistory = \App\Models\UserStrikeHistory::where('user_id', Auth::id())
+                            ->latest()
+                            ->take(10)
+                            ->get();
+
+                        $totalSeverity = 0;
+                        $itemsCount = 0;
+
+                        foreach ($recentHistory as $h) {
+                            $act = $h->action;
+                            $pts = 10; // BASE
+
+                            // High Intent
+                            if (
+                                in_array($act, [
+                                    'Copy',
+                                    'Cut',
+                                    'Paste',
+                                    'PrintScreen',
+                                    'Save',
+                                    'View Source',
+                                    'DevTools',
+                                    'F12',
+                                ])
+                            ) {
+                                $pts = 100;
+                            }
+                            // Medium
+                            elseif ($act === 'Right Click') {
+                                $pts = 50;
+                            }
+                            // Low / Accidental
+                            elseif (in_array($act, ['Shift', 'Restricted Key / Modifier'])) {
+                                $pts = 10;
+                            }
+                            // Very Low
+                            elseif (strpos($act, 'Volume') !== false) {
+                                $pts = 0;
+                            }
+
+                            $totalSeverity += $pts;
+                            $itemsCount++;
+                        }
+
+                        $avgSeverity = $itemsCount > 0 ? $totalSeverity / $itemsCount : 0;
+
+                        $semaphoreColor = '#28a745'; // Green
+                        $semaphoreText = 'Baja Intencionalidad (Posibles Errores)';
+                        $semaphoreIcon = 'fa-check-circle';
+
+                        if ($avgSeverity >= 70) {
+                            $semaphoreColor = '#dc3545'; // Red
+                            $semaphoreText = 'Alta Intencionalidad (Acciones Prohibidas Detectadas)';
+                            $semaphoreIcon = 'fa-exclamation-circle';
+                        } elseif ($avgSeverity >= 30) {
+                            $semaphoreColor = '#ffc107'; // Yellow
+                            $semaphoreText = 'Intencionalidad Media (Precaución)';
+                            $semaphoreIcon = 'fa-exclamation-triangle';
+                        }
+                    @endphp
+
+                    <div class="card mb-4" style="border: 2px solid {{ $semaphoreColor }};">
+                        <div class="card-body py-3">
+                            <h5 class="mb-0" style="color: {{ $semaphoreColor }}; font-weight: bold;">
+                                <i class="fas {{ $semaphoreIcon }}"></i> Nivel de Intencionalidad Detectado
+                            </h5>
+                            <p class="text-muted mb-0 mt-1">
+                                El sistema ha analizado tus acciones recientes:
+                                <span class="badge"
+                                    style="background-color: {{ $semaphoreColor }}; color: white; font-size: 1rem;">
+                                    {{ $semaphoreText }}
+                                </span>
+                            </p>
+                            <div class="progress mt-2" style="height: 10px;">
+                                <div class="progress-bar" role="progressbar"
+                                    style="width: {{ min($avgSeverity, 100) }}%; background-color: {{ $semaphoreColor }};"
+                                    aria-valuenow="{{ $avgSeverity }}" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                        </div>
                     </div>
 
                     @php
@@ -54,30 +136,43 @@
                                                 $visual =
                                                     '<div class="mouse-icon"><div class="mouse-btn left"></div><div class="mouse-btn right active"></div></div> <span class="align-middle">Clic Derecho</span>';
                                             } elseif (Str::contains($record->action, 'PrintScreen')) {
-                                                $visual = '<span class="kbd-key">PrtScn</span>';
+                                                $visual =
+                                                    '<span class="kbd-key">PrtScn</span> <span class="align-middle pl-2">Captura de Pantalla</span>';
                                             } elseif ($record->action == 'F12' || $record->action == 'DevTools') {
-                                                $visual = '<span class="kbd-key">F12</span>';
+                                                $visual =
+                                                    '<span class="kbd-key">F12</span> <span class="align-middle pl-2">Herramientas de Desarrollo</span>';
                                             } elseif (Str::contains($record->action, 'Copy')) {
                                                 $visual =
-                                                    '<span class="kbd-key">Ctrl</span> + <span class="kbd-key">C</span>';
+                                                    '<span class="kbd-key">Ctrl</span> + <span class="kbd-key">C</span> <span class="align-middle pl-2">Copiar Contenido</span>';
                                             } elseif (Str::contains($record->action, 'Paste')) {
                                                 $visual =
-                                                    '<span class="kbd-key">Ctrl</span> + <span class="kbd-key">V</span>';
+                                                    '<span class="kbd-key">Ctrl</span> + <span class="kbd-key">V</span> <span class="align-middle pl-2">Pegar Contenido</span>';
                                             } elseif (Str::contains($record->action, 'Cut')) {
                                                 $visual =
-                                                    '<span class="kbd-key">Ctrl</span> + <span class="kbd-key">X</span>';
+                                                    '<span class="kbd-key">Ctrl</span> + <span class="kbd-key">X</span> <span class="align-middle pl-2">Cortar Contenido</span>';
                                             } elseif (Str::contains($record->action, 'Shortcut')) {
                                                 // Extract key from "Shortcut x"
                                                 $key = strtoupper(str_replace('Shortcut ', '', $record->action));
                                                 $visual =
                                                     '<span class="kbd-key">Ctrl</span> + <span class="kbd-key">' .
                                                     $key .
-                                                    '</span>';
+                                                    '</span> <span class="align-middle pl-2">Atajo de Teclado</span>';
                                             } elseif (Str::contains($record->action, 'Mac Screenshot')) {
                                                 $visual =
-                                                    '<span class="kbd-key">Cmd</span> + <span class="kbd-key">Shift</span> + <span class="kbd-key">3/4</span>';
+                                                    '<span class="kbd-key">Cmd</span> + <span class="kbd-key">Shift</span> + <span class="kbd-key">3/4</span> <span class="align-middle pl-2">Captura en Mac</span>';
+                                            } elseif (Str::contains($record->action, 'Snipping Tool')) {
+                                                $visual =
+                                                    '<span class="kbd-key">Win</span> + <span class="kbd-key">Shift</span> + <span class="kbd-key">S</span> <span class="align-middle pl-2">Recortes (Snipping Tool)</span>';
+                                            } elseif (Str::contains($record->action, 'Restricted Key')) {
+                                                // Try to guess key from details if available or just generic
+                                                $visual =
+                                                    '<span class="kbd-key"><i class="fas fa-ban"></i></span> <span class="align-middle pl-2">Tecla Restringida / Shift</span>';
+                                            } elseif (Str::contains($record->action, 'Volume')) {
+                                                $visual =
+                                                    '<i class="fas fa-volume-up fa-lg text-muted"></i> <span class="align-middle pl-2">Ajuste de Volumen</span>';
                                             } else {
-                                                $visual = $record->action;
+                                                // Generic Keyboard visual
+                                                $visual = '<span class="kbd-key">' . $record->action . '</span>';
                                             }
                                         @endphp
                                         <tr>

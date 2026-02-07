@@ -289,28 +289,56 @@ class UserController extends Controller
     {
         $user = Auth::user();
         if ($user) {
-            $user->strikes += 1;
+            $action = $request->input('action', 'Unknown');
+            $points = 10; // Default
+
+            // Map actions to severity points (Threshold = 100)
+            // High Intent (34 pts -> 3 strikes to block)
+            if (in_array($action, ['Copy', 'Cut', 'Paste', 'PrintScreen', 'Save', 'View Source', 'Snipping Tool', 'Mac Screenshot'])) {
+                $points = 34;
+            }
+            // Critical Intent (50 pts -> 2 strikes to block)
+            elseif (in_array($action, ['DevTools', 'F12'])) {
+                $points = 50;
+            }
+            // Medium Intent (20 pts -> 5 strikes to block)
+            elseif ($action === 'Right Click') {
+                $points = 20;
+            }
+            // Low Intent / Accidental (5 pts -> Warning + contribution to block)
+            // User requested Shift adds to percentage: "que sea igual algo que sume al porcentaje"
+            elseif (in_array($action, ['Shift', 'Restricted Key / Modifier'])) {
+                $points = 5;
+            }
+            // Volume / Minimal Intent (0 pts)
+            elseif (strpos($action, 'Volume') !== false) {
+                $points = 0;
+            }
+
+            $user->strikes += $points;
 
             $status = 'warning';
-            if ($user->strikes >= 3) {
+            // Limit is notionally 100
+            if ($user->strikes >= 100) {
                 $user->is_blocked = true;
                 $status = 'blocked';
             }
 
             $user->save();
 
-            // Register History
+            // Register History with points
             \App\Models\UserStrikeHistory::create([
                 'user_id' => $user->id,
-                'action' => $request->input('action', 'Unknown'),
-                'details' => $request->input('details', null),
+                'action' => $action,
+                'details' => $request->input('details', "Points: $points"),
             ]);
 
-            // if ($status === 'blocked') {
-            //     Auth::logout();
-            // }
-
-            return response()->json(['status' => $status, 'strikes' => $user->strikes]);
+            return response()->json([
+                'status' => $status,
+                'strikes' => $user->strikes,
+                'max_strikes' => 100,
+                'points_added' => $points
+            ]);
         }
         return response()->json(['status' => 'error'], 400);
     }

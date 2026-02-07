@@ -7,7 +7,7 @@
     const registerStrikeEndpoint = window.sapiusRoutes?.registerStrike || '/alumno/register-strike';
     const lockedUrl = window.sapiusRoutes?.locked || '/alumno/cuenta-bloqueada';
     let isWarningActive = false;
-    const maxStrikes = 3;
+    const maxStrikes = 100;
 
     function getCsrfToken() {
         return document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
@@ -47,13 +47,15 @@
                 console.log(`Global Strike registered: ${reason}`, data);
 
                 if (msg && overlay) {
-                    // If the element is specifically the counter (contador-intentos)
+                    // Update UI to show Risk Level instead of attempt count
+                    // Using Math.min to cap at 100 for display
+                    const currentScore = Math.min(data.strikes || 0, 100);
+
                     if (msg.id === 'contador-intentos') {
-                        const restantes = maxStrikes - (data.strikes || 0);
-                        msg.textContent = `Intento ${data.strikes} de ${maxStrikes} — ${restantes > 0 ? `Te quedan ${restantes}` : '⚠️ Cuenta Bloqueada'}`;
+                        msg.textContent = `Nivel de Riesgo: ${currentScore}% — ${currentScore < 100 ? 'Evite acciones indebidas' : '⚠️ Cuenta Bloqueada'}`;
                     } else {
                         // Generic message element
-                        msg.textContent = `Advertencia ${data.strikes} de ${maxStrikes}`;
+                        msg.textContent = `Advertencia: Nivel de Riesgo ${currentScore}%`;
                     }
 
                     overlay.style.display = 'flex';
@@ -129,6 +131,13 @@
 
     // 4. Restricted Keys
     function handleGlobalKey(e) {
+        // Volume Keys - Handled as Low Severity
+        if (['AudioVolumeUp', 'AudioVolumeDown', 'AudioVolumeMute'].includes(e.key)) {
+            e.preventDefault();
+            registerGlobalPanelStrike('Volume Key');
+            return;
+        }
+
         // Windows PrintScreen
         if (e.key === 'PrintScreen' || e.keyCode === 44) {
             e.preventDefault();
@@ -151,6 +160,14 @@
         if (isMac && e.metaKey && e.shiftKey && ['3', '4', '5'].includes(e.key)) {
             e.preventDefault();
             registerGlobalPanelStrike("Mac Screenshot");
+            return;
+        }
+
+        // Windows Snipping Tool (Win + Shift + S)
+        // Note: 'metaKey' is Windows Key on Windows
+        if (!isMac && e.metaKey && e.shiftKey && (e.key === 's' || e.key === 'S')) {
+            e.preventDefault();
+            registerGlobalPanelStrike("Snipping Tool");
             return;
         }
 

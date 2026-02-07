@@ -251,7 +251,9 @@ class ExamenController extends Controller
         $respuestas = collect(json_decode($examen->respuestas_json));
 
         $respuestas_db = Respuesta::with(['Pregunta' => function ($q1) use ($examen) {
-            $q1->with('Respuestas')
+            $q1->with(['Respuestas' => function ($q2) {
+                $q2->where('activo', 'si');
+            }])
                 ->where('prueba_id', $examen->prueba_id)
                 ->where('activo', 'si');
         }])->where('correcto', 1)->where('activo', 'si')->get();

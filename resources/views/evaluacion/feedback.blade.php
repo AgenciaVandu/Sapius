@@ -111,34 +111,6 @@ acceso permanente a la plataforma."
             </div>
         </div>
     </div>
-
-    <!-- Overlay mensaje de advertencia -->
-    <div id="warning-overlay"
-        style="display:none; position:fixed; top:0; left:0; width:100%; height:100%;
-           background-color:rgba(5, 36, 66,0.90); color:white; font-size:1.5rem;
-           z-index:9999; text-align:center; justify-content:center; align-items:center; flex-direction:column;">
-        <img src="https://sapius.com.mx/img/logo-sapius.png" alt="Logo Sapius">
-        <p><strong>⚠️ Uso de teclas no permitido</strong></p>
-        <p>
-            Durante la revisión está prohibido el uso de teclas o combinaciones.<br>
-            Tienes 3 advertencias; a la tercera se cerrará automáticamente el acceso.
-        </p>
-        <p id="contador-intentos" style="font-size:1.8rem; font-weight:bold; margin-top:10px;"></p>
-    </div>
-
-    <!-- Overlay mensaje de advertencia -->
-    <div id="warning-overlay"
-        style="display:none; position:fixed; top:0; left:0; width:100%; height:100%;
-           background-color:rgba(5, 36, 66,0.90); color:white; font-size:1.5rem;
-           z-index:9999; text-align:center; justify-content:center; align-items:center; flex-direction:column;">
-        <img src="https://sapius.com.mx/img/logo-sapius.png" alt="Logo Sapius">
-        <p><strong>⚠️ Uso de teclas no permitido</strong></p>
-        <p>
-            Durante la revisión está prohibido el uso de teclas o combinaciones.<br>
-            Tienes 3 advertencias; a la tercera se cerrará automáticamente el acceso.
-        </p>
-        <p id="contador-intentos" style="font-size:1.8rem; font-weight:bold; margin-top:10px;"></p>
-    </div>
 @endsection
 
 @section('javascript')
@@ -155,56 +127,80 @@ acceso permanente a la plataforma."
         }
 
 
-        // --- NUEVO SISTEMA DE ADVERTENCIA CON CONTADOR ---
-        let intentos = 0;
-        const maxIntentos = 3;
+        // --- NUEVO SISTEMA DE ADVERTENCIA CON CONTADOR (Conectado al Backend) ---
         const overlay = document.getElementById('warning-overlay');
         const contador = document.getElementById('contador-intentos');
+        const registerStrikeEndpoint = "{{ route('alumno.register-strike') }}";
+        let isFinalizing = false;
 
         function registerExamStrike(reason) {
-            if (intentos >= maxIntentos) return;
-            intentos++;
-            const restantes = maxIntentos - intentos;
+            if (isFinalizing) return;
 
-            if (contador) {
-                contador.textContent =
-                    `Intento ${intentos} de ${maxIntentos} — ${restantes > 0 ? `Te quedan ${restantes}` : '⚠️ Sin intentos restantes'}`;
-            }
-            if (overlay) overlay.style.display = 'flex';
+            fetch(registerStrikeEndpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': "{{ csrf_token() }}",
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        action: reason,
+                        details: 'Feedback Mode'
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    const currentScore = Math.min(data.strikes || 0, 100);
+                    const maxStrikes = 100;
 
-            console.log("Strike: " + reason);
+                    if (contador) {
+                        contador.textContent =
+                            `Nivel de Riesgo: ${currentScore}% — ${currentScore < 100 ? 'Evite acciones indebidas' : '⚠️ Acceso Bloqueado'}`;
+                    }
+                    if (overlay) overlay.style.display = 'flex';
 
-            // Ocultar después de 5 segundos
-            setTimeout(() => {
-                if (intentos < maxIntentos && overlay) overlay.style.display = 'none';
-            }, 5000);
+                    console.log(`Strike: ${reason} (Risk: ${currentScore}%)`);
 
-            // Si llega al tercer intento, finalizar (bloquear)
-            if (intentos >= maxIntentos) {
+                    // Limit reached -> Block
+                    if (data.status === 'blocked' || currentScore >= maxStrikes) {
+                        isFinalizing = true;
+                        setTimeout(() => {
+                            finalizeFeedbackDueToStrike();
+                        }, 2000);
+                    } else {
+                        setTimeout(() => {
+                            if (!isFinalizing && overlay) overlay.style.display = 'none';
+                        }, 4000);
+                    }
+                })
+                .catch(err => {
+                    console.error("Error registering strike:", err);
+                });
+        }
+
+        function finalizeFeedbackDueToStrike() {
+            var url = "{{ route('examen.finalizar-imprevisto') }}";
+            var examen_id = @json($examen->id);
+            var token = "{{ csrf_token() }}";
+
+            $.post(url, {
+                _token: token,
+                examen_id: examen_id
+            }, function(data) {
+                document.open();
+                document.write(data);
+                document.close();
                 setTimeout(() => {
-                    // Use the route that triggers the block/finalize logic
-                    var url = "{{ route('examen.finalizar-imprevisto') }}";
-                    var examen_id = @json($examen->id);
-                    var token = "{{ csrf_token() }}";
-
-                    $.post(url, {
-                        _token: token,
-                        examen_id: examen_id
-                    }, function(data) {
-                        document.open();
-                        document.write(data);
-                        document.close();
-                    }).fail(function(xhr) {
-                        console.error("Error finalizing:", xhr);
-                        location.reload();
-                    });
-                }, 1000);
-            }
+                    window.location.reload();
+                }, 3000);
+            }).fail(function(xhr) {
+                console.error("Error finalizing:", xhr);
+                location.reload();
+            });
         }
 
         $(window).on("load", function() {
-            // override older handlers if necessary or let them coexist if non-conflicting
-            // document.onkeydown = mostrarInformacionTecla; 
+            // override older handlers if necessary
         });
 
         $(document).ready(function() {
@@ -222,7 +218,13 @@ acceso permanente a la plataforma."
             $(window).keydown(function(event) {
                 const e = event;
 
-                // Allow ESC to close modals if needed, but forbidden keys must be blocked
+                // Volume Keys
+                if (['AudioVolumeUp', 'AudioVolumeDown', 'AudioVolumeMute'].includes(e.key)) {
+                    e.preventDefault();
+                    registerExamStrike('Volume Key');
+                    return;
+                }
+
                 // Windows PrintScreen
                 if (e.key === 'PrintScreen' || e.keyCode === 44) {
                     e.preventDefault();
@@ -237,6 +239,13 @@ acceso permanente a la plataforma."
                 if (isMac && e.metaKey && e.shiftKey && ['3', '4', '5'].includes(e.key)) {
                     e.preventDefault();
                     registerExamStrike("Mac Screenshot");
+                    return;
+                }
+
+                // Windows Snipping Tool (Win + Shift + S)
+                if (!isMac && e.metaKey && e.shiftKey && (e.key === 's' || e.key === 'S')) {
+                    e.preventDefault();
+                    registerExamStrike("Snipping Tool");
                     return;
                 }
 

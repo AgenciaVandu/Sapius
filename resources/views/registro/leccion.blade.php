@@ -135,7 +135,7 @@
                             <a class="list-group-item"
                                 @if (isset($homework)) style="pointer-events: none; cursor: default; background-color: #e9ecef;" @endif
                                 href="{{ route('alumno.lecciones.tarea', ['leccion_id' => $leccion->id, 'curso_programado_id' => $curso_programado_id]) }}"
-                                target="_blank">Enviar tarea {{ strtolower($leccion->titulo) }} @if (isset($homework))
+                                >Enviar tarea {{ strtolower($leccion->titulo) }} @if (isset($homework))
                                     {{-- icono check --}}
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="green"
                                         class="bi bi-check-circle-fill" viewBox="0 0 16 16">
