@@ -54,7 +54,7 @@ class ExamenController extends Controller
         $examen = Examen::with(['Inscripcion', 'Prueba'])->where('inscripcion_id', $request->inscripcion_id)->where('prueba_id', $request->prueba_id)->first();
 
         if ($request->ajax() && $examen->finalizado == 'si') {
-            $fin =  view('evaluacion.finalizar-imprevisto')->with('examen_id', $examen->id)
+            $fin = view('evaluacion.finalizar-imprevisto')->with('examen_id', $examen->id)
                 ->with('leccion_id', $examen->Prueba->leccion_id)
                 ->with('curso_programado_id', $examen->Inscripcion->curso_programado_id)
                 ->with('inscripcion_id', $examen->inscripcion_id);
@@ -75,9 +75,10 @@ class ExamenController extends Controller
 
         $preguntas = Pregunta::with(['GrupoPreguntas' => function ($q) use ($request) {
             $q->with(['Respuestas' => function ($q1) {
-                $q1->where('activo', 'si');
-            }])->where('prueba_id', $request->prueba_id);
-        }])->where('activo', 'si')
+                    $q1->where('activo', 'si');
+                }
+                    ])->where('prueba_id', $request->prueba_id);
+            }])->where('activo', 'si')
             ->where('prueba_id', $request->prueba_id)
             ->select('slug')
             ->inRandomOrder(Auth::user()->id)
@@ -108,15 +109,17 @@ class ExamenController extends Controller
 
             $r->each(function ($item1, $key) use ($respuestas) {
                 $v = $respuestas->search(function ($item2, $key) use ($item1) {
-                    return $item2->name == $item1->name;
-                });
+                        return $item2->name == $item1->name;
+                    }
+                    );
 
-                if ($v !== false) {
-                    $respuestas[$v]->value = $item1->value; //editamos las que ya estaban
-                } else {
-                    $respuestas->push($item1); //agregamos las nuevas
-                }
-            });
+                    if ($v !== false) {
+                        $respuestas[$v]->value = $item1->value; //editamos las que ya estaban
+                    }
+                    else {
+                        $respuestas->push($item1); //agregamos las nuevas
+                    }
+                });
 
             $examen->respuestas_json = $respuestas->toJson();
             $examen->save();
@@ -128,9 +131,10 @@ class ExamenController extends Controller
         //solictud de nuevas respuestas para la paginacion
         $preguntasAll = Pregunta::with(['GrupoPreguntas' => function ($q) use ($request) {
             $q->with(['Respuestas' => function ($q1) {
-                $q1->where('activo', 'si');
-            }])->where('prueba_id', $request->prueba_id);
-        }])->where('activo', 'si')
+                    $q1->where('activo', 'si');
+                }
+                    ])->where('prueba_id', $request->prueba_id);
+            }])->where('activo', 'si')
             ->where('prueba_id', $request->prueba_id)
             ->select('slug')
             ->inRandomOrder(Auth::user()->id)
@@ -152,8 +156,9 @@ class ExamenController extends Controller
         //dd($preguntas);
         //presentacion de las primeras preguntas
         if ($examen->finalizado == "si") {
-            return  redirect()->route('alumno.home');
-        } else {
+            return redirect()->route('alumno.home');
+        }
+        else {
             return view('evaluacion.prueba')
                 ->with('prueba', $prueba)
                 ->with('preguntasAll', $preguntasAll)
@@ -181,7 +186,7 @@ class ExamenController extends Controller
         $examen->retro_visualizado = 'si';
         $examen->save();
 
-        $fin =  view('evaluacion.finalizar-imprevisto')->with('examen_id', $examen->id)
+        $fin = view('evaluacion.finalizar-imprevisto')->with('examen_id', $examen->id)
             ->with('leccion_id', $examen->Prueba->leccion_id)
             ->with('curso_programado_id', $examen->Inscripcion->curso_programado_id)
             ->with('inscripcion_id', $examen->inscripcion_id);
@@ -208,16 +213,17 @@ class ExamenController extends Controller
 
         $respuestas->each(function ($r, $key) use ($respuestas_db, $examen) {
             $v = $respuestas_db->search(function ($rdb, $key) use ($r) {
-                return $rdb->id == $r->value && $rdb->pregunta_id == $r->name;
-            });
+                    return $rdb->id == $r->value && $rdb->pregunta_id == $r->name;
+                }
+                );
 
-            if ($v !== false) {
-                $examen->total_correctas++;
-                $examen->score_total += $respuestas_db[$v]->Pregunta->score;
-            }
+                if ($v !== false) {
+                    $examen->total_correctas++;
+                    $examen->score_total += $respuestas_db[$v]->Pregunta->score;
+                }
 
             //\Log::debug(print_r($v,true));
-        });
+            });
 
         //dd($examen->total_correctas);
 
@@ -241,7 +247,7 @@ class ExamenController extends Controller
         $examen = Examen::with('Prueba')->where('id', $request->examen_id)->first();
 
         if ($examen == null) {
-            return  redirect()->route('alumno.home');
+            return redirect()->route('alumno.home');
         }
         if ($examen->retro_visualizado == 'no') {
             $examen->retro_visualizado = 'si';
@@ -252,38 +258,42 @@ class ExamenController extends Controller
 
         $respuestas_db = Respuesta::with(['Pregunta' => function ($q1) use ($examen) {
             $q1->with(['Respuestas' => function ($q2) {
-                $q2->where('activo', 'si');
-            }])
-                ->where('prueba_id', $examen->prueba_id)
-                ->where('activo', 'si');
-        }])->where('correcto', 1)->where('activo', 'si')->get();
+                    $q2->where('activo', 'si');
+                }
+                    ])
+                    ->where('prueba_id', $examen->prueba_id)
+                    ->where('activo', 'si');
+            }])->where('correcto', 1)->where('activo', 'si')->get();
 
         $feedback = [];
 
         $respuestas->each(function ($r, $key) use ($respuestas_db, &$feedback) {
             $v = $respuestas_db->search(function ($rdb, $key) use ($r) {
-                return $rdb->id == $r->value && $rdb->pregunta_id == $r->name;
-            });
+                    return $rdb->id == $r->value && $rdb->pregunta_id == $r->name;
+                }
+                );
 
-            if ($v === false) { //incorrecta
-                $r_db = $respuestas_db->search(function ($rdb, $key) use ($r) {
-                    return $rdb->pregunta_id == $r->name;
+                if ($v === false) { //incorrecta
+                    $r_db = $respuestas_db->search(function ($rdb, $key) use ($r) {
+                            return $rdb->pregunta_id == $r->name;
+                        }
+                        );
+
+                        $feedback[] = [$r, $respuestas_db[$r_db]];
+                    }
                 });
-
-                $feedback[] = [$r, $respuestas_db[$r_db]];
-            }
-        });
 
         $respuestas_db->each(function ($rdb, $key) use ($respuestas, &$feedback) {
             $v = $respuestas->search(function ($r, $key) use ($rdb) {
-                return $rdb->pregunta_id == $r->name;
-            });
+                    return $rdb->pregunta_id == $r->name;
+                }
+                );
 
-            if ($v === false) { //no la encontró, lo que significa que no fue respondida
-                $o = (object)['name' => 0, 'value' => 0];
-                $feedback[] = [$o, $rdb];
-            }
-        });
+                if ($v === false) { //no la encontró, lo que significa que no fue respondida
+                    $o = (object)['name' => 0, 'value' => 0];
+                    $feedback[] = [$o, $rdb];
+                }
+            });
 
 
         return view('evaluacion.feedback')->with('examen', $examen)->with('feedback', $feedback);
@@ -292,7 +302,7 @@ class ExamenController extends Controller
     public function feedbackFinalizar(Request $request)
     {
 
-        $fin =  view('evaluacion.feedback-finalizar');
+        $fin = view('evaluacion.feedback-finalizar');
 
         return response()->json($fin->render());
     }
@@ -311,11 +321,11 @@ class ExamenController extends Controller
 
     public function listaResultados($inscripcion_id)
     {
-        $inscripcion  =  Inscripcion::find($inscripcion_id);
+        $inscripcion = Inscripcion::find($inscripcion_id);
         $curso = CursosCurso::find($inscripcion->CursoProgramado->curso_id);
         $lecciones = $curso->lecciones;
         $examenes = Examen::with('Prueba')->where('inscripcion_id', $inscripcion_id)->get();
-        return view('admin.registro.resultados')->with('examenes', $examenes,)->with('lecciones', $lecciones)->with('inscripcion', $inscripcion);
+        return view('admin.registro.resultados')->with('examenes', $examenes, )->with('lecciones', $lecciones)->with('inscripcion', $inscripcion);
     }
 
 
@@ -325,7 +335,8 @@ class ExamenController extends Controller
         $examen = Examen::findOrFail($request->id);
         if ($examen->finalizado == 'si') {
             $examen->finalizado = 'no';
-        } else {
+        }
+        else {
             // Si el examen no está finalizado, lo marcamos como finalizado
             $examen->finalizado = 'si';
         }
@@ -343,7 +354,8 @@ class ExamenController extends Controller
         // Cambiamos el estado de retroalimentación
         if ($examen->retro_visualizado == 'si') {
             $examen->retro_visualizado = 'no';
-        } else {
+        }
+        else {
             $examen->retro_visualizado = 'si';
         }
 
@@ -355,11 +367,22 @@ class ExamenController extends Controller
         ]);
     }
 
+    public function reiniciarExamen(Request $request)
+    {
+        $examen = Examen::findOrFail($request->id);
+        $examen->delete();
+
+        return response()->json([
+            'message' => 'Examen reiniciado correctamente.',
+            'status' => 'success'
+        ]);
+    }
+
 
 
     public function listaResultadosAlumno($inscripcion_id)
     {
-        $inscripcion  =  Inscripcion::find($inscripcion_id);
+        $inscripcion = Inscripcion::find($inscripcion_id);
         $curso = CursosCurso::find($inscripcion->CursoProgramado->curso_id);
         $lecciones = $curso->lecciones;
 

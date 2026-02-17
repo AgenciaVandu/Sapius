@@ -1,15 +1,6 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
+/* |-------------------------------------------------------------------------- | Web Routes |-------------------------------------------------------------------------- | | Here is where you can register web routes for your application. These | routes are loaded by the RouteServiceProvider within a group which | contains the "web" middleware group. Now create something great! | */
 
 use App\ManageableGuiaMedicine;
 use App\ManageableGuiaNutrition;
@@ -41,9 +32,8 @@ Route::post('/view', 'Registro\CursoProgramadoController@viewGuia')->name('alumn
 
 
 /* Route::get('/generate-storage-link', function () {
-    Artisan::call('storage:link');
-    return 'Symlink creado exitosamente aver si funciona.';
-}); */
+ Artisan::call('storage:link');
+ return 'Symlink creado exitosamente aver si funciona.'; }); */
 
 Route::get('terms/conditions', function () {
     return view('terms');
@@ -326,6 +316,7 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
     Route::post('/examen/retro', 'Evaluacion\ExamenController@cambiarEstadoRetro')->name('examen.cambiarEstadoRetro');
     Route::get('/exportCalificaciones/{inscripcion_id}', 'Evaluacion\ExamenController@exportReport')->name('admin.exportCalificaciones');
     Route::get('/exportAllResults/{curso_id}', 'Evaluacion\ExamenController@exportAllStudentResults')->name('admin.exportAllResults');
+    Route::post('/examen/reiniciar', 'Evaluacion\ExamenController@reiniciarExamen')->name('examen.reiniciar');
 });
 
 Route::group(['middleware' => ['instructor', 'restrict.mobile'], 'prefix' => 'instructor'], function () {
@@ -440,12 +431,12 @@ Route::group(['middleware' => ['alumno', 'check.blocked'], 'prefix' => 'alumno']
     Route::get('/tu-opinion', 'HomeController@tuOpinion')->name('tu.opinion');
     Route::post('/tu-opinion/store', 'HomeController@storeOpinion')->name('alumno.opinion.store');
     Route::get('/cuenta-bloqueada', function () {
-        if (Auth::check() && !Auth::user()->is_blocked) {
-            return redirect()->route('alumno.home');
+            if (Auth::check() && !Auth::user()->is_blocked) {
+                return redirect()->route('alumno.home');
+            }
+            return view('errors.locked');
         }
-        return view('errors.locked');
-    })->name('alumno.locked');
-});
+        )->name('alumno.locked');    });
 
 //Rutas de alumno con restricciones de mobile
 Route::group(['middleware' => ['alumno', 'restrict.mobile', 'check.blocked'], 'prefix' => 'alumno'], function () {
@@ -517,5 +508,4 @@ Route::get('/email-preview', function () {
 
 
 /* Route::get('/forzar-503', function () {
-    abort(503);
-}); */
+ abort(503); }); */
