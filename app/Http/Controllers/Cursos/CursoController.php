@@ -26,22 +26,22 @@ class CursoController extends Controller
     public function index()
     {
         $cursos = Curso::where('activo', 'si')->get();
-        return (Auth::user()->rol[0]->slug =='admin') ? view('cursos.index',compact('cursos')) : view('instructor.cursos-index');
+        return (Auth::user()->rol[0]->slug == 'admin') ? view('cursos.index', compact('cursos')) : view('instructor.cursos-index');
     }
 
     public function getAll($active)
     {
-        if($active == "enable")
+        if ($active == "enable")
             $cursos = Curso::where('activo', 'si')->get();
-        elseif($active == "disable")
+        elseif ($active == "disable")
             $cursos = Curso::where('activo', 'no')->get();
         return $cursos->toJson();
     }
 
     public function getAllForInstructor($active)
     {
-        $cursos = Curso::withCount(['CursoProgramado' => function($q){
-            $q->where('user_id',Auth::user()->id);
+        $cursos = Curso::withCount(['CursoProgramado' => function ($q) {
+            $q->where('user_id', Auth::user()->id);
         }])->where('activo', 'si')->get();
 
         return $cursos->toJson();
@@ -76,7 +76,7 @@ class CursoController extends Controller
         $curso->imagen = $this->imageUploadPost($request);
         $curso->activo = "si";
         $curso->save();
-        return redirect()->route(Auth::user()->rol[0]->slug.'.cursos.index')->with('success', 'El curso ha sido agregado correctamente');
+        return redirect()->route(Auth::user()->rol[0]->slug . '.cursos.index')->with('success', 'El curso ha sido agregado correctamente');
     }
 
     /**
@@ -88,7 +88,7 @@ class CursoController extends Controller
     public function show($id)
     {
         $curso = Curso::find($id);
-        return view('cursos.show',compact('curso'));
+        return view('cursos.show', compact('curso'));
     }
 
     /**
@@ -102,7 +102,7 @@ class CursoController extends Controller
         $curso = Curso::find($request->id);
         //\Log::debug(dd($curso));
         $edit = true;
-        return view('cursos.edit')->with('curso',$curso)->with('edit',$edit);
+        return view('cursos.edit')->with('curso', $curso)->with('edit', $edit);
     }
 
     /**
@@ -122,7 +122,7 @@ class CursoController extends Controller
             $curso->imagen = $this->imageUploadPost($request);
         }
         $curso->save();
-        return redirect()->route(Auth::user()->rol[0]->slug.'.cursos.index')->with('success', 'El curso ha sido actualizado correctamente');
+        return redirect()->route(Auth::user()->rol[0]->slug . '.cursos.index')->with('success', 'El curso ha sido actualizado correctamente');
     }
 
     /**
@@ -137,7 +137,7 @@ class CursoController extends Controller
         $curso->activo = "no";
         //\Log::debug(dd($curso));
         $curso->save();
-        return redirect()->route(Auth::user()->rol[0]->slug.'.cursos.index');
+        return redirect()->route(Auth::user()->rol[0]->slug . '.cursos.index');
     }
 
     public function activate(Request $request)
@@ -146,21 +146,21 @@ class CursoController extends Controller
         $curso->activo = "si";
         //\Log::debug(dd($curso));
         $curso->save();
-        return redirect()->route(Auth::user()->rol[0]->slug.'.cursos.index');
+        return redirect()->route(Auth::user()->rol[0]->slug . '.cursos.index');
     }
 
     public function delete(Request $request)
     {
         $curso = Curso::find($request->id);
         $curso->delete();
-        return redirect()->route(Auth::user()->rol[0]->slug.'.cursos.index');
+        return redirect()->route(Auth::user()->rol[0]->slug . '.cursos.index');
     }
 
     public function imageUploadPost(Request $request)
     {
         $file = $request->file('image');
         //\Log::debug(dd($file));
-        if(is_null($file) || $request->imgEliminar == "si"){
+        if (is_null($file) || $request->imgEliminar == "si") {
             //\Log::debug(dd("file null"));
             return null;
         }
@@ -195,8 +195,9 @@ class CursoController extends Controller
         return view('cursos.payment2');
     }
 
-    public function checkout($curso_id){
-        $curso = CursoProgramado::with('Curso')->where('id',$curso_id)->first();
+    public function checkout($curso_id)
+    {
+        $curso = CursoProgramado::with('Curso')->where('id', $curso_id)->first();
         dd($curso->id);
         return view('checkout', compact('curso'));
     }
@@ -205,116 +206,137 @@ class CursoController extends Controller
     public function copyIndex()
     {
         $cursos = Curso::all();
-        return view('cursos.copy-index',compact('cursos'));
+        return view('cursos.copy-index', compact('cursos'));
     }
 
     public function copyCreate(Request $request)
     {
+        // Increase execution time for large course copy operations (5 minutes)
+        set_time_limit(300);
 
         if ($request->copyAll) {
 
-        $cursoOriginal = Curso::find($request->curso_id);
+            // Eager load all relationships to avoid N+1 query problem
+            $cursoOriginal = Curso::with([
+                'Lecciones' => function ($query) {
+                $query->orderBy('leccion_id')->orderBy('id');
+            },
+                'Lecciones.Pruebas.Preguntas.Respuestas',
+                'Lecciones.Medias'
+            ])->find($request->curso_id);
 
-        $curso = new Curso;
+            $curso = new Curso;
 
-        $curso->user_id = auth()->user()->id;
-        $curso->titulo = $cursoOriginal->titulo . ' (Copia)';
-        $curso->slug = $cursoOriginal->slug . '-copia-' . time();
-        $curso->descripcion = $cursoOriginal->descripcion;
-        $curso->imagen = $cursoOriginal->imagen;
-        $curso->activo = "si";
-        $curso->save();
+            $curso->user_id = auth()->user()->id;
+            $curso->titulo = $cursoOriginal->titulo . ' (Copia)';
+            $curso->slug = $cursoOriginal->slug . '-copia-' . time();
+            $curso->descripcion = $cursoOriginal->descripcion;
+            $curso->imagen = $cursoOriginal->imagen;
+            $curso->activo = "si";
+            $curso->save();
 
-        /* dd($cursoOriginal->Lecciones); */
-        // Copiar las lecciones
-        if (!empty($cursoOriginal->Lecciones) && is_iterable($cursoOriginal->Lecciones)) {
+            /* dd($cursoOriginal->Lecciones); */
+            // Copiar las lecciones
+            if (!empty($cursoOriginal->Lecciones) && is_iterable($cursoOriginal->Lecciones)) {
 
-            // Closure para copiar pruebas -> preguntas -> respuestas de una lección origen a una lección destino
-            $copyPruebas = function ($leccionOrigen, $leccionDestino) use ($curso) {
-            if (!empty($leccionOrigen->Pruebas) && is_iterable($leccionOrigen->Pruebas)) {
-                foreach ($leccionOrigen->Pruebas as $pruebaOriginal) {
-                $prueba = $pruebaOriginal->replicate();
-                $prueba->curso_id = $curso->id;
-                $prueba->leccion_id = $leccionDestino->id;
-                $prueba->save();
+                // Closure para copiar pruebas -> preguntas -> respuestas de una lección origen a una lección destino
+                $copyPruebas = function ($leccionOrigen, $leccionDestino) use ($curso) {
+                    if (!empty($leccionOrigen->Pruebas) && is_iterable($leccionOrigen->Pruebas)) {
+                        foreach ($leccionOrigen->Pruebas as $pruebaOriginal) {
+                            $prueba = $pruebaOriginal->replicate();
+                            $prueba->curso_id = $curso->id;
+                            $prueba->leccion_id = $leccionDestino->id;
+                            $prueba->save();
 
-                // Copiar preguntas de la prueba
-                if (!empty($pruebaOriginal->Preguntas) && is_iterable($pruebaOriginal->Preguntas)) {
-                    foreach ($pruebaOriginal->Preguntas as $preguntaOriginal) {
-                    $pregunta = $preguntaOriginal->replicate();
-                    $pregunta->prueba_id = $prueba->id;
-                    $pregunta->save();
+                            // Copiar preguntas de la prueba
+                            if (!empty($pruebaOriginal->Preguntas) && is_iterable($pruebaOriginal->Preguntas)) {
+                                foreach ($pruebaOriginal->Preguntas as $preguntaOriginal) {
+                                    $pregunta = $preguntaOriginal->replicate();
+                                    $pregunta->prueba_id = $prueba->id;
+                                    $pregunta->save();
 
-                    // Copiar respuestas de la pregunta
-                    if (!empty($preguntaOriginal->Respuestas) && is_iterable($preguntaOriginal->Respuestas)) {
-                        foreach ($preguntaOriginal->Respuestas as $respuestaOriginal) {
-                        $respuesta = $respuestaOriginal->replicate();
-                        $respuesta->pregunta_id = $pregunta->id;
-                        $respuesta->save();
+                                    // Copiar respuestas de la pregunta
+                                    if (!empty($preguntaOriginal->Respuestas) && is_iterable($preguntaOriginal->Respuestas)) {
+                                        foreach ($preguntaOriginal->Respuestas as $respuestaOriginal) {
+                                            $respuesta = $respuestaOriginal->replicate();
+                                            $respuesta->pregunta_id = $pregunta->id;
+                                            $respuesta->save();
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
+                };
+
+                // Closure para copiar media
+                $copyMedia = function ($leccionOrigen, $leccionDestino) use ($curso) {
+                    if (!empty($leccionOrigen->Medias) && is_iterable($leccionOrigen->Medias)) {
+                        foreach ($leccionOrigen->Medias as $mediaOriginal) {
+                            $media = $mediaOriginal->replicate();
+                            // $media->curso_id = $curso->id; // Removed as column doesn't exist
+                            $media->leccion_id = $leccionDestino->id;
+                            $media->save();
+                        }
+                    }
+                };
+
+                foreach ($cursoOriginal->Lecciones->where('leccion_id', 0) as $leccionOriginal) {
+                    $leccion = $leccionOriginal->replicate();
+                    $leccion->curso_id = $curso->id;
+                    $leccion->save();
+
+                    // Copiar pruebas/preguntas/respuestas de la lección padre
+                    $copyPruebas($leccionOriginal, $leccion);
+                    // Copiar media de la lección padre
+                    $copyMedia($leccionOriginal, $leccion);
+
+                    // Validar y copiar lecciones hijas
+                    $leccionesHijas = $cursoOriginal->Lecciones->where('leccion_id', $leccionOriginal->id);
+                    foreach ($leccionesHijas as $leccionHijaOriginal) {
+                        $leccionHija = $leccionHijaOriginal->replicate();
+                        $leccionHija->curso_id = $curso->id;
+                        $leccionHija->leccion_id = $leccion->id; // Asignar el nuevo id de la lección padre
+                        $leccionHija->save();
+
+                        // Copiar pruebas/preguntas/respuestas de la lección hija
+                        $copyPruebas($leccionHijaOriginal, $leccionHija);
+                        // Copiar media de la lección hija
+                        $copyMedia($leccionHijaOriginal, $leccionHija);
                     }
                 }
-                }
             }
-            };
 
-            // Closure para copiar media
-            $copyMedia = function ($leccionOrigen, $leccionDestino) use ($curso) {
-                if (!empty($leccionOrigen->Medias) && is_iterable($leccionOrigen->Medias)) {
-                    foreach ($leccionOrigen->Medias as $mediaOriginal) {
-                        $media = $mediaOriginal->replicate();
-                        // $media->curso_id = $curso->id; // Removed as column doesn't exist
-                        $media->leccion_id = $leccionDestino->id;
-                        $media->save();
-                    }
-                }
-            };
-
-            foreach ($cursoOriginal->Lecciones->where('leccion_id', 0) as $leccionOriginal) {
-            $leccion = $leccionOriginal->replicate();
-            $leccion->curso_id = $curso->id;
-            $leccion->save();
-
-            // Copiar pruebas/preguntas/respuestas de la lección padre
-            $copyPruebas($leccionOriginal, $leccion);
-            // Copiar media de la lección padre
-            $copyMedia($leccionOriginal, $leccion);
-
-            // Validar y copiar lecciones hijas
-            $leccionesHijas = $cursoOriginal->Lecciones->where('leccion_id', $leccionOriginal->id);
-            foreach ($leccionesHijas as $leccionHijaOriginal) {
-                $leccionHija = $leccionHijaOriginal->replicate();
-                $leccionHija->curso_id = $curso->id;
-                $leccionHija->leccion_id = $leccion->id; // Asignar el nuevo id de la lección padre
-                $leccionHija->save();
-
-                // Copiar pruebas/preguntas/respuestas de la lección hija
-                $copyPruebas($leccionHijaOriginal, $leccionHija);
-                // Copiar media de la lección hija
-                $copyMedia($leccionHijaOriginal, $leccionHija);
-            }
-            }
+            return redirect()->route(Auth::user()->rol[0]->slug . '.cursos.index')->with('success', 'El curso ha sido copiado correctamente');
         }
-
-        return redirect()->route(Auth::user()->rol[0]->slug.'.cursos.index')->with('success', 'El curso ha sido copiado correctamente');
-        } else {
+        else {
             $cursoOriginal = Curso::find($request->curso_id);
-            return redirect()->route('admin.cursos.details.copy',$cursoOriginal);
+            return redirect()->route('admin.cursos.details.copy', $cursoOriginal);
         }
     }
 
     //Funcion para poder obtener todos los contenidos de un curso y listarlos en una vista la cual dara paso a que se copie toda la informacion seleccionada
-    public function getAllContentOfCurso(Curso $curso){
+    public function getAllContentOfCurso(Curso $curso)
+    {
         /* dd($curso); */
-        return view('cursos.copy-details',compact('curso'));
+        return view('cursos.copy-details', compact('curso'));
     }
 
 
-    public function copySelectContentOfCourse(Request $request){
+    public function copySelectContentOfCourse(Request $request)
+    {
+        // Increase execution time for large course copy operations (5 minutes)
+        set_time_limit(300);
+
         $itemsSeleccionados = $request->items; // IDs de módulos y clases que seleccionó el usuario
 
-        $cursoOriginal = Curso::find($request->curso_id);
+        $cursoOriginal = Curso::with([
+            'Lecciones' => function ($query) {
+            $query->orderBy('leccion_id')->orderBy('id');
+        },
+            'Lecciones.Pruebas.Preguntas.Respuestas',
+            'Lecciones.Medias'
+        ])->find($request->curso_id);
 
         $curso = new Curso;
         $curso->user_id = auth()->user()->id;
