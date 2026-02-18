@@ -402,5 +402,41 @@ class CursoProgramadoController extends Controller
         return view('admin.registro.index')->with('success', 'Alumnos inscritos correctamente')->with('curso_programado',$cursoProgramado);
     }
 
+    public function toggleLessonCompletion(Request $request)
+    {
+        $user = Auth::user();
+        $leccionId = $request->leccion_id;
+        $cursoProgramadoId = $request->curso_programado_id;
+
+        // Check if already completed
+        $exists = \DB::table('leccion_user')
+            ->where('user_id', $user->id)
+            ->where('leccion_id', $leccionId)
+            ->where('curso_programado_id', $cursoProgramadoId)
+            ->exists();
+
+        if ($exists) {
+            // Unmark
+            \DB::table('leccion_user')
+                ->where('user_id', $user->id)
+                ->where('leccion_id', $leccionId)
+                ->where('curso_programado_id', $cursoProgramadoId)
+                ->delete();
+            return response()->json(['status' => 'unmarked']);
+        } else {
+            // Mark as complete
+            \DB::table('leccion_user')->insert([
+                'user_id' => $user->id,
+                'leccion_id' => $leccionId,
+                'curso_programado_id' => $cursoProgramadoId,
+                'completed_at' => now(),
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
+            return response()->json(['status' => 'marked']);
+        }
+    }
+
 
 }
+ 

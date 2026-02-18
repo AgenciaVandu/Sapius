@@ -19,7 +19,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'nombre','apellido','username', 'email', 'password', 'strikes', 'is_blocked',
+        'nombre', 'apellido', 'username', 'email', 'password', 'strikes', 'is_blocked',
     ];
 
     /**
@@ -42,24 +42,34 @@ class User extends Authenticatable
         'is_blocked' => 'boolean',
     ];
 
-    protected $appends =['nombre_completo'];
+    protected $appends = ['nombre_completo'];
 
     public function roles()
     {
         return $this->belongsToMany('Caffeinated\Shinobi\Models\Role');
     }
 
-    public function getNombreCompletoAttribute(){
-        return $this->attributes['nombre'].' '.$this->attributes['apellido'];
+    public function getNombreCompletoAttribute()
+    {
+        return $this->attributes['nombre'] . ' ' . $this->attributes['apellido'];
     }
 
-    public function getRolAttribute(){
+    public function getRolAttribute()
+    {
         return $this->roles()->get();
     }
 
     //Relacion uno a uno con el modelo Reviews
-    public function review(){
+    public function review()
+    {
         return $this->hasOne(Reviews::class);
+    }
+
+    public function completedLessons()
+    {
+        return $this->belongsToMany('App\Models\Cursos\Leccion', 'leccion_user', 'user_id', 'leccion_id')
+            ->withPivot('curso_programado_id', 'completed_at')
+            ->withTimestamps();
     }
 
     protected static function boot()

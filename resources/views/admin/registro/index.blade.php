@@ -4,8 +4,7 @@
 <div class="page-breadcrumb">
     <div class="row">
         <div class="col-7 align-self-center">
-            <h3 class="page-title text-truncate text-dark font-weight-medium mb-1">{{ $curso_programado->Curso->titulo
-                }}
+            <h3 class="page-title text-truncate text-dark font-weight-medium mb-1">{{ $curso_programado->Curso->titulo}}
             </h3>
             <div class="d-flex align-items-center">
                 Lista de inscritos
@@ -166,9 +165,9 @@
     $(document).ready(function () {
         var activo = true;
         var endpoint =
-            '{{ URL::route(Auth::user()->rol[0]->slug . '.cursos.get - inscritos', ['curso_id' => $curso_programado->id, 'active' => 'si']) }}';
+            '{{ URL::route(Auth::user()->rol[0]->slug . '.cursos.get-inscritos', ['curso_id' => $curso_programado->id, 'active' => 'si']) }}';
         var show =
-            '<a class="btn btn-primary btn-detalle" href="javascript:void(0)" id="{{ route(Auth::user()->rol[0]->slug . '.curso.lista - resultados', ['inscripcion_id' => '__ID__']) }}"><i class="fas fa-chess"></i></a>';
+            '<a class="btn btn-primary btn-detalle" href="javascript:void(0)" id="{{ route(Auth::user()->rol[0]->slug . '.curso.lista-resultados', ['inscripcion_id' => '__ID__']) }}"><i class="fas fa-chess"></i></a>';
         $("#btnActivo").click(function () {
             if (activo) {
                 activo = false;
@@ -376,10 +375,9 @@
                 success: function (response) {
                     if (response.status === 'success') {
                         alert(response.message);
-                        // Eliminar la fila de la tabla o recargar
-                        button.closest('tr').fadeOut(function () {
-                            $(this).remove();
-                        });
+                        button.text("Reiniciado");
+                        button.removeClass("btn-danger").addClass("btn-success");
+                        button.prop("disabled", true);
                     }
                 },
                 error: function (xhr) {

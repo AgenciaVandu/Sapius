@@ -436,7 +436,8 @@ Route::group(['middleware' => ['alumno', 'check.blocked'], 'prefix' => 'alumno']
             }
             return view('errors.locked');
         }
-        )->name('alumno.locked');    });
+        )->name('alumno.locked');
+    });
 
 //Rutas de alumno con restricciones de mobile
 Route::group(['middleware' => ['alumno', 'restrict.mobile', 'check.blocked'], 'prefix' => 'alumno'], function () {
@@ -448,6 +449,7 @@ Route::group(['middleware' => ['alumno', 'restrict.mobile', 'check.blocked'], 'p
     //Cursos
     Route::post('/curso', 'Registro\CursoProgramadoController@cursoDetallado')->name('cursos.detallado');
     Route::post('/modulo', 'Registro\CursoProgramadoController@leccionDetallada')->name('leccion.detallada');
+    Route::post('/lecciones/toggle-completion', 'Registro\CursoProgramadoController@toggleLessonCompletion')->name('leccion.toggleCompletion');
     Route::get('/cursos/video', 'Cursos\CursoController@video')->name('cursos.video');
     Route::get('/cursos/token', 'Cursos\CursoController@token')->name('cursos.token');
     Route::post('/cursos/payment', 'Cursos\CursoController@payment')->name('cursos.payment');
