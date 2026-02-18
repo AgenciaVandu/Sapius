@@ -480,6 +480,16 @@ class CursoProgramadoController extends Controller
                 ->where('leccion_id', $leccionId)
                 ->where('curso_programado_id', $cursoProgramadoId)
                 ->delete();
+            $status = 'unmarked';
+        } else {
+            // Mark as complete
+            \DB::table('leccion_user')->insert([
+                'user_id' => $user->id,
+                'leccion_id' => $leccionId,
+                'curso_programado_id' => $cursoProgramadoId,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
             $status = 'marked';
         }
 
