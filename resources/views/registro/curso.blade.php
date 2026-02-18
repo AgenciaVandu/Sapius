@@ -184,6 +184,8 @@
                 </div>
                 <a href="{{ route('alumno.curso.lista-resultados', ['inscripcion_id' => $inscrito->id]) }}"
                     class="btn btn-block btn-info">Ver Calificaciones</a>
+                <a href="{{ route('alumno.curso.homework.tracking', ['curso_programado_id' => $curso_programado->id]) }}"
+                    class="btn btn-block btn-primary mt-2">Ver Mis Tareas</a>
                 @endif
 
                 <small class="d-block mt-3">

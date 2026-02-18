@@ -312,6 +312,8 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
 
     Route::get('/evaluacion/resultados/{inscripcion_id}', 'Evaluacion\ExamenController@listaResultados')->name('admin.curso.lista-resultados'); //{id}
 
+    Route::get('/curso/homework-tracking/{curso_programado_id}/{user_id}', 'Registro\CursoProgramadoController@homeworkTracking')->name('admin.curso.homework.tracking');
+
     Route::post('/examen/finalizar', 'Evaluacion\ExamenController@cambiarEstadoFinalizado')->name('examen.cambiarEstadoFinalizado');
     Route::post('/examen/retro', 'Evaluacion\ExamenController@cambiarEstadoRetro')->name('examen.cambiarEstadoRetro');
     Route::get('/exportCalificaciones/{inscripcion_id}', 'Evaluacion\ExamenController@exportReport')->name('admin.exportCalificaciones');
@@ -493,6 +495,7 @@ Route::group(['middleware' => ['alumno', 'restrict.mobile', 'check.blocked'], 'p
     Route::get('/calendario', 'UserController@calendario')->name('alumno.calendario');
 
     Route::get('/evaluaciones/resultados/{inscripcion_id}', 'Evaluacion\ExamenController@listaResultadosAlumno')->name('alumno.curso.lista-resultados'); //{id}
+    Route::get('/curso/homework-tracking/{curso_programado_id}', 'Registro\CursoProgramadoController@studentHomeworkTracking')->name('alumno.curso.homework.tracking');
     Route::get('/exportCalificaciones/{inscripcion_id}', 'Evaluacion\ExamenController@exportReport')->name('alumno.exportCalificaciones');
 });
 

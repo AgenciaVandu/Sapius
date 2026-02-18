@@ -545,4 +545,70 @@ class CursoProgramadoController extends Controller
     }
 
 
-} 
+    public function homeworkTracking($curso_programado_id, $user_id)
+    {
+        $curso_programado = CursoProgramado::with('Curso')->find($curso_programado_id);
+        $alumno = User::find($user_id);
+        
+        // Obtenemos todas las lecciones del curso (Módulos y Clases)
+        $curso = CursoProgramado::with(['Curso' => function($r){
+            $r->with(['Lecciones' =>function($q){
+                $q->with('Clases');
+                $q->where('leccion_id',0); // Módulos
+            }])->get();
+        }])->find($curso_programado_id);
+
+        // Obtenemos los IDs de todas las lecciones (clases) del curso
+        $leccionIds = [];
+        foreach ($curso->Curso->Lecciones as $modulo) {
+            foreach ($modulo->Clases as $clase) {
+                $leccionIds[] = $clase->id;
+            }
+        }
+
+        // Obtenemos las tareas entregadas por el usuario para estas lecciones
+        $homeworks = Homework::where('user_id', $user_id)
+                            ->whereIn('leccion_id', $leccionIds)
+                            ->get()
+                            ->keyBy('leccion_id'); // Key by leccion_id for easy lookup
+
+        return view('admin.registro.homework_tracking')
+            ->with('curso_programado', $curso_programado)
+            ->with('alumno', $alumno)
+            ->with('modulos', $curso->Curso->Lecciones)
+            ->with('homeworks', $homeworks);
+    }
+
+    public function studentHomeworkTracking($curso_programado_id)
+    {
+        $user_id = Auth::user()->id;
+        $curso_programado = CursoProgramado::with('Curso')->find($curso_programado_id);
+        
+         // Obtenemos todas las lecciones del curso (Módulos y Clases)
+         $curso = CursoProgramado::with(['Curso' => function($r){
+            $r->with(['Lecciones' =>function($q){
+                $q->with('Clases');
+                $q->where('leccion_id',0); // Módulos
+            }])->get();
+        }])->find($curso_programado_id);
+
+        // Obtenemos los IDs de todas las lecciones (clases) del curso
+        $leccionIds = [];
+        foreach ($curso->Curso->Lecciones as $modulo) {
+            foreach ($modulo->Clases as $clase) {
+                $leccionIds[] = $clase->id;
+            }
+        }
+
+        // Obtenemos las tareas entregadas por el usuario para estas lecciones
+        $homeworks = Homework::where('user_id', $user_id)
+                            ->whereIn('leccion_id', $leccionIds)
+                            ->get()
+                            ->keyBy('leccion_id');
+
+        return view('registro.homework_tracking')
+            ->with('curso_programado', $curso_programado)
+            ->with('modulos', $curso->Curso->Lecciones)
+            ->with('homeworks', $homeworks);
+    }
+}

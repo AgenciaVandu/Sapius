@@ -167,7 +167,8 @@
         var endpoint =
             '{{ URL::route(Auth::user()->rol[0]->slug . '.cursos.get-inscritos', ['curso_id' => $curso_programado->id, 'active' => 'si']) }}';
         var show =
-            '<a class="btn btn-primary btn-detalle" href="javascript:void(0)" id="{{ route(Auth::user()->rol[0]->slug . '.curso.lista-resultados', ['inscripcion_id' => '__ID__']) }}"><i class="fas fa-chess"></i></a>';
+            '<a class="btn btn-primary btn-detalle" href="javascript:void(0)" id="{{ route(Auth::user()->rol[0]->slug . '.curso.lista-resultados', ['inscripcion_id' => '__ID__']) }}" title="Ver Resultados"><i class="fas fa-chess"></i></a> ' +
+            '<a class="btn btn-info" href="{{ route('admin.curso.homework.tracking', ['curso_programado_id' => $curso_programado->id, 'user_id' => '__USER_ID__']) }}" title="Ver Tareas"><i class="fas fa-tasks"></i></a>';
         $("#btnActivo").click(function () {
             if (activo) {
                 activo = false;
@@ -251,7 +252,7 @@
             buttons: [],
                 "rowCallback": function(row, data) {
 
-                    $(row).find('td:eq(3)').html(show.replace('__ID__', data['pivot']['id']));
+                    $(row).find('td:eq(3)').html(show.replace('__ID__', data['pivot']['id']).replace('__USER_ID__', data['id']));
 
                     // Columna Bloqueo (Index 4)
                     if (data['is_blocked'] == 1 || data['is_blocked'] == true) {
