@@ -1,4 +1,6 @@
-@extends('layouts.adminmart.course')
+@extends('layouts.adminmart.default')
+
+
 
 @section('breadcrumb')
 <div class="page-breadcrumb">
@@ -7,71 +9,15 @@
             <h3 class="page-title text-truncate text-dark font-weight-medium mb-1">{{ $leccion->Curso->titulo }}</h3>
             <div class="d-flex align-items-center">
                 <div class="mr-3">{{ $leccion->titulo }}</div>
+            </div>
+        </div>
+        <div class="col-5 align-self-center">
+            <div class="customize-input float-right">
                 <button class="btn btn-sm btn-outline-info rounded-pill btn-tutorial-animate" onclick="startTutorial()">
                     <i class="far fa-question-circle"></i> Ver Tutorial
                 </button>
             </div>
         </div>
-    </div>
-</div>
-@endsection
-
-@section('sidebar')
-<div class="sidebar-content">
-    <div id="accordion" class="accordion">
-        @foreach($curso_programado->Curso->Lecciones as $modulo)
-        <div class="card mb-0">
-            <div class="card-header" id="heading{{ $modulo->id }}">
-                <h5 class="mb-0">
-                    <button class="btn btn-link w-100 text-left d-flex justify-content-between align-items-center"
-                        data-toggle="collapse" data-target="#collapse{{ $modulo->id }}"
-                        aria-expanded="{{ $leccion->leccion_id == $modulo->id ? 'true' : 'false' }}"
-                        aria-controls="collapse{{ $modulo->id }}">
-                        <span class="text-truncate" style="max-width: 80%;">{{ $modulo->titulo }}</span>
-                        <i class="fas fa-chevron-down"></i>
-                    </button>
-                </h5>
-                <div class="progress mt-2" style="height: 5px; margin: 0 1.25rem;">
-                    <div class="progress-bar bg-success" role="progressbar" style="width: {{ $modulo->progress }}%;"
-                        aria-valuenow="{{ $modulo->progress }}" aria-valuemin="0" aria-valuemax="100"></div>
-                </div>
-                <small class="text-muted ml-3">{{ $modulo->progress }}% Completado</small>
-            </div>
-
-            <div id="collapse{{ $modulo->id }}"
-                class="collapse {{ $leccion->leccion_id == $modulo->id || $leccion->id == $modulo->id ? 'show' : '' }}"
-                aria-labelledby="heading{{ $modulo->id }}" data-parent="#accordion">
-                <div class="card-body p-0">
-                    <div class="list-group list-group-flush">
-                        @foreach($modulo->Clases as $clase)
-                        @php
-                        $isActive = $leccion->id == $clase->id;
-                        $isCompleted = in_array($clase->id, $completedLessons);
-                        @endphp
-                        <a href="javascript:void(0)"
-                            onclick="event.preventDefault(); document.getElementById('form{{ $clase->id }}').submit();"
-                            class="list-group-item list-group-item-action d-flex justify-content-between align-items-center {{ $isActive ? 'active' : '' }}">
-                            <div class="d-flex align-items-center" style="max-width: 85%;">
-                                <i
-                                    class="far {{ $isCompleted ? 'fa-check-circle text-success' : 'fa-circle' }} mr-2"></i>
-                                <span class="text-truncate">{{ $clase->titulo }}</span>
-                            </div>
-                            @if($m = $clase->Medias->where('tipo','video')->first())
-                            <i class="fas fa-play-circle text-muted"></i>
-                            @endif
-                        </a>
-                        <form method="POST" action="{{ route('leccion.detallada') }}" id="form{{ $clase->id }}">
-                            @csrf
-                            <input name="leccion_id" type="hidden" value="{{ $clase->id }}">
-                            <input name="curso_programado_id" type="hidden" value="{{ $curso_programado_id }}">
-                            <input name="inscripcion_id" type="hidden" value="{{ $inscrito->id }}">
-                        </form>
-                        @endforeach
-                    </div>
-                </div>
-            </div>
-        </div>
-        @endforeach
     </div>
 </div>
 @endsection
@@ -89,14 +35,34 @@
                 </video>
             </div>
             @else
+            @if($leccion->imagen)
             <img class="card-img-top img-fluid"
-                src="{{ $leccion->imagen ? route(Auth::user()->rol[0]->slug . '.lecciones.image', ['file' => $leccion->imagen]) : asset('vendor/adminmart/assets/images/big/cursos.png') }}"
+                src="{{ route(Auth::user()->rol[0]->slug . '.lecciones.image', ['file' => $leccion->imagen]) }}"
                 alt="Card image cap">
+            @endif
             @endif
 
             <div class="card-body" id="clases">
-                <h4 class="card-title">{{ $leccion->titulo }}</h4>
-                <p class="card-text">{!! $leccion->contenido !!}</p>
+
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4 class="card-title mb-0">{{ $leccion->titulo }}</h4>
+
+                    @if($leccion->leccion_id > 0)
+                    @php
+                    $isCompleted = in_array($leccion->id, $completedLessons);
+                    @endphp
+                    <button id="btn-complete"
+                        class="btn {{ $isCompleted ? 'btn-success' : 'btn-outline-secondary' }} rounded-pill"
+                        onclick="toggleCompletion({{ $leccion->id }}, {{ $curso_programado_id }})">
+                        <i class="fas {{ $isCompleted ? 'fa-check' : 'fa-check-circle' }} mr-1"></i>
+                        <span id="btn-complete-text">{{ $isCompleted ? 'Completado' : 'Marcar como visto' }}</span>
+                    </button>
+                    @endif
+                </div>
+
+
+
+                <div class="card-text mb-4">{!! $leccion->contenido !!}</div>
 
                 @if (count($leccion->Clases))
                 <h4 class="card-title">Clases</h4>
@@ -125,7 +91,7 @@
                     ? strtotime(str_replace('/', '-', $item_contenido['fecha_final']))
                     : null;
                     $verifica_fecha = $hoy >= $fecha_inicial && $hoy <= $fecha_final; @endphp @if ($verifica_fecha) <a
-                        href="javascript:void(0)" class="list-group-item"
+                        href="javascript:void(0)" class="list-group-item list-group-item-action"
                         onclick="event.preventDefault(); document.getElementById('form{{ $item->id }}').submit();">
                         {{ $item->titulo }}
                         </a>
@@ -148,6 +114,95 @@
 
     {{-- Columna derecha: multimedia, tareas y pruebas --}}
     <div class="col-md-4">
+        {{-- Accordion for Modules --}}
+        <div class="card shadow-sm border-0 mb-3">
+            <div class="card-body p-0 sidebar-content">
+                {{-- Global Progress Bar --}}
+                <div class="p-3 border-bottom bg-white">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                        <small class="text-muted font-weight-bold">Progreso del Curso</small>
+                        <span class="badge badge-primary" id="global-progress-text">{{ $globalProgress }}%</span>
+                    </div>
+                    <div class="progress" style="height: 6px;">
+                        <div id="global-progress-bar" class="progress-bar bg-success" role="progressbar"
+                            style="width: {{ $globalProgress }}%;" aria-valuenow="{{ $globalProgress }}"
+                            aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                </div>
+                <div id="accordion" class="accordion">
+                    @foreach($curso_programado->Curso->Lecciones as $modulo)
+                    <div class="card mb-0">
+                        <div class="card-header" id="heading{{ $modulo->id }}">
+                            <h5 class="mb-0">
+                                <button
+                                    class="btn btn-link w-100 text-left d-flex justify-content-between align-items-center"
+                                    data-toggle="collapse" data-target="#collapse{{ $modulo->id }}"
+                                    aria-expanded="{{ $leccion->leccion_id == $modulo->id ? 'true' : 'false' }}"
+                                    aria-controls="collapse{{ $modulo->id }}">
+                                    <span class="text-truncate" style="max-width: 80%;">{{ $modulo->titulo }}</span>
+                                    <i class="fas fa-chevron-down text-muted" style="font-size: 0.8rem;"></i>
+                                </button>
+                            </h5>
+                            @if($modulo->progress > 0)
+                            <div class="px-3 pb-2">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <small class="text-muted" style="font-size: 0.7rem;"
+                                        id="progress-count-{{ $modulo->id }}">Progreso: {{ $modulo->completedCount }}/{{
+                                        $modulo->totalClases }}</small>
+                                    <small class="text-muted" style="font-size: 0.7rem;"
+                                        id="progress-text-{{ $modulo->id }}">{{ $modulo->progress }}%</small>
+                                </div>
+                                <div class="progress" style="height: 4px;">
+                                    <div id="progress-bar-{{ $modulo->id }}" class="progress-bar bg-success"
+                                        role="progressbar" style="width: {{ $modulo->progress }}%;"
+                                        aria-valuenow="{{ $modulo->progress }}" aria-valuemin="0" aria-valuemax="100">
+                                    </div>
+                                </div>
+                            </div>
+                            @endif
+                        </div>
+
+                        <div id="collapse{{ $modulo->id }}"
+                            class="collapse {{ $leccion->leccion_id == $modulo->id || $leccion->id == $modulo->id ? 'show' : '' }}"
+                            aria-labelledby="heading{{ $modulo->id }}" data-parent="#accordion">
+                            <div class="card-body p-0">
+                                <div class="list-group list-group-flush">
+                                    @foreach($modulo->Clases as $clase)
+                                    @php
+                                    $isActive = $leccion->id == $clase->id;
+                                    $isCompleted = in_array($clase->id, $completedLessons);
+                                    @endphp
+                                    <a href="javascript:void(0)"
+                                        onclick="event.preventDefault(); document.getElementById('form{{ $clase->id }}').submit();"
+                                        class="list-group-item list-group-item-action d-flex justify-content-between align-items-center {{ $isActive ? 'active' : '' }}">
+                                        <div class="d-flex align-items-center" style="max-width: 90%;">
+                                            <i id="icon-lesson-{{ $clase->id }}"
+                                                class="far {{ $isCompleted ? 'fa-check-circle text-success' : 'fa-circle text-muted' }} mr-2"
+                                                style="font-size: 0.9em;"></i>
+                                            <span class="text-truncate">{{ $clase->titulo }}</span>
+                                        </div>
+                                        @if($m = $clase->Medias->where('tipo','video')->first())
+                                        <i class="fas fa-play-circle text-muted" style="font-size: 0.9em;"></i>
+                                        @endif
+                                    </a>
+                                    <form method="POST" action="{{ route('leccion.detallada') }}"
+                                        id="form{{ $clase->id }}">
+                                        @csrf
+                                        <input name="leccion_id" type="hidden" value="{{ $clase->id }}">
+                                        <input name="curso_programado_id" type="hidden"
+                                            value="{{ $curso_programado_id }}">
+                                        <input name="inscripcion_id" type="hidden" value="{{ $inscrito->id }}">
+                                    </form>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+
         @if ($leccion->Medias->count())
         <div class="card" id="card-multimedia">
             <div class="card-body">
@@ -286,14 +341,13 @@
             );
         @else
         xhr.open('GET',
-            '{{ route(Auth::user()->rol[0]->slug . '.medias.stream', ['filename' => $video->ruta]) }}');
+            '{{ route(Auth::user()->rol[0]->slug . ".medias.stream", ["filename" => $video->ruta]) }}');
         @endif
         xhr.send();
     });
 </script>
 <script type="text/javascript">
     $(document).ready(function () {
-        //Disable full page
         $("body").on("contextmenu", function (e) {
             return false;
         });
@@ -302,124 +356,89 @@
 </script>
 <script type="text/javascript">
     $(document).ready(function () {
-        //Disable full page
+        //Disabpage
         $('body').bind('cut copy paste', function (e) {
-            e.preventDefault();
+            e.preventDefaul
         });
     });
 </script>
 @endif
 
 <script>
-    const driver = window.driver.js.driver;
+    document.addEventListener('DOMContentLoaded', function() {
+        try {
+            if (!window.driver || !window.driver.js || !window.driver.js.driver) {
+                console.error('Driver.js is not loaded correctly.');
+                return;
+            }
+            const driverConstructor = window.driver.js.driver;
 
-    const driverObj = driver({
-        showProgress: true,
-        animate: true,
-        doneBtnText: 'Entendido',
-        nextBtnText: 'Siguiente',
-        prevBtnText: 'Anterior',
-        steps: [{
-            element: '.page-breadcrumb',
-            popover: {
-                title: 'Aula Virtual',
-                description: 'Estás en la vista de lección. Aquí consumirás el contenido de tu curso.',
-                side: "bottom",
-                align: 'start'
-            }
-        },
-        {
-            element: '.col-md-8 .card',
-            popover: {
-                title: 'Contenido Principal',
-                description: 'Aquí aparecerá el video de la clase o la imagen representativa.',
-                side: "bottom",
-                align: 'start'
-            }
-        },
-        {
-            element: '#clases .list-group',
-            popover: {
-                title: 'Navegación de Clases',
-                description: 'Usa esta lista para moverte entre las diferentes clases de este módulo.',
-                side: "top",
-                align: 'start'
-            }
-        },
-        {
-            element: '#card-multimedia',
-            popover: {
-                title: 'Multimedia y Recursos',
-                description: 'Aquí encontrarás archivos descargables, enlaces y materiales extra para apoyar tu aprendizaje.',
-                side: "left",
-                align: 'start'
-            }
-        },
-        {
-            element: '#card-tareas',
-            popover: {
-                title: 'Sección de Tareas',
-                description: 'En este apartado podrás adjuntar tus archivos y enviar tus tareas para calificación.',
-                side: "left",
-                align: 'start'
-            }
-        },
-        {
-            element: '.card.examen',
-            popover: {
-                title: 'Exámenes y Resultados',
-                description: 'Aquí aparecerán tus exámenes disponibles.',
-                side: "left",
-                align: 'start'
-            }
-        },
-        {
-            element: '.card.examen .btn-detalle',
-            popover: {
-                title: 'Seleccionar Prueba',
-                description: 'Haz clic en el nombre de la prueba para ver las instrucciones previas.',
-                side: "left",
-                align: 'center'
-            }
-        },
-        {
-            element: '#myModal .modal-content',
-            popover: {
-                title: 'Instrucciones Previas',
-                description: 'Se abrirá esta ventana con información vital: tiempo límite, intentos disponibles y reglas de conducta (no copiar/pegar, no cambiar de pestaña).',
-                side: "top",
-                align: 'center'
-            },
-            onHighlightStarted: (element) => {
-                const btn = document.querySelector('.card.examen .btn-detalle');
-                if (btn && !document.querySelector('#myModal').classList.contains('show')) {
-                    btn.click();
-                }
-            },
-            onDeselected: (element) => {
-                $('#myModal').modal('hide');
-            }
-        }
-        ]
-    });
-
-    function startTutorial() {
-        driverObj.drive();
-    }
-
-    document.addEventListener("DOMContentLoaded", function () {
-        @if (session('examen_finalizado'))
-            const feedbackDriver = driver({
+            // Main Driver
+            const driverObj = driverConstructor({
                 showProgress: true,
                 animate: true,
                 doneBtnText: 'Entendido',
                 nextBtnText: 'Siguiente',
                 prevBtnText: 'Anterior',
                 steps: [{
+                    element: '.page-breadcrumb',
+                    popover: {
+                        title: 'Aula Virtual',
+                        description: 'Estás en la vista de lección. Aquí consumirás el contenido de tu curso.',
+                        side: "bottom",
+                        align: 'start'
+                    }
+                },
+                {
+                    element: '.col-md-8 .card',
+                    popover: {
+                        title: 'Contenido Principal',
+                        description: 'Aquí aparecerá el video de la clase o la imagen representativa.',
+                        side: "bottom",
+                        align: 'start'
+                    }
+                },
+                {
+                    element: '#accordion',
+                    popover: {
+                        title: 'Navegación del Curso',
+                        description: 'Usa este menú para navegar entre los módulos y clases del curso.',
+                        side: "left",
+                        align: 'start'
+                    }
+                },
+                {
+                    element: '#card-multimedia',
+                    popover: {
+                        title: 'Multimedia y Recursos',
+                        description: 'Aquí encontrarás archivos descargables, enlaces y materiales extra para apoyar tu aprendizaje.',
+                        side: "left",
+                        align: 'start'
+                    }
+                },
+                {
+                    element: '#card-tareas',
+                    popover: {
+                        title: 'Sección de Tareas',
+                        description: 'En este apartado podrás adjuntar tus archivos y enviar tus tareas para calificación.',
+                        side: "left",
+                        align: 'start'
+                    }
+                },
+                {
+                    element: '.card.examen',
+                    popover: {
+                        title: 'Exámenes y Resultados',
+                        description: 'Aquí aparecerán tus exámenes disponibles.',
+                        side: "left",
+                        align: 'start'
+                    }
+                },
+                {
                     element: '.card.examen .btn-detalle',
                     popover: {
-                        title: 'Resultados Disponibles',
-                        description: 'Has finalizado tu examen. Haz clic aquí nuevamente para ver tus resultados.',
+                        title: 'Seleccionar Prueba',
+                        description: 'Haz clic en el nombre de la prueba para ver las instrucciones previas.',
                         side: "left",
                         align: 'center'
                     }
@@ -427,16 +446,16 @@
                 {
                     element: '#myModal .modal-content',
                     popover: {
-                        title: 'Retroalimentación',
-                        description: 'Aquí verás tu puntaje obtenido y las opciones para revisar tus respuestas si están habilitadas.',
+                        title: 'Instrucciones Previas',
+                        description: 'Se abrirá esta ventana con información vital: tiempo límite, intentos disponibles y reglas de conducta (no copiar/pegar, no cambiar de pestaña).',
                         side: "top",
                         align: 'center'
                     },
                     onHighlightStarted: (element) => {
-                        const btn = document.querySelector('.card.examen .btn-detalle');
-                        if (btn && !document.querySelector('#myModal').classList.contains('show')) {
-                            btn.click();
-                        }
+                         const btn = document.querySelector('.card.examen .btn-detalle');
+                         if (btn && !document.querySelector('#myModal').classList.contains('show')) {
+                             btn.click();
+                         }
                     },
                     onDeselected: (element) => {
                         $('#myModal').modal('hide');
@@ -445,17 +464,62 @@
                 ]
             });
 
-        setTimeout(() => {
-            feedbackDriver.drive();
-        }, 1000);
-        @else
-        if (!localStorage.getItem('lesson_tutorial_seen')) {
-            setTimeout(() => {
-                startTutorial();
-                localStorage.setItem('lesson_tutorial_seen', 'true');
-            }, 1000);
+            window.startTutorial = function() {
+                driverObj.drive();
+            };
+
+            @if (session('examen_finalizado'))
+                const feedbackDriver = driverConstructor({
+                    showProgress: true,
+                    animate: true,
+                    doneBtnText: 'Entendido',
+                    nextBtnText: 'Siguiente',
+                    prevBtnText: 'Anterior',
+                    steps: [{
+                        element: '.card.examen .btn-detalle',
+                        popover: {
+                            title: 'Resultados Disponibles',
+                            description: 'Has finalizado tu examen. Haz clic aquí nuevamente para ver tus resultados.',
+                            side: "left",
+                            align: 'center'
+                        }
+                    },
+                    {
+                        element: '#myModal .modal-content',
+                        popover: {
+                            title: 'Retroalimentación',
+                            description: 'Aquí verás tu puntaje obtenido y las opciones para revisar tus respuestas si están habilitadas.',
+                            side: "top",
+                            align: 'center'
+                        },
+                        onHighlightStarted: (element) => {
+                            const btn = document.querySelector('.card.examen .btn-detalle');
+                            if (btn && !document.querySelector('#myModal').classList.contains('show')) {
+                                btn.click();
+                            }
+                        },
+                        onDeselected: (element) => {
+                            $('#myModal').modal('hide');
+                        }
+                    }
+                    ]
+                });
+
+                setTimeout(() => {
+                    feedbackDriver.drive();
+                }, 1000);
+            @else
+                if (!localStorage.getItem('lesson_tutorial_seen')) {
+                    setTimeout(() => {
+                        window.startTutorial();
+                        localStorage.setItem('lesson_tutorial_seen', 'true');
+                    }, 1000);
+                }
+            @endif
+
+        } catch (e) {
+            console.error('Error initializing tutorial:', e);
         }
-        @endif
     });
 
     function toggleCompletion(leccionId, cursoProgramadoId) {
@@ -472,15 +536,34 @@
                 curso_programado_id: cursoProgramadoId
             },
             success: function (response) {
+                // Update Button State
                 if (response.status === 'marked') {
                     btn.removeClass('btn-outline-secondary').addClass('btn-success');
                     icon.removeClass('fa-check-circle').addClass('fa-check');
                     btnText.text('Completado');
+                    // Update list icon to check
+                    $('#icon-lesson-' + leccionId).removeClass('fa-circle text-muted').addClass('fa-check-circle text-success');
                 } else {
                     btn.removeClass('btn-success').addClass('btn-outline-secondary');
                     icon.removeClass('fa-check').addClass('fa-check-circle');
-                    btnText.text('Marcar como visto');
+                    btnText.text('Marcar');
+                    // Update list icon to circle
+                    $('#icon-lesson-' + leccionId).removeClass('fa-check-circle text-success').addClass('fa-circle text-muted');
                 }
+
+                // Update Global Progress
+                $('#global-progress-text').text(response.globalProgress + '%');
+                $('#global-progress-bar').css('width', response.globalProgress + '%').attr('aria-valuenow', response.globalProgress);
+
+                // Update Module Progress
+                var moduleId = response.moduleId;
+                var modProgress = response.moduleProgress;
+                var modCompleted = response.moduleCompleted;
+                var modTotal = response.moduleTotal;
+
+                $('#progress-text-' + moduleId).text(modProgress + '%');
+                $('#progress-bar-' + moduleId).css('width', modProgress + '%').attr('aria-valuenow', modProgress);
+                $('#progress-count-' + moduleId).text('Progreso: ' + modCompleted + '/' + modTotal);
             },
             error: function (xhr) {
                 console.error(xhr.responseText);

@@ -233,7 +233,36 @@ class CursoProgramadoController extends Controller
             /* return "Aqui la guia"; */
             return view('registro.curso')->with('curso_programado',$curso)->with('inscrito',$inscripcion)->with('contenido_programado',$contenido_programado);
         }else{
-            return view('registro.curso')->with('curso_programado',$curso)->with('inscrito',$inscripcion)->with('contenido_programado',$contenido_programado);
+            // Calculate Progress
+            $completedLessons = \DB::table('leccion_user')
+                ->where('user_id', Auth::user()->id)
+                ->where('curso_programado_id', $request->curso_programado_id)
+                ->pluck('leccion_id')
+                ->toArray();
+
+            $totalCursoClases = 0;
+            foreach ($curso->Curso->Lecciones as $modulo) {
+                $totalClases = $modulo->Clases->count();
+                $totalCursoClases += $totalClases;
+                $completedCount = 0;
+                foreach ($modulo->Clases as $clase) {
+                    if (in_array($clase->id, $completedLessons)) {
+                        $completedCount++;
+                    }
+                }
+                $modulo->progress = $totalClases > 0 ? round(($completedCount / $totalClases) * 100) : 0;
+                $modulo->completedCount = $completedCount;
+                $modulo->totalClases = $totalClases;
+            }
+
+            $globalProgress = $totalCursoClases > 0 ? round((count($completedLessons) / $totalCursoClases) * 100) : 0;
+
+            return view('registro.curso')
+                ->with('curso_programado',$curso)
+                ->with('inscrito',$inscripcion)
+                ->with('contenido_programado',$contenido_programado)
+                ->with('completedLessons', $completedLessons)
+                ->with('globalProgress', $globalProgress);
         }
 
     }
@@ -286,14 +315,18 @@ class CursoProgramadoController extends Controller
                             ->first();
 
         // Obtener lecciones completadas por el usuario en este curso programado
-        $completedLessons = Auth::user()->completedLessons()
-            ->wherePivot('curso_programado_id', $request->curso_programado_id)
+
+        $completedLessons = \DB::table('leccion_user')
+            ->where('user_id', Auth::user()->id)
+            ->where('curso_programado_id', $request->curso_programado_id)
             ->pluck('leccion_id')
             ->toArray();
 
         // Calcular progreso por módulo
+        $totalCursoClases = 0;
         foreach ($curso->Curso->Lecciones as $modulo) {
             $totalClases = $modulo->Clases->count();
+            $totalCursoClases += $totalClases;
             $completedCount = 0;
             foreach ($modulo->Clases as $clase) {
                 if (in_array($clase->id, $completedLessons)) {
@@ -301,7 +334,12 @@ class CursoProgramadoController extends Controller
                 }
             }
             $modulo->progress = $totalClases > 0 ? round(($completedCount / $totalClases) * 100) : 0;
+            $modulo->completedCount = $completedCount;
+            $modulo->totalClases = $totalClases;
         }
+
+        // Calcular progreso global del curso
+        $globalProgress = $totalCursoClases > 0 ? round((count($completedLessons) / $totalCursoClases) * 100) : 0;
 
         return view('registro.leccion')->with('leccion',$leccion)
             ->with('curso_programado_id',$request->curso_programado_id)
@@ -312,6 +350,7 @@ class CursoProgramadoController extends Controller
             ->with('videoext',$videoext)
             ->with('homework',$homework)
             ->with('completedLessons', $completedLessons)
+            ->with('globalProgress', $globalProgress)
             ->with('video',$video);
     }
 
@@ -441,23 +480,59 @@ class CursoProgramadoController extends Controller
                 ->where('leccion_id', $leccionId)
                 ->where('curso_programado_id', $cursoProgramadoId)
                 ->delete();
-            return response()->json(['status' => 'unmarked']);
-        } else {
-            // Mark as complete
-            \DB::table('leccion_user')->insert([
-                'user_id' => $user->id,
-                'leccion_id' => $leccionId,
-                'curso_programado_id' => $cursoProgramadoId,
-                'completed_at' => now(),
-                'created_at' => now(),
-                'updated_at' => now()
-            ]);
-            return response()->json(['status' => 'marked']);
+            $status = 'marked';
         }
+
+        // Recalculate Progress
+        $completedLessons = \DB::table('leccion_user')
+            ->where('user_id', $user->id)
+            ->where('curso_programado_id', $cursoProgramadoId)
+            ->pluck('leccion_id')
+            ->toArray();
+
+        $curso = CursoProgramado::with(['Curso' => function($r){
+            $r->with(['Lecciones' =>function($q){
+                $q->where('leccion_id',0)->where('activo','si');
+            }])->get();
+        }])->find($cursoProgramadoId);
+
+        $totalCursoClases = 0;
+        $totalCursoCompletadas = count($completedLessons);
+        $moduleProgress = 0;
+        $moduleCompleted = 0;
+        $moduleTotal = 0;
+
+        // Find the specific module for the toggled lesson
+        $currentModuleId = Leccion::find($leccionId)->leccion_id;
+
+        foreach ($curso->Curso->Lecciones as $modulo) {
+            $modTotal = $modulo->Clases->count();
+            $totalCursoClases += $modTotal;
+            
+            if ($modulo->id == $currentModuleId) {
+                $modCompleted = 0;
+                foreach ($modulo->Clases as $clase) {
+                    if (in_array($clase->id, $completedLessons)) {
+                        $modCompleted++;
+                    }
+                }
+                $moduleCompleted = $modCompleted;
+                $moduleTotal = $modTotal;
+                $moduleProgress = $modTotal > 0 ? round(($modCompleted / $modTotal) * 100) : 0;
+            }
+        }
+
+        $globalProgress = $totalCursoClases > 0 ? round(($totalCursoCompletadas / $totalCursoClases) * 100) : 0;
+
+        return response()->json([
+            'status' => $status,
+            'globalProgress' => $globalProgress,
+            'moduleProgress' => $moduleProgress,
+            'moduleCompleted' => $moduleCompleted,
+            'moduleTotal' => $moduleTotal,
+            'moduleId' => $currentModuleId
+        ]);
     }
 
 
-}
-
-
- 
+} 
