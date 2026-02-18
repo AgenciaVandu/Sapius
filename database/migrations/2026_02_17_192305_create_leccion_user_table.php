@@ -14,10 +14,15 @@ class CreateLeccionUserTable extends Migration
     public function up()
     {
         Schema::create('leccion_user', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('leccion_id')->constrained('lecciones')->onDelete('cascade');
-            $table->foreignId('curso_programado_id')->nullable()->constrained('cursos_programados')->onDelete('cascade');
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('leccion_id');
+            $table->unsignedBigInteger('curso_programado_id')->nullable();
+
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('leccion_id')->references('id')->on('lecciones')->onDelete('cascade');
+            $table->foreign('curso_programado_id')->references('id')->on('cursos_programados')->onDelete('cascade');
+
             $table->timestamp('completed_at')->nullable();
             $table->timestamps();
 
