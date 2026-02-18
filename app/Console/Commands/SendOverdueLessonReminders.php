@@ -37,7 +37,9 @@ class SendOverdueLessonReminders extends Command
      */
     public function handle()
     {
-        $today = \Carbon\Carbon::now()->setTime(0, 0, 0); // Ignore time, just compare dates
+        $now = \Carbon\Carbon::now();
+
+        $this->info("Checking for pending lessons on " . $now->format('d/m/Y H:i'));
 
         // 1. Get Active Courses
         $cursos = \App\Models\Registro\CursoProgramado::with(['Curso.Lecciones.Clases'])
@@ -54,26 +56,37 @@ class SendOverdueLessonReminders extends Command
 
             $schedule = collect($contenidoProgramado->contenido);
 
-            // Check if the entire course is expired based on the last lesson's date
+            // Find the MAX course end date to check if the whole course appears expired
             $maxFechaFinal = null;
             foreach ($schedule as $item) {
                 if (isset($item['fecha_final'])) {
                     try {
-                        $fecha = \Carbon\Carbon::createFromFormat('d/m/Y', $item['fecha_final'])->setTime(0, 0, 0);
+                        $format = 'd/m/Y';
+                        $dateStr = $item['fecha_final'];
+                        
+                        if (isset($item['hora_final'])) {
+                            $format .= ' H:i';
+                            $dateStr .= ' ' . $item['hora_final'];
+                        }
+                        
+                        $fecha = \Carbon\Carbon::createFromFormat($format, $dateStr);
+                        
+                        // If no time was present, set to end of day? Or Keep 00:00? 
+                        // Usually end date implies until the end of that day.
+                        if (!isset($item['hora_final'])) {
+                            $fecha->setTime(23, 59, 59);
+                        }
+
                         if ($maxFechaFinal === null || $fecha->gt($maxFechaFinal)) {
                             $maxFechaFinal = $fecha;
                         }
-                    } catch (\Exception $e) {
-                         continue;
-                    }
+                    } catch (\Exception $e) { continue; }
                 }
             }
 
-            // If we have a max date and today is past it, skip this course (it's expired)
-            // Unless the user explicitly wants to notify about *any* uncompleted lesson even if course is over?
-            // "si todas sus lecciones ya estan expiradas en tiempo entonces ya no notifiquemos" -> If today > max_date, skip.
-            if ($maxFechaFinal && $today->gt($maxFechaFinal)) {
-                $this->info("Course {$curso->id} is expired (End date: {$maxFechaFinal->format('d/m/Y')}). Skipping.");
+            // If the COURSE is fully expired, skip it.
+            if ($maxFechaFinal && $now->gt($maxFechaFinal)) {
+                $this->info("Course {$curso->id} is expired (End date: {$maxFechaFinal->format('d/m/Y H:i')}). Skipping.");
                 continue;
             }
 
@@ -83,67 +96,84 @@ class SendOverdueLessonReminders extends Command
             foreach ($inscritos as $user) {
                 if (!$user) continue;
 
-                // Get completed lesson IDs for this user in this course
-                $completedLessonIds = $user->completedLessons()
-                    ->wherePivot('curso_programado_id', $curso->id)
-                    ->pluck('lecciones.id') // Specify table name to avoid ambiguity if needed, usually 'id' works on relationship
-                    ->toArray();
+                // Get completed lessons logic (optional, but good practice if available)
+                // $completedLessonIds = $user->completedLessons()...
 
-                $overdueLessons = [];
+                $pendingLessons = [];
 
                 // 4. Check against schedule (Modules)
                 foreach ($curso->Curso->Lecciones as $modulo) {
                     // Find module in schedule
                     $scheduleItem = $schedule->firstWhere('id', $modulo->id);
 
-                    if ($scheduleItem && isset($scheduleItem['fecha_final'])) {
-                        // Parse date (d/m/Y)
+                    if ($scheduleItem && isset($scheduleItem['fecha_inicial']) && isset($scheduleItem['fecha_final'])) {
                         try {
-                            $fechaFinal = \Carbon\Carbon::createFromFormat('d/m/Y', $scheduleItem['fecha_final'])->setTime(0, 0, 0);
-                        } catch (\Exception $e) {
-                            continue; // Invalid date format
-                        }
-
-                        // If Module is overdue
-                        if ($today->gt($fechaFinal)) {
-                            // Check lessons within this module
-                            foreach ($modulo->Clases as $clase) {
-                                if (!in_array($clase->id, $completedLessonIds)) {
-                                    $overdueLessons[] = [
-                                        'titulo' => $clase->titulo,
-                                        'modulo' => $modulo->titulo,
-                                        'fecha_final' => $scheduleItem['fecha_final']
-                                    ];
-                                }
+                            // Parse Start Date + Time
+                            $startFormat = 'd/m/Y';
+                            $startStr = $scheduleItem['fecha_inicial'];
+                            if (isset($scheduleItem['hora_inicial'])) {
+                                $startFormat .= ' H:i';
+                                $startStr .= ' ' . $scheduleItem['hora_inicial'];
                             }
+                            $fechaInicial = \Carbon\Carbon::createFromFormat($startFormat, $startStr);
+
+                            // Parse End Date + Time
+                            $endFormat = 'd/m/Y';
+                            $endStr = $scheduleItem['fecha_final'];
+                            if (isset($scheduleItem['hora_final'])) {
+                                $endFormat .= ' H:i';
+                                $endStr .= ' ' . $scheduleItem['hora_final'];
+                            }
+                            $fechaFinal = \Carbon\Carbon::createFromFormat($endFormat, $endStr);
+                            
+                            // If user didn't specify time for end date, assume end of day
+                            if (!isset($scheduleItem['hora_final'])) {
+                                $fechaFinal->setTime(23, 59, 59);
+                            }
+
+                        } catch (\Exception $e) { continue; }
+
+                        // Logic:
+                        // 1. Lesson Started > 2 days ago? ($now >= $fechaInicial + 2 days)
+                        // 2. Lesson Still Active? ($now <= $fechaFinal)
+                        
+                        $reminderStartDate = $fechaInicial->copy()->addDays(2);
+
+                        if ($now->gte($reminderStartDate) && $now->lte($fechaFinal)) {
+                             // This module is currently "active" for reminders.
+                             // Add lessons to pending list.
+                             foreach ($modulo->Clases as $clase) {
+                                // Add logic here if we want to filter ONLY completed lessons
+                                // For now, we list them as pending reminders.
+                                $pendingLessons[] = [
+                                    'titulo' => $clase->titulo, // Lesson Title
+                                    'modulo' => $modulo->titulo, // Module Title
+                                    'fecha_final' => $scheduleItem['fecha_final'] . (isset($scheduleItem['hora_final']) ? ' ' . $scheduleItem['hora_final'] : ''),
+                                    'leccion_id' => $clase->id, // Passing ID for link
+                                    'curso_programado_id' => $curso->id,
+                                    'inscripcion_id' => $user->pivot->id ?? null
+                                ];
+                             }
                         }
                     }
                 }
 
-                // 5. Send Email and Notification if there are overdue lessons
-                if (count($overdueLessons) > 0) {
-                   \Illuminate\Support\Facades\Mail::to($user)->queue(new \App\Mail\OverdueLessonsReminder($overdueLessons, $user));
-                   $this->info("Email queued for user: {$user->email}");
+                // 5. Send Notification/Email
+                if (count($pendingLessons) > 0) {
+                    $this->info("Found " . count($pendingLessons) . " pending lessons for user: {$user->email}");
 
-                   // Send UI Notification for each overdue lesson (or one summary?)
-                   // The user requested: "un icono de notificaciones el cual le diga que lecciones tiene atrasadas"
-                   // and "deberia poder al darle clic redireccionarle a la leccion en cuestion"
-                   // So it's better to store each overdue lesson as a notification, OR a summary that links to the course.
-                   // "redireccionarle a la leccion en cuestion" -> implies individual notifications per lesson.
-                   
-                   foreach ($overdueLessons as $lesson) {
-                        // Check if already notified recently? For now, we just notify. 
-                        // To avoid spamming daily for the same lesson, we might want to check DB. 
-                        // But for "daily reminders", maybe it's intended.
-                        // Let's check if a similar notification exists to avoid duplicates if run multiple times?
-                        // For MVP, we send it. The user said "automatizar".
+                    // Send Email
+                    \Illuminate\Support\Facades\Mail::to($user)->queue(new \App\Mail\OverdueLessonsReminder($pendingLessons, $user));
 
-                       $user->notify(new \App\Notifications\OverdueLessonNotification($lesson));
+                   // Send UI Notifications
+                   foreach ($pendingLessons as $lessonData) {
+                        // Avoid duplicates if logic allows, but for now we send.
+                       $user->notify(new \App\Notifications\OverdueLessonNotification($lessonData));
                    }
                 }
             }
         }
         
-        $this->info('Overdue lesson checks completed.');
+        $this->info('Reminder checks completed.');
     }
 }

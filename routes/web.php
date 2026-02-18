@@ -140,6 +140,8 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
     Route::get('/configuraciones', 'HomeController@configuracion')->name('admin.configuracion.index');
     Route::post('/configuraciones/upload', 'HomeController@uploadslide')->name('admin.configuracion.slide');
     Route::get('/configuraciones/delete/{slide}', 'HomeController@deleteSlide')->name('admin.configuracion.slide,delete');
+    
+    Route::post('/configuraciones/trigger-reminders', 'HomeController@triggerOverdueReminders')->name('admin.configuracion.trigger-reminders');
 
     Route::post('/configuraciones/pride/upload', 'HomeController@uploadpride')->name('admin.configuracion.pride');
     Route::put('/configuraciones/pride/{pride}/update', 'HomeController@updatePride')->name('admin.configuracion.pride.update');

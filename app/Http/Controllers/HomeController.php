@@ -13,6 +13,7 @@ use App\Models\Registro\Inscripcion;
 use App\Reviews;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Artisan;
 
 class HomeController extends Controller
 {
@@ -314,4 +315,14 @@ class HomeController extends Controller
         return redirect()->route('tu.opinion')->with('success', 'Opinion created successfully.');
     }
 
+    public function triggerOverdueReminders()
+    {
+        try {
+            Artisan::call('reminders:overdue-lessons');
+            return redirect()->back()->with('success', 'Recordatorios de lecciones atrasadas enviados correctamente.');
+        } catch (\Exception $e) {
+            Log::error('Error triggering overdue reminders: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Error al enviar recordatorios: ' . $e->getMessage());
+        }
+    }
 }

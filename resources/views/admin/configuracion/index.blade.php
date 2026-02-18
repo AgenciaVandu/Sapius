@@ -358,6 +358,31 @@
                                 </div>
                             </div>
                         </div>
+                        
+                        {{-- System Commands --}}
+                        <div class="card">
+                            <div class="card-header" id="headingFour">
+                                <h2 class="mb-0">
+                                    <button class="btn btn-link btn-block text-left collapsed" type="button"
+                                        data-toggle="collapse" data-target="#collapseFour" aria-expanded="false"
+                                        aria-controls="collapseFour">
+                                        Comandos del Sistema
+                                    </button>
+                                </h2>
+                            </div>
+                            <div id="collapseFour" class="collapse" aria-labelledby="headingFour"
+                                data-parent="#accordionExample">
+                                <div class="card-body">
+                                    <p class="mb-3">Ejecutar manualmente el recordatorio de lecciones atrasadas (Envía correos y notificaciones).</p>
+                                    <form action="{{ route('admin.configuracion.trigger-reminders') }}" method="POST">
+                                        @csrf
+                                        <button type="submit" class="btn btn-warning">
+                                            <i class="fas fa-bell mr-2"></i> Ejecutar Recordatorios
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
