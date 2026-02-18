@@ -7,7 +7,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class SoporteTecnico extends Mailable
+class SoporteTecnico extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
     public $datos;

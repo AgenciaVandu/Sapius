@@ -7,7 +7,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class TarjetaEmail extends Mailable
+class TarjetaEmail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
     public $datos;

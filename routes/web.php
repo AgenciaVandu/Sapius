@@ -497,6 +497,15 @@ Route::group(['middleware' => ['alumno', 'restrict.mobile', 'check.blocked'], 'p
     Route::get('/evaluaciones/resultados/{inscripcion_id}', 'Evaluacion\ExamenController@listaResultadosAlumno')->name('alumno.curso.lista-resultados'); //{id}
     Route::get('/curso/homework-tracking/{curso_programado_id}', 'Registro\CursoProgramadoController@studentHomeworkTracking')->name('alumno.curso.homework.tracking');
     Route::get('/exportCalificaciones/{inscripcion_id}', 'Evaluacion\ExamenController@exportReport')->name('alumno.exportCalificaciones');
+
+    // Notifications
+    Route::post('/notifications/mark-as-read/{id}', function ($id) {
+        $notification = auth()->user()->notifications()->find($id);
+        if ($notification) {
+            $notification->markAsRead();
+        }
+        return response()->json(['success' => true]);
+    })->name('notifications.markAsRead');
 });
 
 Route::get('email-registro', function () {
@@ -512,5 +521,8 @@ Route::get('/email-preview', function () {
 });
 
 
+Route::get('/debug/contenido', function() {
+    return App\Models\Registro\ContenidoProgramado::first()->contenido;
+});
 /* Route::get('/forzar-503', function () {
  abort(503); }); */

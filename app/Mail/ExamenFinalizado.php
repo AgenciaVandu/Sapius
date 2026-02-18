@@ -8,7 +8,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Models\Evaluacion\Examen;
 
-class ExamenFinalizado extends Mailable
+class ExamenFinalizado extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
     public $examen;
