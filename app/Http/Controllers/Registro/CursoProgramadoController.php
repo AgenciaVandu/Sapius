@@ -285,6 +285,24 @@ class CursoProgramadoController extends Controller
                             ->where('user_id', Auth::user()->id)
                             ->first();
 
+        // Obtener lecciones completadas por el usuario en este curso programado
+        $completedLessons = Auth::user()->completedLessons()
+            ->wherePivot('curso_programado_id', $request->curso_programado_id)
+            ->pluck('leccion_id')
+            ->toArray();
+
+        // Calcular progreso por módulo
+        foreach ($curso->Curso->Lecciones as $modulo) {
+            $totalClases = $modulo->Clases->count();
+            $completedCount = 0;
+            foreach ($modulo->Clases as $clase) {
+                if (in_array($clase->id, $completedLessons)) {
+                    $completedCount++;
+                }
+            }
+            $modulo->progress = $totalClases > 0 ? round(($completedCount / $totalClases) * 100) : 0;
+        }
+
         return view('registro.leccion')->with('leccion',$leccion)
             ->with('curso_programado_id',$request->curso_programado_id)
             ->with('curso_programado',$curso)
@@ -293,6 +311,7 @@ class CursoProgramadoController extends Controller
             ->with('inscrito',$inscripcion)
             ->with('videoext',$videoext)
             ->with('homework',$homework)
+            ->with('completedLessons', $completedLessons)
             ->with('video',$video);
     }
 
@@ -439,4 +458,6 @@ class CursoProgramadoController extends Controller
 
 
 }
+
+
  
