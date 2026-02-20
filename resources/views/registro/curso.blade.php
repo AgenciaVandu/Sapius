@@ -34,7 +34,7 @@
             <div class="card-body">
                 <p class="card-text">{!! $curso_programado->Curso->descripcion !!}</p>
                 <h4 class="card-title">Módulos</h4>
-                {{-- <div class="list-group">
+                <div class="list-group">
                     @php
                     $hoy = strtotime(date('d-m-Y'));
                     $contenido = collect($contenido_programado->contenido ?? []);
@@ -76,7 +76,7 @@
                         @endif
                         @endif
                         @endforeach
-                </div> --}}
+                </div>
             </div>
             <div class="card-footer text-muted"></div>
         </div>
@@ -85,10 +85,10 @@
     <div class="col-md-4">
 
         {{-- Global Progress & Menu Card --}}
-        <div class="card shadow-sm border-0 mb-3">
-            <div class="card-body p-0 sidebar-content">
+        {{-- <div class="card shadow-sm border-0 mb-3">
+            <div class="card-body p-0 sidebar-content"> --}}
                 {{-- Global Progress Bar --}}
-                <div class="p-3 border-bottom bg-white">
+               {{--  <div class="p-3 border-bottom bg-white">
                     <div class="d-flex justify-content-between align-items-center mb-1">
                         <small class="text-muted font-weight-bold">Progreso del Curso</small>
                         <span class="badge badge-primary" id="global-progress-text">{{ $globalProgress }}%</span>
@@ -98,10 +98,10 @@
                             style="width: {{ $globalProgress }}%;" aria-valuenow="{{ $globalProgress }}"
                             aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
-                </div>
+                </div> --}}
 
                 {{-- Accordion Menu --}}
-                <div id="accordion" class="accordion">
+       {{--          <div id="accordion" class="accordion">
                     @foreach($curso_programado->Curso->Lecciones as $modulo)
                     <div class="card mb-0">
                         <div class="card-header" id="heading{{ $modulo->id }}">
@@ -149,7 +149,6 @@
                                                 style="font-size: 0.9em;"></i>
                                             <span class="text-truncate">{{ $clase->titulo }}</span>
                                         </div>
-                                        {{-- If media exists logic if needed --}}
                                     </a>
                                     <form method="POST" action="{{ route('leccion.detallada') }}"
                                         id="form-menu-{{ $clase->id }}">
@@ -167,7 +166,7 @@
                     @endforeach
                 </div>
             </div>
-        </div>
+        </div> --}}
 
         <div class="card">
             <div class="card-body">

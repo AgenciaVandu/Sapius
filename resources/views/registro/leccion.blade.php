@@ -129,7 +129,7 @@
                             aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                 </div>
-                <div id="accordion" class="accordion">
+                {{-- <div id="accordion" class="accordion">
                     @foreach($curso_programado->Curso->Lecciones as $modulo)
                     <div class="card mb-0">
                         <div class="card-header" id="heading{{ $modulo->id }}">
@@ -199,7 +199,7 @@
                         </div>
                     </div>
                     @endforeach
-                </div>
+                </div> --}}
             </div>
         </div>
 
