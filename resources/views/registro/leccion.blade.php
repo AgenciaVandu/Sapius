@@ -118,7 +118,7 @@
         <div class="card shadow-sm border-0 mb-3">
             <div class="card-body p-0 sidebar-content">
                 {{-- Global Progress Bar --}}
-                <div class="p-3 border-bottom bg-white">
+               {{--  <div class="p-3 border-bottom bg-white">
                     <div class="d-flex justify-content-between align-items-center mb-1">
                         <small class="text-muted font-weight-bold">Progreso del Curso</small>
                         <span class="badge badge-primary" id="global-progress-text">{{ $globalProgress }}%</span>
@@ -128,7 +128,7 @@
                             style="width: {{ $globalProgress }}%;" aria-valuenow="{{ $globalProgress }}"
                             aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
-                </div>
+                </div> --}}
                 {{-- <div id="accordion" class="accordion">
                     @foreach($curso_programado->Curso->Lecciones as $modulo)
                     <div class="card mb-0">
