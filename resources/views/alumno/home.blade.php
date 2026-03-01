@@ -132,6 +132,30 @@
             </div>
         </div>
     </div>
+    <!-- Modal de Aviso de Notificaciones -->
+    <div class="modal fade" id="avisoNotificacionesModal" tabindex="-1" role="dialog" aria-labelledby="avisoNotificacionesModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 15px;">
+                <div class="modal-header bg-warning text-dark" style="border-top-left-radius: 15px; border-top-right-radius: 15px;">
+                    <h5 class="modal-title font-weight-bold" id="avisoNotificacionesModalLabel">
+                        <i class="fas fa-exclamation-triangle mr-2"></i> Aviso Importante
+                    </h5>
+                    <button type="button" class="close text-dark" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body p-4 text-justify" style="font-size: 1.05rem;">
+                    <p>¡Hola! Queremos informarte que actualmente estamos realizando mejoras en nuestro sistema automático de notificaciones y recordatorios por correo electrónico.</p>
+                    <p>Somos conscientes de que, temporalmente, <strong>algunos correos podrían no estar reflejando tu información de la manera correcta</strong>. Para evitar cualquier tipo de confusión, te pedimos amablemente que <strong>hagas caso omiso</strong> a esas notificaciones por el momento.</p>
+                    <p>Para revisar tu progreso, tareas pendientes y estado real, <strong>te invitamos a basarte de manera exclusiva en la información que aparece en este panel y en tu apartado de Calificaciones</strong>, ya que esta es la información 100% oficial y actualizada.</p>
+                    <p class="mb-0 text-muted small">Estamos trabajando arduamente para corregir estos detalles a la brevedad posible. ¡Agradecemos mucho tu comprensión y paciencia!</p>
+                </div>
+                <div class="modal-footer border-0 justify-content-center pb-4">
+                    <button type="button" class="btn btn-warning rounded-pill px-5 font-weight-bold shadow-sm" data-dismiss="modal">¡Entendido!</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('javascript')
@@ -288,6 +312,15 @@
         }
 
         document.addEventListener("DOMContentLoaded", function() {
+            // Lógica del modal de aviso de notificaciones
+            if (!sessionStorage.getItem('aviso_notificaciones_visto')) {
+                // Pequeño delay para que no sea tan abrupto al cargar
+                setTimeout(() => {
+                    $('#avisoNotificacionesModal').modal('show');
+                    sessionStorage.setItem('aviso_notificaciones_visto', 'true');
+                }, 500);
+            }
+
             if (!localStorage.getItem('student_panel_tutorial_seen')) {
                 // Pequeño delay para asegurar que los elementos estén renderizados y visibles
                 setTimeout(() => {

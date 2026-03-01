@@ -102,63 +102,64 @@ class SendOverdueLessonReminders extends Command
 
                 $pendingLessons = [];
 
-                // 4. Check against schedule (Modules)
+                // 4. Check against schedule (Modules and Classes)
                 foreach ($curso->Curso->Lecciones as $modulo) {
-                    // Find module in schedule
-                    $scheduleItem = $schedule->firstWhere('id', $modulo->id);
+                    // Find module in schedule (as fallback)
+                    $moduleScheduleItem = $schedule->firstWhere('id', $modulo->id);
 
-                    if ($scheduleItem && isset($scheduleItem['fecha_inicial']) && isset($scheduleItem['fecha_final'])) {
-                        try {
-                            // Parse Start Date + Time
-                            $startFormat = 'd/m/Y';
-                            $startStr = $scheduleItem['fecha_inicial'];
-                            if (isset($scheduleItem['hora_inicial'])) {
-                                $startFormat .= ' H:i';
-                                $startStr .= ' ' . $scheduleItem['hora_inicial'];
-                            }
-                            $fechaInicial = \Carbon\Carbon::createFromFormat($startFormat, $startStr);
+                    foreach ($modulo->Clases as $clase) {
+                        // Skip already completed or submitted
+                        if (in_array($clase->id, $completedLessonIds) || in_array($clase->id, $submittedHomeworkLessonIds)) {
+                            continue;
+                        }
 
-                            // Parse End Date + Time
-                            $endFormat = 'd/m/Y';
-                            $endStr = $scheduleItem['fecha_final'];
-                            if (isset($scheduleItem['hora_final'])) {
-                                $endFormat .= ' H:i';
-                                $endStr .= ' ' . $scheduleItem['hora_final'];
-                            }
-                            $fechaFinal = \Carbon\Carbon::createFromFormat($endFormat, $endStr);
-                            
-                            // If user didn't specify time for end date, assume end of day
-                            if (!isset($scheduleItem['hora_final'])) {
-                                $fechaFinal->setTime(23, 59, 59);
-                            }
+                        // Find class in schedule, fallback to module if class isn't scheduled
+                        $scheduleItem = $schedule->firstWhere('id', $clase->id) ?? $moduleScheduleItem;
 
-                        } catch (\Exception $e) { continue; }
+                        if ($scheduleItem && isset($scheduleItem['fecha_inicial']) && isset($scheduleItem['fecha_final'])) {
+                            try {
+                                // Parse Start Date + Time
+                                $startFormat = 'd/m/Y';
+                                $startStr = $scheduleItem['fecha_inicial'];
+                                if (isset($scheduleItem['hora_inicial'])) {
+                                    $startFormat .= ' H:i';
+                                    $startStr .= ' ' . $scheduleItem['hora_inicial'];
+                                }
+                                $fechaInicial = \Carbon\Carbon::createFromFormat($startFormat, $startStr);
 
-                        // Logic:
-                        // 1. Lesson Started > 2 days ago? ($now >= $fechaInicial + 2 days)
-                        // 2. Lesson Still Active? ($now <= $fechaFinal)
-                        
-                        $reminderStartDate = $fechaInicial->copy()->addDays(2);
-
-                        if ($now->gte($reminderStartDate) && $now->lte($fechaFinal)) {
-                             // This module is currently "active" for reminders.
-                             // Add lessons to pending list.
-                             foreach ($modulo->Clases as $clase) {
-                                // Add logic here if we want to filter ONLY completed lessons
-                                if (in_array($clase->id, $completedLessonIds) || in_array($clase->id, $submittedHomeworkLessonIds)) {
-                                    continue; // Skip already completed or submitted
+                                // Parse End Date + Time
+                                $endFormat = 'd/m/Y';
+                                $endStr = $scheduleItem['fecha_final'];
+                                if (isset($scheduleItem['hora_final'])) {
+                                    $endFormat .= ' H:i';
+                                    $endStr .= ' ' . $scheduleItem['hora_final'];
+                                }
+                                $fechaFinal = \Carbon\Carbon::createFromFormat($endFormat, $endStr);
+                                
+                                // If user didn't specify time for end date, assume end of day
+                                if (!isset($scheduleItem['hora_final'])) {
+                                    $fechaFinal->setTime(23, 59, 59);
                                 }
 
-                                // For now, we list them as pending reminders.
-                                $pendingLessons[] = [
-                                    'titulo' => $clase->titulo, // Lesson Title
-                                    'modulo' => $modulo->titulo, // Module Title
-                                    'fecha_final' => $scheduleItem['fecha_final'] . (isset($scheduleItem['hora_final']) ? ' ' . $scheduleItem['hora_final'] : ''),
-                                    'leccion_id' => $clase->id, // Passing ID for link
-                                    'curso_programado_id' => $curso->id,
-                                    'inscripcion_id' => $user->pivot->id ?? null
-                                ];
-                             }
+                            } catch (\Exception $e) { continue; }
+
+                            // Logic:
+                            // 1. Lesson Started > 2 days ago? ($now >= $fechaInicial + 2 days)
+                            // 2. Lesson Still Active? ($now <= $fechaFinal)
+                            $reminderStartDate = $fechaInicial->copy()->addDays(2);
+
+                            if ($now->gte($reminderStartDate) && $now->lte($fechaFinal)) {
+                                 // This class is currently "active" for reminders.
+                                 // Add it to pending list.
+                                 $pendingLessons[] = [
+                                     'titulo' => $clase->titulo, // Lesson Title
+                                     'modulo' => $modulo->titulo, // Module Title
+                                     'fecha_final' => $scheduleItem['fecha_final'] . (isset($scheduleItem['hora_final']) ? ' ' . $scheduleItem['hora_final'] : ''),
+                                     'leccion_id' => $clase->id, // Passing ID for link
+                                     'curso_programado_id' => $curso->id,
+                                     'inscripcion_id' => $user->pivot->id ?? null
+                                 ];
+                            }
                         }
                     }
                 }
