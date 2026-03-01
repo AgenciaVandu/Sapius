@@ -98,7 +98,6 @@ class SendOverdueLessonReminders extends Command
 
                 // Get completed lessons logic (optional, but good practice if available)
                 $completedLessonIds = $user->completedLessons()->wherePivot('curso_programado_id', $curso->id)->pluck('lecciones.id')->toArray();
-                $submittedHomeworkLessonIds = clone (\App\Homework::class);
                 $submittedHomeworkLessonIds = \App\Homework::where('user_id', $user->id)->pluck('leccion_id')->toArray();
 
                 $pendingLessons = [];
