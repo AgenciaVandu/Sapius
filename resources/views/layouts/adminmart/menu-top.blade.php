@@ -132,7 +132,7 @@
                         <span class="badge badge-primary notify-no rounded-circle">{{ Auth::user()->unreadNotifications->count() }}</span>
                         @endif
                     </a>
-                    <div class="dropdown-menu dropdown-menu-left mailbox animated bounceInDown">
+                    <div class="dropdown-menu dropdown-menu-left mailbox animated bounceInDown" style="min-width: 350px;">
                         <ul class="list-style-none">
                             <li>
                                 <div class="message-center notifications position-relative" style="max-height: 300px; overflow-y: auto;">
@@ -165,6 +165,14 @@
                                     @endforelse
                                 </div>
                             </li>
+                            @if(Auth::user()->unreadNotifications->count() > 0)
+                            <li>
+                                <a class="nav-link pt-3 text-center text-danger" href="javascript:void(0);" onclick="deleteAllNotifications()">
+                                    <strong>Eliminar todas</strong>
+                                    <i class="fa fa-trash"></i>
+                                </a>
+                            </li>
+                            @endif
                         </ul>
                     </div>
                 </li>
@@ -207,8 +215,32 @@
                                         } else {
                                             badge.remove();
                                             document.querySelector('.message-center.notifications').innerHTML = '<div class="p-3 text-center">No tienes notificaciones nuevas.</div>';
+                                            // Remover boton eliminar todas
+                                            let clearAllBtn = document.querySelector('.text-danger[onclick^="deleteAll"]');
+                                            if (clearAllBtn) clearAllBtn.closest('li').remove();
                                         }
                                     }
+                                }
+                            });
+                    }
+
+                    function deleteAllNotifications() {
+                        fetch('/alumno/notifications/delete-all', {
+                                method: 'DELETE',
+                                headers: {
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                    'Content-Type': 'application/json'
+                                }
+                            })
+                            .then(response => {
+                                if (response.ok) {
+                                    document.querySelector('.message-center.notifications').innerHTML = '<div class="p-3 text-center">No tienes notificaciones nuevas.</div>';
+                                    let badge = document.querySelector('.notify-no');
+                                    if(badge) badge.remove();
+                                    
+                                    // Remove the delete all button itself
+                                    let clearAllBtn = document.querySelector('.text-danger[onclick^="deleteAll"]');
+                                    if (clearAllBtn) clearAllBtn.closest('li').remove();
                                 }
                             });
                     }

@@ -516,6 +516,11 @@ Route::group(['middleware' => ['alumno', 'restrict.mobile', 'check.blocked'], 'p
         }
         return response()->json(['success' => true]);
     })->name('notifications.delete');
+
+    Route::delete('/notifications/delete-all', function () {
+        auth()->user()->notifications()->delete();
+        return response()->json(['success' => true]);
+    })->name('notifications.deleteAll');
 });
 
 Route::get('email-registro', function () {
