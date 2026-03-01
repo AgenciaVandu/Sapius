@@ -508,6 +508,14 @@ Route::group(['middleware' => ['alumno', 'restrict.mobile', 'check.blocked'], 'p
         }
         return response()->json(['success' => true]);
     })->name('notifications.markAsRead');
+
+    Route::delete('/notifications/delete/{id}', function ($id) {
+        $notification = auth()->user()->notifications()->find($id);
+        if ($notification) {
+            $notification->delete();
+        }
+        return response()->json(['success' => true]);
+    })->name('notifications.delete');
 });
 
 Route::get('email-registro', function () {
@@ -523,8 +531,85 @@ Route::get('/email-preview', function () {
 });
 
 
+Route::get('/send-test-mail', function () {
+    config(['queue.default' => 'sync']);
+    $user = new App\User();
+    $user->nombre = 'Estudiante de Prueba';
+    $user->email = 'test@sapius.com.mx';
+    $overdueLessons = [
+        ['titulo' => 'Introducción a la Biología Molecular', 'modulo' => 'Módulo 1: Conceptos Básicos', 'fecha_final' => '15/05/2026 23:59'],
+        ['titulo' => 'Estructura Celular Avanzada (Lección muy larga con un título extenso que rompía la tabla en dispositivos moviles)', 'modulo' => 'Módulo 2: Células', 'fecha_final' => '20/05/2026 23:59']
+    ];
+    \Mail::to($user)->send(new \App\Mail\OverdueLessonsReminder($overdueLessons, $user));
+    return 'Correo enviado con éxito a Mailtrap.';
+});
+
 Route::get('/debug/contenido', function() {
     return App\Models\Registro\ContenidoProgramado::first()->contenido;
 });
+
+/* Route::get('/test-email-reminders', function () {
+    if (!Auth::check()) {
+        return "Inicia sesión primero para probar el envío.";
+    }
+
+    config(['queue.default' => 'sync']);
+    $user = Auth::user();
+    $now = \Carbon\Carbon::now();
+    $pendingLessons = [];
+
+    // Get Active Courses for this user
+    $cursos = \App\Models\Registro\CursoProgramado::with(['Curso.Lecciones.Clases'])
+        ->whereHas('Inscritos', function($q) use ($user) {
+            $q->where('users.id', $user->id)->where('aceptado', 'si');
+        })
+        ->where('activo', 'si')
+        ->get();
+
+    foreach ($cursos as $curso) {
+        $contenidoProgramado = \App\Models\Registro\ContenidoProgramado::where('curso_programado_id', $curso->id)->first();
+        if (!$contenidoProgramado || !$contenidoProgramado->contenido) continue;
+        $schedule = collect($contenidoProgramado->contenido);
+
+        $completedLessonIds = $user->completedLessons()->wherePivot('curso_programado_id', $curso->id)->pluck('lecciones.id')->toArray();
+        $submittedHomeworkLessonIds = \App\Homework::where('user_id', $user->id)->pluck('leccion_id')->toArray();
+
+        foreach ($curso->Curso->Lecciones as $modulo) {
+            $scheduleItem = $schedule->firstWhere('id', $modulo->id);
+            if ($scheduleItem && isset($scheduleItem['fecha_inicial']) && isset($scheduleItem['fecha_final'])) {
+                try {
+                    $startFormat = isset($scheduleItem['hora_inicial']) ? 'd/m/Y H:i' : 'd/m/Y';
+                    $startStr = $scheduleItem['fecha_inicial'] . (isset($scheduleItem['hora_inicial']) ? ' ' . $scheduleItem['hora_inicial'] : '');
+                    $fechaInicial = \Carbon\Carbon::createFromFormat($startFormat, $startStr);
+
+                    $endFormat = isset($scheduleItem['hora_final']) ? 'd/m/Y H:i' : 'd/m/Y';
+                    $endStr = $scheduleItem['fecha_final'] . (isset($scheduleItem['hora_final']) ? ' ' . $scheduleItem['hora_final'] : '');
+                    $fechaFinal = \Carbon\Carbon::createFromFormat($endFormat, $endStr);
+                    if (!isset($scheduleItem['hora_final'])) $fechaFinal->setTime(23, 59, 59);
+
+                    $reminderStartDate = $fechaInicial->copy()->addDays(2);
+                    if ($now->gte($reminderStartDate) && $now->lte($fechaFinal)) {
+                        foreach ($modulo->Clases as $clase) {
+                            if (!in_array($clase->id, $completedLessonIds) && !in_array($clase->id, $submittedHomeworkLessonIds)) {
+                                $pendingLessons[] = [
+                                    'titulo' => $clase->titulo,
+                                    'modulo' => $modulo->titulo,
+                                    'fecha_final' => $endStr
+                                ];
+                            }
+                        }
+                    }
+                } catch (\Exception $e) { continue; }
+            }
+        }
+    }
+
+    if (count($pendingLessons) > 0) {
+        \Mail::to($user)->send(new \App\Mail\OverdueLessonsReminder($pendingLessons, $user));
+        return 'Se enviaron ' . count($pendingLessons) . ' lecciones reales atrasadas a tu correo (' . $user->email . ') usando Mailtrap.';
+    } else {
+        return 'Al parecer no tienes lecciones atrasadas en la BD en este momento según las fechas (' . $user->email . ').';
+    }
+}); */
 /* Route::get('/forzar-503', function () {
  abort(503); }); */

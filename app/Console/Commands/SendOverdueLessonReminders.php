@@ -97,7 +97,9 @@ class SendOverdueLessonReminders extends Command
                 if (!$user) continue;
 
                 // Get completed lessons logic (optional, but good practice if available)
-                // $completedLessonIds = $user->completedLessons()...
+                $completedLessonIds = $user->completedLessons()->wherePivot('curso_programado_id', $curso->id)->pluck('lecciones.id')->toArray();
+                $submittedHomeworkLessonIds = clone (\App\Homework::class);
+                $submittedHomeworkLessonIds = \App\Homework::where('user_id', $user->id)->pluck('leccion_id')->toArray();
 
                 $pendingLessons = [];
 
@@ -144,6 +146,10 @@ class SendOverdueLessonReminders extends Command
                              // Add lessons to pending list.
                              foreach ($modulo->Clases as $clase) {
                                 // Add logic here if we want to filter ONLY completed lessons
+                                if (in_array($clase->id, $completedLessonIds) || in_array($clase->id, $submittedHomeworkLessonIds)) {
+                                    continue; // Skip already completed or submitted
+                                }
+
                                 // For now, we list them as pending reminders.
                                 $pendingLessons[] = [
                                     'titulo' => $clase->titulo, // Lesson Title

@@ -5,13 +5,9 @@ Hemos notado que te has atrasado en el contenido de tu curso. Es importante que 
 
 Aquí tienes una lista de las lecciones que deberías haber completado:
 
-@component('mail::table')
-| Lección       | Fecha Límite   |
-|:------------- |:-------------:|
 @foreach ($overdueLessons as $lesson)
-| {{ $lesson['titulo'] }} | {{ $lesson['fecha_final'] }} |
+- **{{ $lesson['modulo'] }} - {{ $lesson['titulo'] }}** (Fecha límite: {{ $lesson['fecha_final'] }})
 @endforeach
-@endcomponent
 
 Te animamos a retomar tus clases lo antes posible.
 

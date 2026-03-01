@@ -138,16 +138,25 @@
                                 <div class="message-center notifications position-relative" style="max-height: 300px; overflow-y: auto;">
                                     @forelse(Auth::user()->unreadNotifications as $notification)
                                     <!-- Message -->
-                                    <a href="javascript:void(0)"
-                                        class="message-item d-flex align-items-center border-bottom px-3 py-2">
+                                    <a href="javascript:void(0)" id="notif-item-{{ $notification->id }}"
+                                        class="message-item d-flex align-items-center border-bottom px-3 py-2 position-relative">
                                         <div class="btn btn-warning rounded-circle btn-circle"><i
                                                 data-feather="alert-circle" class="text-white"></i></div>
                                         <div class="w-75 d-inline-block v-middle pl-2">
                                             <h6 class="message-title mb-0 mt-1">{{ \Illuminate\Support\Str::limit($notification->data['titulo'], 30) }}</h6>
-                                            <span class="font-12 text-nowrap d-block text-muted">{{ $notification->data['modulo'] }}</span>
-                                            <span class="font-12 text-nowrap d-block text-muted">Vence: {{ $notification->data['fecha_final'] }}</span>
-                                            <div class="mt-1">
-                                                <button class="btn btn-xs btn-primary mark-as-read" data-id="{{ $notification->id }}" data-url="{{ route('alumno.home') }}" onclick="event.stopPropagation(); markAsRead('{{ $notification->id }}', '{{ route('alumno.home') }}')">Ir a Curso</button>
+                                            <span class="font-12 text-nowrap d-block text-muted">{{ \Illuminate\Support\Str::limit($notification->data['modulo'] ?? '', 30) }}</span>
+                                            <span class="font-12 text-nowrap d-block text-muted">Vence: {{ $notification->data['fecha_final'] ?? '' }}</span>
+                                            
+                                            @php
+                                                $actionUrl = route('alumno.home');
+                                            @endphp
+
+                                            <div class="mt-1 d-flex">
+                                                <button class="btn btn-xs btn-primary mr-2" onclick="event.stopPropagation(); markAsRead('{{ $notification->id }}', '{{ $actionUrl }}')">Ir al Curso</button>
+                                                
+                                                <button class="btn btn-xs btn-outline-danger" onclick="event.stopPropagation(); deleteNotification('{{ $notification->id }}')" title="Eliminar alerta">
+                                                    <i data-feather="trash-2" style="width: 14px; height: 14px;"></i>
+                                                </button>
                                             </div>
                                         </div>
                                     </a>
@@ -156,19 +165,13 @@
                                     @endforelse
                                 </div>
                             </li>
-                            {{-- <li>
-                                <a class="nav-link pt-3 text-center text-dark" href="javascript:void(0);">
-                                    <strong>Check all notifications</strong>
-                                    <i class="fa fa-angle-right"></i>
-                                </a>
-                            </li> --}}
                         </ul>
                     </div>
                 </li>
                 <!-- End Notification -->
                 <script>
                     function markAsRead(id, redirectUrl) {
-                        fetch('/notifications/mark-as-read/' + id, {
+                         fetch('/alumno/notifications/mark-as-read/' + id, {
                                 method: 'POST',
                                 headers: {
                                     'X-CSRF-TOKEN': '{{ csrf_token() }}',
@@ -178,6 +181,34 @@
                             .then(response => {
                                 if (response.ok) {
                                     window.location.href = redirectUrl;
+                                } else {
+                                    // Fallback just in case
+                                    window.location.href = redirectUrl;
+                                }
+                            });
+                    }
+
+                    function deleteNotification(id) {
+                        fetch('/alumno/notifications/delete/' + id, {
+                                method: 'DELETE',
+                                headers: {
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                    'Content-Type': 'application/json'
+                                }
+                            })
+                            .then(response => {
+                                if (response.ok) {
+                                    document.getElementById('notif-item-' + id).remove();
+                                    let badge = document.querySelector('.notify-no');
+                                    if(badge) {
+                                        let currentCount = parseInt(badge.innerText);
+                                        if(currentCount > 1) {
+                                            badge.innerText = currentCount - 1;
+                                        } else {
+                                            badge.remove();
+                                            document.querySelector('.message-center.notifications').innerHTML = '<div class="p-3 text-center">No tienes notificaciones nuevas.</div>';
+                                        }
+                                    }
                                 }
                             });
                     }
