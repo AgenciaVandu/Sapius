@@ -323,8 +323,13 @@ class ExamenController extends Controller
     {
         $inscripcion = Inscripcion::find($inscripcion_id);
         $curso = CursosCurso::find($inscripcion->CursoProgramado->curso_id);
-        $lecciones = $curso->lecciones;
-        $examenes = Examen::with('Prueba')->where('inscripcion_id', $inscripcion_id)->get();
+        $lecciones = $this->getLeccionesActivas($curso);
+        $examenes = Examen::with('Prueba')
+            ->where('inscripcion_id', $inscripcion_id)
+            ->whereHas('Prueba', function ($query) use ($curso) {
+                $query->where('curso_id', $curso->id);
+            })
+            ->get();
         return view('admin.registro.resultados')->with('examenes', $examenes, )->with('lecciones', $lecciones)->with('inscripcion', $inscripcion);
     }
 
@@ -384,10 +389,13 @@ class ExamenController extends Controller
     {
         $inscripcion = Inscripcion::find($inscripcion_id);
         $curso = CursosCurso::find($inscripcion->CursoProgramado->curso_id);
-        $lecciones = $curso->lecciones;
+        $lecciones = $this->getLeccionesActivas($curso);
 
         $conPrueba = Examen::with('Prueba')
             ->where('inscripcion_id', $inscripcion_id)
+            ->whereHas('Prueba', function ($query) use ($curso) {
+                $query->where('curso_id', $curso->id);
+            })
             ->has('Prueba')
             ->get();
 
@@ -408,9 +416,14 @@ class ExamenController extends Controller
         // Eager load lecciones and pruebas to reduce queries
         $curso = CursosCurso::with('lecciones')->find($inscripcion->CursoProgramado->curso_id);
 
+        $lecciones = $this->getLeccionesActivas($curso);
+
         // Eager load Prueba for all examenes in a single query
         $examenes = Examen::with('Prueba')
             ->where('inscripcion_id', $inscripcion_id)
+            ->whereHas('Prueba', function ($query) use ($curso) {
+                $query->where('curso_id', $curso->id);
+            })
             ->get();
 
         // If you need to separate conPrueba/sinPrueba, you can filter in-memory
@@ -421,13 +434,28 @@ class ExamenController extends Controller
         /* return view('alumno.exportresultados')->with('examenes', $examenes)->with('lecciones', $curso->lecciones)->with('inscripcion', $inscripcion); */
         $pdf = \PDF::loadView('alumno.exportresultados', [
             'examenes' => $examenes,
-            'lecciones' => $curso->lecciones,
+            'lecciones' => $lecciones,
             'inscripcion' => $inscripcion
         ]);
 
         return $pdf->download($inscripcion->User->getNombreCompletoAttribute() . ' - ' . date('Y-m-d H:i:s') . '.pdf');
     }
 
+    private function getLeccionesActivas($curso)
+    {
+        $modulosActivosIds = $curso->Lecciones()
+            ->where('leccion_id', 0)
+            ->where('activo', 'si')
+            ->pluck('id');
+
+        return $curso->Lecciones()
+            ->where('activo', 'si')
+            ->where(function ($query) use ($modulosActivosIds) {
+                $query->where('leccion_id', 0)
+                      ->orWhereIn('leccion_id', $modulosActivosIds);
+            })
+            ->get();
+    }
     public function getInscritos($curso_id, $active = 'si')
     {
         //$curso = Inscripcion::with('Inscritos')->where('curso_programado_id',$curso_id)->first();
