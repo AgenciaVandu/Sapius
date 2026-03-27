@@ -25,7 +25,7 @@
             <div class="card-body">
                 <h4 class="card-title">Tareas del Alumno: {{ $alumno->nombre_completo }}</h4>
                 <div class="table-responsive">
-                    <table class="table table-striped table-bordered no-wrap">
+                    <table class="table table-striped table-bordered">
                         <thead>
                             <tr>
                                 <th>Módulo</th>

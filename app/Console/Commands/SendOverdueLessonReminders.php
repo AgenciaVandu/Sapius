@@ -113,8 +113,10 @@ class SendOverdueLessonReminders extends Command
                             continue;
                         }
 
-                        // Find class in schedule, fallback to module if class isn't scheduled
+                        // Para la clase, usamos exclusivamente su fecha si existe. 
+                        // Si no, recae en la del módulo SOLO como contingencia, pero la UI debe mapear donde está.
                         $scheduleItem = $schedule->firstWhere('id', $clase->id) ?? $moduleScheduleItem;
+                        $isModuleDate = $scheduleItem === $moduleScheduleItem;
 
                         if ($scheduleItem && isset($scheduleItem['fecha_inicial']) && isset($scheduleItem['fecha_final'])) {
                             try {
@@ -145,16 +147,20 @@ class SendOverdueLessonReminders extends Command
 
                             // Logic:
                             // 1. Lesson Started > 2 days ago? ($now >= $fechaInicial + 2 days)
-                            // 2. Lesson Still Active? ($now <= $fechaFinal)
                             $reminderStartDate = $fechaInicial->copy()->addDays(2);
 
-                            if ($now->gte($reminderStartDate) && $now->lte($fechaFinal)) {
-                                 // This class is currently "active" for reminders.
+                            // The user requested to send overdue reminders even if expired ($now > $fechaFinal)
+                            if ($now->gte($reminderStartDate)) {
                                  // Add it to pending list.
+                                 // "segun donde se encuentre la tarea modulo o leccion"
+                                 // Mostramos el nombre de la leccion/tarea y su fecha limite correcta.
+                                 
+                                 $fecha_final_mostrar = $scheduleItem['fecha_final'] . (isset($scheduleItem['hora_final']) ? ' ' . $scheduleItem['hora_final'] : '');
+
                                  $pendingLessons[] = [
                                      'titulo' => $clase->titulo, // Lesson Title
                                      'modulo' => $modulo->titulo, // Module Title
-                                     'fecha_final' => $scheduleItem['fecha_final'] . (isset($scheduleItem['hora_final']) ? ' ' . $scheduleItem['hora_final'] : ''),
+                                     'fecha_final' => $fecha_final_mostrar,
                                      'leccion_id' => $clase->id, // Passing ID for link
                                      'curso_programado_id' => $curso->id,
                                      'inscripcion_id' => $user->pivot->id ?? null
