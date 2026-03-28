@@ -6,7 +6,16 @@ $kernel = $app->make(Illuminate\Contracts\Console\Kernel::class);
 $kernel->bootstrap();
 
 $now = \Carbon\Carbon::now();
-$cursos = \App\Models\Registro\CursoProgramado::with(['Curso.Lecciones.Clases'])->where('activo', 'si')->get();
+$cursos = \App\Models\Registro\CursoProgramado::with(['Curso' => function($r) {
+    $r->with(['Lecciones' => function($q) {
+        $q->with(['Clases' => function($c) {
+            $c->where('activo', 'si');
+        }]);
+        $q->where('leccion_id', 0)->where('activo', 'si');
+    }]);
+}])
+->where('activo', 'si')
+->get();
 
 $html = "";
 foreach ($cursos as $curso) {
@@ -58,6 +67,18 @@ foreach ($cursos as $curso) {
                 $scheduleItem = $schedule->firstWhere('id', $clase->id) ?? $moduleScheduleItem;
                 if ($scheduleItem && isset($scheduleItem['fecha_inicial']) && isset($scheduleItem['fecha_final'])) {
                     $fechaInicial = \Carbon\Carbon::createFromFormat('d/m/Y', explode(' ', $scheduleItem['fecha_inicial'])[0]);
+                    
+                    $endFormat = 'd/m/Y';
+                    $endStr = $scheduleItem['fecha_final'];
+                    if (isset($scheduleItem['hora_final'])) {
+                        $endFormat .= ' H:i';
+                        $endStr .= ' ' . $scheduleItem['hora_final'];
+                    }
+                    $fechaFinal = \Carbon\Carbon::createFromFormat($endFormat, $endStr);
+                    if (!isset($scheduleItem['hora_final'])) {
+                        $fechaFinal->setTime(23, 59, 59);
+                    }
+
                     $reminderStartDate = $fechaInicial->copy()->addDays(2);
                     
                     if ($now->gte($reminderStartDate)) {
@@ -65,6 +86,7 @@ foreach ($cursos as $curso) {
                             'titulo' => $clase->titulo,
                             'modulo' => $modulo->titulo,
                             'fecha_final' => $scheduleItem['fecha_final'] . (isset($scheduleItem['hora_final']) ? ' ' . $scheduleItem['hora_final'] : ''),
+                            'is_expired' => $now->gt($fechaFinal),
                             'leccion_id' => $clase->id,
                             'curso_programado_id' => $curso->id,
                             'inscripcion_id' => $user->pivot->id ?? null

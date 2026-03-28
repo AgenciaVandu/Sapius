@@ -42,9 +42,16 @@ class SendOverdueLessonReminders extends Command
         $this->info("Checking for pending lessons on " . $now->format('d/m/Y H:i'));
 
         // 1. Get Active Courses
-        $cursos = \App\Models\Registro\CursoProgramado::with(['Curso.Lecciones.Clases'])
-            ->where('activo', 'si')
-            ->get();
+        $cursos = \App\Models\Registro\CursoProgramado::with(['Curso' => function($r) {
+            $r->with(['Lecciones' => function($q) {
+                $q->with(['Clases' => function($c) {
+                    $c->where('activo', 'si');
+                }]);
+                $q->where('leccion_id', 0)->where('activo', 'si');
+            }]);
+        }])
+        ->where('activo', 'si')
+        ->get();
 
         foreach ($cursos as $curso) {
             // 2. Get content schedule
@@ -156,11 +163,13 @@ class SendOverdueLessonReminders extends Command
                                  // Mostramos el nombre de la leccion/tarea y su fecha limite correcta.
                                  
                                  $fecha_final_mostrar = $scheduleItem['fecha_final'] . (isset($scheduleItem['hora_final']) ? ' ' . $scheduleItem['hora_final'] : '');
+                                 $is_expired = isset($fechaFinal) ? $now->gt($fechaFinal) : false;
 
                                  $pendingLessons[] = [
                                      'titulo' => $clase->titulo, // Lesson Title
                                      'modulo' => $modulo->titulo, // Module Title
                                      'fecha_final' => $fecha_final_mostrar,
+                                     'is_expired' => $is_expired,
                                      'leccion_id' => $clase->id, // Passing ID for link
                                      'curso_programado_id' => $curso->id,
                                      'inscripcion_id' => $user->pivot->id ?? null

@@ -185,6 +185,8 @@
                     class="btn btn-block btn-info">Ver Calificaciones</a>
                 <a href="{{ route('alumno.curso.homework.tracking', ['curso_programado_id' => $curso_programado->id]) }}"
                     class="btn btn-block btn-primary mt-2">Ver Mis Tareas</a>
+                <a href="{{ route('alumno.curso.progress', ['curso_programado_id' => $curso_programado->id]) }}"
+                    class="btn btn-block btn-success mt-2">Mi Progreso</a>
                 @endif
 
                 <small class="d-block mt-3">

@@ -15,6 +15,8 @@ use App\Models\Cursos\Prueba;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
+use App\Models\Evaluacion\Examen;
 use App\User;
 
 class CursoProgramadoController extends Controller
@@ -553,8 +555,10 @@ class CursoProgramadoController extends Controller
         // Obtenemos todas las lecciones del curso (Módulos y Clases)
         $curso = CursoProgramado::with(['Curso' => function($r){
             $r->with(['Lecciones' =>function($q){
-                $q->with('Clases');
-                $q->where('leccion_id',0); // Módulos
+                $q->with(['Clases' => function($c) {
+                    $c->where('activo', 'si');
+                }]);
+                $q->where('leccion_id',0)->where('activo', 'si'); // Módulos
             }])->get();
         }])->find($curso_programado_id);
 
@@ -572,11 +576,16 @@ class CursoProgramadoController extends Controller
                             ->get()
                             ->keyBy('leccion_id'); // Key by leccion_id for easy lookup
 
+        // Obtenemos las fechas programadas para comparar
+        $contenidoProgramado = ContenidoProgramado::where('curso_programado_id', $curso_programado_id)->first();
+        $schedule = $contenidoProgramado && $contenidoProgramado->contenido ? collect($contenidoProgramado->contenido) : collect([]);
+
         return view('admin.registro.homework_tracking')
             ->with('curso_programado', $curso_programado)
             ->with('alumno', $alumno)
             ->with('modulos', $curso->Curso->Lecciones)
-            ->with('homeworks', $homeworks);
+            ->with('homeworks', $homeworks)
+            ->with('schedule', $schedule);
     }
 
     public function studentHomeworkTracking($curso_programado_id)
@@ -587,8 +596,10 @@ class CursoProgramadoController extends Controller
          // Obtenemos todas las lecciones del curso (Módulos y Clases)
          $curso = CursoProgramado::with(['Curso' => function($r){
             $r->with(['Lecciones' =>function($q){
-                $q->with('Clases');
-                $q->where('leccion_id',0); // Módulos
+                $q->with(['Clases' => function($c) {
+                    $c->where('activo', 'si');
+                }]);
+                $q->where('leccion_id',0)->where('activo', 'si'); // Módulos
             }])->get();
         }])->find($curso_programado_id);
 
@@ -606,9 +617,122 @@ class CursoProgramadoController extends Controller
                             ->get()
                             ->keyBy('leccion_id');
 
+        // Obtenemos las fechas programadas para comparar
+        $contenidoProgramado = ContenidoProgramado::where('curso_programado_id', $curso_programado_id)->first();
+        $schedule = $contenidoProgramado && $contenidoProgramado->contenido ? collect($contenidoProgramado->contenido) : collect([]);
+
         return view('registro.homework_tracking')
             ->with('curso_programado', $curso_programado)
             ->with('modulos', $curso->Curso->Lecciones)
-            ->with('homeworks', $homeworks);
+            ->with('homeworks', $homeworks)
+            ->with('schedule', $schedule);
+    }
+
+    public function adminCourseProgress($curso_programado_id, $user_id)
+    {
+        $curso_programado = CursoProgramado::with('Curso')->find($curso_programado_id);
+        $alumno = User::find($user_id);
+
+        $curso = CursoProgramado::with(['Curso' => function($r){
+            $r->with(['Lecciones' => function($q){
+                $q->with(['Clases' => function($c) {
+                    $c->where('activo', 'si')->with('Pruebas.Examenes');
+                }]);
+                $q->where('leccion_id', 0)->where('activo', 'si'); // Módulos
+            }])->get();
+        }])->find($curso_programado_id);
+
+        $leccionIds = [];
+        $pruebaIds = [];
+        foreach ($curso->Curso->Lecciones as $modulo) {
+            foreach ($modulo->Clases as $clase) {
+                $leccionIds[] = $clase->id;
+                foreach ($clase->Pruebas as $prueba) {
+                    $pruebaIds[] = $prueba->id;
+                }
+            }
+        }
+
+        $completedLessons = DB::table('leccion_user')
+            ->where('user_id', $user_id)
+            ->where('curso_programado_id', $curso_programado_id)
+            ->pluck('leccion_id')
+            ->toArray();
+
+        $homeworks = Homework::where('user_id', $user_id)
+            ->whereIn('leccion_id', $leccionIds)
+            ->get()
+            ->keyBy('leccion_id');
+
+        $inscripcion = Inscripcion::where('user_id', $user_id)
+            ->where('curso_programado_id', $curso_programado_id)->first();
+
+        // Obtener exámenes finalizados
+        $examenes = Examen::with('Prueba')
+            ->where('inscripcion_id', $inscripcion ? $inscripcion->id : 0)
+            ->whereIn('prueba_id', $pruebaIds)
+            ->get()
+            ->keyBy('prueba_id');
+
+        return view('admin.registro.course_progress')
+            ->with('curso_programado', $curso_programado)
+            ->with('alumno', $alumno)
+            ->with('modulos', $curso->Curso->Lecciones)
+            ->with('completedLessons', $completedLessons)
+            ->with('homeworks', $homeworks)
+            ->with('examenes', $examenes);
+    }
+
+    public function studentCourseProgress($curso_programado_id)
+    {
+        $user_id = Auth::user()->id;
+        $curso_programado = CursoProgramado::with('Curso')->find($curso_programado_id);
+
+        $curso = CursoProgramado::with(['Curso' => function($r){
+            $r->with(['Lecciones' => function($q){
+                $q->with(['Clases' => function($c) {
+                    $c->where('activo', 'si')->with('Pruebas.Examenes');
+                }]);
+                $q->where('leccion_id', 0)->where('activo', 'si'); // Módulos
+            }])->get();
+        }])->find($curso_programado_id);
+
+        $leccionIds = [];
+        $pruebaIds = [];
+        foreach ($curso->Curso->Lecciones as $modulo) {
+            foreach ($modulo->Clases as $clase) {
+                $leccionIds[] = $clase->id;
+                foreach ($clase->Pruebas as $prueba) {
+                    $pruebaIds[] = $prueba->id;
+                }
+            }
+        }
+
+        $completedLessons = DB::table('leccion_user')
+            ->where('user_id', $user_id)
+            ->where('curso_programado_id', $curso_programado_id)
+            ->pluck('leccion_id')
+            ->toArray();
+
+        $homeworks = Homework::where('user_id', $user_id)
+            ->whereIn('leccion_id', $leccionIds)
+            ->get()
+            ->keyBy('leccion_id');
+
+        $inscripcion = Inscripcion::where('user_id', $user_id)
+            ->where('curso_programado_id', $curso_programado_id)->first();
+
+        $examenes = Examen::with('Prueba')
+            ->where('inscripcion_id', $inscripcion ? $inscripcion->id : 0)
+            ->whereIn('prueba_id', $pruebaIds)
+            ->get()
+            ->keyBy('prueba_id');
+
+        return view('registro.course_progress')
+            ->with('curso_programado', $curso_programado)
+            ->with('modulos', $curso->Curso->Lecciones)
+            ->with('completedLessons', $completedLessons)
+            ->with('homeworks', $homeworks)
+            ->with('examenes', $examenes);
     }
 }
