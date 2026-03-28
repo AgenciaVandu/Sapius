@@ -225,9 +225,39 @@ class LeccionController extends Controller
         $m = new TareaEmail($datos);
         $m->attachFromStorage($ruta);
         $mail->send($m);
+
+        $isLate = false;
+        $contenidoProgramado = \App\Models\Registro\ContenidoProgramado::where('curso_programado_id', $curso_programado->id)->first();
+        if ($contenidoProgramado && $contenidoProgramado->contenido) {
+            $schedule = collect($contenidoProgramado->contenido);
+            // Buscar la lección específica o su módulo padre en el cronograma
+            $scheduleItem = $schedule->firstWhere('id', $leccion->id);
+            if (!$scheduleItem) {
+                $scheduleItem = $schedule->firstWhere('id', $leccion->leccion_id);
+            }
+            if ($scheduleItem && isset($scheduleItem['fecha_final'])) {
+                try {
+                    $endFormat = 'd/m/Y';
+                    $endStr = $scheduleItem['fecha_final'];
+                    if (isset($scheduleItem['hora_final'])) {
+                        $endFormat .= ' H:i';
+                        $endStr .= ' ' . $scheduleItem['hora_final'];
+                    }
+                    $fechaFinal = \Carbon\Carbon::createFromFormat($endFormat, $endStr);
+                    if (!isset($scheduleItem['hora_final'])) {
+                        $fechaFinal->setTime(23, 59, 59);
+                    }
+                    if (\Carbon\Carbon::now()->gt($fechaFinal)) {
+                        $isLate = true;
+                    }
+                } catch (\Exception $e) {}
+            }
+        }
+
         $homework = new Homework();
         $homework->leccion_id = $leccion->id;
         $homework->user_id = Auth::user()->id;
+        $homework->is_late = $isLate;
         $homework->save();
 
         return view('lecciones.tarea')->with('success', 'Tarea enviada')

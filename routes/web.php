@@ -317,6 +317,8 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
     Route::get('/curso/homework-tracking/{curso_programado_id}/{user_id}', 'Registro\CursoProgramadoController@homeworkTracking')->name('admin.curso.homework.tracking');
     Route::get('/curso/progress/{curso_programado_id}/{user_id}', 'Registro\CursoProgramadoController@adminCourseProgress')->name('admin.curso.progress');
 
+    Route::post('/curso/lesson/unlock', 'Registro\CursoProgramadoController@toggleLessonUnlock')->name('admin.curso.lesson.unlock');
+
     Route::post('/examen/finalizar', 'Evaluacion\ExamenController@cambiarEstadoFinalizado')->name('examen.cambiarEstadoFinalizado');
     Route::post('/examen/retro', 'Evaluacion\ExamenController@cambiarEstadoRetro')->name('examen.cambiarEstadoRetro');
     Route::get('/exportCalificaciones/{inscripcion_id}', 'Evaluacion\ExamenController@exportReport')->name('admin.exportCalificaciones');

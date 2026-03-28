@@ -54,8 +54,14 @@
                     ? strtotime(str_replace('/', '-', $item_contenido['fecha_inicial']))
                     : null;
                     $fecha_final = isset($item_contenido['fecha_final'])
-                    ? strtotime(str_replace('/', '-', $item_contenido['fecha_final']))
-                    : null;
+                    ? (isset($item_contenido['hora_final']) ? strtotime(str_replace('/', '-', $item_contenido['fecha_final'].' '.$item_contenido['hora_final'])) : strtotime(str_replace('/', '-', $item_contenido['fecha_final'].' 23:59:59')))
+                    : 0; 
+                        
+                    $unlockData = isset($unlockedLessonsData) ? $unlockedLessonsData->get($modulo->id) : null;
+                    if ($unlockData) {
+                        $fecha_final = strtotime($unlockData->until_date);
+                    }
+                        
                     $verifica_fecha = $hoy >= $fecha_inicial && $hoy <= $fecha_final; @endphp @if ($inscrito==null ||
                         ($inscrito !=null && $inscrito->aceptado == 'no'))
                         <a href="javascript:void(0)" class="list-group-item disabled">{{ $modulo->titulo }}</a>

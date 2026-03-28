@@ -57,7 +57,8 @@
 
                                         // 2. Tarea Enviada
                                         $enviado = $homeworks->has($clase->id);
-                                        $checkTarea = $enviado ? '<span class="badge badge-success">Entregada</span>' : '<span class="badge badge-light text-muted">Pendiente</span>';
+                                        $hw = $enviado ? $homeworks[$clase->id] : null;
+                                        $checkTarea = $enviado ? ($hw->is_late ? '<span class="badge badge-success">Entregada</span> <span class="badge badge-danger">Atrasada</span>' : '<span class="badge badge-success">Entregada</span>') : '<span class="badge badge-light text-muted">Pendiente</span>';
 
                                         // 3. Examen (Pruebas)
                                         $checkExamenStr = '<span class="text-muted font-italic">N/A</span>';
@@ -81,7 +82,7 @@
                                                         $bgColor = '#D4EDDA'; // Verde (Aprobado)
                                                         $textColor = '#155724';
                                                     }
-                                                    $checkExamenStr = '<strong>Presentado</strong><br><small>(' . $examen->total_correctas . '/' . $examen->total_preguntas . ')</small>';
+                                                    $checkExamenStr = '<strong>Presentado</strong>' . ($examen->is_late ? ' <span class="badge badge-danger">Atrasado</span>' : '') . '<br><small>(' . $examen->total_correctas . '/' . $examen->total_preguntas . ')</small>';
                                                     $calificacionExamenStr = '<strong>' . $examen->score_total . '</strong>';
                                                 } else {
                                                     $bgColor = '#FFF3CD';
@@ -108,7 +109,12 @@
                                         <td class="text-center align-middle border-right-0" style="width: 50px;">
                                             <i class="fas fa-level-up-alt fa-rotate-90 text-muted"></i>
                                         </td>
-                                        <td class="pl-3 align-middle border-left-0">{{ $clase->titulo }}</td>
+                                        <td class="pl-3 align-middle border-left-0">
+                                            {{ $clase->titulo }}
+                                            @if($unlockedLessonsData->has($clase->id))
+                                                <span class="badge badge-info ml-1">Desbloqueo Especial</span>
+                                            @endif
+                                        </td>
                                         <td class="align-middle text-center">
                                             {!! $checkTerminada !!}
                                         </td>

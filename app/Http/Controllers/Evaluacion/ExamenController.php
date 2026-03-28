@@ -228,7 +228,49 @@ class ExamenController extends Controller
         //dd($examen->total_correctas);
 
         //$examen->score_total = $examen->total_correctas / $examen->total_preguntas;
+        // $mail = Mail::to(Auth::user()->email);
+        // $correo_examen_finalizado = new ExamenFinalizado($examen);
+        // $mail->send($correo_examen_finalizado);
+
+        $isLate = false;
+        $inscripcion = Inscripcion::find($examen->inscripcion_id);
+        if ($inscripcion) {
+            $contenidoProgramado = \App\Models\Registro\ContenidoProgramado::where('curso_programado_id', $inscripcion->curso_programado_id)->first();
+            if ($contenidoProgramado && $contenidoProgramado->contenido) {
+                $schedule = collect($contenidoProgramado->contenido);
+                $leccionId = $examen->Prueba->leccion_id;
+                // Buscar la lección o módulo en el cronograma
+                $scheduleItem = $schedule->firstWhere('id', $leccionId);
+                // Si no está, buscar el padre si existe
+                if (!$scheduleItem) {
+                    $leccion = \App\Models\Cursos\Leccion::find($leccionId);
+                    if ($leccion) {
+                        $scheduleItem = $schedule->firstWhere('id', $leccion->leccion_id);
+                    }
+                }
+
+                if ($scheduleItem && isset($scheduleItem['fecha_final'])) {
+                    try {
+                        $endFormat = 'd/m/Y';
+                        $endStr = $scheduleItem['fecha_final'];
+                        if (isset($scheduleItem['hora_final'])) {
+                            $endFormat .= ' H:i';
+                            $endStr .= ' ' . $scheduleItem['hora_final'];
+                        }
+                        $fechaFinal = \Carbon\Carbon::createFromFormat($endFormat, $endStr);
+                        if (!isset($scheduleItem['hora_final'])) {
+                            $fechaFinal->setTime(23, 59, 59);
+                        }
+                        if ($examen->created_at->gt($fechaFinal)) {
+                            $isLate = true;
+                        }
+                    } catch (\Exception $e) {}
+                }
+            }
+        }
+
         $examen->finalizado = 'si';
+        $examen->is_late = $isLate;
 
         $examen->save();
 

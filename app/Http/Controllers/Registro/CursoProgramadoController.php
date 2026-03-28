@@ -259,12 +259,18 @@ class CursoProgramadoController extends Controller
 
             $globalProgress = $totalCursoClases > 0 ? round((count($completedLessons) / $totalCursoClases) * 100) : 0;
 
+            $unlockedLessonsData = \App\Models\Registro\LessonUnlock::where('user_id', Auth::user()->id)
+                ->where('curso_programado_id', $request->curso_programado_id)
+                ->get()
+                ->keyBy('leccion_id');
+
             return view('registro.curso')
                 ->with('curso_programado',$curso)
                 ->with('inscrito',$inscripcion)
                 ->with('contenido_programado',$contenido_programado)
                 ->with('completedLessons', $completedLessons)
-                ->with('globalProgress', $globalProgress);
+                ->with('globalProgress', $globalProgress)
+                ->with('unlockedLessonsData', $unlockedLessonsData);
         }
 
     }
@@ -343,6 +349,11 @@ class CursoProgramadoController extends Controller
         // Calcular progreso global del curso
         $globalProgress = $totalCursoClases > 0 ? round((count($completedLessons) / $totalCursoClases) * 100) : 0;
 
+        $unlockedLessonsData = \App\Models\Registro\LessonUnlock::where('user_id', Auth::user()->id)
+            ->where('curso_programado_id', $request->curso_programado_id)
+            ->get()
+            ->keyBy('leccion_id');
+
         return view('registro.leccion')->with('leccion',$leccion)
             ->with('curso_programado_id',$request->curso_programado_id)
             ->with('curso_programado',$curso)
@@ -353,6 +364,7 @@ class CursoProgramadoController extends Controller
             ->with('homework',$homework)
             ->with('completedLessons', $completedLessons)
             ->with('globalProgress', $globalProgress)
+            ->with('unlockedLessonsData', $unlockedLessonsData)
             ->with('video',$video);
     }
 
@@ -580,12 +592,18 @@ class CursoProgramadoController extends Controller
         $contenidoProgramado = ContenidoProgramado::where('curso_programado_id', $curso_programado_id)->first();
         $schedule = $contenidoProgramado && $contenidoProgramado->contenido ? collect($contenidoProgramado->contenido) : collect([]);
 
+        $unlockedLessonsData = \App\Models\Registro\LessonUnlock::where('user_id', $user_id)
+            ->where('curso_programado_id', $curso_programado_id)
+            ->get()
+            ->keyBy('leccion_id');
+
         return view('admin.registro.homework_tracking')
             ->with('curso_programado', $curso_programado)
             ->with('alumno', $alumno)
             ->with('modulos', $curso->Curso->Lecciones)
             ->with('homeworks', $homeworks)
-            ->with('schedule', $schedule);
+            ->with('schedule', $schedule)
+            ->with('unlockedLessonsData', $unlockedLessonsData);
     }
 
     public function studentHomeworkTracking($curso_programado_id)
@@ -621,11 +639,17 @@ class CursoProgramadoController extends Controller
         $contenidoProgramado = ContenidoProgramado::where('curso_programado_id', $curso_programado_id)->first();
         $schedule = $contenidoProgramado && $contenidoProgramado->contenido ? collect($contenidoProgramado->contenido) : collect([]);
 
+        $unlockedLessonsData = \App\Models\Registro\LessonUnlock::where('user_id', $user_id)
+            ->where('curso_programado_id', $curso_programado_id)
+            ->get()
+            ->keyBy('leccion_id');
+
         return view('registro.homework_tracking')
             ->with('curso_programado', $curso_programado)
             ->with('modulos', $curso->Curso->Lecciones)
             ->with('homeworks', $homeworks)
-            ->with('schedule', $schedule);
+            ->with('schedule', $schedule)
+            ->with('unlockedLessonsData', $unlockedLessonsData);
     }
 
     public function adminCourseProgress($curso_programado_id, $user_id)
@@ -667,12 +691,16 @@ class CursoProgramadoController extends Controller
         $inscripcion = Inscripcion::where('user_id', $user_id)
             ->where('curso_programado_id', $curso_programado_id)->first();
 
-        // Obtener exámenes finalizados
         $examenes = Examen::with('Prueba')
             ->where('inscripcion_id', $inscripcion ? $inscripcion->id : 0)
             ->whereIn('prueba_id', $pruebaIds)
             ->get()
             ->keyBy('prueba_id');
+
+        $unlockedLessonsData = \App\Models\Registro\LessonUnlock::where('user_id', $user_id)
+            ->where('curso_programado_id', $curso_programado_id)
+            ->get()
+            ->keyBy('leccion_id');
 
         return view('admin.registro.course_progress')
             ->with('curso_programado', $curso_programado)
@@ -680,7 +708,8 @@ class CursoProgramadoController extends Controller
             ->with('modulos', $curso->Curso->Lecciones)
             ->with('completedLessons', $completedLessons)
             ->with('homeworks', $homeworks)
-            ->with('examenes', $examenes);
+            ->with('examenes', $examenes)
+            ->with('unlockedLessonsData', $unlockedLessonsData);
     }
 
     public function studentCourseProgress($curso_programado_id)
@@ -728,11 +757,55 @@ class CursoProgramadoController extends Controller
             ->get()
             ->keyBy('prueba_id');
 
+        $unlockedLessonsData = \App\Models\Registro\LessonUnlock::where('user_id', $user_id)
+            ->where('curso_programado_id', $curso_programado_id)
+            ->get()
+            ->keyBy('leccion_id');
+
         return view('registro.course_progress')
             ->with('curso_programado', $curso_programado)
             ->with('modulos', $curso->Curso->Lecciones)
             ->with('completedLessons', $completedLessons)
             ->with('homeworks', $homeworks)
-            ->with('examenes', $examenes);
+            ->with('examenes', $examenes)
+            ->with('unlockedLessonsData', $unlockedLessonsData);
+    }
+
+    public function toggleLessonUnlock(Request $request)
+    {
+        $user_id = $request->user_id;
+        $curso_programado_id = $request->curso_programado_id;
+        $leccion_id = $request->leccion_id;
+        $until_date = $request->until_date;
+
+        $unlock = \App\Models\Registro\LessonUnlock::where('user_id', $user_id)
+            ->where('curso_programado_id', $curso_programado_id)
+            ->where('leccion_id', $leccion_id)
+            ->first();
+
+        if ($unlock) {
+            // Unlocked already? If user sends action = unlock again, it might update date.
+            // Or toggle behavior:
+            if ($request->action === 'lock') {
+                $unlock->delete();
+                return response()->json(['status' => 'locked']);
+            } else {
+                // Update deadline
+                $unlock->until_date = $until_date ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $until_date))) : null;
+                $unlock->save();
+                return response()->json(['status' => 'unlocked', 'deadline' => $unlock->until_date]);
+            }
+        } else {
+            if ($request->action === 'lock') {
+               return response()->json(['status' => 'locked']);
+            }
+            $unlock = new \App\Models\Registro\LessonUnlock();
+            $unlock->user_id = $user_id;
+            $unlock->curso_programado_id = $curso_programado_id;
+            $unlock->leccion_id = $leccion_id;
+            $unlock->until_date = $until_date ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $until_date))) : null;
+            $unlock->save();
+            return response()->json(['status' => 'unlocked', 'deadline' => $unlock->until_date]);
+        }
     }
 }

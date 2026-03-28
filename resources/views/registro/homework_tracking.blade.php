@@ -93,8 +93,28 @@
                                             } catch (\Exception $e) {}
                                         }
 
+                                        // Individual Unlock logic
+                                        $unlock = $unlockedLessonsData->get($clase->id);
+                                        if ($unlock) {
+                                            $fechaFinalCarbon = \Carbon\Carbon::parse($unlock->until_date);
+                                            $fechaLimiteStr = $fechaFinalCarbon->format('d/m/Y H:i');
+                                            
+                                            if (!$homeworks->has($clase->id)) {
+                                                if ($now->gt($fechaFinalCarbon)) {
+                                                    $estadoStr = '<span class="badge badge-danger">Cerrada</span>';
+                                                } else {
+                                                    $estadoStr = '<span class="badge badge-info">Desbloqueada</span>';
+                                                }
+                                            }
+                                        }
+
                                         if ($homeworks->has($clase->id)) {
-                                            $estadoStr = '<span class="badge badge-success">Entregado</span>';
+                                            $hw = $homeworks[$clase->id];
+                                            if ($hw->is_late) {
+                                                $estadoStr = '<span class="badge badge-success">Entregado</span> <span class="badge badge-danger">Atrasado</span>';
+                                            } else {
+                                                $estadoStr = '<span class="badge badge-success">Entregado</span>';
+                                            }
                                         }
                                     @endphp
                                     <tr>

@@ -87,10 +87,16 @@
                     $fecha_inicial = isset($item_contenido['fecha_inicial'])
                     ? strtotime(str_replace('/', '-', $item_contenido['fecha_inicial']))
                     : null;
-                    $fecha_final = isset($item_contenido['fecha_final'])
-                    ? strtotime(str_replace('/', '-', $item_contenido['fecha_final']))
-                    : null;
-                    $verifica_fecha = $hoy >= $fecha_inicial && $hoy <= $fecha_final; @endphp @if ($verifica_fecha) <a
+                        $fecha_final = isset($item_contenido['fecha_final'])
+                        ? (isset($item_contenido['hora_final']) ? strtotime(str_replace('/', '-', $item_contenido['fecha_final'].' '.$item_contenido['hora_final'])) : strtotime(str_replace('/', '-', $item_contenido['fecha_final'].' 23:59:59')))
+                        : 0; 
+                        
+                        $unlockData = isset($unlockedLessonsData) ? $unlockedLessonsData->get($item->id) : null;
+                        if ($unlockData) {
+                            $fecha_final = strtotime($unlockData->until_date);
+                        }
+                        
+                        $verifica_fecha = $hoy >= $fecha_inicial && $hoy <= $fecha_final; @endphp @if ($verifica_fecha) <a
                         href="javascript:void(0)" class="list-group-item list-group-item-action"
                         onclick="event.preventDefault(); document.getElementById('form{{ $item->id }}').submit();">
                         {{ $item->titulo }}
