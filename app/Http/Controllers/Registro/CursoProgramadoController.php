@@ -659,8 +659,12 @@ class CursoProgramadoController extends Controller
 
         $curso = CursoProgramado::with(['Curso' => function($r){
             $r->with(['Lecciones' => function($q){
-                $q->with(['Clases' => function($c) {
-                    $c->where('activo', 'si')->with('Pruebas.Examenes');
+                $q->with(['Pruebas' => function($p) {
+                    $p->where('activo', 'si');
+                }, 'Clases' => function($c) {
+                    $c->where('activo', 'si')->with(['Pruebas' => function($p) {
+                        $p->where('activo', 'si');
+                    }]);
                 }]);
                 $q->where('leccion_id', 0)->where('activo', 'si'); // Módulos
             }])->get();
@@ -669,8 +673,13 @@ class CursoProgramadoController extends Controller
         $leccionIds = [];
         $pruebaIds = [];
         foreach ($curso->Curso->Lecciones as $modulo) {
+            // Recolectar pruebas del módulo
+            foreach ($modulo->Pruebas as $prueba) {
+                $pruebaIds[] = $prueba->id;
+            }
             foreach ($modulo->Clases as $clase) {
                 $leccionIds[] = $clase->id;
+                // Recolectar pruebas de la clase
                 foreach ($clase->Pruebas as $prueba) {
                     $pruebaIds[] = $prueba->id;
                 }
@@ -719,8 +728,12 @@ class CursoProgramadoController extends Controller
 
         $curso = CursoProgramado::with(['Curso' => function($r){
             $r->with(['Lecciones' => function($q){
-                $q->with(['Clases' => function($c) {
-                    $c->where('activo', 'si')->with('Pruebas.Examenes');
+                $q->with(['Pruebas' => function($p) {
+                    $p->where('activo', 'si');
+                }, 'Clases' => function($c) {
+                    $c->where('activo', 'si')->with(['Pruebas' => function($p) {
+                        $p->where('activo', 'si');
+                    }]);
                 }]);
                 $q->where('leccion_id', 0)->where('activo', 'si'); // Módulos
             }])->get();
@@ -729,8 +742,13 @@ class CursoProgramadoController extends Controller
         $leccionIds = [];
         $pruebaIds = [];
         foreach ($curso->Curso->Lecciones as $modulo) {
+             // Recolectar pruebas del módulo
+             foreach ($modulo->Pruebas as $prueba) {
+                $pruebaIds[] = $prueba->id;
+            }
             foreach ($modulo->Clases as $clase) {
                 $leccionIds[] = $clase->id;
+                // Recolectar pruebas de la clase
                 foreach ($clase->Pruebas as $prueba) {
                     $pruebaIds[] = $prueba->id;
                 }
