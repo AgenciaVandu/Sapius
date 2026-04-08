@@ -36,7 +36,8 @@
                                 <th class="text-center">Examen</th>
                                 <th class="text-center">Calificación Examen</th>
                             </tr>
-                        </thea                        @foreach ($modulos as $modulo)
+                        </thead>
+                        @foreach ($modulos as $modulo)
                             <tbody style="border-top: 2px solid #dee2e6;">
                                 <tr data-toggle="collapse" data-target="#module-{{ $modulo->id }}" aria-expanded="false" aria-controls="module-{{ $modulo->id }}" style="cursor: pointer; background-color: #f4f6f9;">
                                     <td colspan="5">
