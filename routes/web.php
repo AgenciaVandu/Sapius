@@ -136,6 +136,7 @@ Auth::routes();
 
 Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
     Route::post('users/{id}/unlock', 'UserController@unlock')->name('users.unlock');
+    Route::post('users/{id}/clear-mac', 'UserController@clearMac')->name('users.clearMac');
     Route::get('/', 'HomeController@admin')->name('admin');
     Route::get('/configuraciones', 'HomeController@configuracion')->name('admin.configuracion.index');
     Route::post('/configuraciones/upload', 'HomeController@uploadslide')->name('admin.configuracion.slide');
@@ -418,7 +419,7 @@ Route::group(['middleware' => ['instructor', 'restrict.mobile'], 'prefix' => 'in
 });
 
 //Rutas de alumno sin restricciones de mobile
-Route::group(['middleware' => ['alumno', 'check.blocked'], 'prefix' => 'alumno'], function () {
+Route::group(['middleware' => ['alumno', 'check.blocked', 'verify.mac'], 'prefix' => 'alumno'], function () {
     Route::post('/register-strike', 'UserController@registerStrike')->name('alumno.register-strike');
     Route::get('/', 'HomeController@index')->name('alumno.home');
     Route::get('/cursos/image/{file}', 'Cursos\CursoController@cursoPicture')->name('alumno.cursos.image');
@@ -447,7 +448,7 @@ Route::group(['middleware' => ['alumno', 'check.blocked'], 'prefix' => 'alumno']
     });
 
 //Rutas de alumno con restricciones de mobile
-Route::group(['middleware' => ['alumno', 'restrict.mobile', 'check.blocked'], 'prefix' => 'alumno'], function () {
+Route::group(['middleware' => ['alumno', 'restrict.mobile', 'check.blocked', 'verify.mac'], 'prefix' => 'alumno'], function () {
     Route::post('/users/profile', 'UserController@profile')->name('alumno.profile'); //{id}
     Route::get('/users/pase/{file}', 'UserController@pase')->name('alumno.pase');
     Route::get('/users/documento/{file}', 'UserController@documento')->name('alumno.documento');

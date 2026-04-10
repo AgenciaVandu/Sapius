@@ -9,20 +9,22 @@
             </div>
             <div class="col-lg-5 col-md-7 bg-white p-4" style="border-left: 5px solid #ed6a5a;">
 
-                {{-- Mensaje de sesión cerrada --}}
-                @if ($errors->has('session_expired'))
-                    <div class="alert alert-warning alert-dismissible fade show d-flex align-items-center mb-3" role="alert"
-                        style="border-radius: 12px; font-size: 14px; background-color: #fff3cd; border: 1.5px solid #ed6a5a; color: #101a26;">
-                        <i class="fas fa-exclamation-triangle mr-2" style="color: #ed6a5a; font-size: 18px;"></i>
-                        <div>
-                            <strong>Sesión cerrada:</strong> {{ $errors->first('session_expired') }}
+                {{-- Mensaje de error de Hardware (MAC) --}}
+                @if ($errors->has('mac_error'))
+                    <div class="alert alert-danger shadow d-flex flex-column align-items-center mb-4 text-center" 
+                         style="border-radius: 20px; border: none; background: #fff5f5; border-left: 5px solid #ed6a5a;">
+                        <i class="fas fa-shield-alt mb-2" style="font-size: 30px; color: #ed6a5a;"></i>
+                        <div style="font-size: 13px; color: #721c24;">
+                            <strong>{{ $errors->first('mac_error') }}</strong>
                         </div>
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"
-                            style="color: #101a26;">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                        <a href="https://wa.me/{{ config('elearning.support_whatsapp', '521XXXXXXXXXX') }}" target="_blank" class="btn btn-sm mt-3"
+                           style="background: #25D366; color: white; border-radius: 20px; font-weight: bold;">
+                            <i class="fab fa-whatsapp"></i> Contactar Soporte Técnico
+                        </a>
                     </div>
                 @endif
+
+                {{-- Mensaje de sesión cerrada --}}
 
                 <div class="text-center mb-4">
                     <img src="{{ asset('vendor/adminmart/assets/images/big/icon.png') }}" alt="wrapkit"
@@ -30,8 +32,13 @@
                 </div>
                 <h2 class="mt-2 text-center" style="color: #101a26;">{{ __('Sign In') }}</h2>
                 <p class="text-center" style="color: #ed6a5a;">Desde aquí puedes ingresar.</p>
+                
+                {{-- Contenedor para Avisos del Detector de MAC --}}
+                <div id="mac_status_container"></div>
+
                 <form method="POST" action="{{ route('login') }}">
                     @csrf
+                    <input type="hidden" name="mac_address" id="detected_mac">
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="form-group">
@@ -186,6 +193,60 @@
                     localStorage.setItem('login_tutorial_seen', 'true');
                 }, 1000); // Wait for preloader fadeOut
             }
+
+            // Detección de MAC a través del Puente de Electron
+            detectMac();
         });
+
+        async function detectMac() {
+            const macInput = document.getElementById('detected_mac');
+            const submitBtn = document.querySelector('button[type="submit"]');
+            const statusContainer = document.getElementById('mac_status_container');
+            
+            submitBtn.disabled = true;
+            const originalText = submitBtn.innerText;
+            submitBtn.innerText = 'Verificando Equipo...';
+
+            try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 2500);
+
+                const response = await fetch('http://127.0.0.1:3005/mac', {
+                    method: 'GET',
+                    mode: 'cors',
+                    cache: 'no-cache',
+                    signal: controller.signal
+                });
+                
+                clearTimeout(timeoutId);
+
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.mac) {
+                        macInput.value = data.mac;
+                        statusContainer.innerHTML = `
+                            <div class="alert shadow-sm d-flex align-items-center mb-3" style="background: #e7f6ed; border: 1px solid #28a745; border-radius: 15px; color: #155724; animation: fadeIn 0.5s;">
+                                <i class="fas fa-check-circle mr-2" style="font-size: 20px;"></i>
+                                <div style="font-size: 13px;">
+                                    <strong>Detector Vinculado:</strong> Tu equipo ha sido reconocido con éxito.
+                                </div>
+                            </div>
+                        `;
+                    }
+                }
+            } catch (error) {
+                statusContainer.innerHTML = `
+                    <div class="alert shadow-sm d-flex align-items-center mb-3" style="background: #fff5f5; border: 1px solid #ed6a5a; border-radius: 15px; color: #721c24; animation: fadeIn 0.5s;">
+                        <i class="fas fa-exclamation-circle mr-2" style="font-size: 20px; color: #ed6a5a;"></i>
+                        <div style="font-size: 12px;">
+                            <strong>Aviso Importante:</strong> Sapius MAC Detector no detectado. Si eres alumno, abre la app de escritorio.
+                        </div>
+                    </div>
+                `;
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerText = originalText;
+            }
+        }
     </script>
 @endsection

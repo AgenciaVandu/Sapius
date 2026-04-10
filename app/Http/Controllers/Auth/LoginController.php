@@ -7,6 +7,7 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use App\Rules\ValidRecaptcha;
 
@@ -89,6 +90,14 @@ class LoginController extends Controller
         Auth::user()->session_id = Session::getId();
         Auth::user()->save();
         $this->clearLoginAttempts($request);
+
+        // Almacenar la MAC en la sesión si viene en el request y NO está vacía
+        if ($request->filled('mac_address')) {
+            session(['sapius_mac' => $request->mac_address]);
+            Log::info("[LOGIN] MAC almacenada en sesión para User ID: " . Auth::id() . " - MAC: " . $request->mac_address);
+        } else {
+            Log::warning("[LOGIN] No se recibió MAC en el request para User ID: " . Auth::id());
+        }
 
         return $this->authenticated($request, $this->guard()->user())
             ?: redirect()->intended($this->redirectPath());

@@ -28,3 +28,7 @@ Route::post('sort/guias-nutricion','Api\SortController@manageableGuiasNutrition'
 
 // routes/web.php o api.php
 Route::get('/test-n8n', 'Api\N8nTestController@send')->name('test.n8n');
+
+// Electron MAC Detector Routes
+Route::post('/login', 'Api\AuthController@login');
+Route::middleware('auth:api')->post('/validate-mac', 'Api\AuthController@validateMac');

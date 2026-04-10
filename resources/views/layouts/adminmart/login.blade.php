@@ -87,6 +87,7 @@
             $(".preloader ").fadeOut();
         });
     </script>
+    @yield('javascript')
 </body>
 
 </html>

@@ -366,4 +366,24 @@ class UserController extends Controller
 
         return redirect()->back()->with('success', 'El usuario ha sido desbloqueado exitosamente.');
     }
+
+    /**
+     * Clear MAC address for a user.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\JsonResponse
+     */
+    public function clearMac($id)
+    {
+        $user = User::withoutGlobalScope('Activos')->find($id);
+
+        if (!$user) {
+             return redirect()->back()->with('error', 'Usuario no encontrado.');
+        }
+
+        $user->mac_address = null;
+        $user->save();
+
+        return redirect()->back()->with('success', 'La dirección MAC ha sido desvinculada exitosamente.');
+    }
 }
