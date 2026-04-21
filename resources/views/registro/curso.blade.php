@@ -62,7 +62,11 @@
                         $fecha_final = strtotime($unlockData->until_date);
                     }
                         
-                    $verifica_fecha = $hoy >= $fecha_inicial && $hoy <= $fecha_final; @endphp @if ($inscrito==null ||
+                    $childUnlocked = $modulo->Clases->contains(function($clase) use ($unlockedLessonsData) {
+                        return isset($unlockedLessonsData) && $unlockedLessonsData->has($clase->id);
+                    });
+                        
+                    $verifica_fecha = ($hoy >= $fecha_inicial && $hoy <= $fecha_final) || $childUnlocked; @endphp @if ($inscrito==null ||
                         ($inscrito !=null && $inscrito->aceptado == 'no'))
                         <a href="javascript:void(0)" class="list-group-item disabled">{{ $modulo->titulo }}</a>
                         @elseif($inscrito != null && $inscrito->aceptado == 'si')
