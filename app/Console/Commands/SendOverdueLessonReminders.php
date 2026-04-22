@@ -107,6 +107,12 @@ class SendOverdueLessonReminders extends Command
                 $completedLessonIds = $user->completedLessons()->wherePivot('curso_programado_id', $curso->id)->pluck('lecciones.id')->toArray();
                 $submittedHomeworkLessonIds = \App\Homework::where('user_id', $user->id)->pluck('leccion_id')->toArray();
 
+                // Get lessons specifically unlocked for this user
+                $unlockedLessonIds = \App\Models\Registro\LessonUnlock::where('user_id', $user->id)
+                    ->where('curso_programado_id', $curso->id)
+                    ->where('until_date', '>=', $now->toDateString())
+                    ->pluck('leccion_id')->toArray();
+
                 $pendingLessons = [];
 
                 // 4. Check against schedule (Modules and Classes)
@@ -114,9 +120,35 @@ class SendOverdueLessonReminders extends Command
                     // Find module in schedule (as fallback)
                     $moduleScheduleItem = $schedule->firstWhere('id', $modulo->id);
 
+                    // Check if the module is officially "closed" (past its end date)
+                    $moduleIsClosed = false;
+                    if ($moduleScheduleItem && isset($moduleScheduleItem['fecha_final'])) {
+                        try {
+                            $mEndFormat = 'd/m/Y';
+                            $mEndStr = $moduleScheduleItem['fecha_final'];
+                            if (isset($moduleScheduleItem['hora_final'])) {
+                                $mEndFormat .= ' H:i';
+                                $mEndStr .= ' ' . $moduleScheduleItem['hora_final'];
+                            }
+                            $moduleFechaFinal = \Carbon\Carbon::createFromFormat($mEndFormat, $mEndStr);
+                            if (!isset($moduleScheduleItem['hora_final'])) {
+                                $moduleFechaFinal->setTime(23, 59, 59);
+                            }
+                            
+                            if ($now->gt($moduleFechaFinal)) {
+                                $moduleIsClosed = true;
+                            }
+                        } catch (\Exception $e) { /* Fallback to not closed if weird date */ }
+                    }
+
                     foreach ($modulo->Clases as $clase) {
                         // Skip already completed or submitted
                         if (in_array($clase->id, $completedLessonIds) || in_array($clase->id, $submittedHomeworkLessonIds)) {
+                            continue;
+                        }
+
+                        // If the module is closed, skip unless there's an individual unlock for this specific lesson
+                        if ($moduleIsClosed && !in_array($clase->id, $unlockedLessonIds)) {
                             continue;
                         }
 

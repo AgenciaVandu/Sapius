@@ -37,7 +37,19 @@ class ReviewsController extends Controller
      */
     public function store(Request $request)
     {
-        Reviews::create($request->all());
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'rating' => 'required|integer|min:1|max:5',
+            'comment' => 'required|string',
+            'visible' => 'nullable|boolean',
+            'course_id' => 'nullable|integer',
+        ]);
+
+        $data = $request->only(['rating', 'user_id', 'visible', 'course_id']);
+        $data['name'] = strip_tags($request->name);
+        $data['comment'] = strip_tags($request->comment);
+
+        Reviews::create($data);
 
         return redirect()->route('admin.reviews.index')->with('success', 'Review created successfully.');
     }
@@ -74,8 +86,21 @@ class ReviewsController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'rating' => 'required|integer|min:1|max:5',
+            'comment' => 'required|string',
+            'visible' => 'nullable|boolean',
+            'course_id' => 'nullable|integer',
+        ]);
+
         $review = Reviews::findOrFail($id);
-        $review->update($request->all());
+        
+        $data = $request->only(['rating', 'user_id', 'visible', 'course_id']);
+        $data['name'] = strip_tags($request->name);
+        $data['comment'] = strip_tags($request->comment);
+
+        $review->update($data);
 
         return redirect()->route('admin.reviews.index')->with('success', 'Review updated successfully.');
     }

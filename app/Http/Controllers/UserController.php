@@ -90,12 +90,20 @@ class UserController extends Controller
 
     public function update(Request $request, $id)
     {
+        $nameRegex = 'regex:/^[a-zA-Z0-9\sáéíóúÁÉÍÓÚñÑ]+$/u';
+        $request->validate([
+            'nombre' => ['required', 'string', $nameRegex, 'max:255'],
+            'apellido' => ['required', 'string', $nameRegex, 'max:255'],
+            'usuario' => ['required', 'string', 'alpha_dash', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255'],
+        ]);
+
         $user = User::with('roles')->find($id);
 
-        $user->nombre = $request->nombre;
-        $user->apellido = $request->apellido;
-        $user->username = $request->usuario;
-        $user->email = $request->email;
+        $user->nombre = strip_tags($request->nombre);
+        $user->apellido = strip_tags($request->apellido);
+        $user->username = strip_tags($request->usuario);
+        $user->email = strip_tags($request->email);
 
         $user->roles()->updateExistingPivot($user->roles[0]->id, ['role_id' => $request->rol_id]);
 
@@ -105,15 +113,25 @@ class UserController extends Controller
 
     public function updateComplete(Request $request, $id)
     {
+        $nameRegex = 'regex:/^[a-zA-Z0-9\sáéíóúÁÉÍÓÚñÑ]+$/u';
+        $request->validate([
+            'nombre' => ['required', 'string', $nameRegex, 'max:255'],
+            'apellido' => ['required', 'string', $nameRegex, 'max:255'],
+            'telefono' => ['nullable', 'string', 'max:20'],
+            'folio' => ['nullable', 'string', 'max:100'],
+            'universidad_procedencia' => ['nullable', 'string', 'max:255'],
+            'especialidad' => ['nullable', 'string', 'max:255'],
+        ]);
+
         $user = User::with('roles')->find($id);
 
-        $user->nombre = $request->nombre;
-        $user->apellido = $request->apellido;
+        $user->nombre = strip_tags($request->nombre);
+        $user->apellido = strip_tags($request->apellido);
         $user->fecha_sustentacion = $request->fecha_sustentacion;
-        $user->telefono = $request->telefono;
-        $user->folio = $request->folio;
-        $user->universidad_procedencia = $request->universidad_procedencia;
-        $user->especialidad = $request->especialidad;
+        $user->telefono = strip_tags($request->telefono);
+        $user->folio = strip_tags($request->folio);
+        $user->universidad_procedencia = strip_tags($request->universidad_procedencia);
+        $user->especialidad = strip_tags($request->especialidad);
         $user->foto = $this->fotoUpload($request, $user->foto);
         $user->documento_identificacion = $this->DocumentoUpload($request, $user->documento_identificacion);
         $user->pase_ingreso = $this->paseUpload($request, $user->pase_ingreso);
@@ -272,11 +290,18 @@ class UserController extends Controller
 
     public function informacion(Request $request)
     {
+        $request->validate([
+            'nombre' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'telefono' => 'nullable|string|max:20',
+            'mensaje' => 'required|string',
+        ]);
+
         $datos = [
-            'nombre' => $request->nombre,
-            'email' => $request->email,
-            'telefono' => $request->telefono,
-            'mensaje' => $request->mensaje
+            'nombre' => strip_tags($request->nombre),
+            'email' => strip_tags($request->email),
+            'telefono' => strip_tags($request->telefono),
+            'mensaje' => strip_tags($request->mensaje)
         ];
 
         $correo = config('mail.to_support');

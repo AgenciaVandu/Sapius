@@ -79,7 +79,6 @@ class LoginController extends Controller
      */
     protected function sendLoginResponse(Request $request)
     {
-        //$this->validateLogin($request);
         $request->session()->regenerate();
         $previous_session = Auth::User()->session_id;
         if ($previous_session) {
@@ -97,8 +96,10 @@ class LoginController extends Controller
     protected function validateLogin(Request $request)
     {
         $request->validate([
+            $this->username() => 'required|string',
+            'password' => 'required|string',
             'g-recaptcha-response' => ['required', new ValidRecaptcha],
-        ],$this->messages());
+        ], $this->messages());
     }
 
     public function messages()
