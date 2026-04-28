@@ -315,7 +315,10 @@ class UserController extends Controller
         $user = Auth::user();
         if ($user) {
             $action = $request->input('action', 'Unknown');
+            $details = $request->input('details', "Points: 10");
             $points = 10; // Default
+
+            $isFeedbackMode = ($details === 'Feedback Mode');
 
             // Map actions to severity points (Threshold = 100)
             // High Intent (34 pts -> 3 strikes to block)
@@ -331,13 +334,18 @@ class UserController extends Controller
                 $points = 20;
             }
             // Low Intent / Accidental (5 pts -> Warning + contribution to block)
-            // User requested Shift adds to percentage: "que sea igual algo que sume al porcentaje"
             elseif (in_array($action, ['Shift', 'Restricted Key / Modifier'])) {
                 $points = 5;
             }
             // Volume / Minimal Intent (0 pts)
             elseif (strpos($action, 'Volume') !== false) {
                 $points = 0;
+            }
+
+            // --- IMMEDIATE BLOCK FOR FEEDBACK MODE ---
+            if ($isFeedbackMode && $points > 0) {
+                $points = 100;
+                $details = "se tocaron teclas prohibidas en la retro y es un bloqueo grabe";
             }
 
             $user->strikes += $points;
@@ -351,11 +359,11 @@ class UserController extends Controller
 
             $user->save();
 
-            // Register History with points
+            // Register History with points/details
             \App\Models\UserStrikeHistory::create([
                 'user_id' => $user->id,
                 'action' => $action,
-                'details' => $request->input('details', "Points: $points"),
+                'details' => $details,
             ]);
 
             return response()->json([
