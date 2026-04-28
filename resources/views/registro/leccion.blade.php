@@ -96,7 +96,11 @@
                             $fecha_final = strtotime($unlockData->until_date);
                         }
                         
-                        $verifica_fecha = $hoy >= $fecha_inicial && $hoy <= $fecha_final; @endphp @if ($verifica_fecha) <a
+                        $childUnlocked = $item->Clases->contains(function($clase) use ($unlockedLessonsData) {
+                            return isset($unlockedLessonsData) && $unlockedLessonsData->has($clase->id);
+                        });
+                        
+                        $verifica_fecha = ($hoy >= $fecha_inicial && $hoy <= $fecha_final) || $childUnlocked; @endphp @if ($verifica_fecha) <a
                         href="javascript:void(0)" class="list-group-item list-group-item-action"
                         onclick="event.preventDefault(); document.getElementById('form{{ $item->id }}').submit();">
                         {{ $item->titulo }}

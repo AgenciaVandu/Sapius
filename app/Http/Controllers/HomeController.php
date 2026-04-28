@@ -306,9 +306,9 @@ class HomeController extends Controller
 
         Reviews::create([
             'user_id' => Auth::id(),
-            'name' => $request->name,
+            'name' => strip_tags($request->name),
             'rating' => $rating,
-            'comment' => $request->comment,
+            'comment' => strip_tags($request->comment),
             'visible' => $visible,
         ]);
 

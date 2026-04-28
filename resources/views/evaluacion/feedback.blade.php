@@ -7,10 +7,21 @@
         @php
             $str_time = $examen->Prueba->tiempo_vigencia;
             sscanf($str_time, '%d:%d:%d', $hours, $minutes, $seconds);
+            $duration_seconds = isset($hours) ? $hours * 3600 + $minutes * 60 + $seconds : $minutes * 60 + $seconds;
+
+            $start_time = \Carbon\Carbon::parse($examen->updated_at);
+            $now = \Carbon\Carbon::now();
+            $elapsed_seconds = $now->diffInSeconds($start_time);
+            $remaining_seconds = $duration_seconds - $elapsed_seconds;
+
+            // Ensure we don't pass negative time if it's already over
+            $remaining_seconds = $remaining_seconds > 0 ? $remaining_seconds : 0;
+
             $time_minutes = isset($hours) ? $hours * 60 + $minutes : $minutes;
         @endphp
         <input type="hidden" id="tiempo" value="{{ $time_minutes }}">
-        <input type="hidden" id="tiempo-inicio" value="{{ date('Y-m-d H:i:s') }}">
+        <input type="hidden" id="tiempo_segundos" value="{{ $remaining_seconds }}">
+        <input type="hidden" id="tiempo-inicio" value="{{ $examen->updated_at }}">
     </div>
     <input type="text"
         value="Se ha detectado el uso indebido
@@ -120,10 +131,11 @@ acceso permanente a la plataforma."
         // Timer elements might not be present or needed in feedback exactly like exam, but keeping existing non-breaking code
         if ($('#tiempo').length) {
             timer.minutes = $('#tiempo').val();
+            timer.seconds = $('#tiempo_segundos').val();
             timer.div_show = $('#timer');
             timer.form_redirect = $('#form-redirect');
             timer.start_at = $('#tiempo-inicio').val();
-            // ShowTime(timer); // Timer might not be relevant for feedback view in same way
+            ShowTime(timer);
         }
 
 

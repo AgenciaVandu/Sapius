@@ -90,12 +90,20 @@ class UserController extends Controller
 
     public function update(Request $request, $id)
     {
+        $nameRegex = 'regex:/^[a-zA-Z0-9\sáéíóúÁÉÍÓÚñÑ]+$/u';
+        $request->validate([
+            'nombre' => ['required', 'string', $nameRegex, 'max:255'],
+            'apellido' => ['required', 'string', $nameRegex, 'max:255'],
+            'usuario' => ['required', 'string', 'alpha_dash', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255'],
+        ]);
+
         $user = User::with('roles')->find($id);
 
-        $user->nombre = $request->nombre;
-        $user->apellido = $request->apellido;
-        $user->username = $request->usuario;
-        $user->email = $request->email;
+        $user->nombre = strip_tags($request->nombre);
+        $user->apellido = strip_tags($request->apellido);
+        $user->username = strip_tags($request->usuario);
+        $user->email = strip_tags($request->email);
 
         $user->roles()->updateExistingPivot($user->roles[0]->id, ['role_id' => $request->rol_id]);
 
@@ -105,15 +113,25 @@ class UserController extends Controller
 
     public function updateComplete(Request $request, $id)
     {
+        $nameRegex = 'regex:/^[a-zA-Z0-9\sáéíóúÁÉÍÓÚñÑ]+$/u';
+        $request->validate([
+            'nombre' => ['required', 'string', $nameRegex, 'max:255'],
+            'apellido' => ['required', 'string', $nameRegex, 'max:255'],
+            'telefono' => ['nullable', 'string', 'max:20'],
+            'folio' => ['nullable', 'string', 'max:100'],
+            'universidad_procedencia' => ['nullable', 'string', 'max:255'],
+            'especialidad' => ['nullable', 'string', 'max:255'],
+        ]);
+
         $user = User::with('roles')->find($id);
 
-        $user->nombre = $request->nombre;
-        $user->apellido = $request->apellido;
+        $user->nombre = strip_tags($request->nombre);
+        $user->apellido = strip_tags($request->apellido);
         $user->fecha_sustentacion = $request->fecha_sustentacion;
-        $user->telefono = $request->telefono;
-        $user->folio = $request->folio;
-        $user->universidad_procedencia = $request->universidad_procedencia;
-        $user->especialidad = $request->especialidad;
+        $user->telefono = strip_tags($request->telefono);
+        $user->folio = strip_tags($request->folio);
+        $user->universidad_procedencia = strip_tags($request->universidad_procedencia);
+        $user->especialidad = strip_tags($request->especialidad);
         $user->foto = $this->fotoUpload($request, $user->foto);
         $user->documento_identificacion = $this->DocumentoUpload($request, $user->documento_identificacion);
         $user->pase_ingreso = $this->paseUpload($request, $user->pase_ingreso);
@@ -272,11 +290,18 @@ class UserController extends Controller
 
     public function informacion(Request $request)
     {
+        $request->validate([
+            'nombre' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'telefono' => 'nullable|string|max:20',
+            'mensaje' => 'required|string',
+        ]);
+
         $datos = [
-            'nombre' => $request->nombre,
-            'email' => $request->email,
-            'telefono' => $request->telefono,
-            'mensaje' => $request->mensaje
+            'nombre' => strip_tags($request->nombre),
+            'email' => strip_tags($request->email),
+            'telefono' => strip_tags($request->telefono),
+            'mensaje' => strip_tags($request->mensaje)
         ];
 
         $correo = config('mail.to_support');
@@ -290,7 +315,10 @@ class UserController extends Controller
         $user = Auth::user();
         if ($user) {
             $action = $request->input('action', 'Unknown');
+            $details = $request->input('details', "Points: 10");
             $points = 10; // Default
+
+            $isFeedbackMode = ($details === 'Feedback Mode');
 
             // Map actions to severity points (Threshold = 100)
             // High Intent (34 pts -> 3 strikes to block)
@@ -306,13 +334,18 @@ class UserController extends Controller
                 $points = 20;
             }
             // Low Intent / Accidental (5 pts -> Warning + contribution to block)
-            // User requested Shift adds to percentage: "que sea igual algo que sume al porcentaje"
             elseif (in_array($action, ['Shift', 'Restricted Key / Modifier'])) {
                 $points = 5;
             }
             // Volume / Minimal Intent (0 pts)
             elseif (strpos($action, 'Volume') !== false) {
                 $points = 0;
+            }
+
+            // --- IMMEDIATE BLOCK FOR FEEDBACK MODE ---
+            if ($isFeedbackMode && $points > 0) {
+                $points = 100;
+                $details = "se tocaron teclas prohibidas en la retro y es un bloqueo grabe";
             }
 
             $user->strikes += $points;
@@ -326,11 +359,11 @@ class UserController extends Controller
 
             $user->save();
 
-            // Register History with points
+            // Register History with points/details
             \App\Models\UserStrikeHistory::create([
                 'user_id' => $user->id,
                 'action' => $action,
-                'details' => $request->input('details', "Points: $points"),
+                'details' => $details,
             ]);
 
             return response()->json([

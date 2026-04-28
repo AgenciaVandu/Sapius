@@ -1,6 +1,77 @@
 @extends('layouts.adminmart.default')
 
 @section('content')
+    @php
+        $recentHistory = \App\Models\UserStrikeHistory::where('user_id', Auth::id())
+            ->latest()
+            ->take(10)
+            ->get();
+
+        $totalSeverity = 0;
+        $itemsCount = 0;
+
+        foreach ($recentHistory as $h) {
+            $act = $h->action;
+            $pts = 10; // BASE
+
+            // High Intent
+            if (
+                in_array($act, [
+                    'Copy',
+                    'Cut',
+                    'Paste',
+                    'PrintScreen',
+                    'Save',
+                    'View Source',
+                    'DevTools',
+                    'F12',
+                ])
+            ) {
+                $pts = 100;
+            }
+            // Medium
+            elseif ($act === 'Right Click') {
+                $pts = 50;
+            }
+            // Low / Accidental
+            elseif (in_array($act, ['Shift', 'Restricted Key / Modifier'])) {
+                $pts = 10;
+            }
+            // Very Low
+            elseif (strpos($act, 'Volume') !== false) {
+                $pts = 0;
+            }
+
+            $totalSeverity += $pts;
+            $itemsCount++;
+        }
+
+        $avgSeverity = $itemsCount > 0 ? $totalSeverity / $itemsCount : 0;
+
+        $isGraveBlock = $recentHistory->contains(function ($h) {
+            return strpos($h->details, 'retro') !== false && strpos($h->details, 'grabe') !== false;
+        });
+
+        $semaphoreColor = '#28a745'; // Green
+        $semaphoreText = 'Baja Intencionalidad (Posibles Errores)';
+        $semaphoreIcon = 'fa-check-circle';
+
+        if ($isGraveBlock) {
+            $avgSeverity = 100;
+            $semaphoreColor = '#4b0000'; // Dark Blood Red
+            $semaphoreText = 'VIOLACIÓN CRÍTICA DE SEGURIDAD (MODO RETROALIMENTACIÓN)';
+            $semaphoreIcon = 'fa-skull-crossbones';
+        } elseif ($avgSeverity >= 70) {
+            $semaphoreColor = '#dc3545'; // Red
+            $semaphoreText = 'Alta Intencionalidad (Acciones Prohibidas Detectadas)';
+            $semaphoreIcon = 'fa-exclamation-circle';
+        } elseif ($avgSeverity >= 30) {
+            $semaphoreColor = '#ffc107'; // Yellow
+            $semaphoreText = 'Intencionalidad Media (Precaución)';
+            $semaphoreIcon = 'fa-exclamation-triangle';
+        }
+    @endphp
+
     <div class="row justify-content-center align-items-center" style="min-height: 80vh;">
         <div class="col-md-8 text-center">
             <div class="card shadow-lg p-5">
@@ -8,9 +79,16 @@
                     <div class="mb-4">
                         <i data-feather="lock" class="text-danger" style="width: 80px; height: 80px;"></i>
                     </div>
-                    <h2 class="card-title text-danger font-weight-bold">Cuenta Bloqueada</h2>
+                    <h2 class="card-title font-weight-bold" style="color: {{ $isGraveBlock ? '#4b0000' : '#dc3545' }};">
+                        {{ $isGraveBlock ? 'BLOQUEO POR VIOLACIÓN DE SEGURIDAD' : 'Cuenta Bloqueada' }}
+                    </h2>
                     <h5 class="text-dark mb-4">
-                        Hemos detectado actividad sospechosa en tu cuenta (intentos reiterados de uso indebido).
+                        @if ($isGraveBlock)
+                            Se ha detectado una violación crítica de los términos de servicio y derechos de autor durante la
+                            retroalimentación de tu evaluación.
+                        @else
+                            Hemos detectado actividad sospechosa en tu cuenta (intentos reiterados de uso indebido).
+                        @endif
                     </h5>
                     <p class="card-text lead mt-3 text-muted">
                         Por motivos de seguridad y cumpliendo con nuestros términos de servicio, tu acceso ha sido
@@ -27,67 +105,6 @@
                         </p>
                     </div>
 
-                    @php
-                        $recentHistory = \App\Models\UserStrikeHistory::where('user_id', Auth::id())
-                            ->latest()
-                            ->take(10)
-                            ->get();
-
-                        $totalSeverity = 0;
-                        $itemsCount = 0;
-
-                        foreach ($recentHistory as $h) {
-                            $act = $h->action;
-                            $pts = 10; // BASE
-
-                            // High Intent
-                            if (
-                                in_array($act, [
-                                    'Copy',
-                                    'Cut',
-                                    'Paste',
-                                    'PrintScreen',
-                                    'Save',
-                                    'View Source',
-                                    'DevTools',
-                                    'F12',
-                                ])
-                            ) {
-                                $pts = 100;
-                            }
-                            // Medium
-                            elseif ($act === 'Right Click') {
-                                $pts = 50;
-                            }
-                            // Low / Accidental
-                            elseif (in_array($act, ['Shift', 'Restricted Key / Modifier'])) {
-                                $pts = 10;
-                            }
-                            // Very Low
-                            elseif (strpos($act, 'Volume') !== false) {
-                                $pts = 0;
-                            }
-
-                            $totalSeverity += $pts;
-                            $itemsCount++;
-                        }
-
-                        $avgSeverity = $itemsCount > 0 ? $totalSeverity / $itemsCount : 0;
-
-                        $semaphoreColor = '#28a745'; // Green
-                        $semaphoreText = 'Baja Intencionalidad (Posibles Errores)';
-                        $semaphoreIcon = 'fa-check-circle';
-
-                        if ($avgSeverity >= 70) {
-                            $semaphoreColor = '#dc3545'; // Red
-                            $semaphoreText = 'Alta Intencionalidad (Acciones Prohibidas Detectadas)';
-                            $semaphoreIcon = 'fa-exclamation-circle';
-                        } elseif ($avgSeverity >= 30) {
-                            $semaphoreColor = '#ffc107'; // Yellow
-                            $semaphoreText = 'Intencionalidad Media (Precaución)';
-                            $semaphoreIcon = 'fa-exclamation-triangle';
-                        }
-                    @endphp
 
                     <div class="card mb-4" style="border: 2px solid {{ $semaphoreColor }};">
                         <div class="card-body py-3">
@@ -123,6 +140,7 @@
                                     <tr>
                                         <th scope="col">Hora</th>
                                         <th scope="col">Acción Detectada</th>
+                                        <th scope="col">Observaciones</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -179,6 +197,7 @@
                                             <td class="align-middle">{{ $record->created_at->format('H:i:s') }}</td>
                                             <td class="text-danger font-weight-bold align-middle">{!! $visual !!}
                                             </td>
+                                            <td class="align-middle text-muted">{{ $record->details }}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>

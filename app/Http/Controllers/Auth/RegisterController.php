@@ -45,6 +45,7 @@ class RegisterController extends Controller
     public function __construct()
     {
         $this->middleware('guest');
+        $this->middleware('throttle:5,1')->only('register');
     }
 
     /**
@@ -55,12 +56,13 @@ class RegisterController extends Controller
      */
     protected function validator(array $data)
     {
+        $nameRegex = 'regex:/^[a-zA-Z0-9\sáéíóúÁÉÍÓÚñÑ]+$/u';
         return Validator::make($data, [
-            'nombre' => ['required', 'string', 'max:255'],
-            'apellido' => ['required', 'string', 'max:255'],
-            'username' => ['required', 'string', 'max:255'],
+            'nombre' => ['required', 'string', $nameRegex, 'max:255'],
+            'apellido' => ['required', 'string', $nameRegex, 'max:255'],
+            'username' => ['required', 'string', 'alpha_dash', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            /* 'g-recaptcha-response' => ['required', new ValidRecaptcha], */
+            'g-recaptcha-response' => ['required', new ValidRecaptcha],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
     }
