@@ -42,11 +42,21 @@
                                     <div style="text-align:center">
                                         <p><b>¡Buenos días, {{ $inscripcion->User->nombre_completo }}!</b></p>
                                         <p><br></p>
-                                        <p><b>Confirmamos la recepción de tu pago, por el cual ya cuentas con acceso a los {{ $inscripcion->CursoProgramado->identificador }}.</b></p>
+                                        <p><b>Confirmamos la recepción de tu pago, por el cual ya cuentas con acceso a: {{ $inscripcion->CursoProgramado->identificador }}.</b></p>
                                         <p><b>Usuario: </b> {{ $inscripcion->User->username }}</p>
-                                        <p><i>Estos simuladores se encuentran divididos en tres áreas y cada examen incluye dos intentos con su respectiva retroalimentación.</i></p>
-                                        <p>Te compartimos un documento PDF adjunto con las instrucciones para ingresar a la plataforma y al apartado de simuladores. En caso de que presentes alguna duda respecto al uso de la plataforma, puedes comunicarte a <b>Sapius Soporte vía WhatsApp al 999 364 8594.</b></p>
-                                        <p><u>Nota: Estos simuladores se abren el {{ \Carbon\Carbon::parse($inscripcion->CursoProgramado->fecha_inicio)->translatedFormat('d \d\e F') }} y se cierran el {{ \Carbon\Carbon::parse($inscripcion->CursoProgramado->fecha_fin)->translatedFormat('d \d\e F') }} a las 11:59 pm con todo y retroalimentación.</u></p>
+                                        
+                                        @if($inscripcion->CursoProgramado->category && $inscripcion->CursoProgramado->category->name == 'Guias')
+                                            <p><i>Esta guía se encuentra disponible para su descarga y consulta inmediata en tu panel de alumno.</i></p>
+                                            <p>Te compartimos un documento PDF adjunto con las instrucciones para ingresar a la plataforma y descargar tu guía. En caso de que presentes alguna duda, comunícate a <b>Sapius Soporte vía WhatsApp al 999 364 8594.</b></p>
+                                        @elseif($inscripcion->CursoProgramado->category && $inscripcion->CursoProgramado->category->name == 'Simuladores')
+                                            <p><i>Estos simuladores se encuentran divididos en tres áreas y cada examen incluye dos intentos con su respectiva retroalimentación.</i></p>
+                                            <p>Te compartimos un documento PDF adjunto con las instrucciones para ingresar a la plataforma y al apartado de simuladores. En caso de que presentes alguna duda, comunícate a <b>Sapius Soporte vía WhatsApp al 999 364 8594.</b></p>
+                                        @else
+                                            <p><i>Ya puedes acceder a todas las lecciones, videos y material complementario de tu curso.</i></p>
+                                            <p>Te compartimos un documento PDF adjunto con las instrucciones para ingresar a la plataforma y comenzar tus clases. En caso de que presentes alguna duda, comunícate a <b>Sapius Soporte vía WhatsApp al 999 364 8594.</b></p>
+                                        @endif
+
+                                        <p><u>Nota: El acceso se abre el {{ \Carbon\Carbon::parse($inscripcion->CursoProgramado->fecha_inicio)->translatedFormat('d \d\e F') }} y se cierra el {{ \Carbon\Carbon::parse($inscripcion->CursoProgramado->fecha_fin)->translatedFormat('d \d\e F') }} a las 11:59 pm.</u></p>
                                         <p>📌 Factura</p>
                                         <p>Si requieres factura, favor de enviarnos tu Constancia de Situación Fiscal antes del día 25 del mes en curso.</p>
                                         <hr>

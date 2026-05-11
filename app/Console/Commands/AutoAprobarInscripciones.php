@@ -48,7 +48,7 @@ class AutoAprobarInscripciones extends Command
             ->whereHas('CursoProgramado', function($query) {
                 $query->where('fecha_fin', '>=', now()); // Solo cursos que no han finalizado
             })
-            ->with(['User', 'CursoProgramado'])
+            ->with(['User', 'CursoProgramado.category'])
             ->get();
 
         $count = $inscripciones->count();
