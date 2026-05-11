@@ -14,7 +14,7 @@ class Inscripcion extends Model
     }
 
     public function CursoProgramado(){
-        return $this->hasOne('App\Models\Registro\CursoProgramado','id','curso_programado_id');
+        return $this->belongsTo('App\Models\Registro\CursoProgramado','curso_programado_id','id');
     }
 
     //Relacion con user

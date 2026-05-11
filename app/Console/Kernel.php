@@ -28,6 +28,7 @@ class Kernel extends ConsoleKernel
         //          ->hourly();
         $schedule->command('usuarios:verificar')->mondays()->at('08:00');
         $schedule->command('reminders:overdue-lessons')->dailyAt('08:00');
+        $schedule->command('inscripciones:auto-aprobar')->everyFifteenMinutes();
     }
 
     /**
