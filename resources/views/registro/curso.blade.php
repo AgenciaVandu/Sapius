@@ -47,45 +47,73 @@
                     ->values();
                     @endphp
 
+                <div class="list-group list-group-custom">
                     @foreach ($modulos as $modulo)
-                    @php
-                    $item_contenido = $contenido->firstWhere('id', $modulo->id);
-                    $fecha_inicial = isset($item_contenido['fecha_inicial'])
-                    ? strtotime(str_replace('/', '-', $item_contenido['fecha_inicial']))
-                    : null;
-                    $fecha_final = isset($item_contenido['fecha_final'])
-                    ? (isset($item_contenido['hora_final']) ? strtotime(str_replace('/', '-', $item_contenido['fecha_final'].' '.$item_contenido['hora_final'])) : strtotime(str_replace('/', '-', $item_contenido['fecha_final'].' 23:59:59')))
-                    : 0; 
-                        
-                    $unlockData = isset($unlockedLessonsData) ? $unlockedLessonsData->get($modulo->id) : null;
-                    if ($unlockData) {
-                        $fecha_final = strtotime($unlockData->until_date);
-                    }
-                        
-                    $childUnlocked = $modulo->Clases->contains(function($clase) use ($unlockedLessonsData) {
-                        return isset($unlockedLessonsData) && $unlockedLessonsData->has($clase->id);
-                    });
-                        
-                    $verifica_fecha = ($hoy >= $fecha_inicial && $hoy <= $fecha_final) || $childUnlocked; @endphp @if ($inscrito==null ||
-                        ($inscrito !=null && $inscrito->aceptado == 'no'))
-                        <a href="javascript:void(0)" class="list-group-item disabled">{{ $modulo->titulo }}</a>
-                        @elseif($inscrito != null && $inscrito->aceptado == 'si')
-                        @if ($verifica_fecha)
-                        <a href="javascript:void(0)" class="list-group-item"
-                            onclick="event.preventDefault(); document.getElementById('form{{ $modulo->id }}').submit();">
-                            {{ $modulo->titulo }}
-                        </a>
-                        <form method="POST" action="{{ route('leccion.detallada') }}" id="form{{ $modulo->id }}">
-                            @csrf
-                            <input name="leccion_id" type="hidden" value="{{ $modulo->id }}">
-                            <input name="curso_programado_id" type="hidden" value="{{ $curso_programado->id }}">
-                            <input name="inscripcion_id" type="hidden" value="{{ $inscrito->id }}">
-                        </form>
+                        @php
+                            $item_contenido = $contenido->firstWhere('id', $modulo->id);
+                            $fecha_inicial = isset($item_contenido['fecha_inicial']) ? strtotime(str_replace('/', '-', $item_contenido['fecha_inicial'])) : null;
+                            $fecha_final = isset($item_contenido['fecha_final']) ? (isset($item_contenido['hora_final']) ? strtotime(str_replace('/', '-', $item_contenido['fecha_final'] . ' ' . $item_contenido['hora_final'])) : strtotime(str_replace('/', '-', $item_contenido['fecha_final'] . ' 23:59:59'))) : 0;
+
+                            $unlockData = isset($unlockedLessonsData) ? $unlockedLessonsData->get($modulo->id) : null;
+                            if ($unlockData) {
+                                $fecha_final = strtotime($unlockData->until_date);
+                            }
+
+                            $childUnlocked = $modulo->Clases->contains(function ($clase) use ($unlockedLessonsData) {
+                                return isset($unlockedLessonsData) && $unlockedLessonsData->has($clase->id);
+                            });
+
+                            $verifica_fecha = ($hoy >= $fecha_inicial && $hoy <= $fecha_final) || $childUnlocked;
+                            $isAccepted = $inscrito != null && $inscrito->aceptado == 'si';
+                        @endphp
+
+                        @if ($isAccepted && $verifica_fecha)
+                            <a href="javascript:void(0)"
+                                class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-3 mb-2 shadow-sm"
+                                onclick="event.preventDefault(); document.getElementById('form{{ $modulo->id }}').submit();"
+                                style="border-left: 4px solid #002146 !important; border-radius: 8px; transition: all 0.2s ease-in-out; background-color: #ffffff;">
+                                <div class="d-flex align-items-center">
+                                    <div class="icon-wrapper mr-3 d-flex align-items-center justify-content-center"
+                                        style="width: 40px; height: 40px; border-radius: 50%; background-color: #e3f2fd;">
+                                        <i class="fas fa-folder text-primary" style="font-size: 0.9rem;"></i>
+                                    </div>
+                                    <div>
+                                        <span class="font-weight-bold text-dark d-block">{{ $modulo->titulo }}</span>
+                                        <small class="text-muted">Módulo disponible</small>
+                                    </div>
+                                </div>
+                                <i class="fas fa-chevron-right text-muted small"></i>
+                            </a>
+                            <form method="POST" action="{{ route('leccion.detallada') }}" id="form{{ $modulo->id }}">
+                                @csrf
+                                <input name="leccion_id" type="hidden" value="{{ $modulo->id }}">
+                                <input name="curso_programado_id" type="hidden" value="{{ $curso_programado->id }}">
+                                <input name="inscripcion_id" type="hidden" value="{{ $inscrito->id }}">
+                            </form>
                         @else
-                        <a href="javascript:void(0)" class="list-group-item disabled">{{ $modulo->titulo }}</a>
+                            <div class="list-group-item d-flex justify-content-between align-items-center py-3 mb-2"
+                                style="background-color: #fcfcfc; border-radius: 8px; border-left: 4px solid #dee2e6 !important; opacity: 0.8;">
+                                <div class="d-flex align-items-center">
+                                    <div class="icon-wrapper mr-3 d-flex align-items-center justify-content-center"
+                                        style="width: 40px; height: 40px; border-radius: 50%; background-color: #f8f9fa; color: #adb5bd;">
+                                        <i class="fas fa-lock" style="font-size: 0.9rem;"></i>
+                                    </div>
+                                    <div>
+                                        <span class="font-weight-medium text-muted d-block">{{ $modulo->titulo }}</span>
+                                        <small class="text-muted">
+                                            @if (!$isAccepted)
+                                                Aprobación pendiente
+                                            @else
+                                                No disponible aún
+                                            @endif
+                                        </small>
+                                    </div>
+                                </div>
+                                <span class="badge badge-light text-muted p-2">Bloqueado</span>
+                            </div>
                         @endif
-                        @endif
-                        @endforeach
+                    @endforeach
+                </div>
                 </div>
             </div>
             <div class="card-footer text-muted"></div>
