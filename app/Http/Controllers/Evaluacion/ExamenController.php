@@ -128,13 +128,10 @@ class ExamenController extends Controller
         //valimos si llegamos al final de la paginacion
         $final = $preguntas->currentPage() == $preguntas->lastPage();
 
-        //solictud de nuevas respuestas para la paginacion
+        // solictud de nuevas respuestas para la paginacion
         $preguntasAll = Pregunta::with(['GrupoPreguntas' => function ($q) use ($request) {
-            $q->with(['Respuestas' => function ($q1) {
-                    $q1->where('activo', 'si');
-                }
-                    ])->where('prueba_id', $request->prueba_id);
-            }])->where('activo', 'si')
+            $q->where('prueba_id', $request->prueba_id);
+        }])->where('activo', 'si')
             ->where('prueba_id', $request->prueba_id)
             ->select('slug')
             ->inRandomOrder(Auth::user()->id)
@@ -207,23 +204,28 @@ class ExamenController extends Controller
 
         $respuestas = collect(json_decode($examen->respuestas_json));
 
+        // Optimización: Traer solo las respuestas necesarias y indexarlas por una llave única
         $respuestas_db = Respuesta::with(['Pregunta' => function ($q1) use ($examen) {
             $q1->where('prueba_id', $examen->prueba_id);
-        }])->where('correcto', 1)->where('activo', 'si')->get();
+        }])
+        ->where('correcto', 1)
+        ->where('activo', 'si')
+        ->get()
+        ->keyBy(function ($item) {
+            return $item->pregunta_id . '-' . $item->id;
+        });
 
         $respuestas->each(function ($r, $key) use ($respuestas_db, $examen) {
-            $v = $respuestas_db->search(function ($rdb, $key) use ($r) {
-                    return $rdb->id == $r->value && $rdb->pregunta_id == $r->name;
+            $busqueda = $r->name . '-' . $r->value;
+            
+            if ($respuestas_db->has($busqueda)) {
+                $r_db = $respuestas_db->get($busqueda);
+                $examen->total_correctas++;
+                if (isset($r_db->Pregunta->score)) {
+                    $examen->score_total += $r_db->Pregunta->score;
                 }
-                );
-
-                if ($v !== false) {
-                    $examen->total_correctas++;
-                    $examen->score_total += $respuestas_db[$v]->Pregunta->score;
-                }
-
-            //\Log::debug(print_r($v,true));
-            });
+            }
+        });
 
         //dd($examen->total_correctas);
 
@@ -307,35 +309,29 @@ class ExamenController extends Controller
                     ->where('activo', 'si');
             }])->where('correcto', 1)->where('activo', 'si')->get();
 
+        // Optimización: Mapas para búsqueda O(1)
+        $correctasPorId = $respuestas_db->keyBy(function($r) { return $r->pregunta_id . '-' . $r->id; });
+        $correctasPorPregunta = $respuestas_db->keyBy('pregunta_id');
+        $usuarioPorPregunta = $respuestas->keyBy('name');
+
         $feedback = [];
 
-        $respuestas->each(function ($r, $key) use ($respuestas_db, &$feedback) {
-            $v = $respuestas_db->search(function ($rdb, $key) use ($r) {
-                    return $rdb->id == $r->value && $rdb->pregunta_id == $r->name;
+        $respuestas->each(function ($r, $key) use ($correctasPorId, $correctasPorPregunta, &$feedback) {
+            $llave = $r->name . '-' . $r->value;
+            
+            if (!$correctasPorId->has($llave)) { // incorrecta o no encontrada
+                if ($correctasPorPregunta->has($r->name)) {
+                    $feedback[] = [$r, $correctasPorPregunta->get($r->name)];
                 }
-                );
+            }
+        });
 
-                if ($v === false) { //incorrecta
-                    $r_db = $respuestas_db->search(function ($rdb, $key) use ($r) {
-                            return $rdb->pregunta_id == $r->name;
-                        }
-                        );
-
-                        $feedback[] = [$r, $respuestas_db[$r_db]];
-                    }
-                });
-
-        $respuestas_db->each(function ($rdb, $key) use ($respuestas, &$feedback) {
-            $v = $respuestas->search(function ($r, $key) use ($rdb) {
-                    return $rdb->pregunta_id == $r->name;
-                }
-                );
-
-                if ($v === false) { //no la encontró, lo que significa que no fue respondida
-                    $o = (object)['name' => 0, 'value' => 0];
-                    $feedback[] = [$o, $rdb];
-                }
-            });
+        $respuestas_db->each(function ($rdb, $key) use ($usuarioPorPregunta, &$feedback) {
+            if (!$usuarioPorPregunta->has($rdb->pregunta_id)) { // no respondida
+                $o = (object)['name' => 0, 'value' => 0];
+                $feedback[] = [$o, $rdb];
+            }
+        });
 
 
         return view('evaluacion.feedback')->with('examen', $examen)->with('feedback', $feedback);

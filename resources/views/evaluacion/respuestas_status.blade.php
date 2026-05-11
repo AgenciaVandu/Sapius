@@ -1,5 +1,15 @@
 @php
     $respuestas = is_array($respuestas_json) ? $respuestas_json : [];
+    // Optimización: Crear un set (array con llaves) de IDs respondidos para búsqueda O(1)
+    $respondidasSet = [];
+    foreach ($respuestas as $r) {
+        if (isset($r->name)) {
+            $respondidasSet[(string) $r->name] = true;
+        } elseif (isset($r['name'])) {
+            $respondidasSet[(string) $r['name']] = true;
+        }
+    }
+    
     $contadorGlobal = 1; // contador global para numeración
     $currentPage = request()->get('page', 1); // página actual
 @endphp
@@ -12,14 +22,12 @@
 
             // Determinar si se pinta el recuadro exterior
             if ($esAgrupado) {
-                $todasRespondidas = $preguntasDelGrupo->pluck('id')->every(function ($id) use ($respuestas) {
-                    return collect($respuestas)->pluck('name')->contains((string) $id);
+                $todasRespondidas = $preguntasDelGrupo->pluck('id')->every(function ($id) use ($respondidasSet) {
+                    return isset($respondidasSet[(string) $id]);
                 });
                 $colorExterior = $todasRespondidas ? '#002146' : '#e0e0e0';
             } else {
-                $tieneRespuesta = collect($respuestas)
-                    ->pluck('name')
-                    ->contains((string) $preguntasDelGrupo->first()->id ?? '');
+                $tieneRespuesta = isset($respondidasSet[(string) ($preguntasDelGrupo->first()->id ?? '')]);
                 $colorExterior = $tieneRespuesta ? '#002146' : '#e0e0e0';
             }
 
@@ -45,7 +53,7 @@
             {{-- Mini-cuadritos internos --}}
             @foreach ($preguntasDelGrupo as $subIndex => $item)
                 @php
-                    $tieneRespuesta = collect($respuestas)->pluck('name')->contains((string) $item->id);
+                    $tieneRespuesta = isset($respondidasSet[(string) $item->id]);
                     $colorFondo = $tieneRespuesta ? '#002146' : '#e0e0e0';
                     $colorTexto = $tieneRespuesta ? 'white' : '#b0b0b0';
 
