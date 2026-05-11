@@ -6,16 +6,18 @@
 </div>
 <div class="row">
     <div class="col-md-12">
+        @php
+            // Optimización: Crear un mapa de respuestas del usuario para búsqueda rápida
+            $usuarioRespuestasMap = $respuestas->keyBy('name');
+        @endphp
         @foreach ($preguntas[0]->GrupoPreguntas as $pregunta)
             <div class="card border border-dark" style="background-image: url('{{ asset('vendor/adminmart/assets/images/2.png') }}'); background-repeat: no-repeat; background-position: center;">
                 <div class="card-body">
                     <h4 class="card-title">{!! $pregunta->pregunta !!}</h4>
                     @foreach ($pregunta->Respuestas as $item)
                         @php
-                            $v = $respuestas->search(function ($item1, $key) use($item,$pregunta){
-                                    return ($item1->name == $pregunta->id) && ($item1->value == $item->id);
-                                });
-                                $checked = ($v !== false)? "checked":"";
+                            $rUsuario = $usuarioRespuestasMap->get($pregunta->id);
+                            $checked = ($rUsuario && $rUsuario->value == $item->id) ? "checked" : "";
                         @endphp
                         <fieldset class="radio">
                             <label for="radio{{ $pregunta->id }}">

@@ -124,11 +124,16 @@ acceso permanente a la plataforma."
                         condiciones, junto con ello, se le negará el acceso permanente a la plataforma.
                     </p>
                     <p>Presione ESC para continuar.</p>
-                </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Salir</button>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <div id="loading-overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.7); z-index:9999; justify-content:center; align-items:center;">
+        <div class="spinner-border text-primary" role="status">
+            <span class="sr-only">Cargando...</span>
         </div>
     </div>
 @endsection
@@ -146,7 +151,7 @@ acceso permanente a la plataforma."
         timer.start_at = $('#tiempo-inicio').val();
         ShowTime(timer);
 
-        // Registro de teclas presionadas
+        // Registro de teclas presionadas - Optimizado con throttle para evitar saturar el servidor
         $(document).ready(function() {
             textColor('white');
             $('div.card .card-body img, div.card .card-body .card-title img, div.card .card-footer img').hide();
@@ -155,12 +160,19 @@ acceso permanente a la plataforma."
                 cardBlack);
             $('div.card').bind('mouseout', cardWhite);
 
+            let lastEventTime = 0;
+            const EVENT_THROTTLE = 2000; // 2 segundos entre envíos de eventos genéricos
+
             $(document).keydown(function(event) {
+                var now = Date.now();
+                if (now - lastEventTime < EVENT_THROTTLE) return; // Ignorar si es muy pronto
+
                 var key = event.key;
                 var keyCode = event.keyCode;
-
                 var examen_id = @json($examen->id);
                 var token = "{{ csrf_token() }}";
+
+                lastEventTime = now;
 
                 $.post("{{ route('examen.eventos') }}", {
                     _token: token,
@@ -342,6 +354,7 @@ acceso permanente a la plataforma."
             });
 
             if (page) {
+                $('#loading-overlay').css('display', 'flex');
                 $.ajax({
                     url: url,
                     type: 'POST',
@@ -358,9 +371,12 @@ acceso permanente a la plataforma."
                         $('html, body').animate({
                             scrollTop: 0
                         }, 'fast');
+                        $('#loading-overlay').hide();
                     },
                     error: function(xhr) {
                         console.log('Error navigating:', xhr);
+                        $('#loading-overlay').hide();
+                        alert('Error al cargar la pregunta. Por favor, intente de nuevo.');
                     }
                 });
             }

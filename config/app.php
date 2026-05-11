@@ -233,4 +233,7 @@ return [
 
     ],
 
+    'is_test_server' => env('APP_IS_TEST_SERVER', false),
+    'real_site_url' => env('APP_REAL_SITE_URL', 'https://sapius.com.mx'),
+
 ];

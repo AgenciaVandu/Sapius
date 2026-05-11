@@ -79,43 +79,66 @@
                 ->values();
                 @endphp
 
-                <div class="list-group">
+                <div class="list-group list-group-custom">
                     @foreach ($clases_ordenadas as $item)
-                    @if ($item->curso_id == $leccion->Curso->id)
-                    @php
-                    $item_contenido = $contenido->firstWhere('id', $item->id);
-                    $fecha_inicial = isset($item_contenido['fecha_inicial'])
-                    ? strtotime(str_replace('/', '-', $item_contenido['fecha_inicial']))
-                    : null;
-                        $fecha_final = isset($item_contenido['fecha_final'])
-                        ? (isset($item_contenido['hora_final']) ? strtotime(str_replace('/', '-', $item_contenido['fecha_final'].' '.$item_contenido['hora_final'])) : strtotime(str_replace('/', '-', $item_contenido['fecha_final'].' 23:59:59')))
-                        : 0; 
-                        
-                        $unlockData = isset($unlockedLessonsData) ? $unlockedLessonsData->get($item->id) : null;
-                        if ($unlockData) {
-                            $fecha_final = strtotime($unlockData->until_date);
-                        }
-                        
-                        $childUnlocked = $item->Clases->contains(function($clase) use ($unlockedLessonsData) {
-                            return isset($unlockedLessonsData) && $unlockedLessonsData->has($clase->id);
-                        });
-                        
-                        $verifica_fecha = ($hoy >= $fecha_inicial && $hoy <= $fecha_final) || $childUnlocked; @endphp @if ($verifica_fecha) <a
-                        href="javascript:void(0)" class="list-group-item list-group-item-action"
-                        onclick="event.preventDefault(); document.getElementById('form{{ $item->id }}').submit();">
-                        {{ $item->titulo }}
-                        </a>
-                        <form method="POST" action="{{ route('leccion.detallada') }}" id="form{{ $item->id }}">
-                            @csrf
-                            <input name="leccion_id" type="hidden" value="{{ $item->id }}">
-                            <input name="curso_programado_id" type="hidden" value="{{ $curso_programado_id }}">
-                            <input name="inscripcion_id" type="hidden" value="{{ $inscrito->id }}">
-                        </form>
-                        @else
-                        <a href="javascript:void(0)" class="list-group-item disabled">{{ $item->titulo }}</a>
+                        @if ($item->curso_id == $leccion->Curso->id)
+                            @php
+                                $item_contenido = $contenido->firstWhere('id', $item->id);
+                                $fecha_inicial = isset($item_contenido['fecha_inicial']) ? strtotime(str_replace('/', '-', $item_contenido['fecha_inicial'])) : null;
+                                $fecha_final = isset($item_contenido['fecha_final']) ? (isset($item_contenido['hora_final']) ? strtotime(str_replace('/', '-', $item_contenido['fecha_final'] . ' ' . $item_contenido['hora_final'])) : strtotime(str_replace('/', '-', $item_contenido['fecha_final'] . ' 23:59:59'))) : 0;
+
+                                $unlockData = isset($unlockedLessonsData) ? $unlockedLessonsData->get($item->id) : null;
+                                if ($unlockData) {
+                                    $fecha_final = strtotime($unlockData->until_date);
+                                }
+
+                                $childUnlocked = $item->Clases->contains(function ($clase) use ($unlockedLessonsData) {
+                                    return isset($unlockedLessonsData) && $unlockedLessonsData->has($clase->id);
+                                });
+
+                                $verifica_fecha = ($hoy >= $fecha_inicial && $hoy <= $fecha_final) || $childUnlocked;
+                                $isCompleted = in_array($item->id, $completedLessons);
+                            @endphp
+                            
+                            @if ($verifica_fecha)
+                                <a href="javascript:void(0)"
+                                    class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-3 mb-2 shadow-sm border-left-primary"
+                                    onclick="event.preventDefault(); document.getElementById('form{{ $item->id }}').submit();"
+                                    style="border-left: 4px solid #002146 !important; border-radius: 8px; transition: all 0.2s ease-in-out; background-color: #ffffff;">
+                                    <div class="d-flex align-items-center">
+                                        <div class="icon-wrapper mr-3 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; border-radius: 50%; background-color: {{ $isCompleted ? '#e8f5e9' : '#e3f2fd' }};">
+                                            <i class="fas {{ $isCompleted ? 'fa-check text-success' : 'fa-play text-primary' }}" style="font-size: 0.9rem;"></i>
+                                        </div>
+                                        <div>
+                                            <span class="font-weight-bold text-dark d-block">{{ $item->titulo }}</span>
+                                            <small class="text-muted">{{ $isCompleted ? 'Completada' : 'Disponible para ver' }}</small>
+                                        </div>
+                                    </div>
+                                    <i class="fas fa-chevron-right text-muted small"></i>
+                                </a>
+                                <form method="POST" action="{{ route('leccion.detallada') }}" id="form{{ $item->id }}">
+                                    @csrf
+                                    <input name="leccion_id" type="hidden" value="{{ $item->id }}">
+                                    <input name="curso_programado_id" type="hidden" value="{{ $curso_programado_id }}">
+                                    <input name="inscripcion_id" type="hidden" value="{{ $inscrito->id }}">
+                                </form>
+                            @else
+                                <div class="list-group-item d-flex justify-content-between align-items-center py-3 mb-2"
+                                    style="background-color: #fcfcfc; border-radius: 8px; border-left: 4px solid #dee2e6 !important; opacity: 0.8;">
+                                    <div class="d-flex align-items-center">
+                                        <div class="icon-wrapper mr-3 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; border-radius: 50%; background-color: #f8f9fa; color: #adb5bd;">
+                                            <i class="fas fa-lock" style="font-size: 0.9rem;"></i>
+                                        </div>
+                                        <div>
+                                            <span class="font-weight-medium text-muted d-block">{{ $item->titulo }}</span>
+                                            <small class="text-muted">No disponible aún</small>
+                                        </div>
+                                    </div>
+                                    <span class="badge badge-light text-muted p-2">Bloqueado</span>
+                                </div>
+                            @endif
                         @endif
-                        @endif
-                        @endforeach
+                    @endforeach
                 </div>
                 @endif
             </div>
