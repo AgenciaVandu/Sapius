@@ -16,6 +16,13 @@ class AlumnoMiddleware
      */
     public function handle($request, Closure $next)
     {
+        // Si no está autenticado en la sesión web tradicional, pero se envía un Token Bearer
+        if (!Auth::check() && $request->bearerToken()) {
+            if ($user = Auth::guard('api')->user()) {
+                Auth::setUser($user);
+            }
+        }
+
         if(Auth::check() && Auth::user()->hasRole('alumno'))
         return $next($request);
 
