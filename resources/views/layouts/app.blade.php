@@ -33,14 +33,34 @@
     <link href="{{ asset('vendor/select2/select2.min.css') }}" rel="stylesheet" />
     <link href="{{ asset('vendor/select2/select2-bootstrap4.min.css') }}" rel="stylesheet" />
     <script src="{{ asset('vendor/select2/select2.min.js') }}"></script>
+    @php
+        $hasRestrictMobile = false;
+        if (request()->route()) {
+            $middlewares = method_exists(request()->route(), 'gatherMiddleware') 
+                ? request()->route()->gatherMiddleware() 
+                : (method_exists(request()->route(), 'middleware') ? request()->route()->middleware() : []);
+            $hasRestrictMobile = in_array('restrict.mobile', $middlewares);
+        }
+    @endphp
+
+    @if ($hasRestrictMobile)
     <script>
-        window.onload = function() {
-            if (navigator.maxTouchPoints > 0 || 'ontouchstart' in window) {
-                document.body.innerHTML =
-                "<h1>Acceso Restringido</h1><p>No puedes acceder desde un móvil o tablet.</p>";
+        (function() {
+            var ua = navigator.userAgent.toLowerCase();
+            var isMobileOrTablet = /iphone|ipad|ipod|android|webos|blackberry|iemobile|opera mini/i.test(ua);
+            var isMac = /macintosh|macintel|macppc|mac68k/i.test(ua);
+            var isTouch = (navigator.maxTouchPoints && navigator.maxTouchPoints > 2) || ('ontouchstart' in window);
+
+            if (isMobileOrTablet || (isMac && isTouch)) {
+                // Set the touch device cookie for backend middleware checks
+                document.cookie = "is_touch_device=1; path=/; max-age=86400; SameSite=Lax";
+                if (window.location.pathname !== '/no-access') {
+                    window.location.href = "/no-access";
+                }
             }
-        };
+        })();
     </script>
+    @endif
 
 </head>
 

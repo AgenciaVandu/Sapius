@@ -49,6 +49,11 @@ Route::get('cookies', function () {
     return view('cookies');
 })->name('cookies');
 
+//NO ACCESS (MOBILE/TABLET RESTRICTION)
+Route::get('no-access', function () {
+    return view('errors.no_access');
+})->name('no-access');
+
 Route::get('/exani-1', function () {
     $reviews = Reviews::where('visible', 1)->where('rating', '>=', 4)->orderBy('created_at', 'desc')->take(6)->get();
     return view('cursos-front.exani-1', compact('reviews'));

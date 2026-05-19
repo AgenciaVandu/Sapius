@@ -42,14 +42,34 @@
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 <![endif]-->
-    {{-- <script>
-        window.onload = function() {
-            if (navigator.maxTouchPoints > 0 || 'ontouchstart' in window) {
-                document.body.innerHTML =
-                    "<h1>Acceso Restringido</h1><p>No puedes acceder desde un móvil o tablet.</p>";
+    @php
+        $hasRestrictMobile = false;
+        if (request()->route()) {
+            $middlewares = method_exists(request()->route(), 'gatherMiddleware') 
+                ? request()->route()->gatherMiddleware() 
+                : (method_exists(request()->route(), 'middleware') ? request()->route()->middleware() : []);
+            $hasRestrictMobile = in_array('restrict.mobile', $middlewares);
+        }
+    @endphp
+
+    @if ($hasRestrictMobile)
+    <script>
+        (function() {
+            var ua = navigator.userAgent.toLowerCase();
+            var isMobileOrTablet = /iphone|ipad|ipod|android|webos|blackberry|iemobile|opera mini/i.test(ua);
+            var isMac = /macintosh|macintel|macppc|mac68k/i.test(ua);
+            var isTouch = (navigator.maxTouchPoints && navigator.maxTouchPoints > 2) || ('ontouchstart' in window);
+
+            if (isMobileOrTablet || (isMac && isTouch)) {
+                // Set the touch device cookie for backend middleware checks
+                document.cookie = "is_touch_device=1; path=/; max-age=86400; SameSite=Lax";
+                if (window.location.pathname !== '/no-access') {
+                    window.location.href = "/no-access";
+                }
             }
-        };
-    </script> --}}
+        })();
+    </script>
+    @endif
     <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 </head>
