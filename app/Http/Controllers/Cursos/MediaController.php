@@ -256,15 +256,21 @@ class MediaController extends Controller
 
     public function stream($filename)
     {
-        //$videosDir = config('larastreamer.basepath');
         $videosDir = storage_path('app/uploads/');
-        if (file_exists($filePath = $videosDir."/".$filename)) {
+        $filePath = $videosDir . "/" . $filename;
+
+        // Fallback al directorio public (donde se guardan los archivos en Laravel)
+        if (!file_exists($filePath)) {
+            $videosDir = storage_path('app/public/');
+            $filePath = $videosDir . "/" . $filename;
+        }
+
+        if (file_exists($filePath)) {
             $stream = new VideoStream($filePath);
             return response()->stream(function() use ($stream) {
                 $stream->start();
             });
         }
-        //\Log::debug(dd($videosDir));
         return response("File doesn't exists", 404);
     }
 
