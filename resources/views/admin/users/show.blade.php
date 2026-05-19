@@ -20,6 +20,20 @@
             <th scope="row">Rol:</th>
             <td>{{ $user->roles[0]->name }}<td>
         </tr>
+        <tr>
+            <th scope="row">Dirección MAC:</th>
+            <td>
+                @if($user->mac_address)
+                    <code class="bg-light px-2 py-1 border rounded text-dark font-weight-bold">{{ $user->mac_address }}</code>
+                    <form action="{{ route('users.clearMac', $user->id) }}" method="POST" class="d-inline ml-2" onsubmit="return confirm('¿Estás seguro de que deseas desvincular el dispositivo de este alumno? El primer equipo en iniciar sesión registrará su MAC automáticamente.');">
+                        @csrf
+                        <button type="submit" class="btn btn-xs btn-danger font-weight-bold" style="padding: 2px 8px; font-size: 11px;">Desvincular Dispositivo</button>
+                    </form>
+                @else
+                    <span class="text-muted italic">Ningún dispositivo vinculado aún (se registrará al primer inicio de sesión).</span>
+                @endif
+            <td>
+        </tr>
     </tbody>
 </table>
 

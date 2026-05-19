@@ -32,3 +32,23 @@ Route::get('/test-n8n', 'Api\N8nTestController@send')->name('test.n8n');
 // Electron MAC Detector Routes
 Route::post('/login', 'Api\AuthController@login');
 Route::middleware('auth:api')->post('/validate-mac', 'Api\AuthController@validateMac');
+
+// Electron Application Panel Endpoints
+Route::middleware('auth:api')->group(function () {
+    Route::get('/electron/dashboard', 'Api\ElectronPanelController@dashboard');
+    Route::get('/electron/course/{id}', 'Api\ElectronPanelController@courseDetails');
+    Route::get('/electron/lesson/{leccion_id}/{curso_programado_id}', 'Api\ElectronPanelController@lessonDetails');
+    Route::post('/electron/lecciones/toggle-completion', 'Api\ElectronPanelController@toggleLessonCompletion');
+    Route::get('/electron/homework-tracking/{curso_programado_id}', 'Api\ElectronPanelController@homeworkTracking');
+    Route::post('/electron/send-homework', 'Api\ElectronPanelController@sendHomework');
+    
+    // Exams / Pruebas
+    Route::get('/electron/exam/previo/{prueba_id}/{inscripcion_id}', 'Api\ElectronPanelController@examPrevio');
+    Route::post('/electron/exam/presentar', 'Api\ElectronPanelController@examPresentar');
+    Route::post('/electron/exam/finalizar', 'Api\ElectronPanelController@examFinalizar');
+    Route::get('/electron/exam/feedback/{examen_id}', 'Api\ElectronPanelController@examFeedback');
+    Route::post('/electron/exam/eventos', 'Api\ElectronPanelController@examEventos');
+    
+    // Secure Delivery
+    Route::get('/electron/pdf/{leccion_id}', 'Api\ElectronPanelController@securePdf');
+});
