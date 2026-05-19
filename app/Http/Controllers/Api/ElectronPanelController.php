@@ -90,7 +90,9 @@ class ElectronPanelController extends Controller
 
         $curso = CursoProgramado::with(['Curso' => function($r){
             $r->with(['Lecciones' => function($q){
-                $q->where('leccion_id', 0)->where('activo', 'si');
+                $q->where('leccion_id', 0)->where('activo', 'si')->with(['Clases' => function($c){
+                    $c->where('activo', 'si');
+                }]);
             }])->get();
         }])->find($curso_programado_id);
 
@@ -182,15 +184,13 @@ class ElectronPanelController extends Controller
 
         $video = null;
         $videoext = null;
-        if ($leccion->leccion_id > 0) {
-            $video = $leccion->Medias->filter(function($m) {
-                return $m->tipo == "video";
-            })->first();
-            
-            $videoext = $leccion->Medias->filter(function($m) {
-                return $m->tipo == "videoext";
-            })->first();
-        }
+        $video = $leccion->Medias->filter(function($m) {
+            return $m->tipo == "video";
+        })->first();
+        
+        $videoext = $leccion->Medias->filter(function($m) {
+            return $m->tipo == "videoext";
+        })->first();
 
         // Eliminar los videos de la lista de medias para mostrarlos por separado
         $leccion->Medias = $leccion->Medias->filter(function($m) {
