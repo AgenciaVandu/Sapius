@@ -35,6 +35,8 @@ Route::middleware('auth:api')->post('/validate-mac', 'Api\AuthController@validat
 
 // Electron Application Panel Endpoints
 Route::middleware('auth:api')->group(function () {
+    Route::post('/register-strike', 'Api\AuthController@registerStrike');
+    Route::get('/user/locked-details', 'Api\AuthController@getLockedDetails');
     Route::get('/electron/dashboard', 'Api\ElectronPanelController@dashboard');
     Route::get('/electron/course/{id}', 'Api\ElectronPanelController@courseDetails');
     Route::get('/electron/lesson/{leccion_id}/{curso_programado_id}', 'Api\ElectronPanelController@lessonDetails');

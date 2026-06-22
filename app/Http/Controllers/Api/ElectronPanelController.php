@@ -29,26 +29,35 @@ class ElectronPanelController extends Controller
     {
         $user = $request->user();
         if (!$user) {
-            return 'user_null';
+            abort(401, 'No autorizado.');
+        }
+        if ($user->is_blocked) {
+            throw new \Illuminate\Http\Exceptions\HttpResponseException(
+                response()->json([
+                    'success' => false,
+                    'message' => 'Cuenta bloqueada por violación de seguridad.',
+                    'is_blocked' => true
+                ], 403)
+            );
         }
         if ($user->hasRole('alumno')) {
             $mac = $request->header('X-Sapius-MAC');
-            if (!$mac) {
-                return 'mac_header_missing';
-            }
-            if ($mac !== $user->mac_address) {
-                return 'mac_mismatch:received_' . var_export($mac, true) . '_vs_db_' . var_export($user->mac_address, true);
+            if (!$mac || $mac !== $user->mac_address) {
+                throw new \Illuminate\Http\Exceptions\HttpResponseException(
+                    response()->json([
+                        'success' => false,
+                        'message' => 'Dispositivo no autorizado.',
+                        'is_blocked' => false
+                    ], 403)
+                );
             }
         }
-        return 'valid';
+        return true;
     }
 
     public function dashboard(Request $request)
     {
-        $val = $this->validateMacAddress($request);
-        if ($val !== 'valid') {
-            return response()->json(['success' => false, 'message' => 'Dispositivo no autorizado: ' . $val], 403);
-        }
+        $this->validateMacAddress($request);
 
         $user = $request->user();
 
