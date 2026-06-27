@@ -66,6 +66,27 @@ class ElectronUpdaterController extends Controller
         if ($request->hasFile('latest_yml')) {
             $file = $request->file('latest_yml');
             if ($file->getClientOriginalName() === 'latest.yml' || $file->getClientOriginalExtension() === 'yml') {
+                
+                // Limpieza inteligente de versiones viejas en el disco
+                try {
+                    $ymlContent = File::get($file->getRealPath());
+                    if (preg_match('/version:\s*([^\s\n]+)/', $ymlContent, $matches)) {
+                        $newVersion = $matches[1];
+                        if ($newVersion) {
+                            $dirFiles = File::files($updateDir);
+                            foreach ($dirFiles as $existingFile) {
+                                $filename = $existingFile->getFilename();
+                                // No borrar el latest.yml actual, ni archivos que contengan la nueva versión en su nombre
+                                if ($filename !== 'latest.yml' && strpos($filename, $newVersion) === false) {
+                                    File::delete($existingFile->getRealPath());
+                                }
+                            }
+                        }
+                    }
+                } catch (\Exception $e) {
+                    // Ignorar errores al leer/limpiar para no romper la subida
+                }
+
                 $file->move($updateDir, 'latest.yml');
                 $uploadedCount++;
             } else {
