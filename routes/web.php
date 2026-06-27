@@ -325,6 +325,10 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
     Route::get('/exportCalificaciones/{inscripcion_id}', 'Evaluacion\ExamenController@exportReport')->name('admin.exportCalificaciones');
     Route::get('/exportAllResults/{curso_id}', 'Evaluacion\ExamenController@exportAllStudentResults')->name('admin.exportAllResults');
     Route::post('/examen/reiniciar', 'Evaluacion\ExamenController@reiniciarExamen')->name('examen.reiniciar');
+    
+    // Electron Auto Updater Management
+    Route::get('/electron/updater', 'Admin\ElectronUpdaterController@index')->name('admin.electron.updater.index');
+    Route::post('/electron/updater/upload', 'Admin\ElectronUpdaterController@upload')->name('admin.electron.updater.upload');
 });
 
 Route::group(['middleware' => ['instructor', 'restrict.mobile'], 'prefix' => 'instructor'], function () {
