@@ -57,6 +57,11 @@
                                 class="hide-menu">Reviews
                             </span></a>
                     </li>
+                    <li class="sidebar-item"> <a class="sidebar-link" href="{{ route('admin.electron.updater.index') }}"
+                            aria-expanded="false"><i data-feather="upload-cloud" class="feather-icon"></i><span
+                                class="hide-menu">Actualizador App
+                            </span></a>
+                    </li>
                     <li class="list-divider"></li>
                     <!-- Adminisración de Cursos-->
                     <li class="nav-small-cap"><span class="hide-menu">Reportes</span></li>
