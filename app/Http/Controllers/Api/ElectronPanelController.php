@@ -740,12 +740,24 @@ class ElectronPanelController extends Controller
             return response()->json(['success' => false, 'message' => 'Dispositivo no autorizado.'], 403);
         }
 
-        $leccion = Leccion::find($leccion_id);
-        if (!$leccion || !$leccion->archivo_pdf) {
-            return response()->json(['success' => false, 'message' => 'PDF no encontrado.'], 404);
+        if ($leccion_id == 0 || $leccion_id === '0') {
+            $curso_programado_id = $request->query('curso_programado_id');
+            $fileGuia = FileGuia::where('curso_programado_id', $curso_programado_id)->first();
+            if (!$fileGuia || !$fileGuia->url) {
+                return response()->json(['success' => false, 'message' => 'Guía no encontrada.'], 404);
+            }
+            $path = storage_path('app/files/medias/' . $fileGuia->url);
+            if (!file_exists($path)) {
+                $path = storage_path('app/public/files/medias/' . $fileGuia->url);
+            }
+        } else {
+            $leccion = Leccion::find($leccion_id);
+            if (!$leccion || !$leccion->archivo_pdf) {
+                return response()->json(['success' => false, 'message' => 'PDF no encontrado.'], 404);
+            }
+            $path = storage_path('app/public/' . $leccion->archivo_pdf);
         }
 
-        $path = storage_path('app/public/' . $leccion->archivo_pdf);
         if (!file_exists($path)) {
             return response()->json(['success' => false, 'message' => 'Archivo no encontrado en el servidor.'], 404);
         }
