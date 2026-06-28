@@ -64,7 +64,7 @@ class ElectronPanelController extends Controller
         $mis_cursos = Inscripcion::whereHas('CursoProgramado', function ($query) {
             $query->with('Curso')->where('fecha_inicio_venta', '<=', date('Y-m-d H:i:s'))
                 ->where('fecha_fin', '>=', date('Y-m-d H:i:s'));
-        })->with(['CursoProgramado.Curso', 'CursoProgramado.category'])->where('user_id', $user->id)->get();
+        })->with(['CursoProgramado.Curso', 'CursoProgramado.category', 'CursoProgramado.instructor'])->where('user_id', $user->id)->get();
 
         return response()->json([
             'success' => true,
