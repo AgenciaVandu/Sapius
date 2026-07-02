@@ -53,4 +53,7 @@ Route::middleware('auth:api')->group(function () {
     
     // Secure Delivery
     Route::get('/electron/pdf/{leccion_id}', 'Api\ElectronPanelController@securePdf');
+    
+    // Imágenes de preguntas (ruta privada, no pública)
+    Route::get('/electron/pregunta-imagen/{filename}', 'Api\ElectronPanelController@preguntaImagen');
 });

@@ -770,4 +770,29 @@ class ElectronPanelController extends Controller
             'Expires' => '0'
         ]);
     }
+
+    /**
+     * Sirve imágenes privadas de preguntas al cliente Electron.
+     * Las imágenes se guardan en storage/app/images/preguntas/ (no pública).
+     */
+    public function preguntaImagen(Request $request, $filename)
+    {
+        if (!$this->validateMacAddress($request)) {
+            return response()->json(['success' => false, 'message' => 'Dispositivo no autorizado.'], 403);
+        }
+
+        // Sanitizar el nombre del archivo para evitar path traversal
+        $filename = basename($filename);
+        $path = storage_path('app/images/preguntas/' . $filename);
+
+        if (!file_exists($path)) {
+            return response()->json(['success' => false, 'message' => 'Imagen no encontrada.'], 404);
+        }
+
+        $mimeType = mime_content_type($path);
+        return Response::file($path, [
+            'Content-Type' => $mimeType,
+            'Cache-Control' => 'public, max-age=86400',
+        ]);
+    }
 }
