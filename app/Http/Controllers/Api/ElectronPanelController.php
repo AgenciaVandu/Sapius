@@ -795,4 +795,231 @@ class ElectronPanelController extends Controller
             'Cache-Control' => 'public, max-age=86400',
         ]);
     }
+
+    public function getProfile(Request $request)
+    {
+        if (!$this->validateMacAddress($request)) {
+            return response()->json(['success' => false, 'message' => 'Dispositivo no autorizado.'], 403);
+        }
+
+        $user = $request->user();
+        
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'id' => $user->id,
+                'nombre' => $user->nombre,
+                'apellido' => $user->apellido,
+                'username' => $user->username,
+                'email' => $user->email,
+                'telefono' => $user->telefono,
+                'folio' => $user->folio,
+                'universidad_procedencia' => $user->universidad_procedencia,
+                'especialidad' => $user->especialidad,
+                'fecha_sustentacion' => $user->fecha_sustentacion,
+                'foto' => $user->foto,
+                'documento_identificacion' => $user->documento_identificacion,
+                'pase_ingreso' => $user->pase_ingreso,
+                'foto_url' => $user->foto ? url('/public/users/image/' . $user->foto) : null,
+                'documento_url' => $user->documento_identificacion ? url('/public/users/image/' . $user->documento_identificacion) : null,
+                'pase_url' => $user->pase_ingreso ? url('/public/users/image/' . $user->pase_ingreso) : null,
+                'expediente_completo' => ($user->foto && $user->documento_identificacion && $user->pase_ingreso)
+            ]
+        ]);
+    }
+
+    public function updateProfile(Request $request)
+    {
+        if (!$this->validateMacAddress($request)) {
+            return response()->json(['success' => false, 'message' => 'Dispositivo no autorizado.'], 403);
+        }
+
+        $user = $request->user();
+
+        $nameRegex = 'regex:/^[a-zA-Z0-9\sáéíóúÁÉÍÓÚñÑ]+$/u';
+        $rules = [
+            'nombre' => ['required', 'string', $nameRegex, 'max:255'],
+            'apellido' => ['required', 'string', $nameRegex, 'max:255'],
+            'telefono' => ['nullable', 'string', 'max:20'],
+            'universidad_procedencia' => ['nullable', 'string', 'max:255'],
+            'especialidad' => ['nullable', 'string', 'max:255'],
+            'password' => ['nullable', 'string', 'min:6'],
+        ];
+
+        $validator = \Illuminate\Support\Facades\Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json(['success' => false, 'errors' => $validator->errors()], 422);
+        }
+
+        $user->nombre = strip_tags($request->nombre);
+        $user->apellido = strip_tags($request->apellido);
+        $user->telefono = strip_tags($request->telefono);
+        $user->universidad_procedencia = strip_tags($request->universidad_procedencia);
+        $user->especialidad = strip_tags($request->especialidad);
+
+        if ($request->filled('password')) {
+            $user->password = \Illuminate\Support\Facades\Hash::make($request->password);
+        }
+
+        // Upload files if provided
+        if ($request->hasFile('foto')) {
+            $file = $request->file('foto');
+            $user->foto = basename(Storage::put('images/usuarios', $file));
+        }
+
+        if ($request->hasFile('documento_identificacion')) {
+            $file = $request->file('documento_identificacion');
+            $user->documento_identificacion = basename(Storage::put('documentos/identificaciones', $file));
+        }
+
+        if ($request->hasFile('pase_ingreso')) {
+            $file = $request->file('pase_ingreso');
+            $user->pase_ingreso = basename(Storage::put('documentos/pases', $file));
+        }
+
+        $user->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Perfil actualizado exitosamente.',
+            'user' => [
+                'nombre_completo' => $user->nombre_completo,
+                'avatar' => $user->nombre[0]
+            ]
+        ]);
+    }
+
+    public function getNotifications(Request $request)
+    {
+        if (!$this->validateMacAddress($request)) {
+            return response()->json(['success' => false, 'message' => 'Dispositivo no autorizado.'], 403);
+        }
+
+        $user = $request->user();
+        
+        $notifications = $user->notifications()->take(50)->get()->map(function ($notif) {
+            return [
+                'id' => $notif->id,
+                'type' => $notif->type,
+                'data' => $notif->data,
+                'read_at' => $notif->read_at,
+                'created_at' => $notif->created_at->toIso8651String(),
+            ];
+        });
+
+        return response()->json([
+            'success' => true,
+            'data' => $notifications
+        ]);
+    }
+
+    public function markNotificationRead(Request $request, $id)
+    {
+        if (!$this->validateMacAddress($request)) {
+            return response()->json(['success' => false, 'message' => 'Dispositivo no autorizado.'], 403);
+        }
+
+        $user = $request->user();
+        $notification = $user->notifications()->find($id);
+
+        if ($notification) {
+            $notification->markAsRead();
+            return response()->json(['success' => true, 'message' => 'Notificación marcada como leída.']);
+        }
+
+        return response()->json(['success' => false, 'message' => 'Notificación no encontrada.'], 404);
+    }
+
+    public function clearAllNotifications(Request $request)
+    {
+        if (!$this->validateMacAddress($request)) {
+            return response()->json(['success' => false, 'message' => 'Dispositivo no autorizado.'], 403);
+        }
+
+        $user = $request->user();
+        $user->unreadNotifications->markAsRead();
+
+        return response()->json(['success' => true, 'message' => 'Todas las notificaciones marcadas como leídas.']);
+    }
+
+    public function checkOpinionPending(Request $request, $curso_programado_id)
+    {
+        if (!$this->validateMacAddress($request)) {
+            return response()->json(['success' => false, 'message' => 'Dispositivo no autorizado.'], 403);
+        }
+
+        $user = $request->user();
+        
+        // Check if there is already a review for this course program
+        $hasReview = \App\Reviews::where('user_id', $user->id)
+            ->where('course_id', $curso_programado_id)
+            ->exists();
+
+        return response()->json([
+            'success' => true,
+            'pending' => !$hasReview
+        ]);
+    }
+
+    public function submitOpinion(Request $request)
+    {
+        if (!$this->validateMacAddress($request)) {
+            return response()->json(['success' => false, 'message' => 'Dispositivo no autorizado.'], 403);
+        }
+
+        $user = $request->user();
+
+        $validator = \Illuminate\Support\Facades\Validator::make($request->all(), [
+            'course_id' => 'required|integer',
+            'rating' => 'required|integer|min:1|max:5',
+            'comment' => 'required|string|min:50',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['success' => false, 'errors' => $validator->errors()], 422);
+        }
+
+        $badWords = [
+            'puta', 'puto', 'pendejo', 'pendeja', 'mierda', 'chingar', 'chingada', 'chingado',
+            'verga', 'cabrón', 'cabrona', 'culero', 'culera', 'imbécil', 'idiota', 'estúpido', 'estúpida',
+            'zorra', 'perra', 'maricón', 'marica', 'mamón', 'mamona', 'pinche', 'asco',
+            'malo', 'pésimo', 'horrible', 'asqueroso', 'terrible', 'basura', 'fraude', 'falso',
+            'estafa', 'engaño', 'mentira', 'timar', 'robo', 'inútil', 'decepción', 'engañoso',
+            'aburrido', 'mediocre', 'desastre', 'pobre', 'deficiente', 'inservible', 'vergonzoso',
+            'curso malo', 'curso pésimo', 'curso horrible', 'curso basura', 'profesor malo',
+            'profesor pésimo', 'no sirve', 'no aprendes', 'malísimo', 'pérdida de tiempo','culo','pene'
+        ];
+
+        $comment = strtolower($request->comment);
+        $containsBadWord = false;
+
+        foreach ($badWords as $word) {
+            if (strpos($comment, $word) !== false) {
+                $containsBadWord = true;
+                break;
+            }
+        }
+
+        if ($containsBadWord) {
+            $visible = false;
+            $rating = 0;
+        } else {
+            $rating = $request->rating;
+            $visible = $request->rating >= 4 ? true : false;
+        }
+
+        \App\Reviews::create([
+            'user_id' => $user->id,
+            'name' => $user->nombre_completo,
+            'rating' => $rating,
+            'comment' => strip_tags($request->comment),
+            'visible' => $visible,
+            'course_id' => $request->course_id
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Opinión registrada correctamente.'
+        ]);
+    }
 }

@@ -56,4 +56,17 @@ Route::middleware('auth:api')->group(function () {
     
     // Imágenes de preguntas (ruta privada, no pública)
     Route::get('/electron/pregunta-imagen/{filename}', 'Api\ElectronPanelController@preguntaImagen');
+
+    // Perfil del alumno (Fase 1)
+    Route::get('/electron/profile', 'Api\ElectronPanelController@getProfile');
+    Route::post('/electron/profile/update', 'Api\ElectronPanelController@updateProfile');
+
+    // Notificaciones (Fase 2)
+    Route::get('/electron/notifications', 'Api\ElectronPanelController@getNotifications');
+    Route::post('/electron/notifications/{id}/read', 'Api\ElectronPanelController@markNotificationRead');
+    Route::post('/electron/notifications/clear-all', 'Api\ElectronPanelController@clearAllNotifications');
+
+    // Opiniones (Fase 3)
+    Route::get('/electron/opinion/check/{curso_programado_id}', 'Api\ElectronPanelController@checkOpinionPending');
+    Route::post('/electron/opinion/submit', 'Api\ElectronPanelController@submitOpinion');
 });
