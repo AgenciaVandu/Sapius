@@ -176,9 +176,14 @@ class ElectronPanelController extends Controller
             return response()->json(['success' => false, 'message' => 'No estás inscrito en este curso.'], 403);
         }
 
-        $leccion = Leccion::with(['Pruebas' => function($q){
+        $leccion = Leccion::with(['Pruebas' => function($q) use ($inscripcion){
             $q->where('activo', 'si');
             $q->with('Preguntas');
+            if ($inscripcion) {
+                $q->with(['Examenes' => function($q2) use ($inscripcion) {
+                    $q2->where('inscripcion_id', $inscripcion->id);
+                }]);
+            }
         }, 'Medias' => function($q){
             $q->where('activo', 'si');
         }, 'Curso' => function($q1) use ($leccion_id){
