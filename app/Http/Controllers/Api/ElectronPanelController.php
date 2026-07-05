@@ -669,13 +669,17 @@ class ElectronPanelController extends Controller
 
         $respuestas = collect(json_decode($examen->respuestas_json));
 
-        $respuestas_db = Respuesta::with(['Pregunta' => function ($q1) use ($examen) {
+        $respuestas_db = Respuesta::whereHas('Pregunta', function ($q) use ($examen) {
+            $q->where('prueba_id', $examen->prueba_id)->where('activo', 'si');
+        })
+        ->with(['Pregunta' => function ($q1) use ($examen) {
             $q1->with(['Respuestas' => function ($q2) {
                 $q2->where('activo', 'si');
-            }])
-            ->where('prueba_id', $examen->prueba_id)
-            ->where('activo', 'si');
-        }])->where('correcto', 1)->where('activo', 'si')->get();
+            }]);
+        }])
+        ->where('correcto', 1)
+        ->where('activo', 'si')
+        ->get();
 
         $correctasPorId = $respuestas_db->keyBy(function($r) { return $r->pregunta_id . '-' . $r->id; });
         $correctasPorPregunta = $respuestas_db->keyBy('pregunta_id');
@@ -683,9 +687,17 @@ class ElectronPanelController extends Controller
 
         $feedback = [];
 
+        // Incluir tanto las respuestas correctas como incorrectas
         $respuestas->each(function ($r, $key) use ($correctasPorId, $correctasPorPregunta, &$feedback) {
             $llave = $r->name . '-' . $r->value;
-            if (!$correctasPorId->has($llave)) {
+            if ($correctasPorId->has($llave)) {
+                // Correctas
+                $feedback[] = [
+                    'user_answer' => $r,
+                    'correct_answer' => $correctasPorId->get($llave)
+                ];
+            } else {
+                // Incorrectas
                 if ($correctasPorPregunta->has($r->name)) {
                     $feedback[] = [
                         'user_answer' => $r,
@@ -695,6 +707,7 @@ class ElectronPanelController extends Controller
             }
         });
 
+        // Incluir las no respondidas
         $respuestas_db->each(function ($rdb, $key) use ($usuarioPorPregunta, &$feedback) {
             if (!$usuarioPorPregunta->has($rdb->pregunta_id)) {
                 $o = (object)['name' => 0, 'value' => 0];
