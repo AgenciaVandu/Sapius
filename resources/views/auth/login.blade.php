@@ -33,9 +33,6 @@
                 <h2 class="mt-2 text-center" style="color: #101a26;">{{ __('Sign In') }}</h2>
                 <p class="text-center" style="color: #ed6a5a;">Desde aquí puedes ingresar.</p>
                 
-                {{-- Contenedor para Avisos del Detector de MAC --}}
-                <div id="mac_status_container"></div>
-
                 <form method="POST" action="{{ route('login') }}">
                     @csrf
                     <input type="hidden" name="mac_address" id="detected_mac">
@@ -193,60 +190,6 @@
                     localStorage.setItem('login_tutorial_seen', 'true');
                 }, 1000); // Wait for preloader fadeOut
             }
-
-            // Detección de MAC a través del Puente de Electron
-            detectMac();
         });
-
-        async function detectMac() {
-            const macInput = document.getElementById('detected_mac');
-            const submitBtn = document.querySelector('button[type="submit"]');
-            const statusContainer = document.getElementById('mac_status_container');
-            
-            submitBtn.disabled = true;
-            const originalText = submitBtn.innerText;
-            submitBtn.innerText = 'Verificando Equipo...';
-
-            try {
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 2500);
-
-                const response = await fetch('http://127.0.0.1:3005/mac', {
-                    method: 'GET',
-                    mode: 'cors',
-                    cache: 'no-cache',
-                    signal: controller.signal
-                });
-                
-                clearTimeout(timeoutId);
-
-                if (response.ok) {
-                    const data = await response.json();
-                    if (data.mac) {
-                        macInput.value = data.mac;
-                        statusContainer.innerHTML = `
-                            <div class="alert shadow-sm d-flex align-items-center mb-3" style="background: #e7f6ed; border: 1px solid #28a745; border-radius: 15px; color: #155724; animation: fadeIn 0.5s;">
-                                <i class="fas fa-check-circle mr-2" style="font-size: 20px;"></i>
-                                <div style="font-size: 13px;">
-                                    <strong>Detector Vinculado:</strong> Tu equipo ha sido reconocido con éxito.
-                                </div>
-                            </div>
-                        `;
-                    }
-                }
-            } catch (error) {
-                statusContainer.innerHTML = `
-                    <div class="alert shadow-sm d-flex align-items-center mb-3" style="background: #fff5f5; border: 1px solid #ed6a5a; border-radius: 15px; color: #721c24; animation: fadeIn 0.5s;">
-                        <i class="fas fa-exclamation-circle mr-2" style="font-size: 20px; color: #ed6a5a;"></i>
-                        <div style="font-size: 12px;">
-                            <strong>Aviso Importante:</strong> Sapius MAC Detector no detectado. Si eres alumno, abre la app de escritorio.
-                        </div>
-                    </div>
-                `;
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.innerText = originalText;
-            }
-        }
     </script>
 @endsection
