@@ -85,7 +85,8 @@ class ElectronPanelController extends Controller
                     'username' => $user->username,
                     'email' => $user->email,
                     'is_blocked' => $user->is_blocked,
-                    'mac_address' => $user->mac_address
+                    'mac_address' => $user->mac_address,
+                    'foto_url' => $user->foto ? '/api/electron/profile/foto/' . $user->foto : null,
                 ],
                 'mis_cursos' => $mis_cursos
             ]
@@ -848,9 +849,9 @@ class ElectronPanelController extends Controller
                 'foto' => $user->foto,
                 'documento_identificacion' => $user->documento_identificacion,
                 'pase_ingreso' => $user->pase_ingreso,
-                'foto_url' => $user->foto ? url('/api/electron/profile/foto/' . $user->foto) : null,
-                'documento_url' => $user->documento_identificacion ? url('/api/electron/profile/documento/' . $user->documento_identificacion) : null,
-                'pase_url' => $user->pase_ingreso ? url('/api/electron/profile/pase/' . $user->pase_ingreso) : null,
+                'foto_url' => $user->foto ? '/api/electron/profile/foto/' . $user->foto : null,
+                'documento_url' => $user->documento_identificacion ? '/api/electron/profile/documento/' . $user->documento_identificacion : null,
+                'pase_url' => $user->pase_ingreso ? '/api/electron/profile/pase/' . $user->pase_ingreso : null,
                 'expediente_completo' => ($user->foto && $user->documento_identificacion && $user->pase_ingreso)
             ]
         ]);
@@ -948,7 +949,8 @@ class ElectronPanelController extends Controller
             'message' => 'Perfil actualizado exitosamente.',
             'user' => [
                 'nombre_completo' => $user->nombre_completo,
-                'avatar' => $user->nombre[0]
+                'avatar' => $user->nombre[0],
+                'foto_url' => $user->foto ? '/api/electron/profile/foto/' . $user->foto : null,
             ]
         ]);
     }
