@@ -28,8 +28,14 @@
     <div class="col-md-8">
         <div class="card">
             @if (isset($video) || isset($videoext))
+            @php
+                $videoObject = $video ?? $videoext;
+                $streamRoute = auth()->user()->hasRole('alumno') === false 
+                    ? route(Auth::user()->rol[0]->slug . '.medias.stream2', ['filename' => $videoObject->ruta])
+                    : route(Auth::user()->rol[0]->slug . '.medias.stream', ['filename' => $videoObject->ruta]);
+            @endphp
             <div style="text-align: center">
-                <video style="width:100%" src="https://sapius.com.mx/storage/{{ $video->ruta }}" controls
+                <video id="videoClase" style="width:100%" src="{{ $streamRoute }}" controls
                     controlsList="nodownload">
                     Tu navegador no soporta la etiqueta video.
                 </video>
@@ -345,53 +351,18 @@
 
 @section('javascript')
 <script src="{{ asset('js/funciones.js') }}"></script>
-@if (isset($video))
-<script>
-    $(document).ready(function () {
-        var xhr = new XMLHttpRequest();
-        xhr.responseType = 'blob';
-
-        xhr.onload = function () {
-            var reader = new FileReader();
-            reader.onloadend = function () {
-                var byteCharacters = atob(reader.result.slice(reader.result.indexOf(',') + 1));
-                var byteNumbers = new Array(byteCharacters.length);
-                for (var i = 0; i < byteCharacters.length; i++) {
-                    byteNumbers[i] = byteCharacters.charCodeAt(i);
-                }
-                var byteArray = new Uint8Array(byteNumbers);
-                var blob = new Blob([byteArray], {
-                    type: 'video/mp4'
-                });
-                var url = URL.createObjectURL(blob);
-                document.getElementById('videoClase').src = url;
-            }
-            reader.readAsDataURL(xhr.response);
-        };
-        @if (auth() -> user() -> hasRole('alumno') == false)
-            xhr.open('GET',
-                '{{ route(Auth::user()->rol[0]->slug . '.medias.stream2', ['filename' => $video->ruta]) }}'
-            );
-        @else
-        xhr.open('GET',
-            '{{ route(Auth::user()->rol[0]->slug . ".medias.stream", ["filename" => $video->ruta]) }}');
-        @endif
-        xhr.send();
-    });
-</script>
+@if (isset($video) || isset($videoext))
 <script type="text/javascript">
     $(document).ready(function () {
         $("body").on("contextmenu", function (e) {
             return false;
         });
-
     });
 </script>
 <script type="text/javascript">
     $(document).ready(function () {
-        //Disabpage
         $('body').bind('cut copy paste', function (e) {
-            e.preventDefaul
+            e.preventDefault();
         });
     });
 </script>
