@@ -419,4 +419,41 @@ class UserController extends Controller
 
         return redirect()->back()->with('success', 'La dirección MAC ha sido desvinculada exitosamente.');
     }
+
+    public function approveMac($id)
+    {
+        $user = User::withoutGlobalScope('Activos')->find($id);
+
+        if (!$user) {
+             return redirect()->back()->with('error', 'Usuario no encontrado.');
+        }
+
+        if ($user->pending_mac_address) {
+            // Concatenate if mac_address is already set
+            if ($user->mac_address) {
+                $user->mac_address = $user->mac_address . ', ' . $user->pending_mac_address;
+            } else {
+                $user->mac_address = $user->pending_mac_address;
+            }
+            $user->pending_mac_address = null;
+            $user->save();
+            return redirect()->back()->with('success', 'Nueva dirección MAC aprobada exitosamente.');
+        }
+
+        return redirect()->back()->with('error', 'No hay ninguna solicitud de dispositivo pendiente.');
+    }
+
+    public function rejectMac($id)
+    {
+        $user = User::withoutGlobalScope('Activos')->find($id);
+
+        if (!$user) {
+             return redirect()->back()->with('error', 'Usuario no encontrado.');
+        }
+
+        $user->pending_mac_address = null;
+        $user->save();
+
+        return redirect()->back()->with('success', 'Solicitud de dirección MAC rechazada.');
+    }
 }

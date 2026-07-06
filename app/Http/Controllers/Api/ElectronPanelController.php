@@ -42,7 +42,17 @@ class ElectronPanelController extends Controller
         }
         if ($user->hasRole('alumno')) {
             $mac = $request->header('X-Sapius-MAC');
-            if (!$mac || $mac !== $user->mac_address) {
+            if (!$mac) {
+                throw new \Illuminate\Http\Exceptions\HttpResponseException(
+                    response()->json([
+                        'success' => false,
+                        'message' => 'Dispositivo no autorizado.',
+                        'is_blocked' => false
+                    ], 403)
+                );
+            }
+            $macs = array_map('trim', explode(',', $user->mac_address));
+            if (!in_array($mac, $macs)) {
                 throw new \Illuminate\Http\Exceptions\HttpResponseException(
                     response()->json([
                         'success' => false,
@@ -838,12 +848,48 @@ class ElectronPanelController extends Controller
                 'foto' => $user->foto,
                 'documento_identificacion' => $user->documento_identificacion,
                 'pase_ingreso' => $user->pase_ingreso,
-                'foto_url' => $user->foto ? url('/public/users/image/' . $user->foto) : null,
-                'documento_url' => $user->documento_identificacion ? url('/public/users/image/' . $user->documento_identificacion) : null,
-                'pase_url' => $user->pase_ingreso ? url('/public/users/image/' . $user->pase_ingreso) : null,
+                'foto_url' => $user->foto ? url('/api/electron/profile/foto/' . $user->foto) : null,
+                'documento_url' => $user->documento_identificacion ? url('/api/electron/profile/documento/' . $user->documento_identificacion) : null,
+                'pase_url' => $user->pase_ingreso ? url('/api/electron/profile/pase/' . $user->pase_ingreso) : null,
                 'expediente_completo' => ($user->foto && $user->documento_identificacion && $user->pase_ingreso)
             ]
         ]);
+    }
+
+    public function profileFoto(Request $request, $file)
+    {
+        if (!$this->validateMacAddress($request)) {
+            return response()->json(['success' => false, 'message' => 'Dispositivo no autorizado.'], 403);
+        }
+        $path = storage_path('app/images/usuarios/' . basename($file));
+        if (!file_exists($path)) {
+            abort(404);
+        }
+        return response()->file($path);
+    }
+
+    public function profileDocumento(Request $request, $file)
+    {
+        if (!$this->validateMacAddress($request)) {
+            return response()->json(['success' => false, 'message' => 'Dispositivo no autorizado.'], 403);
+        }
+        $path = storage_path('app/documentos/identificaciones/' . basename($file));
+        if (!file_exists($path)) {
+            abort(404);
+        }
+        return response()->file($path);
+    }
+
+    public function profilePase(Request $request, $file)
+    {
+        if (!$this->validateMacAddress($request)) {
+            return response()->json(['success' => false, 'message' => 'Dispositivo no autorizado.'], 403);
+        }
+        $path = storage_path('app/documentos/pases/' . basename($file));
+        if (!file_exists($path)) {
+            abort(404);
+        }
+        return response()->file($path);
     }
 
     public function updateProfile(Request $request)

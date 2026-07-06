@@ -190,6 +190,8 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
     Route::get('/users/image/{file}', 'UserController@userPicture')->name('admin.image');
     Route::get('/users/pase/{file}', 'UserController@pase')->name('admin.pase');
     Route::get('/users/documento/{file}', 'UserController@documento')->name('admin.documento');
+    Route::post('users/{id}/approve-mac', 'UserController@approveMac')->name('users.approveMac');
+    Route::post('users/{id}/reject-mac', 'UserController@rejectMac')->name('users.rejectMac');
 
 
     // Cursos

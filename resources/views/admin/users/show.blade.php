@@ -25,15 +25,31 @@
             <td>
                 @if($user->mac_address)
                     <code class="bg-light px-2 py-1 border rounded text-dark font-weight-bold">{{ $user->mac_address }}</code>
-                    <form action="{{ route('users.clearMac', $user->id) }}" method="POST" class="d-inline ml-2" onsubmit="return confirm('¿Estás seguro de que deseas desvincular el dispositivo de este alumno? El primer equipo en iniciar sesión registrará su MAC automáticamente.');">
+                    <form action="{{ route('users.clearMac', $user->id) }}" method="POST" class="d-inline ml-2" onsubmit="return confirm('¿Estás seguro de que deseas desvincular todos los dispositivos de este alumno?');">
                         @csrf
-                        <button type="submit" class="btn btn-xs btn-danger font-weight-bold" style="padding: 2px 8px; font-size: 11px;">Desvincular Dispositivo</button>
+                        <button type="submit" class="btn btn-xs btn-danger font-weight-bold" style="padding: 2px 8px; font-size: 11px;">Desvincular Todos</button>
                     </form>
                 @else
                     <span class="text-muted italic">Ningún dispositivo vinculado aún (se registrará al primer inicio de sesión).</span>
                 @endif
-            <td>
+            </td>
         </tr>
+        @if($user->pending_mac_address)
+        <tr class="table-warning">
+            <th scope="row">Solicitud de Nuevo Dispositivo:</th>
+            <td>
+                <code class="bg-warning px-2 py-1 border rounded text-dark font-weight-bold">{{ $user->pending_mac_address }}</code>
+                <form action="{{ route('users.approveMac', $user->id) }}" method="POST" class="d-inline ml-2">
+                    @csrf
+                    <button type="submit" class="btn btn-xs btn-success font-weight-bold" style="padding: 2px 8px; font-size: 11px;">Aprobar Dispositivo</button>
+                </form>
+                <form action="{{ route('users.rejectMac', $user->id) }}" method="POST" class="d-inline ml-1">
+                    @csrf
+                    <button type="submit" class="btn btn-xs btn-secondary font-weight-bold" style="padding: 2px 8px; font-size: 11px;">Rechazar</button>
+                </form>
+            </td>
+        </tr>
+        @endif
     </tbody>
 </table>
 

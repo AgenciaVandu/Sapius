@@ -86,8 +86,11 @@ class LoginController extends Controller
             Session::getHandler()->destroy($previous_session);
         }
 
-        Auth::user()->session_id = Session::getId();
-        Auth::user()->save();
+        $user = Auth::user();
+        $user->session_id = Session::getId();
+        // Invalidate Electron token so they cannot use both web browser and Electron at the same time
+        $user->api_token = null;
+        $user->save();
         $this->clearLoginAttempts($request);
 
         // Almacenar la MAC en la sesión si viene en el request y NO está vacía

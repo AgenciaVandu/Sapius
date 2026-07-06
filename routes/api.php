@@ -60,6 +60,10 @@ Route::middleware('auth:api')->group(function () {
     // Perfil del alumno (Fase 1)
     Route::get('/electron/profile', 'Api\ElectronPanelController@getProfile');
     Route::post('/electron/profile/update', 'Api\ElectronPanelController@updateProfile');
+    Route::get('/electron/profile/foto/{file}', 'Api\ElectronPanelController@profileFoto');
+    Route::get('/electron/profile/documento/{file}', 'Api\ElectronPanelController@profileDocumento');
+    Route::get('/electron/profile/pase/{file}', 'Api\ElectronPanelController@profilePase');
+    Route::post('/electron/request-mac-auth', 'Api\AuthController@requestMacAuth');
 
     // Notificaciones (Fase 2)
     Route::get('/electron/notifications', 'Api\ElectronPanelController@getNotifications');

@@ -32,11 +32,16 @@ class AuthController extends Controller
             ], 401);
         }
 
-        // Generate or update API token
-        if (!$user->api_token) {
-            $user->api_token = Str::random(80);
-            $user->save();
+        // Destroy existing web session if any to enforce single active session
+        $previous_session = $user->session_id;
+        if ($previous_session) {
+            \Illuminate\Support\Facades\Session::getHandler()->destroy($previous_session);
+            $user->session_id = null;
         }
+
+        // Generate a new API token every time a new login occurs from Electron to invalidate previous Electron instances
+        $user->api_token = Str::random(80);
+        $user->save();
 
         return response()->json([
             'user' => [
@@ -90,16 +95,43 @@ class AuthController extends Controller
             ]);
         }
 
-        if ($user->mac_address !== $request->mac_address) {
+        $macs = array_map('trim', explode(',', $user->mac_address));
+        if (!in_array($request->mac_address, $macs)) {
             return response()->json([
                 'success' => false,
-                'message' => 'Este dispositivo no está autorizado para esta cuenta. Por favor contacta a soporte.'
+                'message' => 'Este dispositivo no está autorizado para esta cuenta. Por favor contacta a soporte.',
+                'pending_request' => true,
+                'is_blocked' => false
             ], 403);
         }
 
         return response()->json([
             'success' => true,
             'message' => 'Dispositivo validado.'
+        ]);
+    }
+
+    /**
+     * Request authorization for a new MAC address.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function requestMacAuth(Request $request)
+    {
+        $request->validate([
+            'mac_address' => 'required',
+        ]);
+
+        $user = $request->user();
+        if ($user->hasRole('alumno')) {
+            $user->pending_mac_address = $request->mac_address;
+            $user->save();
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Solicitud de autorización enviada al administrador.'
         ]);
     }
 
