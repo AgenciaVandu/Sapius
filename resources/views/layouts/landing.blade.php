@@ -36,6 +36,25 @@
 </head>
 
 <body>
+    @include('components.test-server-banner')
+    @if(config('app.is_test_server'))
+    <style>
+        .navbar.fixed-top {
+            top: 40px !important;
+        }
+        body {
+            padding-top: 40px;
+        }
+        @media (max-width: 768px) {
+            .navbar.fixed-top {
+                top: 65px !important;
+            }
+            body {
+                padding-top: 65px;
+            }
+        }
+    </style>
+    @endif
     <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top" style="background-color: #002146 !important;">
         <div class="container">
             <a class="navbar-brand" href="/">

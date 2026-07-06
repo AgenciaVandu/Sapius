@@ -256,15 +256,26 @@ class MediaController extends Controller
 
     public function stream($filename)
     {
-        //$videosDir = config('larastreamer.basepath');
         $videosDir = storage_path('app/uploads/');
-        if (file_exists($filePath = $videosDir."/".$filename)) {
+        $filePath = $videosDir . "/" . $filename;
+
+        // Fallback 1: Directorio public local
+        if (!file_exists($filePath)) {
+            $videosDir = storage_path('app/public/');
+            $filePath = $videosDir . "/" . $filename;
+        }
+
+        // Fallback 2: Si no existe en el disco de este servidor (común en desarrollo), redirigir al de producción
+        if (!file_exists($filePath)) {
+            return redirect("https://sapius.com.mx/storage/" . $filename);
+        }
+
+        if (file_exists($filePath)) {
             $stream = new VideoStream($filePath);
             return response()->stream(function() use ($stream) {
                 $stream->start();
             });
         }
-        //\Log::debug(dd($videosDir));
         return response("File doesn't exists", 404);
     }
 

@@ -9,20 +9,22 @@
             </div>
             <div class="col-lg-5 col-md-7 bg-white p-4" style="border-left: 5px solid #ed6a5a;">
 
-                {{-- Mensaje de sesión cerrada --}}
-                @if ($errors->has('session_expired'))
-                    <div class="alert alert-warning alert-dismissible fade show d-flex align-items-center mb-3" role="alert"
-                        style="border-radius: 12px; font-size: 14px; background-color: #fff3cd; border: 1.5px solid #ed6a5a; color: #101a26;">
-                        <i class="fas fa-exclamation-triangle mr-2" style="color: #ed6a5a; font-size: 18px;"></i>
-                        <div>
-                            <strong>Sesión cerrada:</strong> {{ $errors->first('session_expired') }}
+                {{-- Mensaje de error de Hardware (MAC) --}}
+                @if ($errors->has('mac_error'))
+                    <div class="alert alert-danger shadow d-flex flex-column align-items-center mb-4 text-center" 
+                         style="border-radius: 20px; border: none; background: #fff5f5; border-left: 5px solid #ed6a5a;">
+                        <i class="fas fa-shield-alt mb-2" style="font-size: 30px; color: #ed6a5a;"></i>
+                        <div style="font-size: 13px; color: #721c24;">
+                            <strong>{{ $errors->first('mac_error') }}</strong>
                         </div>
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"
-                            style="color: #101a26;">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                        <a href="https://wa.me/{{ config('elearning.support_whatsapp', '521XXXXXXXXXX') }}" target="_blank" class="btn btn-sm mt-3"
+                           style="background: #25D366; color: white; border-radius: 20px; font-weight: bold;">
+                            <i class="fab fa-whatsapp"></i> Contactar Soporte Técnico
+                        </a>
                     </div>
                 @endif
+
+                {{-- Mensaje de sesión cerrada --}}
 
                 <div class="text-center mb-4">
                     <img src="{{ asset('vendor/adminmart/assets/images/big/icon.png') }}" alt="wrapkit"
@@ -30,8 +32,10 @@
                 </div>
                 <h2 class="mt-2 text-center" style="color: #101a26;">{{ __('Sign In') }}</h2>
                 <p class="text-center" style="color: #ed6a5a;">Desde aquí puedes ingresar.</p>
+                
                 <form method="POST" action="{{ route('login') }}">
                     @csrf
+                    <input type="hidden" name="mac_address" id="detected_mac">
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="form-group">

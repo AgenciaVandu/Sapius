@@ -75,6 +75,31 @@
 </head>
 
 <body @if (config('app.env') == 'production') class="security-enabled" @endif>
+    @include('components.test-server-banner')
+    @if(config('app.is_test_server'))
+    <style>
+        .topbar {
+            top: 40px !important;
+        }
+        .left-sidebar {
+            top: 104px !important; /* Original 64px + 40px banner */
+        }
+        .page-wrapper {
+            padding-top: 40px !important;
+        }
+        @media (max-width: 768px) {
+            .topbar {
+                top: 65px !important;
+            }
+            .left-sidebar {
+                top: 129px !important;
+            }
+            .page-wrapper {
+                padding-top: 65px !important;
+            }
+        }
+    </style>
+    @endif
     <!-- ============================================================== -->
     <!-- Preloader - style you can find in spinners.css -->
     <!-- ============================================================== -->
@@ -176,6 +201,7 @@
             };
         </script>
         <script src="{{ asset('js/student-security.js') }}"></script>
+        <script src="{{ asset('js/watchdog.js') }}"></script>
     @endif
 
     @yield('javascript')

@@ -141,6 +141,7 @@ Auth::routes();
 
 Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
     Route::post('users/{id}/unlock', 'UserController@unlock')->name('users.unlock');
+    Route::post('users/{id}/clear-mac', 'UserController@clearMac')->name('users.clearMac');
     Route::get('/', 'HomeController@admin')->name('admin');
     Route::get('/configuraciones', 'HomeController@configuracion')->name('admin.configuracion.index');
     Route::post('/configuraciones/upload', 'HomeController@uploadslide')->name('admin.configuracion.slide');
@@ -194,6 +195,8 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
     Route::get('/users/image/{file}', 'UserController@userPicture')->name('admin.image');
     Route::get('/users/pase/{file}', 'UserController@pase')->name('admin.pase');
     Route::get('/users/documento/{file}', 'UserController@documento')->name('admin.documento');
+    Route::post('users/{id}/approve-mac', 'UserController@approveMac')->name('users.approveMac');
+    Route::post('users/{id}/reject-mac', 'UserController@rejectMac')->name('users.rejectMac');
 
 
     // Cursos
@@ -329,6 +332,10 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
     Route::get('/exportCalificaciones/{inscripcion_id}', 'Evaluacion\ExamenController@exportReport')->name('admin.exportCalificaciones');
     Route::get('/exportAllResults/{curso_id}', 'Evaluacion\ExamenController@exportAllStudentResults')->name('admin.exportAllResults');
     Route::post('/examen/reiniciar', 'Evaluacion\ExamenController@reiniciarExamen')->name('examen.reiniciar');
+    
+    // Electron Auto Updater Management
+    Route::get('/electron/updater', 'Admin\ElectronUpdaterController@index')->name('admin.electron.updater.index');
+    Route::post('/electron/updater/upload', 'Admin\ElectronUpdaterController@upload')->name('admin.electron.updater.upload');
 });
 
 Route::group(['middleware' => ['instructor', 'restrict.mobile'], 'prefix' => 'instructor'], function () {
@@ -423,7 +430,7 @@ Route::group(['middleware' => ['instructor', 'restrict.mobile'], 'prefix' => 'in
 });
 
 //Rutas de alumno sin restricciones de mobile
-Route::group(['middleware' => ['alumno', 'check.blocked'], 'prefix' => 'alumno'], function () {
+Route::group(['middleware' => ['alumno', 'check.blocked', 'verify.mac'], 'prefix' => 'alumno'], function () {
     Route::post('/register-strike', 'UserController@registerStrike')->name('alumno.register-strike');
     Route::get('/', 'HomeController@index')->name('alumno.home');
     Route::get('/cursos/image/{file}', 'Cursos\CursoController@cursoPicture')->name('alumno.cursos.image');
@@ -452,7 +459,7 @@ Route::group(['middleware' => ['alumno', 'check.blocked'], 'prefix' => 'alumno']
     });
 
 //Rutas de alumno con restricciones de mobile
-Route::group(['middleware' => ['alumno', 'restrict.mobile', 'check.blocked'], 'prefix' => 'alumno'], function () {
+Route::group(['middleware' => ['alumno', 'restrict.mobile', 'check.blocked', 'verify.mac'], 'prefix' => 'alumno'], function () {
     Route::post('/users/profile', 'UserController@profile')->name('alumno.profile'); //{id}
     Route::get('/users/pase/{file}', 'UserController@pase')->name('alumno.pase');
     Route::get('/users/documento/{file}', 'UserController@documento')->name('alumno.documento');

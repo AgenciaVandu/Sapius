@@ -36,6 +36,7 @@
 </head>
 
 <body @if(config('app.env') == 'production') oncontextmenu="return false;" onselectstart="return false;" @endif>
+    @include('components.test-server-banner')
     <div class="main-wrapper">
         <!-- ============================================================== -->
         <!-- Preloader - style you can find in spinners.css -->
@@ -87,6 +88,7 @@
             $(".preloader ").fadeOut();
         });
     </script>
+    @yield('javascript')
 </body>
 
 </html>

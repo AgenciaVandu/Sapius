@@ -68,6 +68,7 @@ class Kernel extends HttpKernel
         'alumno' => \App\Http\Middleware\AlumnoMiddleware::class,
         'restrict.mobile' => \App\Http\Middleware\RestrictMobileAccess::class,
         'check.blocked' => \App\Http\Middleware\CheckBlocked::class,
+        'verify.mac' => \App\Http\Middleware\VerifyMacAddress::class,
     ];
 
     /**
