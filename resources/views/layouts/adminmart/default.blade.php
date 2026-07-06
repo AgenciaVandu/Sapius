@@ -201,7 +201,6 @@
             };
         </script>
         <script src="{{ asset('js/student-security.js') }}"></script>
-        <script src="{{ asset('js/watchdog.js') }}"></script>
     @endif
 
     @yield('javascript')
