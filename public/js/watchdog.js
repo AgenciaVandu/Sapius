@@ -53,24 +53,29 @@
     const timerDisplay = document.getElementById('watchdog-timer');
 
     async function checkDetector() {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 5000);
+        
         try {
-            const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 5000);
-            
             const response = await fetch(BRIDGE_URL, { signal: controller.signal });
-            clearTimeout(timeoutId);
-
             if (response.ok) {
                 if (isWarningActive) {
                     stopCountdown();
                 }
                 return true;
             }
+            // Treat non-ok response as offline
+            if (!isWarningActive) {
+                startCountdown();
+            }
+            return false;
         } catch (error) {
             if (!isWarningActive) {
                 startCountdown();
             }
             return false;
+        } finally {
+            clearTimeout(timeoutId);
         }
     }
 
