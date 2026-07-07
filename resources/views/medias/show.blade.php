@@ -28,9 +28,13 @@
 </table>
 
 @if($media->tipo == "video")
+@php
+    $streamRoute = auth()->user()->hasRole('alumno') === false 
+        ? route(Auth::user()->rol[0]->slug . '.medias.stream2', ['filename' => $media->ruta])
+        : route(Auth::user()->rol[0]->slug . '.medias.stream', ['filename' => $media->ruta]);
+@endphp
 <div style="text-align: center">
-    <video width="100%" src="https://sapius.com.mx/storage/{{ $media->ruta }}" controls controlsList="nodownload">
-        {{-- <video id="video" width="600" controls controlsList="nodownload"> --}}
+    <video width="100%" src="{{ $streamRoute }}" controls preload="metadata" controlsList="nodownload">
         Your browser does not support the video tag.
     </video>
 </div>
@@ -43,30 +47,6 @@
     $(document).ready( function () {
         //Boton del modal que carga
         $("#continuar").hide();
-        var xhr = new XMLHttpRequest();
-        xhr.responseType = 'blob';
-
-        xhr.onload = function() {
-        var reader = new FileReader();
-            reader.onloadend = function() {
-                var byteCharacters = atob(reader.result.slice(reader.result.indexOf(',') + 1));
-                var byteNumbers = new Array(byteCharacters.length);
-                for (var i = 0; i < byteCharacters.length; i++) {
-                    byteNumbers[i] = byteCharacters.charCodeAt(i);
-                }
-                var byteArray = new Uint8Array(byteNumbers);
-                var blob = new Blob([byteArray], {type: 'video/mp4'});
-                var url = URL.createObjectURL(blob);
-                document.getElementById('video').src = url;
-            }
-            reader.readAsDataURL(xhr.response);
-        };
-        @if(auth()->user()->hasRole('alumno') == false)
-        xhr.open('GET', '{{ route(Auth::user()->rol[0]->slug.'.medias.stream2',['filename'=>$media->ruta]) }}');
-        @else
-        xhr.open('GET', '{{ route(Auth::user()->rol[0]->slug.'.medias.stream',['filename'=>$media->ruta]) }}');
-        @endif
-        xhr.send();
     });
 </script>
 @endsection

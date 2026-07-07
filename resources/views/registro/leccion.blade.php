@@ -36,7 +36,7 @@
             @endphp
             <div style="text-align: center">
                 <video id="videoClase" style="width:100%" src="{{ $streamRoute }}" controls
-                    controlsList="nodownload">
+                    preload="metadata" controlsList="nodownload">
                     Tu navegador no soporta la etiqueta video.
                 </video>
             </div>
