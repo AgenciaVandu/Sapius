@@ -274,6 +274,9 @@ class MediaController extends Controller
             if (session_id()) {
                 session_write_close();
             }
+            if (function_exists('session') && session()->isStarted()) {
+                session()->save();
+            }
             $stream = new VideoStream($filePath);
             return response()->stream(function() use ($stream) {
                 $stream->start();

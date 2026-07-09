@@ -23,9 +23,12 @@ class RestrictMobileAccess
         $platform = strtolower($agent->platform());
         $userAgent = strtolower($request->header('User-Agent'));
 
-        // 1. Block if the front-end has set the cookie indicating this is an iPad simulating a Mac (touch support + Macintosh headers)
-        if ($request->hasCookie('is_touch_device') && (str_contains($platform, 'mac') || str_contains($platform, 'os x') || str_contains($userAgent, 'macintosh'))) {
-            return response()->view('errors.no_access');
+        // 1. Block if the front-end has set the cookie indicating this is a mobile/tablet touch device (including Desktop Mode simulation)
+        if ($request->hasCookie('is_touch_device')) {
+            // Safeguard: Allow touchscreen Windows desktop laptops to pass
+            if (!str_contains($platform, 'windows')) {
+                return response()->view('errors.no_access');
+            }
         }
 
         // 2. Direct string checks for classic mobile/tablet keywords in User-Agent (contingency for older or custom agents)

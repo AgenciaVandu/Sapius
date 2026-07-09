@@ -58,9 +58,16 @@
             var ua = navigator.userAgent.toLowerCase();
             var isMobileOrTablet = /iphone|ipad|ipod|android|webos|blackberry|iemobile|opera mini/i.test(ua);
             var isMac = /macintosh|macintel|macppc|mac68k/i.test(ua);
-            var isTouch = (navigator.maxTouchPoints && navigator.maxTouchPoints > 2) || ('ontouchstart' in window);
+            var isTouch = (navigator.maxTouchPoints && navigator.maxTouchPoints > 0) || ('ontouchstart' in window);
 
-            if (isMobileOrTablet || (isMac && isTouch)) {
+            // Detect mobile/tablet in Desktop Mode (Android/iOS)
+            // On Android Desktop mode, userAgent contains "linux" and touch is active.
+            // On iOS Desktop mode, userAgent contains "macintosh" and touch is active.
+            var isMobileDesktopMode = isTouch && (
+                /linux/i.test(ua) || isMac
+            ) && (Math.min(window.screen.width, window.screen.height) < 1024);
+
+            if (isMobileOrTablet || (isMac && isTouch) || isMobileDesktopMode) {
                 // Set the touch device cookie for backend middleware checks
                 document.cookie = "is_touch_device=1; path=/; max-age=86400; SameSite=Lax";
                 if (window.location.pathname !== '/no-access') {

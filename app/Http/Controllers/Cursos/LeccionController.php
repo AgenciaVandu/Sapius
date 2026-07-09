@@ -207,6 +207,9 @@ class LeccionController extends Controller
 
     public function sendTarea(Request $request)
     {
+        $request->validate([
+            'documento' => 'required|file|max:5120',
+        ]);
         $leccion = Leccion::find($request->leccion_id);
         $curso_programado = CursoProgramado::find($request->curso_programado_id);
         $instructor = User::find($curso_programado->user_id);

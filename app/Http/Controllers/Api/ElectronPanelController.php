@@ -406,6 +406,9 @@ class ElectronPanelController extends Controller
         }
 
         $file = $request->file('documento');
+        if ($file->getSize() > 5 * 1024 * 1024) {
+            return response()->json(['success' => false, 'message' => 'El archivo no debe pesar más de 5MB.'], 400);
+        }
         $ruta = Storage::put('tareas', $file);
 
         $datos = [

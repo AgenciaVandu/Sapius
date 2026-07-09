@@ -114,20 +114,12 @@
         registerGlobalPanelStrike('Paste');
     });
 
-    // 3. Disable Text Selection
-    function disableSelect(e) {
-        if (isAllowedInput(e.target)) return true;
-        return false;
-    }
-
     // Modern browsers use selectstart
     document.addEventListener('selectstart', function (e) {
         if (isAllowedInput(e.target)) return true;
         e.preventDefault();
         return false;
     });
-
-    document.onmousedown = disableSelect;
 
     // 4. Restricted Keys
     function handleGlobalKey(e) {
@@ -150,7 +142,7 @@
         const isShift = e.shiftKey;
 
         // Shift Key Restriction (Any use of Shift)
-        if (e.key === 'Shift' || isShift) {
+        if ((e.key === 'Shift' || isShift) && !isAllowedInput(e.target)) {
             e.preventDefault();
             registerGlobalPanelStrike("Restricted Key / Modifier");
             return;

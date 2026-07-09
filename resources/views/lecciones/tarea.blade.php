@@ -123,9 +123,17 @@
 
     <script>
         $(document).ready(function() {
-            //cambiar nombre de input importar
             $(".custom-file-input").on("change", function() {
+                var file = this.files[0];
                 var fileName = $(this).val().split("\\").pop();
+
+                if (file && file.size > 5 * 1024 * 1024) {
+                    alert("El archivo no debe ser mayor a 5MB.");
+                    $(this).val('');
+                    $(this).siblings(".custom-file-label").removeClass("selected").html("Selecciona archivo");
+                    return;
+                }
+
                 if (fileName) {
                     $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
                 } else {
