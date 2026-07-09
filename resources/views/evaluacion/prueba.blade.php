@@ -338,7 +338,10 @@ acceso permanente a la plataforma."
             }
         });
         // Navegación personalizada por recuadros
+        let isNavigating = false;
         $(document).on('click', '.recuadro-paginacion', function() {
+            if (isNavigating) return;
+
             var page = $(this).data('page');
             var prueba_id = $('#prueba_id').val();
             var inscripcion_id = $('#inscripcion_id').val();
@@ -354,6 +357,7 @@ acceso permanente a la plataforma."
             });
 
             if (page) {
+                isNavigating = true;
                 $('#loading-overlay').css('display', 'flex');
                 $.ajax({
                     url: url,
@@ -372,11 +376,13 @@ acceso permanente a la plataforma."
                             scrollTop: 0
                         }, 'fast');
                         $('#loading-overlay').hide();
+                        isNavigating = false;
                     },
                     error: function(xhr) {
                         console.log('Error navigating:', xhr);
                         $('#loading-overlay').hide();
                         alert('Error al cargar la pregunta. Por favor, intente de nuevo.');
+                        isNavigating = false;
                     }
                 });
             }
