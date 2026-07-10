@@ -91,6 +91,14 @@
                                     <label class="custom-file-label" for="inputGroupFile02"
                                         aria-describedby="inputGroupFileAddon02">Selecciona</label>
                                 </div>
+                                <div id="file-size-warning" class="alert alert-warning mt-2 d-none" style="border-radius: 8px; border-left: 4px solid #ffc107;">
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-exclamation-triangle mr-2 text-warning" style="font-size: 1.2rem;"></i>
+                                        <div>
+                                            <strong>El archivo supera el límite de 5MB.</strong> Para reducir su tamaño, puedes comprimir tu archivo PDF en <a href="https://www.adobe.com/mx/acrobat/online/compress-pdf.html" target="_blank" rel="noopener noreferrer" class="font-weight-bold text-dark" style="text-decoration: underline;">Adobe Acrobat Online</a>.
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="form-group row mb-0">
@@ -128,16 +136,18 @@
                 var fileName = $(this).val().split("\\").pop();
 
                 if (file && file.size > 5 * 1024 * 1024) {
-                    alert("El archivo no debe ser mayor a 5MB.");
+                    $('#file-size-warning').removeClass('d-none');
                     $(this).val('');
-                    $(this).siblings(".custom-file-label").removeClass("selected").html("Selecciona archivo");
+                    $(this).siblings(".custom-file-label").removeClass("selected").html("Selecciona documento");
                     return;
+                } else {
+                    $('#file-size-warning').addClass('d-none');
                 }
 
                 if (fileName) {
                     $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
                 } else {
-                    $(this).siblings(".custom-file-label").addClass("selected").html("Selecciona archivo");
+                    $(this).siblings(".custom-file-label").addClass("selected").html("Selecciona documento");
                 }
             });
 
