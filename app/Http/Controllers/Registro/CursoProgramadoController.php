@@ -224,10 +224,14 @@ class CursoProgramadoController extends Controller
         $inscripcion = Inscripcion::where('curso_programado_id',$request->curso_programado_id)->where('user_id',Auth::user()->id)->first();
 
         $curso = CursoProgramado::with(['Curso' => function($r){
-                        $r->with(['Lecciones' =>function($q){
-                            $q->where('leccion_id',0)->where('activo','si');
-                    }])->get();
-                }])->find($request->curso_programado_id);
+            $r->with(['Lecciones' => function($q){
+                $q->where('leccion_id', 0)
+                  ->where('activo', 'si')
+                  ->with(['Clases' => function($c) {
+                      $c->where('activo', 'si');
+                  }]);
+            }]);
+        }])->find($request->curso_programado_id);
 
         $contenido_programado = ContenidoProgramado::where('curso_programado_id',$request->curso_programado_id)->first();
 
@@ -284,17 +288,26 @@ class CursoProgramadoController extends Controller
                         $q->where('activo','si');
                     },'Curso'=>function($q1) use ($request){
                         $q1->with(['Lecciones' =>function($q2) use($request){
-                            $q2->with('Clases')->where('activo','si')->where("id","<>",$request->leccion_id);
-                        }])->get();
+                            $q2->with(['Clases' => function($c) {
+                                $c->where('activo', 'si');
+                            }])->where('activo','si')->where("id","<>",$request->leccion_id);
+                        }]);
                     }])
                     ->find($request->leccion_id);
 
         $inscripcion = Inscripcion::where('curso_programado_id',$request->curso_programado_id)->where('user_id',Auth::user()->id)->first();
         $curso = CursoProgramado::with(['Curso' => function($r){
-                        $r->with(['Lecciones' =>function($q){
-                            $q->where('leccion_id',0)->where('activo','si');
-                    }])->get();
-                }])->find($request->curso_programado_id);
+            $r->with(['Lecciones' => function($q){
+                $q->where('leccion_id', 0)
+                  ->where('activo', 'si')
+                  ->with(['Clases' => function($c) {
+                      $c->where('activo', 'si')
+                        ->with(['Medias' => function($m) {
+                            $m->where('activo', 'si');
+                        }]);
+                  }]);
+            }]);
+        }])->find($request->curso_programado_id);
 
         $contenido_programado = ContenidoProgramado::where('curso_programado_id',$request->curso_programado_id)->first();
 

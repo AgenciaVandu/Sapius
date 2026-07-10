@@ -227,7 +227,7 @@ class LeccionController extends Controller
         //$mail = Mail::to('eduardoica_@hotmail.com');
         $m = new TareaEmail($datos);
         $m->attachFromStorage($ruta);
-        $mail->send($m);
+        $mail->queue($m);
 
         $isLate = false;
         $contenidoProgramado = \App\Models\Registro\ContenidoProgramado::where('curso_programado_id', $curso_programado->id)->first();
