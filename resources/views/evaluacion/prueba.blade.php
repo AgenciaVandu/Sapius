@@ -411,10 +411,12 @@ acceso permanente a la plataforma."
             fetch(window.location.href, {
                 method: 'GET',
                 headers: {
+                    'Accept': 'application/json',
                     'X-Requested-With': 'XMLHttpRequest'
                 }
             })
             .then(response => {
+                console.log("Heartbeat check - Status:", response.status, "Redirected:", response.redirected, "URL:", response.url);
                 if (response.status === 401 || response.status === 419 || response.status === 403 || (response.redirected && response.url.includes('login'))) {
                     isFinalizing = true;
                     
