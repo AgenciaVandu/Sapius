@@ -415,7 +415,7 @@ acceso permanente a la plataforma."
                 }
             })
             .then(response => {
-                if (response.redirected && response.url.includes('login')) {
+                if (response.status === 401 || response.status === 419 || response.status === 403 || (response.redirected && response.url.includes('login'))) {
                     isFinalizing = true;
                     
                     // Bloquear pantalla con overlay
@@ -429,6 +429,9 @@ acceso permanente a la plataforma."
                     setTimeout(() => {
                         window.location.href = "{{ route('login') }}?expired=1&type=exam";
                     }, 3000);
+                } else if (response.redirected && response.url.includes('locked')) {
+                    isFinalizing = true;
+                    window.location.reload();
                 }
             })
             .catch(err => {
