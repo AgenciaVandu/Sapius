@@ -403,6 +403,38 @@ acceso permanente a la plataforma."
                 });
             }
         });
+ 
+        // Monitoreo en segundo plano de sesión activa (Heartbeat)
+        setInterval(function() {
+            if (isFinalizing) return;
+
+            fetch(window.location.href, {
+                method: 'GET',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => {
+                if (response.redirected && response.url.includes('login')) {
+                    isFinalizing = true;
+                    
+                    // Bloquear pantalla con overlay
+                    if (overlay) {
+                        if (contador) {
+                            contador.innerHTML = "⚠️ ACCESO DENEGADO<br><span style='font-size: 1.3rem; color: #ffeb3b;'>Se inició sesión en otro dispositivo. Cerrando examen...</span>";
+                        }
+                        overlay.style.display = 'flex';
+                    }
+
+                    setTimeout(() => {
+                        window.location.href = "{{ route('login') }}?expired=1&type=exam";
+                    }, 3000);
+                }
+            })
+            .catch(err => {
+                console.error("Error verificando sesión en segundo plano:", err);
+            });
+        }, 10000);
 
         // Tutorial Logic
         const driver = window.driver.js.driver;
