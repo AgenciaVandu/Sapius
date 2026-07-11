@@ -25,12 +25,20 @@
                 @endif
 
                 {{-- Mensaje de sesión cerrada --}}
-                @if ($errors->has('session_expired'))
+                @if ($errors->has('session_expired') || request()->has('expired'))
                     <div class="alert alert-warning shadow d-flex flex-column align-items-center mb-4 text-center" 
                          style="border-radius: 20px; border: none; background: #fffaf0; border-left: 5px solid #ff9800;">
                         <i class="fas fa-exclamation-triangle mb-2" style="font-size: 30px; color: #ff9800;"></i>
                         <div style="font-size: 13px; color: #663c00;">
-                            <strong>{{ $errors->first('session_expired') }}</strong>
+                            <strong>
+                                @if($errors->has('session_expired'))
+                                    {{ $errors->first('session_expired') }}
+                                @elseif(request()->get('type') === 'exam')
+                                    Se cerró tu sesión por abrir una sesión simultánea en otro dispositivo. Esta actividad se registra como posible intento de duplicidad de accesos durante la evaluación.
+                                @else
+                                    Tu sesión fue cerrada porque iniciaste sesión en otro dispositivo o navegador.
+                                @endif
+                            </strong>
                         </div>
                     </div>
                 @endif

@@ -371,7 +371,11 @@ acceso permanente a la plataforma."
                     },
                     success: function(response) {
                         if (!response || typeof response.preguntas === 'undefined') {
-                            window.location.reload();
+                            var redirectUrl = "{{ route('login') }}?expired=1&type=exam";
+                            if (response && response.redirect) {
+                                redirectUrl = response.redirect;
+                            }
+                            window.location.href = redirectUrl;
                             return;
                         }
                         $('#preguntas').html(response.preguntas);
@@ -386,7 +390,11 @@ acceso permanente a la plataforma."
                         console.log('Error navigating:', xhr);
                         $('#loading-overlay').hide();
                         if (xhr.status === 419 || xhr.status === 401 || xhr.status === 403) {
-                            window.location.reload();
+                            var redirectUrl = "{{ route('login') }}?expired=1&type=exam";
+                            if (xhr.responseJSON && xhr.responseJSON.redirect) {
+                                redirectUrl = xhr.responseJSON.redirect;
+                            }
+                            window.location.href = redirectUrl;
                         } else {
                             alert('Error al cargar la pregunta. Por favor, intente de nuevo.');
                             isNavigating = false;

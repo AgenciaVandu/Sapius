@@ -46,6 +46,23 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        if ($exception instanceof \Illuminate\Session\TokenMismatchException) {
+            $referer = $request->header('referer');
+            $type = 'normal';
+            if ($request->is('*examen*') || $request->is('*prueba*') || ($referer && (str_contains($referer, 'examen') || str_contains($referer, 'prueba')))) {
+                $type = 'exam';
+            }
+
+            if ($request->ajax() || $request->expectsJson()) {
+                return response()->json([
+                    'message' => 'Sesión expirada.',
+                    'redirect' => route('login', ['expired' => 1, 'type' => $type])
+                ], 419);
+            }
+
+            return redirect()->route('login', ['expired' => 1, 'type' => $type]);
+        }
+
         return parent::render($request, $exception);
     }
 }
