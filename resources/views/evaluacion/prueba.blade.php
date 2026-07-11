@@ -408,7 +408,7 @@ acceso permanente a la plataforma."
         setInterval(function() {
             if (isFinalizing) return;
 
-            fetch(window.location.href, {
+            fetch("{{ route('alumno.ping-session') }}", {
                 method: 'GET',
                 headers: {
                     'Accept': 'application/json',

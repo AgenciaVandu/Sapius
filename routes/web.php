@@ -432,6 +432,9 @@ Route::group(['middleware' => ['instructor', 'restrict.mobile'], 'prefix' => 'in
 //Rutas de alumno sin restricciones de mobile
 Route::group(['middleware' => ['alumno', 'check.blocked', 'verify.mac'], 'prefix' => 'alumno'], function () {
     Route::post('/register-strike', 'UserController@registerStrike')->name('alumno.register-strike');
+    Route::get('/ping-session', function() {
+        return response()->json(['status' => 'active']);
+    })->name('alumno.ping-session');
     Route::get('/', 'HomeController@index')->name('alumno.home');
     Route::get('/cursos/image/{file}', 'Cursos\CursoController@cursoPicture')->name('alumno.cursos.image');
     Route::get('/inscripcion/{curso_id}', 'Registro\InscripcionController@inscripcion')->name('inscripcion.form'); // Paso 1
