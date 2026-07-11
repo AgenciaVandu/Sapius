@@ -370,6 +370,10 @@ acceso permanente a la plataforma."
                         respuestas: JSON.stringify(respuestas)
                     },
                     success: function(response) {
+                        if (!response || typeof response.preguntas === 'undefined') {
+                            window.location.reload();
+                            return;
+                        }
                         $('#preguntas').html(response.preguntas);
                         $('#respuestas_status').html(response.respuestas_status);
                         $('html, body').animate({
@@ -381,8 +385,12 @@ acceso permanente a la plataforma."
                     error: function(xhr) {
                         console.log('Error navigating:', xhr);
                         $('#loading-overlay').hide();
-                        alert('Error al cargar la pregunta. Por favor, intente de nuevo.');
-                        isNavigating = false;
+                        if (xhr.status === 419 || xhr.status === 401 || xhr.status === 403) {
+                            window.location.reload();
+                        } else {
+                            alert('Error al cargar la pregunta. Por favor, intente de nuevo.');
+                            isNavigating = false;
+                        }
                     }
                 });
             }

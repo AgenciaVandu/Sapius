@@ -25,6 +25,15 @@
                 @endif
 
                 {{-- Mensaje de sesión cerrada --}}
+                @if ($errors->has('session_expired'))
+                    <div class="alert alert-warning shadow d-flex flex-column align-items-center mb-4 text-center" 
+                         style="border-radius: 20px; border: none; background: #fffaf0; border-left: 5px solid #ff9800;">
+                        <i class="fas fa-exclamation-triangle mb-2" style="font-size: 30px; color: #ff9800;"></i>
+                        <div style="font-size: 13px; color: #663c00;">
+                            <strong>{{ $errors->first('session_expired') }}</strong>
+                        </div>
+                    </div>
+                @endif
 
                 <div class="text-center mb-4">
                     <img src="{{ asset('vendor/adminmart/assets/images/big/icon.png') }}" alt="wrapkit"

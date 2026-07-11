@@ -20,8 +20,16 @@ class CheckUserSession
                 Log::warning('CheckUserSession: Session mismatch. User ID: ' . $user->id . '. DB Session: ' . $user->session_id . '. Current Session: ' . Session::getId());
                 Auth::logout();
 
+                $message = 'Tu sesión fue cerrada porque iniciaste sesión en otro dispositivo o navegador.';
+
+                // Detectar si el usuario estaba en un examen o prueba
+                $referer = $request->header('referer');
+                if ($request->is('*examen*') || $request->is('*prueba*') || ($referer && (str_contains($referer, 'examen') || str_contains($referer, 'prueba')))) {
+                    $message = 'Se cerró tu sesión por abrir una sesión simultánea en otro dispositivo. Esta actividad se registra como posible intento de duplicidad de accesos durante la evaluación.';
+                }
+
                 return redirect()->route('login')->withErrors([
-                    'session_expired' => 'Tu sesión fue cerrada porque iniciaste sesión en otro dispositivo o navegador.',
+                    'session_expired' => $message,
                 ]);
             }
         }
