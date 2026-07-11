@@ -20,124 +20,126 @@ use App\User;
 
 
 
-Route::get('/', function () {
-    $images = Slide::where('section', 'like', 'slider-index')->orderBy('position', 'asc')->get();
-    $prides = Pride::orderBy('position', 'asc')->get();
-    $teachers = Teacher::orderBy('position', 'asc')->get();
-    $reviews = Reviews::where('visible', 1)->where('rating', '>=', 4)->orderBy('created_at', 'desc')->take(6)->get();
-    return view('index', compact('images', 'prides', 'teachers', 'reviews'));
-})->name('landing.home');
+Route::group(['middleware' => 'throttle:60,1'], function () {
+    Route::get('/', function () {
+        $images = Slide::where('section', 'like', 'slider-index')->orderBy('position', 'asc')->get();
+        $prides = Pride::orderBy('position', 'asc')->get();
+        $teachers = Teacher::orderBy('position', 'asc')->get();
+        $reviews = Reviews::where('visible', 1)->where('rating', '>=', 4)->orderBy('created_at', 'desc')->take(6)->get();
+        return view('index', compact('images', 'prides', 'teachers', 'reviews'));
+    })->name('landing.home');
 
-Route::post('/view', 'Registro\CursoProgramadoController@viewGuia')->name('alumno.view.guias');
+    Route::post('/view', 'Registro\CursoProgramadoController@viewGuia')->name('alumno.view.guias');
 
 
-/* Route::get('/generate-storage-link', function () {
- Artisan::call('storage:link');
- return 'Symlink creado exitosamente aver si funciona.'; }); */
+    /* Route::get('/generate-storage-link', function () {
+     Artisan::call('storage:link');
+     return 'Symlink creado exitosamente aver si funciona.'; }); */
 
-Route::get('terms/conditions', function () {
-    return view('terms');
-})->name('termsandconditions');
+    Route::get('terms/conditions', function () {
+        return view('terms');
+    })->name('termsandconditions');
 
-//Privacity
-Route::get('privacidad', function () {
-    return view('privacidad');
-})->name('privacidad');
+    //Privacity
+    Route::get('privacidad', function () {
+        return view('privacidad');
+    })->name('privacidad');
 
-//COOKIES
-Route::get('cookies', function () {
-    return view('cookies');
-})->name('cookies');
+    //COOKIES
+    Route::get('cookies', function () {
+        return view('cookies');
+    })->name('cookies');
 
-//NO ACCESS (MOBILE/TABLET RESTRICTION)
-Route::get('no-access', function () {
-    return view('errors.no_access');
-})->name('no-access');
+    //NO ACCESS (MOBILE/TABLET RESTRICTION)
+    Route::get('no-access', function () {
+        return view('errors.no_access');
+    })->name('no-access');
 
-Route::get('/exani-1', function () {
-    $reviews = Reviews::where('visible', 1)->where('rating', '>=', 4)->orderBy('created_at', 'desc')->take(6)->get();
-    return view('cursos-front.exani-1', compact('reviews'));
+    Route::get('/exani-1', function () {
+        $reviews = Reviews::where('visible', 1)->where('rating', '>=', 4)->orderBy('created_at', 'desc')->take(6)->get();
+        return view('cursos-front.exani-1', compact('reviews'));
+    });
+    Route::get('/exani-2', function () {
+        $reviews = Reviews::where('visible', 1)->where('rating', '>=', 4)->orderBy('created_at', 'desc')->take(6)->get();
+        return view('cursos-front.exani-2', compact('reviews'));
+    });
+    Route::get('/exani-3', function () {
+        $reviews = Reviews::where('visible', 1)->where('rating', '>=', 4)->orderBy('created_at', 'desc')->take(6)->get();
+        return view('cursos-front.exani-3', compact('reviews'));
+    });
+    Route::get('/egel-plus', function () {
+        $reviews = Reviews::where('visible', 1)->where('rating', '>=', 4)->orderBy('created_at', 'desc')->take(6)->get();
+        return view('cursos-front.egel-plus', compact('reviews'));
+    });
+    Route::get('/egel-plus-nutricion', function () {
+        $reviews = Reviews::where('visible', 1)->where('rating', '>=', 4)->orderBy('created_at', 'desc')->take(6)->get();
+        return view('cursos-front.nutricion', compact('reviews'));
+    });
+
+    Route::get('/egel-plus-medicina', function () {
+        $reviews = Reviews::where('visible', 1)->where('rating', '>=', 4)->orderBy('created_at', 'desc')->take(6)->get();
+        return view('cursos-front.medicina', compact('reviews'));
+    });
+    Route::get('/cursos-enarm', function () {
+        $reviews = Reviews::where('visible', 1)->where('rating', '>=', 4)->orderBy('created_at', 'desc')->take(6)->get();
+        return view('cursos-front.enarm', compact('reviews'));
+    });
+    Route::get('/cursos-presenciales', function () {
+        $reviews = Reviews::where('visible', 1)->where('rating', '>=', 4)->orderBy('created_at', 'desc')->take(6)->get();
+        return view('cursos-front.presencial', compact('reviews'));
+    });
+
+    Route::get('/guias-medicina', function () {
+        $category = Category::where('name', 'guias')->first();
+        $guias = CursoProgramado::where('category_id', $category->id)->where('identificador', 'like', '%medicina%')->where('activo', 'si')->where('fecha_inicio_venta', '<=', date('Y-m-d H:i:s'))
+            ->where('fecha_fin_venta', '>=', date('Y-m-d H:i:s'))->get();
+        /* dd($guias); */
+        $manageable_guias_medicina = ManageableGuiaMedicine::orderBy('position', 'asc')->get();
+        return view('cursos-front.guia-medicina', compact('guias', 'manageable_guias_medicina'));
+    })->name('guias.medicina');
+
+    Route::get('/guias-nutricion', function () {
+        $category = Category::where('name', 'guias')->first();
+        $guias = CursoProgramado::where('category_id', $category->id)->where('identificador', 'like', '%nutricion%')->where('activo', 'si')->where('fecha_inicio_venta', '<=', date('Y-m-d H:i:s'))
+            ->where('fecha_fin_venta', '>=', date('Y-m-d H:i:s'))->get();
+        $manageable_guias_nutricion = ManageableGuiaNutrition::orderBy('position', 'asc')->get();
+        return view('cursos-front.guia-nutricion', compact('guias', 'manageable_guias_nutricion'));
+    })->name('guias.nutricion');
+
+    Route::get('/simuladores-medicina', function () {
+        $category = Category::where('name', 'simuladores')->first();
+        $simuladores = CursoProgramado::where('category_id', $category->id)->where('identificador', 'like', '%medicina%')->where('activo', 'si')->where('fecha_inicio_venta', '<=', date('Y-m-d H:i:s'))
+            ->where('fecha_fin_venta', '>=', date('Y-m-d H:i:s'))->get();
+        $manageable_simuladores_medicina = ManageableSimulatorMedicine::orderBy('position', 'asc')->get();
+        return view('cursos-front.simulador-medicina', compact('simuladores', 'manageable_simuladores_medicina'));
+    })->name('simuladores.medicina');
+
+    Route::get('/simuladores-nutricion', function () {
+        $category = Category::where('name', 'simuladores')->first();
+        $simuladores = CursoProgramado::where('category_id', $category->id)->where('identificador', 'like', '%nutricion%')->where('activo', 'si')->where('fecha_inicio_venta', '<=', date('Y-m-d H:i:s'))
+            ->where('fecha_fin_venta', '>=', date('Y-m-d H:i:s'))->get();
+        $manageable_simuladores_nutricion = ManageableSimulatorNutrition::orderBy('position', 'asc')->get();
+        return view('cursos-front.simulador-nutricion', compact('simuladores', 'manageable_simuladores_nutricion'));
+    })->name('simuladores.nutricion');
+
+
+    Route::get('/cursos/image/{file}', 'Cursos\CursoController@cursoPicture')->name('public.cursos.image');
+    Route::get('/public/users/image/{file}', 'UserController@userPicture')->name('public.alumno.image');
+
+
+
+
+
+    Route::get('/checkout', 'CheckoutController@createCheckout')->name('checkout');
+    Route::post('/payout', 'CheckoutController@processPay')->name('checkout.processPayout');
+
+    //Socialite
+    Route::get('/redirect', 'SocialAuthFacebookController@redirect');
+    Route::get('/callback', 'SocialAuthFacebookController@callback');
+    //Home
+    Route::post('/informacion', 'UserController@informacion')->name('informacion');
+    Auth::routes();
 });
-Route::get('/exani-2', function () {
-    $reviews = Reviews::where('visible', 1)->where('rating', '>=', 4)->orderBy('created_at', 'desc')->take(6)->get();
-    return view('cursos-front.exani-2', compact('reviews'));
-});
-Route::get('/exani-3', function () {
-    $reviews = Reviews::where('visible', 1)->where('rating', '>=', 4)->orderBy('created_at', 'desc')->take(6)->get();
-    return view('cursos-front.exani-3', compact('reviews'));
-});
-Route::get('/egel-plus', function () {
-    $reviews = Reviews::where('visible', 1)->where('rating', '>=', 4)->orderBy('created_at', 'desc')->take(6)->get();
-    return view('cursos-front.egel-plus', compact('reviews'));
-});
-Route::get('/egel-plus-nutricion', function () {
-    $reviews = Reviews::where('visible', 1)->where('rating', '>=', 4)->orderBy('created_at', 'desc')->take(6)->get();
-    return view('cursos-front.nutricion', compact('reviews'));
-});
-
-Route::get('/egel-plus-medicina', function () {
-    $reviews = Reviews::where('visible', 1)->where('rating', '>=', 4)->orderBy('created_at', 'desc')->take(6)->get();
-    return view('cursos-front.medicina', compact('reviews'));
-});
-Route::get('/cursos-enarm', function () {
-    $reviews = Reviews::where('visible', 1)->where('rating', '>=', 4)->orderBy('created_at', 'desc')->take(6)->get();
-    return view('cursos-front.enarm', compact('reviews'));
-});
-Route::get('/cursos-presenciales', function () {
-    $reviews = Reviews::where('visible', 1)->where('rating', '>=', 4)->orderBy('created_at', 'desc')->take(6)->get();
-    return view('cursos-front.presencial', compact('reviews'));
-});
-
-Route::get('/guias-medicina', function () {
-    $category = Category::where('name', 'guias')->first();
-    $guias = CursoProgramado::where('category_id', $category->id)->where('identificador', 'like', '%medicina%')->where('activo', 'si')->where('fecha_inicio_venta', '<=', date('Y-m-d H:i:s'))
-        ->where('fecha_fin_venta', '>=', date('Y-m-d H:i:s'))->get();
-    /* dd($guias); */
-    $manageable_guias_medicina = ManageableGuiaMedicine::orderBy('position', 'asc')->get();
-    return view('cursos-front.guia-medicina', compact('guias', 'manageable_guias_medicina'));
-})->name('guias.medicina');
-
-Route::get('/guias-nutricion', function () {
-    $category = Category::where('name', 'guias')->first();
-    $guias = CursoProgramado::where('category_id', $category->id)->where('identificador', 'like', '%nutricion%')->where('activo', 'si')->where('fecha_inicio_venta', '<=', date('Y-m-d H:i:s'))
-        ->where('fecha_fin_venta', '>=', date('Y-m-d H:i:s'))->get();
-    $manageable_guias_nutricion = ManageableGuiaNutrition::orderBy('position', 'asc')->get();
-    return view('cursos-front.guia-nutricion', compact('guias', 'manageable_guias_nutricion'));
-})->name('guias.nutricion');
-
-Route::get('/simuladores-medicina', function () {
-    $category = Category::where('name', 'simuladores')->first();
-    $simuladores = CursoProgramado::where('category_id', $category->id)->where('identificador', 'like', '%medicina%')->where('activo', 'si')->where('fecha_inicio_venta', '<=', date('Y-m-d H:i:s'))
-        ->where('fecha_fin_venta', '>=', date('Y-m-d H:i:s'))->get();
-    $manageable_simuladores_medicina = ManageableSimulatorMedicine::orderBy('position', 'asc')->get();
-    return view('cursos-front.simulador-medicina', compact('simuladores', 'manageable_simuladores_medicina'));
-})->name('simuladores.medicina');
-
-Route::get('/simuladores-nutricion', function () {
-    $category = Category::where('name', 'simuladores')->first();
-    $simuladores = CursoProgramado::where('category_id', $category->id)->where('identificador', 'like', '%nutricion%')->where('activo', 'si')->where('fecha_inicio_venta', '<=', date('Y-m-d H:i:s'))
-        ->where('fecha_fin_venta', '>=', date('Y-m-d H:i:s'))->get();
-    $manageable_simuladores_nutricion = ManageableSimulatorNutrition::orderBy('position', 'asc')->get();
-    return view('cursos-front.simulador-nutricion', compact('simuladores', 'manageable_simuladores_nutricion'));
-})->name('simuladores.nutricion');
-
-
-Route::get('/cursos/image/{file}', 'Cursos\CursoController@cursoPicture')->name('public.cursos.image');
-Route::get('/public/users/image/{file}', 'UserController@userPicture')->name('public.alumno.image');
-
-
-
-
-
-Route::get('/checkout', 'CheckoutController@createCheckout')->name('checkout');
-Route::post('/payout', 'CheckoutController@processPay')->name('checkout.processPayout');
-
-//Socialite
-Route::get('/redirect', 'SocialAuthFacebookController@redirect');
-Route::get('/callback', 'SocialAuthFacebookController@callback');
-//Home
-Route::post('/informacion', 'UserController@informacion')->name('informacion');
-Auth::routes();
 
 Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
     Route::post('users/{id}/unlock', 'UserController@unlock')->name('users.unlock');
