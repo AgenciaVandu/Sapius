@@ -278,7 +278,9 @@ class MediaController extends Controller
             if (function_exists('session') && session()->isStarted()) {
                 session()->save();
             }
-            return redirect('/uploads/' . $filename);
+            // Retornamos el archivo directamente a través de Laravel
+            // BinaryFileResponse soporta nativamente Range Requests (206) sin colgar el hilo
+            return response()->file($filePath);
         }
         return response("File doesn't exists", 404);
     }
