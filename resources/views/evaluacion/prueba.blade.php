@@ -439,7 +439,7 @@ acceso permanente a la plataforma."
             .catch(err => {
                 console.error("Error verificando sesión en segundo plano:", err);
             });
-        }, 10000);
+        }, 30000);
 
         // Tutorial Logic
         const driver = window.driver.js.driver;
