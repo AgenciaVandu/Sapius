@@ -32,9 +32,23 @@ Route::group(['middleware' => 'throttle:60,1'], function () {
     Route::post('/view', 'Registro\CursoProgramadoController@viewGuia')->name('alumno.view.guias');
 
 
-    /* Route::get('/generate-storage-link', function () {
-     Artisan::call('storage:link');
-     return 'Symlink creado exitosamente aver si funciona.'; }); */
+    Route::get('/setup-symlinks', function () {
+        $targetFolder = storage_path('app/uploads');
+        $publicHtml = base_path('public_html');
+        $publicDir = base_path('public');
+        
+        $linkFolder = is_dir($publicHtml) ? $publicHtml . '/uploads' : $publicDir . '/uploads';
+        
+        if (!file_exists($linkFolder)) {
+            try {
+                symlink($targetFolder, $linkFolder);
+                return "Symlink creado exitosamente en: " . $linkFolder . " apuntando a " . $targetFolder;
+            } catch (\Exception $e) {
+                return "Error al crear symlink: " . $e->getMessage();
+            }
+        }
+        return "El symlink ya existe en: " . $linkFolder;
+    });
 
     Route::get('terms/conditions', function () {
         return view('terms');

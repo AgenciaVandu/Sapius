@@ -271,6 +271,13 @@ class MediaController extends Controller
         }
 
         if (file_exists($filePath)) {
+            // Liberar la sesión antes de redireccionar para evitar Session Blocking si el navegador retiene la petición
+            if (session_id()) {
+                session_write_close();
+            }
+            if (function_exists('session') && session()->isStarted()) {
+                session()->save();
+            }
             return redirect('/uploads/' . $filename);
         }
         return response("File doesn't exists", 404);

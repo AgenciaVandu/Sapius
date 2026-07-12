@@ -417,6 +417,13 @@ acceso permanente a la plataforma."
             })
             .then(response => {
                 console.log("Heartbeat check - Status:", response.status, "Redirected:", response.redirected, "URL:", response.url);
+                
+                // Ignorar error 429 (Too Many Requests) por los límites del throttle
+                if (response.status === 429) {
+                    console.warn("Too Many Requests (429) en ping-session, reintentando después...");
+                    return;
+                }
+
                 if (response.status === 401 || response.status === 419 || response.status === 403 || (response.redirected && response.url.includes('login'))) {
                     isFinalizing = true;
                     
@@ -439,7 +446,7 @@ acceso permanente a la plataforma."
             .catch(err => {
                 console.error("Error verificando sesión en segundo plano:", err);
             });
-        }, 30000);
+        }, 120000);
 
         // Tutorial Logic
         const driver = window.driver.js.driver;
