@@ -278,11 +278,14 @@ class MediaController extends Controller
             if (function_exists('session') && session()->isStarted()) {
                 session()->save();
             }
+            // Usamos realpath() para normalizar la ruta (quitar doble diagonal //, resolver enlaces, etc.)
+            $realPath = realpath($filePath);
+
             // Usamos X-Sendfile para Apache
             // Apache tomará el archivo de $filePath y lo transmitirá directamente al alumno.
             // El proceso de PHP se libera en este mismo instante.
             return response()->noContent()
-                ->header('X-Sendfile', $filePath)
+                ->header('X-Sendfile', $realPath)
                 ->header('Content-Type', 'video/mp4');
         }
         return response("File doesn't exists", 404);
