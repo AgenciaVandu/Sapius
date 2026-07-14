@@ -278,9 +278,12 @@ class MediaController extends Controller
             if (function_exists('session') && session()->isStarted()) {
                 session()->save();
             }
-            // Retornamos el archivo directamente a través de Laravel
-            // BinaryFileResponse soporta nativamente Range Requests (206) sin colgar el hilo
-            return response()->file($filePath);
+            // Usamos X-Sendfile para Apache
+            // Apache tomará el archivo de $filePath y lo transmitirá directamente al alumno.
+            // El proceso de PHP se libera en este mismo instante.
+            return response()->noContent()
+                ->header('X-Sendfile', $filePath)
+                ->header('Content-Type', 'video/mp4');
         }
         return response("File doesn't exists", 404);
     }
