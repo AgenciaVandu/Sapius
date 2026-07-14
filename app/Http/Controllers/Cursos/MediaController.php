@@ -284,7 +284,7 @@ class MediaController extends Controller
             // Usamos X-Sendfile para Apache
             // Apache tomará el archivo de $filePath y lo transmitirá directamente al alumno.
             // El proceso de PHP se libera en este mismo instante.
-            return response()->noContent()
+            return response('', 200)
                 ->header('X-Sendfile', $realPath)
                 ->header('Content-Type', 'video/mp4');
         }
