@@ -301,6 +301,15 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
     Route::get('/medias/stream/{filename}', 'Cursos\MediaController@stream')->name('admin.medias.stream2');
     Route::get('/medias/archivo/{file}', 'Cursos\MediaController@archivo')->name('admin.medias.archivo');
 
+    // Interactive PDFs (Admin)
+    Route::get('/cursos/modulos/material-pdfs', 'Cursos\MaterialInteractivePdfController@index')->name('admin.material-pdfs.index');
+    Route::get('/material-pdfs/create', 'Cursos\MaterialInteractivePdfController@create')->name('admin.material-pdfs.create');
+    Route::post('/material-pdfs/store', 'Cursos\MaterialInteractivePdfController@store')->name('admin.material-pdfs.store');
+    Route::get('/material-pdfs/{id}/edit', 'Cursos\MaterialInteractivePdfController@edit')->name('admin.material-pdfs.edit');
+    Route::post('/material-pdfs/{id}/save-layout', 'Cursos\MaterialInteractivePdfController@saveConfig')->name('admin.material-pdfs.save-config');
+    Route::delete('/material-pdfs/{id}/destroy', 'Cursos\MaterialInteractivePdfController@destroy')->name('admin.material-pdfs.destroy');
+    Route::get('/material-pdfs/{id}/download-raw', 'Cursos\MaterialInteractivePdfController@downloadRaw')->name('admin.material-pdfs.download-raw');
+
     //Registros
     Route::post('/registro/programacion', 'Registro\CursoProgramadoController@index')->name('schedule'); //{curso_id}
     Route::get('/registro/getallschedule/{curso_id}/{active}', 'Registro\CursoProgramadoController@getAllSchedule')->name('schedule.getall');
@@ -534,6 +543,11 @@ Route::group(['middleware' => ['alumno', 'restrict.mobile', 'check.blocked', 've
     Route::get('/curso/homework-tracking/{curso_programado_id}', 'Registro\CursoProgramadoController@studentHomeworkTracking')->name('alumno.curso.homework.tracking');
     Route::get('/curso/progress/{curso_programado_id}', 'Registro\CursoProgramadoController@studentCourseProgress')->name('alumno.curso.progress');
     Route::get('/exportCalificaciones/{inscripcion_id}', 'Evaluacion\ExamenController@exportReport')->name('alumno.exportCalificaciones');
+
+    // Interactive PDFs (Alumno)
+    Route::get('/material-pdfs/{id}/resolver', 'Cursos\MaterialInteractivePdfController@showAlumno')->name('alumno.material-pdfs.show');
+    Route::post('/material-pdfs/{id}/save-answers', 'Cursos\MaterialInteractivePdfController@saveAnswers')->name('alumno.material-pdfs.save-answers');
+    Route::get('/material-pdfs/{id}/download-raw', 'Cursos\MaterialInteractivePdfController@downloadRaw')->name('alumno.material-pdfs.download-raw');
 
     // Notifications
     Route::post('/notifications/mark-as-read/{id}', function ($id) {

@@ -304,6 +304,30 @@
         </div>
         @endif
 
+        @if ($leccion->materialPdfs->count())
+        <div class="card shadow-sm border-0 mb-3" id="card-material-pdfs">
+            <div class="card-body">
+                <h4 class="card-title text-primary"><i class="far fa-file-pdf mr-2"></i>Material Interactivo</h4>
+                <p class="text-muted small">Haz clic en resolver para contestar las preguntas directamente en la pantalla.</p>
+                <div class="list-group">
+                    @foreach ($leccion->materialPdfs as $material)
+                    <div class="list-group-item d-flex justify-content-between align-items-center py-2 px-3 mb-2 shadow-xs" style="border-radius: 8px; background-color: #fff; border: 1px solid #e9ecef;">
+                        <span class="font-weight-bold text-dark text-truncate mr-2" style="max-width: 60%;">{{ $material->titulo }}</span>
+                        <div class="d-flex align-items-center">
+                            <a href="{{ route('alumno.material-pdfs.show', $material->id) }}" class="btn btn-xs btn-primary mr-1" style="font-size: 0.75rem; padding: 4px 8px;">
+                                <i class="fas fa-edit mr-1"></i> Resolver
+                            </a>
+                            <a href="{{ route('alumno.material-pdfs.download-raw', $material->id) }}" class="btn btn-xs btn-outline-secondary" style="font-size: 0.75rem; padding: 4px 8px;" title="Descargar PDF Original">
+                                <i class="fas fa-download"></i>
+                            </a>
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+        @endif
+
         @if ($leccion->Pruebas->count())
         <div class="card examen">
             <div class="card-body">

@@ -28,6 +28,16 @@
             <th scope="row">Resumen:</th>
             <td>{{ $leccion->resumen }}<td>
         </tr>
+        @if($leccion->leccion_id > 0)
+        <tr>
+            <th scope="row">PDFs Interactivos:</th>
+            <td>
+                <a href="{{ route('admin.material-pdfs.index', ['leccion_id' => $leccion->id]) }}" class="btn btn-sm btn-info">
+                    <i class="far fa-file-pdf mr-1"></i> Gestionar PDFs Interactivos
+                </a>
+            </td>
+        </tr>
+        @endif
     </tbody>
 </table>
 

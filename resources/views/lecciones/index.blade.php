@@ -285,9 +285,12 @@
                         );
                         if (data['leccion_id'] > 0) {
                             $(row).find('td:eq(' + (i++) + ')').html(
-                                '<form method="POST" action="{{ route(Auth::user()->rol[0]->slug . '.medias.index') }}"> @csrf <input name="leccion_id" type="hidden" value="' +
+                                '<div class="btn-group">' +
+                                '<form method="POST" action="{{ route(Auth::user()->rol[0]->slug . '.medias.index') }}" style="display:inline-block; margin-right: 4px;"> @csrf <input name="leccion_id" type="hidden" value="' +
                                 data['id'] +
-                                '"> <button type="submit" class="btn btn-primary"><i class="fas fa-film"></i></button> </form>'
+                                '"> <button type="submit" class="btn btn-primary" title="Multimedia"><i class="fas fa-film"></i></button> </form>' +
+                                '<a href="{{ route("admin.material-pdfs.index") }}?leccion_id=' + data['id'] + '" class="btn btn-info text-white" title="PDFs Interactivos"><i class="far fa-file-pdf"></i></a>' +
+                                '</div>'
                             );
                         }
                         $(row).find('td:eq(' + (i++) + ')').html(

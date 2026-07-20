@@ -19,6 +19,11 @@ class Leccion extends Model
         return $this->hasMany('App\Models\Cursos\Media');
     }
 
+    public function materialPdfs()
+    {
+        return $this->hasMany('App\Models\Cursos\MaterialPdf', 'leccion_id');
+    }
+
     public function Curso()
     {
         return $this->belongsTo('App\Models\Cursos\Curso');

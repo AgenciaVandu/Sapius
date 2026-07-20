@@ -286,7 +286,7 @@ class CursoProgramadoController extends Controller
                         $q->with('Preguntas');
                     },'Medias' =>function($q){
                         $q->where('activo','si');
-                    },'Curso'=>function($q1) use ($request){
+                    },'materialPdfs', 'Curso'=>function($q1) use ($request){
                         $q1->with(['Lecciones' =>function($q2) use($request){
                             $q2->with(['Clases' => function($c) {
                                 $c->where('activo', 'si');
