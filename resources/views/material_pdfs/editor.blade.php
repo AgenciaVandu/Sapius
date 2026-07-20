@@ -34,7 +34,7 @@
             background-color: #525659;
             padding: 20px;
             border-radius: 8px;
-            max-height: 75vh;
+            max-height: 70vh;
             overflow-y: auto;
             position: relative;
         }
@@ -64,31 +64,31 @@
             justify-content: center;
             user-select: none;
             box-sizing: border-box;
-            border-radius: 4px;
-            min-width: 50px;
-            min-height: 25px;
+            border-radius: 2px;
+            min-width: 8px;
+            min-height: 5px;
         }
         .interactive-field.selected {
             border: 2px solid #28a745;
             background-color: rgba(40, 167, 69, 0.2);
         }
         .field-label {
-            font-size: 11px;
+            font-size: 9px;
             font-weight: bold;
             color: #004085;
             text-overflow: ellipsis;
             white-space: nowrap;
             overflow: hidden;
-            padding: 2px;
+            padding: 1px;
             pointer-events: none;
         }
         .resize-handle {
             position: absolute;
-            width: 8px;
-            height: 8px;
+            width: 6px;
+            height: 6px;
             background-color: #007bff;
-            right: -4px;
-            bottom: -4px;
+            right: -3px;
+            bottom: -3px;
             cursor: se-resize;
             border-radius: 50%;
         }
@@ -105,6 +105,14 @@
     <div class="row">
         <!-- PDF Rendering Panel -->
         <div class="col-lg-8">
+            <div class="mb-2 d-flex justify-content-between align-items-center bg-white p-2 rounded shadow-sm">
+                <span class="text-dark font-weight-medium"><i class="fas fa-file-pdf text-danger mr-1"></i> Documento</span>
+                <div class="btn-group">
+                    <button id="zoom-out-btn" class="btn btn-xs btn-outline-secondary"><i class="fas fa-search-minus"></i> Zoom -</button>
+                    <button id="zoom-in-btn" class="btn btn-xs btn-outline-secondary"><i class="fas fa-search-plus"></i> Zoom +</button>
+                </div>
+            </div>
+
             <div id="loading-spinner" class="text-center py-5">
                 <div class="spinner-border text-primary" role="status">
                     <span class="sr-only">Cargando PDF...</span>
@@ -137,13 +145,13 @@
                                 <div class="col-6">
                                     <div class="form-group">
                                         <label for="field-width">Ancho (px)</label>
-                                        <input type="number" id="field-width" class="form-control form-control-sm" min="30">
+                                        <input type="number" id="field-width" class="form-control form-control-sm" min="10">
                                     </div>
                                 </div>
                                 <div class="col-6">
                                     <div class="form-group">
                                         <label for="field-height">Alto (px)</label>
-                                        <input type="number" id="field-height" class="form-control form-control-sm" min="15">
+                                        <input type="number" id="field-height" class="form-control form-control-sm" min="5">
                                     </div>
                                 </div>
                             </div>
@@ -179,7 +187,6 @@
     <!-- Include PDF.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
     <script>
-        // Set worker source
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
 
         const pdfUrl = "{{ route('admin.material-pdfs.download-raw', $material->id) }}";
@@ -189,6 +196,7 @@
         }
         let selectedFieldId = null;
         let pdfDoc = null;
+        let currentScale = 1.2;
 
         // Load Document
         pdfjsLib.getDocument(pdfUrl).promise.then(function(pdfDoc_) {
@@ -196,21 +204,26 @@
             document.getElementById('loading-spinner').classList.add('d-none');
             document.getElementById('viewer-container').classList.remove('d-none');
             
-            // Render all pages
+            renderAllPages();
+        });
+
+        function renderAllPages() {
+            const container = document.getElementById('viewer-container');
+            container.innerHTML = ''; // Clear existing wrappers
+
             const promises = [];
             for (let pageNum = 1; pageNum <= pdfDoc.numPages; pageNum++) {
                 promises.push(renderPage(pageNum));
             }
 
             Promise.all(promises).then(() => {
-                // Once all pages are rendered, draw existing fields
                 drawExistingFields();
             });
-        });
+        }
 
         function renderPage(pageNum) {
             return pdfDoc.getPage(pageNum).then(function(page) {
-                const viewport = page.getViewport({ scale: 1.2 });
+                const viewport = page.getViewport({ scale: currentScale });
                 const wrapper = document.createElement('div');
                 wrapper.className = 'pdf-page-wrapper';
                 wrapper.id = 'page-wrapper-' + pageNum;
@@ -248,14 +261,16 @@
             const y = e.clientY - rect.top;
 
             const fieldId = 'field_' + Date.now();
+            
+            // Save coordinates in original PDF points (scale = 1.0)
             const newField = {
                 id: fieldId,
                 name: 'campo_' + (fields.length + 1),
                 page: pageNum,
-                x: x - 60, // Center roughly on cursor
-                y: y - 15,
-                width: 120,
-                height: 30
+                x: (x - 40) / currentScale, 
+                y: (y - 12) / currentScale,
+                width: 80 / currentScale,
+                height: 24 / currentScale
             };
 
             fields.push(newField);
@@ -270,10 +285,12 @@
             const element = document.createElement('div');
             element.className = 'interactive-field';
             element.id = field.id;
-            element.style.left = field.x + 'px';
-            element.style.top = field.y + 'px';
-            element.style.width = field.width + 'px';
-            element.style.height = field.height + 'px';
+            
+            // Multiply values by scale for correct display
+            element.style.left = (field.x * currentScale) + 'px';
+            element.style.top = (field.y * currentScale) + 'px';
+            element.style.width = (field.width * currentScale) + 'px';
+            element.style.height = (field.height * currentScale) + 'px';
 
             const label = document.createElement('span');
             label.className = 'field-label';
@@ -284,7 +301,7 @@
             resizeHandle.className = 'resize-handle';
             element.appendChild(resizeHandle);
 
-            // Click to select
+            // Click to select/drag/resize
             element.addEventListener('mousedown', function(e) {
                 if (e.target === resizeHandle) {
                     initResize(e, field.id);
@@ -322,10 +339,9 @@
                 let newX = origX + dx;
                 let newY = origY + dy;
 
-                // Restrict boundaries to page
                 const parent = element.parentElement;
-                const maxX = parent.clientWidth - field.width;
-                const maxY = parent.clientHeight - field.height;
+                const maxX = parent.clientWidth - (field.width * currentScale);
+                const maxY = parent.clientHeight - (field.height * currentScale);
 
                 newX = Math.max(0, Math.min(newX, maxX));
                 newY = Math.max(0, Math.min(newY, maxY));
@@ -333,8 +349,9 @@
                 element.style.left = newX + 'px';
                 element.style.top = newY + 'px';
 
-                field.x = newX;
-                field.y = newY;
+                // Save back to scale 1.0 coordinates
+                field.x = newX / currentScale;
+                field.y = newY / currentScale;
             }
 
             function onMouseUp() {
@@ -366,17 +383,19 @@
                 let newW = origWidth + dx;
                 let newH = origHeight + dy;
 
-                newW = Math.max(40, newW);
-                newH = Math.max(15, newH);
+                // Min sizes in pixels at current scale
+                newW = Math.max(10, newW);
+                newH = Math.max(5, newH);
 
                 element.style.width = newW + 'px';
                 element.style.height = newH + 'px';
 
-                field.width = newW;
-                field.height = newH;
+                // Save back to scale 1.0 coordinates
+                field.width = newW / currentScale;
+                field.height = newH / currentScale;
 
-                document.getElementById('field-width').value = Math.round(newW);
-                document.getElementById('field-height').value = Math.round(newH);
+                document.getElementById('field-width').value = Math.round(field.width);
+                document.getElementById('field-height').value = Math.round(field.height);
             }
 
             function onMouseUp() {
@@ -429,23 +448,23 @@
 
         document.getElementById('field-width').addEventListener('input', function() {
             if (!selectedFieldId) return;
-            const val = Math.max(30, parseInt(this.value) || 30);
+            const val = Math.max(10, parseInt(this.value) || 10);
             const field = fields.find(f => f.id === selectedFieldId);
             if (field) {
                 field.width = val;
                 const element = document.getElementById(selectedFieldId);
-                if (element) element.style.width = val + 'px';
+                if (element) element.style.width = (val * currentScale) + 'px';
             }
         });
 
         document.getElementById('field-height').addEventListener('input', function() {
             if (!selectedFieldId) return;
-            const val = Math.max(15, parseInt(this.value) || 15);
+            const val = Math.max(5, parseInt(this.value) || 5);
             const field = fields.find(f => f.id === selectedFieldId);
             if (field) {
                 field.height = val;
                 const element = document.getElementById(selectedFieldId);
-                if (element) element.style.height = val + 'px';
+                if (element) element.style.height = (val * currentScale) + 'px';
             }
         });
 
@@ -459,6 +478,21 @@
 
             document.getElementById('field-details-panel').classList.add('d-none');
             document.getElementById('no-selection-message').classList.remove('d-none');
+        });
+
+        // Zoom handlers
+        document.getElementById('zoom-in-btn').addEventListener('click', function() {
+            if (currentScale < 3.0) {
+                currentScale += 0.2;
+                renderAllPages();
+            }
+        });
+
+        document.getElementById('zoom-out-btn').addEventListener('click', function() {
+            if (currentScale > 0.6) {
+                currentScale -= 0.2;
+                renderAllPages();
+            }
         });
 
         // Save layout

@@ -37,7 +37,7 @@
             background-color: #525659;
             padding: 20px;
             border-radius: 8px;
-            max-height: 78vh;
+            max-height: 72vh;
             overflow-y: auto;
             position: relative;
         }
@@ -61,9 +61,9 @@
             pointer-events: auto;
             background-color: rgba(255, 235, 186, 0.4);
             border: 1px solid #ffc107;
-            border-radius: 3px;
-            padding: 2px 5px;
-            font-size: 13px;
+            border-radius: 2px;
+            padding: 1px 3px;
+            font-size: 11px;
             font-family: inherit;
             color: #495057;
             box-sizing: border-box;
@@ -81,6 +81,14 @@
 @section('content')
     <div class="row">
         <div class="col-12">
+            <div class="mb-2 d-flex justify-content-between align-items-center bg-white p-2 rounded shadow-sm">
+                <span class="text-dark font-weight-medium"><i class="fas fa-file-pdf text-danger mr-1"></i> Visualización del Documento</span>
+                <div class="btn-group">
+                    <button id="zoom-out-btn" class="btn btn-xs btn-outline-secondary"><i class="fas fa-search-minus"></i> Zoom -</button>
+                    <button id="zoom-in-btn" class="btn btn-xs btn-outline-secondary"><i class="fas fa-search-plus"></i> Zoom +</button>
+                </div>
+            </div>
+
             @if(session('success'))
                 <div class="alert alert-success alert-dismissible bg-success text-white border-0 fade show" role="alert">
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -115,7 +123,7 @@
         const fields = @json($material->fields_config ?? []);
         const savedAnswers = @json($respuesta->respuestas ?? []);
         let pdfDoc = null;
-        const pageViewports = {}; // Cache viewports for scaling
+        let currentScale = 1.2;
 
         // Load Document
         pdfjsLib.getDocument(pdfUrl).promise.then(function(pdfDoc_) {
@@ -123,22 +131,29 @@
             document.getElementById('loading-spinner').classList.add('d-none');
             document.getElementById('viewer-container').classList.remove('d-none');
             
-            // Render all pages
+            renderAllPages();
+        });
+
+        function renderAllPages() {
+            // Keep track of values of inputs before clearing them to restore them
+            const currentValues = getAnswersMap();
+
+            const container = document.getElementById('viewer-container');
+            container.innerHTML = ''; // Clear existing wrappers
+
             const promises = [];
             for (let pageNum = 1; pageNum <= pdfDoc.numPages; pageNum++) {
                 promises.push(renderPage(pageNum));
             }
 
             Promise.all(promises).then(() => {
-                // Overlay text inputs
-                overlayInputs();
+                overlayInputs(currentValues);
             });
-        });
+        }
 
         function renderPage(pageNum) {
             return pdfDoc.getPage(pageNum).then(function(page) {
-                const viewport = page.getViewport({ scale: 1.2 });
-                pageViewports[pageNum] = viewport; // Save viewport for coordinate scaling
+                const viewport = page.getViewport({ scale: currentScale });
 
                 const wrapper = document.createElement('div');
                 wrapper.className = 'pdf-page-wrapper';
@@ -166,7 +181,7 @@
             });
         }
 
-        function overlayInputs() {
+        function overlayInputs(currentValues = null) {
             fields.forEach(field => {
                 const overlay = document.getElementById('page-overlay-' + field.page);
                 if (!overlay) return;
@@ -175,13 +190,17 @@
                 input.type = 'text';
                 input.className = 'interactive-input';
                 input.id = field.name;
-                input.style.left = field.x + 'px';
-                input.style.top = field.y + 'px';
-                input.style.width = field.width + 'px';
-                input.style.height = field.height + 'px';
+                
+                // Scale input dimensions to match current viewer zoom scale
+                input.style.left = (parseFloat(field.x) * currentScale) + 'px';
+                input.style.top = (parseFloat(field.y) * currentScale) + 'px';
+                input.style.width = (parseFloat(field.width) * currentScale) + 'px';
+                input.style.height = (parseFloat(field.height) * currentScale) + 'px';
 
-                // Pre-fill answer if exists
-                if (savedAnswers && savedAnswers[field.name]) {
+                // Pre-fill answer: priority to unsaved changes currently in screen, then fallback to database
+                if (currentValues && currentValues[field.name] !== undefined) {
+                    input.value = currentValues[field.name];
+                } else if (savedAnswers && savedAnswers[field.name] !== undefined) {
                     input.value = savedAnswers[field.name];
                 }
 
@@ -199,6 +218,21 @@
             });
             return answers;
         }
+
+        // Zoom handlers
+        document.getElementById('zoom-in-btn').addEventListener('click', function() {
+            if (currentScale < 3.0) {
+                currentScale += 0.2;
+                renderAllPages();
+            }
+        });
+
+        document.getElementById('zoom-out-btn').addEventListener('click', function() {
+            if (currentScale > 0.6) {
+                currentScale -= 0.2;
+                renderAllPages();
+            }
+        });
 
         // Save Answers AJAX
         document.getElementById('save-answers-btn').addEventListener('click', function() {
@@ -255,26 +289,21 @@
                     if (pageIndex < 0 || pageIndex >= pages.length) return;
 
                     const page = pages[pageIndex];
-                    const viewport = pageViewports[field.page];
-                    if (!viewport) return;
 
                     const fieldX = parseFloat(field.x);
                     const fieldY = parseFloat(field.y);
                     const fieldW = parseFloat(field.width);
                     const fieldH = parseFloat(field.height);
 
-                    // Calculate scale factor between viewport (HTML space) and original PDF size
-                    const scaleFactorX = page.getWidth() / parseFloat(viewport.width);
-                    const scaleFactorY = page.getHeight() / parseFloat(viewport.height);
-
+                    // Since DB coordinates are stored at scale=1.0, they map 1-to-1 to original PDF points.
                     // Map coordinates to PDF space (0,0 is bottom-left in PDF)
-                    const pdfX = fieldX * scaleFactorX;
-                    const pdfY = page.getHeight() - ((fieldY + (fieldH * 0.72)) * scaleFactorY);
-                    const pdfFontSize = (fieldH * 0.48) * scaleFactorY;
+                    const pdfX = fieldX;
+                    const pdfY = page.getHeight() - (fieldY + (fieldH * 0.72));
+                    const pdfFontSize = fieldH * 0.48;
 
                     // Draw text on page
                     page.drawText(text, {
-                        x: pdfX + (4 * scaleFactorX), // subtle padding
+                        x: pdfX + 3, // subtle left padding
                         y: pdfY,
                         size: pdfFontSize,
                         font: helveticaFont,
