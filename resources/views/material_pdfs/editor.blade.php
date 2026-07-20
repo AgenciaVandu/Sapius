@@ -141,6 +141,8 @@
                                 <small class="text-muted">Evita espacios y caracteres especiales.</small>
                             </div>
 
+
+
                             <div class="row">
                                 <div class="col-6">
                                     <div class="form-group">
@@ -270,7 +272,8 @@
                 x: (x - 40) / currentScale, 
                 y: (y - 12) / currentScale,
                 width: 80 / currentScale,
-                height: 24 / currentScale
+                height: 24 / currentScale,
+                color: '#000000'
             };
 
             fields.push(newField);
@@ -430,6 +433,7 @@
         }
 
         // Sidebar input events
+
         document.getElementById('field-name').addEventListener('input', function() {
             if (!selectedFieldId) return;
             const val = this.value.replace(/[^a-zA-Z0-9_]/g, '');
