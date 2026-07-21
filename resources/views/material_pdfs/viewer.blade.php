@@ -40,6 +40,10 @@
             max-height: 72vh;
             overflow-y: auto;
             position: relative;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
         }
         .pdf-page-wrapper {
             position: relative;
@@ -47,6 +51,10 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.3);
             background-color: #fff;
             border-radius: 4px;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
         }
         .pdf-overlay {
             position: absolute;
@@ -69,6 +77,10 @@
             box-sizing: border-box;
             outline: none;
             transition: all 0.2s ease-in-out;
+            user-select: text !important;
+            -webkit-user-select: text !important;
+            -moz-user-select: text !important;
+            -ms-user-select: text !important;
         }
         .interactive-input:focus {
             background-color: #ffffff;
@@ -660,6 +672,140 @@
                 btn.disabled = false;
                 btn.innerHTML = '<i class="fas fa-download mr-1"></i> Descargar Resuelto';
             }
+        });
+
+        // ----------------------------------------------------
+        // SISTEMA ANTI-PLAGIO Y PROTECCIÓN DE CONTENIDO (CTRL BLOCK)
+        // ----------------------------------------------------
+        let strikeCount = 0;
+        const maxStrikes = 3;
+
+        // Modal para alertar de Strike / Plagio
+        const modalHtml = `
+        <div class="modal fade" id="plagiarismWarningModal" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content border-danger shadow-lg">
+                    <div class="modal-header bg-danger text-white">
+                        <h5 class="modal-title font-weight-bold text-white"><i class="fas fa-exclamation-triangle mr-2"></i> ADVERTENCIA DE SEGURIDAD Y PLAGIO</h5>
+                    </div>
+                    <div class="modal-body text-center py-4">
+                        <i class="fas fa-ban text-danger mb-3" style="font-size: 3.5rem;"></i>
+                        <h4 class="text-dark font-weight-bold">Acción No Permitida</h4>
+                        <p class="text-muted mt-2" id="plagiarism-modal-message">
+                            Está prohibido el uso de atajos de teclado (Ctrl/Cmd), copiar o capturar contenido en esta sección.
+                        </p>
+                        <div class="alert alert-warning mb-0 font-weight-bold">
+                            Strike acumulado: <span id="strike-counter-num" class="badge badge-danger badge-pill px-3 py-1 font-16">1</span> / ${maxStrikes}
+                        </div>
+                        <p class="text-xs text-danger mt-2 mb-0">Al acumular 3 strikes o detectar reincidencia, su cuenta podrá ser bloqueada o suspendida automáticamente.</p>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button type="button" class="btn btn-danger font-weight-bold px-4 btn-rounded" data-dismiss="modal">Entendido y Acepto</button>
+                    </div>
+                </div>
+            </div>
+        </div>`;
+        document.body.insertAdjacentHTML('beforeend', modalHtml);
+
+        function triggerStrike(reason) {
+            strikeCount++;
+            document.getElementById('strike-counter-num').innerText = strikeCount;
+            document.getElementById('plagiarism-modal-message').innerText = reason || 'El uso de atajos de teclado (Ctrl/Cmd) o la copia de contenido está prohibido.';
+            
+            // Ocultar contenido del PDF al activar strike
+            hidePdfContainer();
+
+            if (window.$ && $('#plagiarismWarningModal').length) {
+                $('#plagiarismWarningModal').modal('show');
+            } else {
+                alert(`[ADVERTENCIA ANTI-PLAGIO]\nStrike ${strikeCount}/${maxStrikes}: ${reason}`);
+                showPdfContainer();
+            }
+
+            if (strikeCount >= maxStrikes) {
+                setTimeout(() => {
+                    alert("Has alcanzado el límite de advertencias por uso indebido/plagio. Tu sesión se cerrará por motivos de seguridad.");
+                    window.location.href = "{{ route('alumno.home') }}";
+                }, 500);
+            }
+        }
+
+        // Funciones para ocultar/mostrar el contenido del PDF
+        function hidePdfContainer() {
+            const container = document.getElementById('viewer-container');
+            if (container) {
+                container.style.filter = 'blur(25px)';
+                container.style.opacity = '0.05';
+                container.style.pointerEvents = 'none';
+            }
+        }
+
+        function showPdfContainer() {
+            const container = document.getElementById('viewer-container');
+            if (container) {
+                container.style.filter = 'none';
+                container.style.opacity = '1';
+                container.style.pointerEvents = 'auto';
+            }
+        }
+
+        // Al cerrar el modal de advertencia, volver a mostrar el PDF
+        $(document).on('click', '#plagiarismWarningModal button', function() {
+            if (strikeCount < maxStrikes) {
+                showPdfContainer();
+            }
+        });
+
+        // Ocultar PDF inmediatamente si la ventana pierde el foco (cambio de pestaña, captura externa o Alt+Tab)
+        window.addEventListener('blur', function() {
+            hidePdfContainer();
+        });
+
+        // Restaurar visor al volver a enfocar la pestaña
+        window.addEventListener('focus', function() {
+            showPdfContainer();
+        });
+
+        // Bloquear menú contextual (click derecho)
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            triggerStrike("El menú contextual (clic derecho) está desactivado para prevenir la copia no autorizada.");
+        });
+
+        // Bloquear atajos con tecla Control (Ctrl) o Command (Cmd en Mac)
+        document.addEventListener('keydown', function(e) {
+            const isCtrlOrCmd = e.ctrlKey || e.metaKey;
+            
+            // Bloqueo total si se presiona la tecla Ctrl sola o en combinación
+            if (e.key === 'Control' || e.key === 'Meta' || isCtrlOrCmd) {
+                // Permitir navegación normal con tab en inputs, pero bloquear combinaciones tipo Ctrl+C, Ctrl+V, Ctrl+P, Ctrl+U, Ctrl+S, F12, etc.
+                const keyLower = e.key.toLowerCase();
+                const forbiddenKeys = ['c', 'v', 'x', 'a', 'p', 's', 'u', 'i', 'j'];
+
+                if (e.key === 'Control' || e.key === 'Meta' || forbiddenKeys.includes(keyLower)) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    triggerStrike("Está completamente bloqueado el uso de la tecla Ctrl / Cmd y atajos de copia o inspección.");
+                    return false;
+                }
+            }
+
+            // Bloquear F12 o herramientas de desarrollador
+            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j'))) {
+                e.preventDefault();
+                triggerStrike("Acceso a Herramientas de Desarrollador bloqueado.");
+                return false;
+            }
+        });
+
+        // Prevenir copiar / cortar directo
+        document.addEventListener('copy', function(e) {
+            e.preventDefault();
+            triggerStrike("Intentaste copiar contenido del documento.");
+        });
+        document.addEventListener('cut', function(e) {
+            e.preventDefault();
+            triggerStrike("Intentaste cortar contenido del documento.");
         });
     </script>
 @endsection
