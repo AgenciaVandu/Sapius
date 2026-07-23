@@ -559,10 +559,13 @@
             $.ajax({
                 url: "{{ route('alumno.material-pdfs.save-answers', $material->id) }}",
                 method: "POST",
-                data: {
-                    _token: "{{ csrf_token() }}",
-                    respuestas: payload
+                headers: {
+                    'X-CSRF-TOKEN': "{{ csrf_token() }}"
                 },
+                contentType: "application/json",
+                data: JSON.stringify({
+                    respuestas: payload
+                }),
                 success: function(response) {
                     btn.disabled = false;
                     btn.innerHTML = '<i class="fas fa-save mr-1"></i> Guardar Respuestas';

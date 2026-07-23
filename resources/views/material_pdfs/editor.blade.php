@@ -508,10 +508,13 @@
             $.ajax({
                 url: "{{ route('admin.material-pdfs.save-config', $material->id) }}",
                 method: "POST",
-                data: {
-                    _token: "{{ csrf_token() }}",
-                    fields_config: fields
+                headers: {
+                    'X-CSRF-TOKEN': "{{ csrf_token() }}"
                 },
+                contentType: "application/json",
+                data: JSON.stringify({
+                    fields_config: fields
+                }),
                 success: function(response) {
                     btn.disabled = false;
                     btn.innerHTML = '<i class="fas fa-save mr-1"></i> Guardar Cambios';
