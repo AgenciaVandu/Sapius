@@ -176,7 +176,7 @@
                     <ul class="pl-3 text-muted small">
                         <li class="mb-2"><strong>Doble Clic:</strong> Añade un campo interactivo en la posición del puntero.</li>
                         <li class="mb-2"><strong>Arrastrar:</strong> Mueve el campo a la posición deseada.</li>
-                        <li class="mb-2"><strong>Modificar Tamaño:</strong> Usa el círculo en la esquina inferior derecha del campo seleccionado para redimensionar.</li>
+                        <li class="mb-2"><strong>Modificar Tamaño:</strong> Usa el círculo en la esquina inferior derecha del campo seleccionado para redimensionarlo. Los campos más altos permitirán a los alumnos escribir en varias líneas con saltos de línea.</li>
                         <li class="mb-2"><strong>Guardar:</strong> Presiona "Guardar Cambios" para registrar el diseño.</li>
                     </ul>
                 </div>

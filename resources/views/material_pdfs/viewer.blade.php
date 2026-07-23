@@ -70,13 +70,18 @@
             background-color: rgba(255, 235, 186, 0.4);
             border: 1px solid #ffc107;
             border-radius: 2px;
-            padding: 1px 3px;
+            padding: 2px 4px;
             font-size: 11px;
+            line-height: 1.3;
             font-family: inherit;
             color: #495057;
             box-sizing: border-box;
             outline: none;
             transition: all 0.2s ease-in-out;
+            resize: none;
+            white-space: pre-wrap;
+            word-break: break-word;
+            overflow-y: auto;
             user-select: text !important;
             -webkit-user-select: text !important;
             -moz-user-select: text !important;
@@ -358,16 +363,23 @@
                 const overlay = document.getElementById('page-overlay-' + field.page);
                 if (!overlay) return;
 
-                const input = document.createElement('input');
-                input.type = 'text';
+                const input = document.createElement('textarea');
                 input.className = 'interactive-input';
                 input.id = field.name;
                 
                 // Scale input dimensions to match current viewer zoom scale
+                const fieldHeightPt = parseFloat(field.height);
                 input.style.left = (parseFloat(field.x) * currentScale) + 'px';
                 input.style.top = (parseFloat(field.y) * currentScale) + 'px';
                 input.style.width = (parseFloat(field.width) * currentScale) + 'px';
-                input.style.height = (parseFloat(field.height) * currentScale) + 'px';
+                input.style.height = (fieldHeightPt * currentScale) + 'px';
+
+                // Adjust font size dynamically if field height is small vs tall
+                if (fieldHeightPt < 30) {
+                    input.style.fontSize = Math.min(13, Math.max(10, fieldHeightPt * 0.45 * currentScale)) + 'px';
+                } else {
+                    input.style.fontSize = Math.min(15, Math.max(11, 11 * currentScale)) + 'px';
+                }
 
                 // Determine default/saved value and color
                 let val = '';
@@ -621,6 +633,42 @@
                     });
                 });
 
+                // Helper to split text into lines based on \n and word wrapping for pdf-lib
+                function getWrappedLines(textStr, font, fontSize, maxWidth) {
+                    const rawParagraphs = textStr.split(/\r?\n/);
+                    const resultLines = [];
+
+                    rawParagraphs.forEach(para => {
+                        if (!para.trim()) {
+                            resultLines.push('');
+                            return;
+                        }
+                        const words = para.split(' ');
+                        let currentLine = '';
+
+                        words.forEach(word => {
+                            const testLine = currentLine ? (currentLine + ' ' + word) : word;
+                            let testWidth = 0;
+                            try {
+                                testWidth = font.widthOfTextAtSize(testLine, fontSize);
+                            } catch (e) {
+                                testWidth = testLine.length * (fontSize * 0.5);
+                            }
+                            if (testWidth <= maxWidth || !currentLine) {
+                                currentLine = testLine;
+                            } else {
+                                resultLines.push(currentLine);
+                                currentLine = word;
+                            }
+                        });
+                        if (currentLine) {
+                            resultLines.push(currentLine);
+                        }
+                    });
+
+                    return resultLines;
+                }
+
                 // Draw Text fields
                 fields.forEach(field => {
                     const ans = answers[field.name];
@@ -639,22 +687,50 @@
                     const fieldW = parseFloat(field.width);
                     const fieldH = parseFloat(field.height);
 
-                    // Since DB coordinates are stored at scale=1.0, they map 1-to-1 to original PDF points.
-                    // Map coordinates to PDF space (0,0 is bottom-left in PDF)
-                    const pdfX = fieldX;
-                    const pdfY = page.getHeight() - (fieldY + (fieldH * 0.72));
-                    const pdfFontSize = fieldH * 0.48;
+                    // Determine font size and line height according to box height
+                    let pdfFontSize = 10;
+                    if (fieldH < 30) {
+                        pdfFontSize = Math.min(12, Math.max(9, fieldH * 0.48));
+                    } else {
+                        pdfFontSize = Math.min(11, Math.max(9, 10));
+                    }
+                    const lineHeight = pdfFontSize * 1.25;
 
                     const colorHex = typeof ans === 'object' ? (ans.color || '#0038a8') : '#0038a8';
                     const textColors = hexToRgb(colorHex);
 
-                    // Draw text on page
-                    page.drawText(text, {
-                        x: pdfX + 3, // subtle left padding
-                        y: pdfY,
-                        size: pdfFontSize,
-                        font: helveticaFont,
-                        color: rgb(textColors.r, textColors.g, textColors.b)
+                    const paddingX = 3;
+                    const paddingY = 3;
+                    const maxTextWidth = Math.max(10, fieldW - (paddingX * 2));
+                    const pdfX = fieldX + paddingX;
+
+                    // pdf-lib y=0 is bottom left. Top edge of box in pdf-lib y-coordinates:
+                    const boxTopY = page.getHeight() - fieldY;
+                    const boxBottomY = page.getHeight() - (fieldY + fieldH);
+
+                    // Get wrapped lines
+                    const lines = getWrappedLines(text, helveticaFont, pdfFontSize, maxTextWidth);
+
+                    // Draw each line from top to bottom
+                    let currentY = boxTopY - paddingY - pdfFontSize;
+
+                    lines.forEach(line => {
+                        if (currentY >= boxBottomY - 2) {
+                            if (line !== '') {
+                                try {
+                                    page.drawText(line, {
+                                        x: pdfX,
+                                        y: currentY,
+                                        size: pdfFontSize,
+                                        font: helveticaFont,
+                                        color: rgb(textColors.r, textColors.g, textColors.b)
+                                    });
+                                } catch (err) {
+                                    console.warn('Error drawing text line in PDF:', err);
+                                }
+                            }
+                        }
+                        currentY -= lineHeight;
                     });
                 });
 
