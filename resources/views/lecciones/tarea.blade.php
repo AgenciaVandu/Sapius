@@ -95,7 +95,7 @@
                                     <div class="d-flex align-items-center">
                                         <i class="fas fa-exclamation-triangle mr-2 text-warning" style="font-size: 1.2rem;"></i>
                                         <div>
-                                            <strong>El archivo supera el límite de 5MB.</strong> Para reducir su tamaño, puedes comprimir tu archivo PDF en <a href="https://www.adobe.com/mx/acrobat/online/compress-pdf.html" target="_blank" rel="noopener noreferrer" class="font-weight-bold text-dark" style="text-decoration: underline;">Adobe Acrobat Online</a>.
+                                            <strong>El archivo supera el límite de 20MB.</strong> Para reducir su tamaño, puedes comprimir tu archivo PDF en <a href="https://www.adobe.com/mx/acrobat/online/compress-pdf.html" target="_blank" rel="noopener noreferrer" class="font-weight-bold text-dark" style="text-decoration: underline;">Adobe Acrobat Online</a>.
                                         </div>
                                     </div>
                                 </div>
@@ -135,7 +135,7 @@
                 var file = this.files[0];
                 var fileName = $(this).val().split("\\").pop();
 
-                if (file && file.size > 5 * 1024 * 1024) {
+                if (file && file.size > 20 * 1024 * 1024) {
                     $('#file-size-warning').removeClass('d-none');
                     $(this).val('');
                     $(this).siblings(".custom-file-label").removeClass("selected").html("Selecciona documento");
