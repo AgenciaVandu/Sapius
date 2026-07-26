@@ -309,6 +309,8 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
     Route::post('/material-pdfs/{id}/save-layout', 'Cursos\MaterialInteractivePdfController@saveConfig')->name('admin.material-pdfs.save-config');
     Route::delete('/material-pdfs/{id}/destroy', 'Cursos\MaterialInteractivePdfController@destroy')->name('admin.material-pdfs.destroy');
     Route::get('/material-pdfs/{id}/download-raw', 'Cursos\MaterialInteractivePdfController@downloadRaw')->name('admin.material-pdfs.download-raw');
+    Route::get('/material-pdfs/{id}/revisar/{user_id}', 'Cursos\MaterialInteractivePdfController@showAdminReview')->name('admin.material-pdfs.review');
+
 
     //Registros
     Route::post('/registro/programacion', 'Registro\CursoProgramadoController@index')->name('schedule'); //{curso_id}
@@ -452,6 +454,7 @@ Route::group(['middleware' => ['instructor', 'restrict.mobile'], 'prefix' => 'in
     //Soporte
     Route::get('/soporte', 'UserController@soporte')->name('instructor.soporte');
     Route::post('/soporte', 'UserController@correoSoporte')->name('instructor.soporte-enviar');
+    Route::get('/material-pdfs/{id}/revisar/{user_id}', 'Cursos\MaterialInteractivePdfController@showAdminReview')->name('instructor.material-pdfs.review');
 });
 
 //Rutas de alumno sin restricciones de mobile

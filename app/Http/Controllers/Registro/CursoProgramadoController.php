@@ -677,7 +677,7 @@ class CursoProgramadoController extends Controller
                 }, 'Clases' => function($c) {
                     $c->where('activo', 'si')->with(['Pruebas' => function($p) {
                         $p->where('activo', 'si');
-                    }]);
+                    }, 'materialPdfs']);
                 }]);
                 $q->where('leccion_id', 0)->where('activo', 'si'); // Módulos
             }])->get();

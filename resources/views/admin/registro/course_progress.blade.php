@@ -145,6 +145,19 @@
                                                         <i class="fas fa-lock"></i>
                                                     </button>
                                                 @endif
+                                                @if($clase->materialPdfs->count() > 0)
+                                                    <div class="mt-2 small">
+                                                        @foreach($clase->materialPdfs as $pdf)
+                                                            <div class="d-inline-block mr-3 mb-1 p-1 bg-light rounded border">
+                                                                <i class="far fa-file-pdf text-danger mr-1"></i>
+                                                                <span class="text-dark font-weight-medium">{{ $pdf->titulo }}</span>
+                                                                <a href="{{ route('admin.material-pdfs.review', [$pdf->id, $alumno->id]) }}" class="btn btn-xs btn-info text-white ml-2">
+                                                                    <i class="fas fa-eye mr-1"></i> Ver Respuestas
+                                                                </a>
+                                                            </div>
+                                                        @endforeach
+                                                    </div>
+                                                @endif
                                             </td>
                                             <td class="align-middle text-center">{!! $checkTerminada !!}</td>
                                             <td class="align-middle text-center">{!! $checkTarea !!}</td>
@@ -200,13 +213,26 @@
                                                                 data-current-deadline="{{ $unlock ? \Carbon\Carbon::parse($unlock->until_date)->format('d/m/Y H:i') : '' }}">
                                                             <i class="fas {{ $unlock ? 'fa-edit' : 'fa-unlock-alt' }}"></i>
                                                         </button>
-                                                        @if($unlock)
-                                                            <button class="btn btn-sm btn-link p-0 ml-1 text-danger btn-lock-now" 
-                                                                    title="Volver a Bloquear"
-                                                                    data-leccion-id="{{ $clase->id }}">
-                                                                <i class="fas fa-lock"></i>
-                                                            </button>
-                                                        @endif
+                                                         @if($unlock)
+                                                             <button class="btn btn-sm btn-link p-0 ml-1 text-danger btn-lock-now" 
+                                                                     title="Volver a Bloquear"
+                                                                     data-leccion-id="{{ $clase->id }}">
+                                                                 <i class="fas fa-lock"></i>
+                                                             </button>
+                                                         @endif
+                                                         @if($clase->materialPdfs->count() > 0)
+                                                             <div class="mt-2 small">
+                                                                 @foreach($clase->materialPdfs as $pdf)
+                                                                     <div class="d-inline-block mr-3 mb-1 p-1 bg-light rounded border text-left">
+                                                                         <i class="far fa-file-pdf text-danger mr-1"></i>
+                                                                         <span class="text-dark font-weight-medium">{{ $pdf->titulo }}</span>
+                                                                         <a href="{{ route('admin.material-pdfs.review', [$pdf->id, $alumno->id]) }}" class="btn btn-xs btn-info text-white ml-2">
+                                                                             <i class="fas fa-eye mr-1"></i> Ver Respuestas
+                                                                         </a>
+                                                                     </div>
+                                                                 @endforeach
+                                                             </div>
+                                                         @endif
                                                     @else
                                                         <span class="text-muted ml-4"><i class="fas fa-caret-right mr-1"></i>Examen: {{ $prueba->titulo }}</span>
                                                     @endif

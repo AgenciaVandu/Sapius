@@ -107,6 +107,24 @@ class MaterialInteractivePdfController extends Controller
     }
 
     /**
+     * Display the PDF with student answers for review by admin/instructor.
+     */
+    public function showAdminReview($id, $user_id)
+    {
+        $material = MaterialPdf::findOrFail($id);
+        $leccion = Leccion::findOrFail($material->leccion_id);
+        $alumno = \App\User::findOrFail($user_id);
+        
+        // Find existing response for student
+        $respuesta = AlumnoPdfRespuesta::where('user_id', $user_id)
+                                        ->where('material_pdf_id', $material->id)
+                                        ->first();
+
+        return view('material_pdfs.viewer_admin', compact('material', 'leccion', 'respuesta', 'alumno'));
+    }
+
+
+    /**
      * Save/update student answers.
      */
     public function saveAnswers(Request $request, $id)
