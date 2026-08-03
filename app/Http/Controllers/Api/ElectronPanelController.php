@@ -197,7 +197,7 @@ class ElectronPanelController extends Controller
             }
         }, 'Medias' => function($q){
             $q->where('activo', 'si');
-        }, 'Curso' => function($q1) use ($leccion_id){
+        }, 'materialPdfs', 'Curso' => function($q1) use ($leccion_id){
             $q1->with(['Lecciones' => function($q2) use ($leccion_id){
                 $q2->with('Clases')->where('activo', 'si')->where("id", "<>", $leccion_id);
             }])->get();
@@ -1294,5 +1294,77 @@ class ElectronPanelController extends Controller
                 'unlockedLessonsData' => $unlockedLessonsData
             ]
         ]);
+    }
+
+    public function getMaterialPdfDetails(Request $request, $id)
+    {
+        if (!$this->validateMacAddress($request)) {
+            return response()->json(['success' => false, 'message' => 'Dispositivo no autorizado.'], 403);
+        }
+
+        $user = $request->user();
+        $material = \App\Models\Cursos\MaterialPdf::find($id);
+        if (!$material) {
+            return response()->json(['success' => false, 'message' => 'PDF interactivo no encontrado.'], 404);
+        }
+
+        $respuesta = \App\Models\Cursos\AlumnoPdfRespuesta::where('user_id', $user->id)
+            ->where('material_pdf_id', $material->id)
+            ->first();
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'material' => $material,
+                'respuesta' => $respuesta
+            ]
+        ]);
+    }
+
+    public function saveMaterialPdfAnswers(Request $request, $id)
+    {
+        if (!$this->validateMacAddress($request)) {
+            return response()->json(['success' => false, 'message' => 'Dispositivo no autorizado.'], 403);
+        }
+
+        $user = $request->user();
+        $material = \App\Models\Cursos\MaterialPdf::find($id);
+        if (!$material) {
+            return response()->json(['success' => false, 'message' => 'PDF interactivo no encontrado.'], 404);
+        }
+
+        $respuesta = \App\Models\Cursos\AlumnoPdfRespuesta::updateOrCreate(
+            [
+                'user_id' => $user->id,
+                'material_pdf_id' => $material->id
+            ],
+            [
+                'respuestas' => $request->input('respuestas', [])
+            ]
+        );
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Tus respuestas han sido guardadas con éxito.'
+        ]);
+    }
+
+    public function downloadMaterialPdfRaw(Request $request, $id)
+    {
+        if (!$this->validateMacAddress($request)) {
+            return response()->json(['success' => false, 'message' => 'Dispositivo no autorizado.'], 403);
+        }
+
+        $material = \App\Models\Cursos\MaterialPdf::find($id);
+        if (!$material) {
+            return response()->json(['success' => false, 'message' => 'PDF interactivo no encontrado.'], 404);
+        }
+
+        $path = storage_path('app/files/interactive_pdfs/' . $material->file_path);
+        if (!file_exists($path)) {
+            return response()->json(['success' => false, 'message' => 'El archivo físico del PDF interactivo no existe.'], 404);
+        }
+
+        return response()->download($path, $material->titulo . '.pdf');
     }
 }
