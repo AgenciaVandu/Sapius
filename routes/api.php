@@ -45,6 +45,7 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/electron/send-homework', 'Api\ElectronPanelController@sendHomework');
     Route::get('/electron/calendar/{curso_programado_id}', 'Api\ElectronPanelController@getCalendar');
     Route::get('/electron/grades/{inscripcion_id}', 'Api\ElectronPanelController@getGrades');
+    Route::get('/electron/course-progress/{curso_programado_id}', 'Api\ElectronPanelController@getCourseProgress');
     
     // Exams / Pruebas
     Route::get('/electron/exam/previo/{prueba_id}/{inscripcion_id}', 'Api\ElectronPanelController@examPrevio');

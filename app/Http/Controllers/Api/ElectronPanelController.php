@@ -1219,4 +1219,80 @@ class ElectronPanelController extends Controller
             ]
         ]);
     }
+
+    public function getCourseProgress(Request $request, $curso_programado_id)
+    {
+        if (!$this->validateMacAddress($request)) {
+            return response()->json(['success' => false, 'message' => 'Dispositivo no autorizado.'], 403);
+        }
+
+        $user = $request->user();
+        
+        $curso = CursoProgramado::with(['Curso' => function($r){
+            $r->with(['Lecciones' => function($q){
+                $q->with(['Pruebas' => function($p) {
+                    $p->where('activo', 'si');
+                }, 'Clases' => function($c) {
+                    $c->where('activo', 'si')->with(['Pruebas' => function($p) {
+                        $p->where('activo', 'si');
+                    }]);
+                }]);
+                $q->where('leccion_id', 0)->where('activo', 'si'); // Módulos
+            }]);
+        }])->find($curso_programado_id);
+
+        if (!$curso) {
+            return response()->json(['success' => false, 'message' => 'Curso no encontrado.'], 404);
+        }
+
+        $leccionIds = [];
+        $pruebaIds = [];
+        foreach ($curso->Curso->Lecciones as $modulo) {
+             foreach ($modulo->Pruebas as $prueba) {
+                $pruebaIds[] = $prueba->id;
+            }
+            foreach ($modulo->Clases as $clase) {
+                $leccionIds[] = $clase->id;
+                foreach ($clase->Pruebas as $prueba) {
+                    $pruebaIds[] = $prueba->id;
+                }
+            }
+        }
+
+        $completedLessons = DB::table('leccion_user')
+            ->where('user_id', $user->id)
+            ->where('curso_programado_id', $curso_programado_id)
+            ->pluck('leccion_id')
+            ->toArray();
+
+        $homeworks = Homework::where('user_id', $user->id)
+            ->whereIn('leccion_id', $leccionIds)
+            ->get()
+            ->keyBy('leccion_id');
+
+        $inscripcion = Inscripcion::where('user_id', $user->id)
+            ->where('curso_programado_id', $curso_programado_id)->first();
+
+        $examenes = Examen::with('Prueba')
+            ->where('inscripcion_id', $inscripcion ? $inscripcion->id : 0)
+            ->whereIn('prueba_id', $pruebaIds)
+            ->get()
+            ->keyBy('prueba_id');
+
+        $unlockedLessonsData = \App\Models\Registro\LessonUnlock::where('user_id', $user->id)
+            ->where('curso_programado_id', $curso_programado_id)
+            ->get()
+            ->keyBy('leccion_id');
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'modulos' => $curso->Curso->Lecciones,
+                'completedLessons' => $completedLessons,
+                'homeworks' => $homeworks,
+                'examenes' => $examenes,
+                'unlockedLessonsData' => $unlockedLessonsData
+            ]
+        ]);
+    }
 }
