@@ -297,4 +297,81 @@ class MediaController extends Controller
         return Storage::download($path);
     }
 
+    public function uploadChunk(Request $request)
+    {
+        $chunk = $request->file('file');
+        $index = $request->input('index');
+        $totalChunks = $request->input('total_chunks');
+        $identifier = $request->input('identifier');
+        $originalName = $request->input('filename');
+
+        if (!$chunk || is_null($index) || is_null($totalChunks) || !$identifier) {
+            return response()->json(['error' => 'Datos de fragmento inválidos.'], 400);
+        }
+
+        $extension = pathinfo($originalName, PATHINFO_EXTENSION);
+        if (strtolower($extension) !== 'mp4') {
+            return response()->json(['error' => 'Solo se permiten archivos de video con extensión MP4.'], 400);
+        }
+
+        $identifier = preg_replace('/[^a-zA-Z0-9_\-]/', '', $identifier);
+        $tempDir = storage_path('app/chunks/' . $identifier);
+
+        if (!file_exists($tempDir)) {
+            mkdir($tempDir, 0777, true);
+        }
+
+        $chunkName = 'chunk_' . $index;
+        $chunk->move($tempDir, $chunkName);
+
+        $uploadedCount = count(glob($tempDir . '/chunk_*'));
+
+        if ($uploadedCount == $totalChunks) {
+            $extension = pathinfo($originalName, PATHINFO_EXTENSION);
+            if (empty($extension)) {
+                $extension = 'mp4';
+            }
+            $finalFilename = $identifier . '.' . $extension;
+            
+            $finalDir = storage_path('app/uploads');
+            if (!file_exists($finalDir)) {
+                mkdir($finalDir, 0777, true);
+            }
+            
+            $finalPath = $finalDir . "/" . $finalFilename;
+
+            $out = fopen($finalPath, 'wb');
+            if ($out) {
+                for ($i = 0; $i < $totalChunks; $i++) {
+                    $chunkFile = $tempDir . '/chunk_' . $i;
+                    if (file_exists($chunkFile)) {
+                        $in = fopen($chunkFile, 'rb');
+                        if ($in) {
+                            while ($buff = fread($in, 4096)) {
+                                fwrite($out, $buff);
+                            }
+                            fclose($in);
+                            unlink($chunkFile);
+                        }
+                    }
+                }
+                fclose($out);
+            }
+
+            if (file_exists($tempDir)) {
+                rmdir($tempDir);
+            }
+
+            return response()->json([
+                'completed' => true,
+                'filename' => $finalFilename
+            ]);
+        }
+
+        return response()->json([
+            'completed' => false,
+            'progress' => round(($uploadedCount / $totalChunks) * 100, 2)
+        ]);
+    }
 }
+

@@ -1091,4 +1091,132 @@ class ElectronPanelController extends Controller
             'message' => 'Opinión registrada correctamente.'
         ]);
     }
+
+    public function getCalendar(Request $request, $curso_programado_id)
+    {
+        if (!$this->validateMacAddress($request)) {
+            return response()->json(['success' => false, 'message' => 'Dispositivo no autorizado.'], 403);
+        }
+
+        $user = $request->user();
+        $curso = CursoProgramado::with(['Curso.Lecciones'])->find($curso_programado_id);
+        
+        if (!$curso) {
+            return response()->json(['success' => false, 'message' => 'Curso no encontrado.'], 404);
+        }
+
+        $events = [];
+        $contenido_programado = ContenidoProgramado::where('curso_programado_id', $curso_programado_id)->first();
+        if ($contenido_programado && $contenido_programado->contenido) {
+            $schedule = collect($contenido_programado->contenido);
+            foreach ($curso->Curso->Lecciones as $leccion) {
+                $contenido = $schedule->where('id', $leccion->id)->first();
+                if ($contenido) {
+                    $fecha_inicial = isset($contenido['fecha_inicial']) ? $contenido['fecha_inicial'] : null;
+                    $fecha_final = isset($contenido['fecha_final']) ? $contenido['fecha_final'] : null;
+                    $events[] = [
+                        'titulo' => $leccion->titulo,
+                        'fecha_inicio' => $fecha_inicial,
+                        'fecha_final' => $fecha_final,
+                    ];
+                }
+            }
+        }
+
+        $current_date = now()->format('Y-m-d');
+        $weekly_calendars = \App\ProgrammingCalendar::where('curso_id', $curso->curso_id)
+            ->where('start_date', '<=', $current_date)
+            ->where('end_date', '>=', $current_date)
+            ->orderBy('position', 'asc')
+            ->get();
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'events' => $events,
+                'weekly_calendars' => $weekly_calendars
+            ]
+        ]);
+    }
+
+    public function getGrades(Request $request, $inscripcion_id)
+    {
+        if (!$this->validateMacAddress($request)) {
+            return response()->json(['success' => false, 'message' => 'Dispositivo no autorizado.'], 403);
+        }
+
+        $user = $request->user();
+        $inscripcion = Inscripcion::find($inscripcion_id);
+        if (!$inscripcion) {
+            return response()->json(['success' => false, 'message' => 'Inscripción no encontrada.'], 404);
+        }
+
+        $curso = Curso::find($inscripcion->CursoProgramado->curso_id);
+        if (!$curso) {
+            return response()->json(['success' => false, 'message' => 'Curso no encontrado.'], 404);
+        }
+
+        $modulosActivosIds = $curso->Lecciones()
+            ->where('leccion_id', 0)
+            ->where('activo', 'si')
+            ->pluck('id');
+
+        $lecciones = $curso->Lecciones()
+            ->where('activo', 'si')
+            ->where(function ($query) use ($modulosActivosIds) {
+                $query->where('leccion_id', 0)
+                      ->orWhereIn('leccion_id', $modulosActivosIds);
+            })
+            ->with(['pruebas' => function($q) {
+                $q->where('activo', 'si');
+            }])
+            ->get();
+
+        $examenes = Examen::with('Prueba')
+            ->where('inscripcion_id', $inscripcion_id)
+            ->whereHas('Prueba', function ($query) use ($curso) {
+                $query->where('curso_id', $curso->id);
+            })
+            ->get()
+            ->keyBy('prueba_id');
+
+        $calificaciones = [];
+
+        foreach ($lecciones as $leccion) {
+            foreach ($leccion->pruebas as $prueba) {
+                if ($prueba->activo === 'si') {
+                    $examen = $examenes->get($prueba->id);
+                    if ($examen) {
+                        $calificaciones[] = [
+                            'prueba_id' => $prueba->id,
+                            'titulo' => $prueba->titulo,
+                            'tipo' => $prueba->tipo,
+                            'total_preguntas' => $examen->total_preguntas,
+                            'total_correctas' => $examen->total_correctas,
+                            'score_total' => $examen->score_total,
+                            'presented' => true
+                        ];
+                    } else {
+                        $calificaciones[] = [
+                            'prueba_id' => $prueba->id,
+                            'titulo' => $prueba->titulo,
+                            'tipo' => $prueba->tipo,
+                            'total_preguntas' => 0,
+                            'total_correctas' => 0,
+                            'score_total' => 0,
+                            'presented' => false
+                        ];
+                    }
+                }
+            }
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'inscripcion' => $inscripcion,
+                'calificaciones' => $calificaciones
+            ]
+        ]);
+    }
 }

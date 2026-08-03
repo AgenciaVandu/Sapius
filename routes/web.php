@@ -300,6 +300,8 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
     Route::get('/medias/image/{file}', 'Cursos\MediaController@mediaPicture')->name('admin.medias.image');
     Route::get('/medias/stream/{filename}', 'Cursos\MediaController@stream')->name('admin.medias.stream2');
     Route::get('/medias/archivo/{file}', 'Cursos\MediaController@archivo')->name('admin.medias.archivo');
+    Route::post('/medias/upload-chunk', 'Cursos\MediaController@uploadChunk')->name('admin.medias.upload-chunk');
+
 
     // Interactive PDFs (Admin)
     Route::get('/cursos/modulos/material-pdfs', 'Cursos\MaterialInteractivePdfController@index')->name('admin.material-pdfs.index');
@@ -445,6 +447,8 @@ Route::group(['middleware' => ['instructor', 'restrict.mobile'], 'prefix' => 'in
     Route::get('/medias/image/{file}', 'Cursos\MediaController@mediaPicture')->name('instructor.medias.image');
     Route::get('/medias/stream/{filename}', 'Cursos\MediaController@stream')->name('instructor.medias.stream2');
     Route::get('/medias/archivo/{file}', 'Cursos\MediaController@archivo')->name('instructor.medias.archivo');
+    Route::post('/medias/upload-chunk', 'Cursos\MediaController@uploadChunk')->name('instructor.medias.upload-chunk');
+
 
     //inscritos
     Route::post('/curso', 'Registro\CursoProgramadoController@listaInscritos')->name('instructor.cursos.lista-inscritos');

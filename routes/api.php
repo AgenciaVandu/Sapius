@@ -43,6 +43,8 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/electron/lecciones/toggle-completion', 'Api\ElectronPanelController@toggleLessonCompletion');
     Route::get('/electron/homework-tracking/{curso_programado_id}', 'Api\ElectronPanelController@homeworkTracking');
     Route::post('/electron/send-homework', 'Api\ElectronPanelController@sendHomework');
+    Route::get('/electron/calendar/{curso_programado_id}', 'Api\ElectronPanelController@getCalendar');
+    Route::get('/electron/grades/{inscripcion_id}', 'Api\ElectronPanelController@getGrades');
     
     // Exams / Pruebas
     Route::get('/electron/exam/previo/{prueba_id}/{inscripcion_id}', 'Api\ElectronPanelController@examPrevio');
