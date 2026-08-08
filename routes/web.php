@@ -307,6 +307,7 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
     Route::get('/cursos/modulos/material-pdfs', 'Cursos\MaterialInteractivePdfController@index')->name('admin.material-pdfs.index');
     Route::get('/material-pdfs/create', 'Cursos\MaterialInteractivePdfController@create')->name('admin.material-pdfs.create');
     Route::post('/material-pdfs/store', 'Cursos\MaterialInteractivePdfController@store')->name('admin.material-pdfs.store');
+    Route::put('/material-pdfs/{id}/update', 'Cursos\MaterialInteractivePdfController@update')->name('admin.material-pdfs.update');
     Route::get('/material-pdfs/{id}/edit', 'Cursos\MaterialInteractivePdfController@edit')->name('admin.material-pdfs.edit');
     Route::post('/material-pdfs/{id}/save-layout', 'Cursos\MaterialInteractivePdfController@saveConfig')->name('admin.material-pdfs.save-config');
     Route::delete('/material-pdfs/{id}/destroy', 'Cursos\MaterialInteractivePdfController@destroy')->name('admin.material-pdfs.destroy');

@@ -56,13 +56,32 @@ class MaterialInteractivePdfController extends Controller
             'leccion_id' => $request->leccion_id,
             'titulo' => $request->titulo,
             'file_path' => $fileName,
-            'fields_config' => []
+            'fields_config' => [],
+            'allow_download' => $request->has('allow_download') ? 1 : 0
         ]);
 
         $leccion = Leccion::findOrFail($request->leccion_id);
 
         return redirect()->route('admin.material-pdfs.index', ['leccion_id' => $leccion->id])
                          ->with('success', 'PDF interactivo subido exitosamente.');
+    }
+
+    /**
+     * Update the metadata (title and allow_download) of the interactive PDF.
+     */
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'titulo' => 'required|string|max:255',
+        ]);
+
+        $material = MaterialPdf::findOrFail($id);
+        $material->titulo = $request->titulo;
+        $material->allow_download = $request->has('allow_download') ? 1 : 0;
+        $material->save();
+
+        return redirect()->route('admin.material-pdfs.index', ['leccion_id' => $material->leccion_id])
+                         ->with('success', 'PDF interactivo actualizado exitosamente.');
     }
 
     /**
@@ -147,13 +166,28 @@ class MaterialInteractivePdfController extends Controller
     /**
      * Download or stream the raw PDF file.
      */
-    public function downloadRaw($id)
+    public function downloadRaw(Request $request, $id)
     {
         $material = MaterialPdf::findOrFail($id);
+
+        // If download is not allowed and the user is a student, restrict it
+        $isAlumno = Auth::check() && Auth::user()->rol->first() && Auth::user()->rol->first()->slug === 'alumno';
+        if (!$material->allow_download && $isAlumno && !$request->has('stream')) {
+            abort(403, 'La descarga de este PDF interactivo está deshabilitada.');
+        }
+
         $path = 'files/interactive_pdfs/' . $material->file_path;
 
         if (!Storage::exists($path)) {
             abort(404, 'Archivo no encontrado.');
+        }
+
+        // If streaming is requested (for viewer/pdf.js), serve it inline instead of forcing download
+        if ($request->has('stream')) {
+            return response()->file(storage_path('app/' . $path), [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'inline; filename="' . $material->titulo . '.pdf"'
+            ]);
         }
 
         return Storage::download($path, $material->titulo . '.pdf');

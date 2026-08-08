@@ -97,6 +97,13 @@
                 </div>
             </div>
 
+            <div class="alert alert-info border-info show shadow-sm mb-3" role="alert" style="border-radius: 8px;">
+                <h5 class="alert-heading font-weight-bold text-info mb-1"><i class="fas fa-info-circle mr-1"></i> Nota Importante sobre la Impresión y Campos de Texto</h5>
+                <p class="mb-0 small text-dark">
+                    La impresión o descarga del documento puede salir incompleta si el texto introducido por el alumno sobrepasa el tamaño visible del campo delimitador. Es normal que pase esto, ya que los cuadros delimitadores tienen dimensiones fijas en el PDF.
+                </p>
+            </div>
+
             <div id="loading-spinner" class="text-center py-5">
                 <div class="spinner-border text-primary" role="status">
                     <span class="sr-only">Cargando material...</span>

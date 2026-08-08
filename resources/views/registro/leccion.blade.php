@@ -317,9 +317,11 @@
                             <a href="{{ route('alumno.material-pdfs.show', $material->id) }}" class="btn btn-xs btn-primary mr-1" style="font-size: 0.75rem; padding: 4px 8px;">
                                 <i class="fas fa-edit mr-1"></i> Resolver
                             </a>
+                            @if($material->allow_download)
                             <a href="{{ route('alumno.material-pdfs.download-raw', $material->id) }}" class="btn btn-xs btn-outline-secondary" style="font-size: 0.75rem; padding: 4px 8px;" title="Descargar PDF Original">
                                 <i class="fas fa-download"></i>
                             </a>
+                            @endif
                         </div>
                     </div>
                     @endforeach

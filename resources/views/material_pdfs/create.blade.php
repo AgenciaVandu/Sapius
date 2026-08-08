@@ -56,6 +56,14 @@
                             @enderror
                         </div>
 
+                        <div class="form-group mb-4">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" name="allow_download" id="allow_download" class="custom-control-input" value="1" checked>
+                                <label class="custom-control-label text-dark font-weight-bold" for="allow_download">Permitir descarga para alumnos</label>
+                            </div>
+                            <small class="text-muted d-block mt-1">Si se desmarca, los alumnos no podrán descargar el PDF original ni el resuelto con sus respuestas.</small>
+                        </div>
+
                         <div class="d-flex justify-content-between">
                             <a href="{{ route('admin.material-pdfs.index', ['leccion_id' => $leccion->id]) }}" class="btn btn-outline-secondary">
                                 <i class="fas fa-arrow-left mr-1"></i> Cancelar

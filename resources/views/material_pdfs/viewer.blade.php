@@ -19,9 +19,11 @@
                     <button id="save-answers-btn" class="btn btn-primary btn-rounded shadow mr-2">
                         <i class="fas fa-save mr-1"></i> Guardar Respuestas
                     </button>
+                    @if($material->allow_download)
                     <button id="download-resolved-btn" class="btn btn-success btn-rounded shadow">
                         <i class="fas fa-download mr-1"></i> Descargar Resuelto
                     </button>
+                    @endif
                 </div>
             </div>
         </div>
@@ -167,6 +169,13 @@
                 </div>
             @endif
 
+            <div class="alert alert-info border-info show shadow-sm mb-3" role="alert" style="border-radius: 8px;">
+                <h5 class="alert-heading font-weight-bold text-info mb-1"><i class="fas fa-info-circle mr-1"></i> Nota Importante sobre la Impresión y Campos de Texto</h5>
+                <p class="mb-0 small text-dark">
+                    La impresión o descarga del documento puede salir incompleta debido a que el texto introducido sobrepasa el tamaño visible del campo delimitador. Es normal que pase esto, por lo que te recomendamos ajustar tus respuestas a los límites visuales de cada recuadro.
+                </p>
+            </div>
+
             <div id="loading-spinner" class="text-center py-5">
                 <div class="spinner-border text-primary" role="status">
                     <span class="sr-only">Cargando material...</span>
@@ -188,7 +197,7 @@
     <script>
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
 
-        const pdfUrl = "{{ route('alumno.material-pdfs.download-raw', $material->id) }}";
+        const pdfUrl = "{{ route('alumno.material-pdfs.download-raw', $material->id) }}?stream=true";
         const fields = @json($material->fields_config ?? []);
         const savedAnswersRaw = @json($respuesta->respuestas ?? []);
         
@@ -592,166 +601,169 @@
             });
         });
         // Download PDF with answers burned into it using pdf-lib
-        document.getElementById('download-resolved-btn').addEventListener('click', async function() {
-            const btn = this;
-            btn.disabled = true;
-            btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Generando...';
+        const downloadResolvedBtn = document.getElementById('download-resolved-btn');
+        if (downloadResolvedBtn) {
+            downloadResolvedBtn.addEventListener('click', async function() {
+                const btn = this;
+                btn.disabled = true;
+                btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Generando...';
 
-            try {
-                // Fetch original PDF bytes
-                const existingPdfBytes = await fetch(pdfUrl).then(res => res.arrayBuffer());
-                
-                // Load into pdf-lib
-                const { PDFDocument, rgb, StandardFonts } = PDFLib;
-                const pdfDoc = await PDFDocument.load(existingPdfBytes);
-                const helveticaFont = await pdfDoc.embedFont(StandardFonts.Helvetica);
-                const pages = pdfDoc.getPages();
-                
-                const answers = getAnswersMap();
+                try {
+                    // Fetch original PDF bytes
+                    const existingPdfBytes = await fetch(pdfUrl).then(res => res.arrayBuffer());
+                    
+                    // Load into pdf-lib
+                    const { PDFDocument, rgb, StandardFonts } = PDFLib;
+                    const pdfDoc = await PDFDocument.load(existingPdfBytes);
+                    const helveticaFont = await pdfDoc.embedFont(StandardFonts.Helvetica);
+                    const pages = pdfDoc.getPages();
+                    
+                    const answers = getAnswersMap();
 
-                // Draw Highlights first so text goes on top
-                highlights.forEach(hl => {
-                    const pageIndex = hl.page - 1;
-                    if (pageIndex < 0 || pageIndex >= pages.length) return;
+                    // Draw Highlights first so text goes on top
+                    highlights.forEach(hl => {
+                        const pageIndex = hl.page - 1;
+                        if (pageIndex < 0 || pageIndex >= pages.length) return;
 
-                    const page = pages[pageIndex];
-                    const hlX = parseFloat(hl.x);
-                    const hlY = parseFloat(hl.y);
-                    const hlW = parseFloat(hl.width);
-                    const hlH = parseFloat(hl.height);
+                        const page = pages[pageIndex];
+                        const hlX = parseFloat(hl.x);
+                        const hlY = parseFloat(hl.y);
+                        const hlW = parseFloat(hl.width);
+                        const hlH = parseFloat(hl.height);
 
-                    // y-coordinate in pdf-lib is from bottom up
-                    const pdfY = page.getHeight() - (hlY + hlH);
+                        // y-coordinate in pdf-lib is from bottom up
+                        const pdfY = page.getHeight() - (hlY + hlH);
 
-                    page.drawRectangle({
-                        x: hlX,
-                        y: pdfY,
-                        width: hlW,
-                        height: hlH,
-                        color: rgb(1.0, 1.0, 0.0), // Yellow
-                        opacity: 0.35
+                        page.drawRectangle({
+                            x: hlX,
+                            y: pdfY,
+                            width: hlW,
+                            height: hlH,
+                            color: rgb(1.0, 1.0, 0.0), // Yellow
+                            opacity: 0.35
+                        });
                     });
-                });
 
-                // Helper to split text into lines based on \n and word wrapping for pdf-lib
-                function getWrappedLines(textStr, font, fontSize, maxWidth) {
-                    const rawParagraphs = textStr.split(/\r?\n/);
-                    const resultLines = [];
+                    // Helper to split text into lines based on \n and word wrapping for pdf-lib
+                    function getWrappedLines(textStr, font, fontSize, maxWidth) {
+                        const rawParagraphs = textStr.split(/\r?\n/);
+                        const resultLines = [];
 
-                    rawParagraphs.forEach(para => {
-                        if (!para.trim()) {
-                            resultLines.push('');
-                            return;
-                        }
-                        const words = para.split(' ');
-                        let currentLine = '';
-
-                        words.forEach(word => {
-                            const testLine = currentLine ? (currentLine + ' ' + word) : word;
-                            let testWidth = 0;
-                            try {
-                                testWidth = font.widthOfTextAtSize(testLine, fontSize);
-                            } catch (e) {
-                                testWidth = testLine.length * (fontSize * 0.5);
+                        rawParagraphs.forEach(para => {
+                            if (!para.trim()) {
+                                resultLines.push('');
+                                return;
                             }
-                            if (testWidth <= maxWidth || !currentLine) {
-                                currentLine = testLine;
-                            } else {
+                            const words = para.split(' ');
+                            let currentLine = '';
+
+                            words.forEach(word => {
+                                const testLine = currentLine ? (currentLine + ' ' + word) : word;
+                                let testWidth = 0;
+                                try {
+                                    testWidth = font.widthOfTextAtSize(testLine, fontSize);
+                                } catch (e) {
+                                    testWidth = testLine.length * (fontSize * 0.5);
+                                }
+                                if (testWidth <= maxWidth || !currentLine) {
+                                    currentLine = testLine;
+                                } else {
+                                    resultLines.push(currentLine);
+                                    currentLine = word;
+                                }
+                            });
+                            if (currentLine) {
                                 resultLines.push(currentLine);
-                                currentLine = word;
                             }
                         });
-                        if (currentLine) {
-                            resultLines.push(currentLine);
-                        }
-                    });
 
-                    return resultLines;
-                }
-
-                // Draw Text fields
-                fields.forEach(field => {
-                    const ans = answers[field.name];
-                    if (!ans) return;
-
-                    const text = typeof ans === 'object' ? (ans.value || '') : (ans || '');
-                    if (!text.trim()) return;
-
-                    const pageIndex = field.page - 1;
-                    if (pageIndex < 0 || pageIndex >= pages.length) return;
-
-                    const page = pages[pageIndex];
-
-                    const fieldX = parseFloat(field.x);
-                    const fieldY = parseFloat(field.y);
-                    const fieldW = parseFloat(field.width);
-                    const fieldH = parseFloat(field.height);
-
-                    // Determine font size and line height according to box height
-                    let pdfFontSize = 10;
-                    if (fieldH < 30) {
-                        pdfFontSize = Math.min(12, Math.max(9, fieldH * 0.48));
-                    } else {
-                        pdfFontSize = Math.min(11, Math.max(9, 10));
+                        return resultLines;
                     }
-                    const lineHeight = pdfFontSize * 1.25;
 
-                    const colorHex = typeof ans === 'object' ? (ans.color || '#0038a8') : '#0038a8';
-                    const textColors = hexToRgb(colorHex);
+                    // Draw Text fields
+                    fields.forEach(field => {
+                        const ans = answers[field.name];
+                        if (!ans) return;
 
-                    const paddingX = 3;
-                    const paddingY = 3;
-                    const maxTextWidth = Math.max(10, fieldW - (paddingX * 2));
-                    const pdfX = fieldX + paddingX;
+                        const text = typeof ans === 'object' ? (ans.value || '') : (ans || '');
+                        if (!text.trim()) return;
 
-                    // pdf-lib y=0 is bottom left. Top edge of box in pdf-lib y-coordinates:
-                    const boxTopY = page.getHeight() - fieldY;
-                    const boxBottomY = page.getHeight() - (fieldY + fieldH);
+                        const pageIndex = field.page - 1;
+                        if (pageIndex < 0 || pageIndex >= pages.length) return;
 
-                    // Get wrapped lines
-                    const lines = getWrappedLines(text, helveticaFont, pdfFontSize, maxTextWidth);
+                        const page = pages[pageIndex];
 
-                    // Draw each line from top to bottom
-                    let currentY = boxTopY - paddingY - pdfFontSize;
+                        const fieldX = parseFloat(field.x);
+                        const fieldY = parseFloat(field.y);
+                        const fieldW = parseFloat(field.width);
+                        const fieldH = parseFloat(field.height);
 
-                    lines.forEach(line => {
-                        if (currentY >= boxBottomY - 2) {
-                            if (line !== '') {
-                                try {
-                                    page.drawText(line, {
-                                        x: pdfX,
-                                        y: currentY,
-                                        size: pdfFontSize,
-                                        font: helveticaFont,
-                                        color: rgb(textColors.r, textColors.g, textColors.b)
-                                    });
-                                } catch (err) {
-                                    console.warn('Error drawing text line in PDF:', err);
+                        // Determine font size and line height according to box height
+                        let pdfFontSize = 10;
+                        if (fieldH < 30) {
+                            pdfFontSize = Math.min(12, Math.max(9, fieldH * 0.48));
+                        } else {
+                            pdfFontSize = Math.min(11, Math.max(9, 10));
+                        }
+                        const lineHeight = pdfFontSize * 1.25;
+
+                        const colorHex = typeof ans === 'object' ? (ans.color || '#0038a8') : '#0038a8';
+                        const textColors = hexToRgb(colorHex);
+
+                        const paddingX = 3;
+                        const paddingY = 3;
+                        const maxTextWidth = Math.max(10, fieldW - (paddingX * 2));
+                        const pdfX = fieldX + paddingX;
+
+                        // pdf-lib y=0 is bottom left. Top edge of box in pdf-lib y-coordinates:
+                        const boxTopY = page.getHeight() - fieldY;
+                        const boxBottomY = page.getHeight() - (fieldY + fieldH);
+
+                        // Get wrapped lines
+                        const lines = getWrappedLines(text, helveticaFont, pdfFontSize, maxTextWidth);
+
+                        // Draw each line from top to bottom
+                        let currentY = boxTopY - paddingY - pdfFontSize;
+
+                        lines.forEach(line => {
+                            if (currentY >= boxBottomY - 2) {
+                                if (line !== '') {
+                                    try {
+                                        page.drawText(line, {
+                                            x: pdfX,
+                                            y: currentY,
+                                            size: pdfFontSize,
+                                            font: helveticaFont,
+                                            color: rgb(textColors.r, textColors.g, textColors.b)
+                                        });
+                                    } catch (err) {
+                                        console.warn('Error drawing text line in PDF:', err);
+                                    }
                                 }
                             }
-                        }
-                        currentY -= lineHeight;
+                            currentY -= lineHeight;
+                        });
                     });
-                });
 
-                // Serialize PDF to bytes
-                const pdfBytes = await pdfDoc.save();
+                    // Serialize PDF to bytes
+                    const pdfBytes = await pdfDoc.save();
 
-                // Trigger file download
-                const blob = new Blob([pdfBytes], { type: "application/pdf" });
-                const link = document.createElement('a');
-                link.href = window.URL.createObjectURL(blob);
-                link.download = "{{ $material->titulo }}_resuelto.pdf";
-                link.click();
+                    // Trigger file download
+                    const blob = new Blob([pdfBytes], { type: "application/pdf" });
+                    const link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = "{{ $material->titulo }}_resuelto.pdf";
+                    link.click();
 
-            } catch (err) {
-                console.error(err);
-                alert("Ocurrió un error al generar el PDF con tus respuestas: " + err.message);
-            } finally {
-                btn.disabled = false;
-                btn.innerHTML = '<i class="fas fa-download mr-1"></i> Descargar Resuelto';
-            }
-        });
+                } catch (err) {
+                    console.error(err);
+                    alert("Ocurrió un error al generar el PDF con tus respuestas: " + err.message);
+                } finally {
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-download mr-1"></i> Descargar Resuelto';
+                }
+            });
+        }
 
         // ----------------------------------------------------
         // SISTEMA ANTI-PLAGIO Y PROTECCIÓN DE CONTENIDO (CTRL BLOCK)

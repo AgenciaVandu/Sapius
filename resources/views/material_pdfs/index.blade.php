@@ -50,6 +50,7 @@
                                 <tr class="bg-primary text-white">
                                     <th>Título</th>
                                     <th>Archivo</th>
+                                    <th>Descarga Alumnos</th>
                                     <th>Campos Configurados</th>
                                     <th class="text-center">Acciones</th>
                                 </tr>
@@ -65,6 +66,13 @@
                                                 <i class="far fa-file-pdf mr-1"></i> {{ $material->file_path }}
                                             </a>
                                         </td>
+                                        <td class="text-center">
+                                            @if($material->allow_download)
+                                                <span class="badge badge-pill badge-success"><i class="fas fa-check-circle mr-1"></i> Permitida</span>
+                                            @else
+                                                <span class="badge badge-pill badge-danger"><i class="fas fa-ban mr-1"></i> Denegada</span>
+                                            @endif
+                                        </td>
                                         <td>
                                             @php
                                                 $fields = $material->fields_config;
@@ -76,8 +84,15 @@
                                         </td>
                                         <td class="text-center">
                                             <div class="btn-group">
+                                                <button type="button" class="btn btn-sm btn-warning text-white btn-edit-material" 
+                                                        data-id="{{ $material->id }}" 
+                                                        data-titulo="{{ $material->titulo }}" 
+                                                        data-allow-download="{{ $material->allow_download ? '1' : '0' }}" 
+                                                        title="Editar Metadatos">
+                                                    <i class="fas fa-edit mr-1"></i> Editar
+                                                </button>
                                                 <a href="{{ route('admin.material-pdfs.edit', $material->id) }}" class="btn btn-sm btn-info text-white" title="Configurar Campos">
-                                                    <i class="fas fa-edit mr-1"></i> Configurar Campos
+                                                    <i class="fas fa-cog mr-1"></i> Configurar Campos
                                                 </a>
                                                 <form action="{{ route('admin.material-pdfs.destroy', $material->id) }}" method="POST" onsubmit="return confirm('¿Estás seguro de eliminar este PDF interactivo?');" style="display:inline;">
                                                     @csrf
@@ -91,7 +106,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="4" class="text-center text-muted py-4">
+                                        <td colspan="5" class="text-center text-muted py-4">
                                             No hay PDFs interactivos subidos para esta clase.
                                         </td>
                                     </tr>
@@ -103,4 +118,58 @@
             </div>
         </div>
     </div>
+
+    <!-- Edit Modal -->
+    <div class="modal fade" id="editMaterialModal" tabindex="-1" role="dialog" aria-labelledby="editMaterialModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form id="edit-material-form" action="" method="POST">
+                    @csrf
+                    @method('PUT')
+                    <div class="modal-header bg-warning text-white">
+                        <h5 class="modal-title text-white font-weight-bold" id="editMaterialModalLabel"><i class="fas fa-edit mr-2"></i> Editar PDF Interactivo</h5>
+                        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group mb-3">
+                            <label for="modal-titulo" class="font-weight-bold text-dark">Título del PDF</label>
+                            <input type="text" name="titulo" id="modal-titulo" class="form-control" placeholder="Ej. Ejercicio Práctico" required>
+                        </div>
+                        <div class="form-group mb-3">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" name="allow_download" id="modal-allow-download" class="custom-control-input" value="1">
+                                <label class="custom-control-label text-dark font-weight-bold" for="modal-allow-download">Permitir descarga para alumnos</label>
+                            </div>
+                            <small class="text-muted d-block mt-1">Si se desmarca, los alumnos no podrán descargar el archivo original ni el resuelto con sus respuestas.</small>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-warning text-white font-weight-bold">Guardar Cambios</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+@endsection
+
+@section('javascript')
+    <script>
+        $(document).ready(function() {
+            $('.btn-edit-material').click(function() {
+                var id = $(this).data('id');
+                var titulo = $(this).data('titulo');
+                var allowDownload = $(this).data('allow-download');
+
+                var formAction = "{{ route('admin.material-pdfs.update', ':id') }}".replace(':id', id);
+                $('#edit-material-form').attr('action', formAction);
+                $('#modal-titulo').val(titulo);
+                $('#modal-allow-download').prop('checked', allowDownload == '1');
+
+                $('#editMaterialModal').modal('show');
+            });
+        });
+    </script>
 @endsection

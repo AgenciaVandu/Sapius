@@ -12,11 +12,13 @@ class MaterialPdf extends Model
         'leccion_id',
         'titulo',
         'file_path',
-        'fields_config'
+        'fields_config',
+        'allow_download'
     ];
 
     protected $casts = [
-        'fields_config' => 'array'
+        'fields_config' => 'array',
+        'allow_download' => 'boolean'
     ];
 
     public function leccion()
