@@ -86,7 +86,7 @@
 
 <!-- Modal -->
 <div class="modal fade" id="myModal" role="dialog">
-    <div class="modal-dialog modal-xl" style="max-width: 90%;">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable" style="max-width: 92%; width: 92%;">
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
