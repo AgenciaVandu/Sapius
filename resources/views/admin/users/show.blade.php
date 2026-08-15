@@ -53,6 +53,52 @@
     </tbody>
 </table>
 
+<h4 class="mt-4">Cursos Inscritos</h4>
+<div class="table-responsive">
+    <table class="table table-sm table-bordered">
+        <thead class="thead-light">
+            <tr>
+                <th>Curso</th>
+                <th>Identificador</th>
+                <th>Estado</th>
+                <th>Fecha Inscripción</th>
+                <th class="text-center">Acción</th>
+            </tr>
+        </thead>
+        <tbody>
+            @forelse($inscripciones as $inscripcion)
+                @if($inscripcion->CursoProgramado && $inscripcion->CursoProgramado->Curso)
+                    <tr>
+                        <td><strong>{{ $inscripcion->CursoProgramado->Curso->titulo }}</strong></td>
+                        <td><span class="badge badge-primary">{{ $inscripcion->CursoProgramado->identificador }}</span></td>
+                        <td>
+                            @if($inscripcion->aceptado == 'si')
+                                <span class="badge badge-success">Aceptado</span>
+                            @else
+                                <span class="badge badge-warning">Pendiente / Inactivo</span>
+                            @endif
+                        </td>
+                        <td>{{ $inscripcion->created_at ? \Carbon\Carbon::parse($inscripcion->created_at)->format('d/m/Y H:i') : 'N/A' }}</td>
+                        <td class="text-center">
+                            <form method="POST" action="{{ route('admin.cursos.lista-inscritos') }}" class="d-inline" target="_top">
+                                @csrf
+                                <input name="curso_programado_id" type="hidden" value="{{ $inscripcion->CursoProgramado->id }}">
+                                <button type="submit" class="btn btn-xs btn-dark font-weight-bold" style="padding: 3px 8px; font-size: 11px;" title="Ver detalle del curso / matrícula">
+                                    <i class="fas fa-external-link-alt"></i> Ver Matrícula del Curso
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                @endif
+            @empty
+                <tr>
+                    <td colspan="5" class="text-center text-muted">El alumno no se encuentra inscrito en ningún curso actualmente.</td>
+                </tr>
+            @endforelse
+        </tbody>
+    </table>
+</div>
+
 <h4 class="mt-4">Historial de Advertencias / Bloqueos</h4>
 <div class="table-responsive">
     <table class="table table-sm table-bordered">

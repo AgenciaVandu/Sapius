@@ -55,7 +55,12 @@ class UserController extends Controller
     public function show($id)
     {
         $user = User::withoutGlobalScope('Activos')->with('roles')->find($id);
-        return view('admin.users.show', compact('user'));
+        $inscripciones = \App\Models\Registro\Inscripcion::where('user_id', $id)
+            ->with(['CursoProgramado' => function ($q) {
+                $q->withoutGlobalScope('Activos')->with('Curso');
+            }])
+            ->get();
+        return view('admin.users.show', compact('user', 'inscripciones'));
     }
 
     public function verify($id)

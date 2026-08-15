@@ -45,6 +45,10 @@ class AutoAprobarInscripciones extends Command
         $inscripciones = \App\Models\Registro\Inscripcion::where('aceptado', 'no')
             ->where('created_at', '>=', $inicioDeAnio) // Solo inscripciones de este año
             ->where('created_at', '<=', $dosHorasAtras)
+            ->whereColumn('created_at', 'updated_at') // Solo inscripciones que NO han sido modificadas/desactivadas por un admin
+            ->whereHas('User', function($query) {
+                $query->where('activo', 'si'); // Solo usuarios cuyo perfil esté activo
+            })
             ->whereHas('CursoProgramado', function($query) {
                 $query->where('fecha_fin', '>=', now()); // Solo cursos que no han finalizado
             })
@@ -55,6 +59,11 @@ class AutoAprobarInscripciones extends Command
         $this->info("Se encontraron {$count} inscripciones pendientes que cumplen los criterios.");
 
         foreach ($inscripciones as $inscripcion) {
+            if (!$inscripcion->User) {
+                $this->warn("Inscripción ID: {$inscripcion->id} - Usuario no encontrado o inactivo. Omitiendo.");
+                continue;
+            }
+
             $this->info("Procesando inscripción ID: {$inscripcion->id} - Usuario: {$inscripcion->User->email}");
 
             // Aprobar la inscripción
