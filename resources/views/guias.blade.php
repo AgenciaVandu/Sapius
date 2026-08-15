@@ -263,7 +263,36 @@
             // Expose for external calls if needed
             window.mostrarAdvertenciaCaptura = () => registerStrike("External call");
 
+            function isPageInput(target) {
+                if (!target) return false;
+                const el = target.nodeType === 3 ? target.parentElement : target;
+                if (!el || !el.tagName) return false;
+                const tag = el.tagName.toUpperCase();
+                if (tag === 'INPUT' || tag === 'TEXTAREA' || el.isContentEditable) return true;
+                if (el.closest && el.closest('input, textarea, [contenteditable="true"], .interactive-input, .f3d-page-number')) return true;
+                return false;
+            }
+
+            function isAllowedStrictKey(e) {
+                if (/^[0-9]$/.test(e.key)) return true;
+                if (e.code && e.code.startsWith('Numpad') && /^[0-9]$/.test(e.key)) return true;
+                if (['Backspace', 'Delete', 'Enter'].includes(e.key)) return true;
+                return false;
+            }
+
             function handleKeyEvent(e) {
+                // Si el evento proviene de una caja de texto/salto de página
+                if (isPageInput(e.target)) {
+                    // Si es una tecla permitida (0-9, Backspace, Delete, Enter), permitir normalmente
+                    if (isAllowedStrictKey(e)) {
+                        return true;
+                    }
+                    // Cualquier otra tecla (Tab, flechas, letras, Shift, Ctrl, Alt, Cmd, etc.) es bloqueada preventivamente
+                    e.preventDefault();
+                    e.stopPropagation();
+                    return false;
+                }
+
                 // Windows PrintScreen
                 if (e.key === 'PrintScreen' || e.keyCode === 44) {
                     e.preventDefault();
@@ -282,9 +311,6 @@
                     registerStrike("Mac Screenshot");
                     return;
                 }
-
-                // Windows Snipping Tool: Win+Shift+S (Hard to intercept Win key in some browsers, but Shift+S with Win might trigger)
-                // Note: Win key (Meta) often not interceptable.
 
                 // Block Ctrl/Cmd + P (Print), S (Save), C (Copy)
                 if (isCtrlOfTheOS && ['p', 's', 'c', 'u'].includes(e.key.toLowerCase())) {

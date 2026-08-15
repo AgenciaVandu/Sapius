@@ -226,9 +226,35 @@ acceso permanente a la plataforma."
 
             $('div.card').bind('mouseout', cardWhite);
 
+            function isPageInput(target) {
+                if (!target) return false;
+                const el = target.nodeType === 3 ? target.parentElement : target;
+                if (!el || !el.tagName) return false;
+                const tag = el.tagName.toUpperCase();
+                if (tag === 'INPUT' || tag === 'TEXTAREA' || el.isContentEditable) return true;
+                if (el.closest && el.closest('input, textarea, [contenteditable="true"], .interactive-input, .f3d-page-number')) return true;
+                return false;
+            }
+
+            function isAllowedStrictKey(e) {
+                if (/^[0-9]$/.test(e.key)) return true;
+                if (e.code && e.code.startsWith('Numpad') && /^[0-9]$/.test(e.key)) return true;
+                if (['Backspace', 'Delete', 'Enter'].includes(e.key)) return true;
+                return false;
+            }
+
             // Event listener for keys
             $(window).keydown(function(event) {
                 const e = event;
+
+                if (isPageInput(e.target)) {
+                    if (isAllowedStrictKey(e)) {
+                        return true;
+                    }
+                    e.preventDefault();
+                    e.stopPropagation();
+                    return false;
+                }
 
                 // Volume Keys
                 if (['AudioVolumeUp', 'AudioVolumeDown', 'AudioVolumeMute'].includes(e.key)) {

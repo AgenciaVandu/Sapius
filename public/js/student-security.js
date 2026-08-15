@@ -82,8 +82,19 @@
     // Helper to check if target is an allowed input
     function isAllowedInput(target) {
         if (!target) return false;
-        const tagName = target.tagName.toUpperCase();
-        return (tagName === 'INPUT' || tagName === 'TEXTAREA'); // || (tagName === 'DIV' && target.isContentEditable)
+        const el = target.nodeType === 3 ? target.parentElement : target;
+        if (!el || !el.tagName) return false;
+        const tag = el.tagName.toUpperCase();
+        if (tag === 'INPUT' || tag === 'TEXTAREA' || el.isContentEditable) return true;
+        if (el.closest && el.closest('input, textarea, [contenteditable="true"], .interactive-input, .f3d-page-number')) return true;
+        return false;
+    }
+
+    function isAllowedStrictKey(e) {
+        if (/^[0-9]$/.test(e.key)) return true;
+        if (e.code && e.code.startsWith('Numpad') && /^[0-9]$/.test(e.key)) return true;
+        if (['Backspace', 'Delete', 'Enter'].includes(e.key)) return true;
+        return false;
     }
 
     // 1. Disable Right Click
@@ -123,6 +134,18 @@
 
     // 4. Restricted Keys
     function handleGlobalKey(e) {
+        // Si la tecla se presiona dentro de un input de salto de página o campo de texto
+        if (isAllowedInput(e.target)) {
+            // Permitir únicamente números 0-9, Backspace, Delete y Enter
+            if (isAllowedStrictKey(e)) {
+                return true;
+            }
+            // Bloquear cualquier otra tecla (Tab, flechas, letras, Shift, Ctrl, Alt, Cmd) sin registrar strike
+            e.preventDefault();
+            e.stopPropagation();
+            return false;
+        }
+
         // Volume Keys - Handled as Low Severity
         if (['AudioVolumeUp', 'AudioVolumeDown', 'AudioVolumeMute'].includes(e.key)) {
             e.preventDefault();
@@ -142,7 +165,7 @@
         const isShift = e.shiftKey;
 
         // Shift Key Restriction (Any use of Shift)
-        if ((e.key === 'Shift' || isShift) && !isAllowedInput(e.target)) {
+        if (e.key === 'Shift' || isShift) {
             e.preventDefault();
             registerGlobalPanelStrike("Restricted Key / Modifier");
             return;
@@ -156,7 +179,6 @@
         }
 
         // Windows Snipping Tool (Win + Shift + S)
-        // Note: 'metaKey' is Windows Key on Windows
         if (!isMac && e.metaKey && e.shiftKey && (e.key === 's' || e.key === 'S')) {
             e.preventDefault();
             registerGlobalPanelStrike("Snipping Tool");
@@ -177,7 +199,7 @@
             return;
         }
 
-        // DevTools Ctrl+Shift+I/J/C - logic redundant due to Shift block but kept for clarity
+        // DevTools Ctrl+Shift+I/J/C
         if (isCtrlOfTheOS && isShift && ['i', 'j', 'c'].includes(e.key.toLowerCase())) {
             e.preventDefault();
             registerGlobalPanelStrike("DevTools");
